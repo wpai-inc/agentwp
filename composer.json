@@ -1,0 +1,22 @@
+{
+    "name": "wpai/agent-wp",
+    "description": "Adds a AI Agent to your WordPress installation.",
+    "license": "GPL2",
+    "autoload": {
+        "psr-4": {
+            "WpAi\\AgentWp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Greg Hunt",
+            "email": "greg@codewp.ai"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "laravel/pint": "^1.14",
+        "php-stubs/wordpress-stubs": "^6.4"
+    }
+}
