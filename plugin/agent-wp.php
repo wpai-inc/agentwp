@@ -17,4 +17,13 @@ defined('ABSPATH') || exit;
 
 require_once __DIR__.'/vendor/autoload.php';
 
-(new \WpAi\AgentWp\Init(__FILE__))->boot();
+/**
+ * Registers all of the service providers
+ * with a Main dependency.
+ */
+(new \WpAi\AgentWp\ProviderRegistry(
+    new \WpAi\AgentWp\Main(__FILE__)
+))->register([
+    \WpAi\AgentWp\Installer::class,
+    \WpAi\AgentWp\Page\Admin\Settings::class,
+]);

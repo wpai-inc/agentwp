@@ -4,7 +4,7 @@
     "license": "GPL2",
     "autoload": {
         "psr-4": {
-            "WpAi\\AgentWp\\": "src/"
+            "WpAi\\AgentWp\\": "server/"
         }
     },
     "authors": [
@@ -18,5 +18,8 @@
     "require-dev": {
         "laravel/pint": "^1.14",
         "php-stubs/wordpress-stubs": "^6.4"
+    },
+    "require": {
+        "idleberg/wordpress-vite-assets": "^1.0"
     }
 }
