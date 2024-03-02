@@ -20,6 +20,6 @@
         "php-stubs/wordpress-stubs": "^6.4"
     },
     "require": {
-        "idleberg/wordpress-vite-assets": "^1.0"
+        "kucrut/vite-for-wp": "^0.8.0"
     }
 }

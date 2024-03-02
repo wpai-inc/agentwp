@@ -23,3 +23,7 @@ Run the following command in the root of the project:
 ```bash
 docker-compose up -d
 ```
+
+## Docs
+
+https://github.com/kucrut/vite-for-wp

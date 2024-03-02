@@ -2,7 +2,7 @@
 
 namespace WpAi\AgentWp\Traits;
 
-use Idleberg\WordPress\ViteAssets\Assets;
+use Kucrut\Vite;
 
 trait HasPage
 {
@@ -73,11 +73,16 @@ trait HasPage
 
     public function enqueue_client_assets()
     {
-        $viteAssets = new Assets($this->main->buildManifestPath(), $this->main->asset());
-        $viteAssets->inject($this->clientPage(), [
-            'integrity' => false,
-        ]);
         $this->registerPageProps();
+        Vite\enqueue_asset(
+            $this->main->buildPath(),
+            $this->clientPage(),
+            [
+                'dependencies' => ['react', 'react-dom'],
+                'handle' => $this->slug(),
+                'in-footer' => true,
+            ]
+        );
     }
 
     private function registerPageProps()

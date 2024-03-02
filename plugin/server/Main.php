@@ -26,9 +26,9 @@ class Main
     {
     }
 
-    public function buildManifestPath(): string
+    public function buildPath(): string
     {
-        return $this->path(self::BUILD_DIR.'/.vite/manifest.json');
+        return $this->path(self::BUILD_DIR);
     }
 
     public function asset(?string $path = null): string
