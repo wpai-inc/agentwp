@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Counter from '@/Components/Counter';
+import App from '@/Shared/App';
 
 const rootElement = document.getElementById( 'agent-wp-admin-settings' );
 if ( rootElement ) {
 	const root = ReactDOM.createRoot( rootElement );
 	root.render(
 		<React.StrictMode>
-			<Counter />
+			<App>
+				<Counter />
+			</App>
 		</React.StrictMode>,
 	);
 } else {

@@ -6,7 +6,7 @@ use WpAi\AgentWp\ReactClient;
 
 class Chat extends ReactClient
 {
-    public function register()
+    public function registrations(): void
     {
         add_action('admin_footer', [$this, 'body'], 100);
     }

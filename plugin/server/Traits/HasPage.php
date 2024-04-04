@@ -13,8 +13,11 @@ trait HasPage
 
     public function registerPage()
     {
-        add_action('admin_menu', [$this, 'addMenuHandler'], 100);
-        add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
+        $page = $_GET['page'] ?? null;
+        if ($this->slug() !== $page) {
+            $this->active = false;
+            add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
+        }
     }
 
     public function pageProps(array $merge = []): array

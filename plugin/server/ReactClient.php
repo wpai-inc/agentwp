@@ -10,13 +10,31 @@ abstract class ReactClient implements ClientBodyInterface, Registrable
 {
     protected string $pageName;
 
+    protected bool $active = true;
+
     public function __construct(protected Main $main)
     {
         $this->pageName =
         str_replace('\\', '/', str_replace(__NAMESPACE__.'\\Page\\', '', get_class($this)));
+    }
 
-        add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
-        add_filter('admin_body_class', [$this, 'bodyClass']);
+    /**
+     * Extra things to register after client assets
+     * have been enqueued
+     */
+    abstract public function registrations(): void;
+
+    /**
+     * Register the client and anything else.
+     */
+    public function register()
+    {
+        $this->registrations();
+
+        if ($this->active) {
+            add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
+            add_filter('admin_body_class', [$this, 'bodyClass']);
+        }
     }
 
     public function setPageName(string $name): self
@@ -54,19 +72,6 @@ abstract class ReactClient implements ClientBodyInterface, Registrable
 
     public function enqueue_client_assets()
     {
-        Vite\enqueue_asset(
-            $this->main->buildPath(),
-            'assets/styles/app.css',
-            [
-                'handle' => 'agent-wp-styles',
-            ]
-        );
-
-        // print_r($asset);
-        // exit();
-
-        // wp_enqueue_style('agent-wp-styles');
-
         Vite\enqueue_asset(
             $this->main->buildPath(),
             $this->clientPage(),

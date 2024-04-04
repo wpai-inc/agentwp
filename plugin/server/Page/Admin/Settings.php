@@ -10,7 +10,7 @@ class Settings extends ReactClient
 {
     use HasMenu, HasPage;
 
-    public function register()
+    public function registrations(): void
     {
         $this->hasFooter()->registerPage();
         $this->menuName('Agent WP Settings')->registerMenu();

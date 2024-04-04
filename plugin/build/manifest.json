@@ -1,32 +1,41 @@
 {
   "Page/Admin/Chat.tsx": {
-    "file": "assets/chat-3b2ab1f3.js",
+    "css": [
+      "assets/app-715bd75c.css"
+    ],
+    "file": "assets/chat-42468202.js",
     "imports": [
-      "_button-bd33f6cb.js"
+      "_App-78dcae1e.js"
     ],
     "isEntry": true,
     "src": "Page/Admin/Chat.tsx"
   },
   "Page/Admin/Settings.tsx": {
-    "assets": [
-      "assets/logo-6bf6c764.png"
+    "css": [
+      "assets/app-715bd75c.css"
     ],
-    "file": "assets/settings-3a4c6b36.js",
+    "file": "assets/settings-19d063aa.js",
     "imports": [
-      "_button-bd33f6cb.js"
+      "_App-78dcae1e.js"
     ],
     "isEntry": true,
     "src": "Page/Admin/Settings.tsx"
   },
-  "_button-bd33f6cb.js": {
-    "file": "assets/button-bd33f6cb.js"
+  "_App-78dcae1e.js": {
+    "assets": [
+      "assets/logo-6bf6c764.png"
+    ],
+    "css": [
+      "assets/app-715bd75c.css"
+    ],
+    "file": "assets/App-78dcae1e.js"
   },
   "assets/logo.png": {
     "file": "assets/logo-6bf6c764.png",
     "src": "assets/logo.png"
   },
   "assets/styles/app.css": {
-    "file": "assets/app-0648a1b9.css",
+    "file": "assets/app-715bd75c.css",
     "isEntry": true,
     "src": "assets/styles/app.css"
   }
