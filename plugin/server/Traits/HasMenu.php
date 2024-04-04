@@ -28,7 +28,7 @@ trait HasMenu
             __($this->menuName, 'agent_wp'),
             'manage_options',
             $this->slug(),
-            [$this, 'body']
+            [$this, 'appRoot']
         );
         add_action("load-{$this->pageHook}", [$this, 'onMenuLoad']);
     }

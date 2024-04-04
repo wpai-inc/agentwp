@@ -3,10 +3,10 @@
 namespace WpAi\AgentWp;
 
 use Kucrut\Vite;
-use WpAi\AgentWp\Contracts\ClientBodyInterface;
+use WpAi\AgentWp\Contracts\ClientAppInterface;
 use WpAi\AgentWp\Contracts\Registrable;
 
-abstract class ReactClient implements ClientBodyInterface, Registrable
+abstract class ReactClient implements ClientAppInterface, Registrable
 {
     protected string $pageName;
 
@@ -83,7 +83,7 @@ abstract class ReactClient implements ClientBodyInterface, Registrable
         );
     }
 
-    public function body(): void
+    public function appRoot(): void
     {
         ?>
         <noscript>

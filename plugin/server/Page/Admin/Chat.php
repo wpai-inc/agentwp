@@ -8,6 +8,6 @@ class Chat extends ReactClient
 {
     public function registrations(): void
     {
-        add_action('admin_footer', [$this, 'body'], 100);
+        add_action('admin_footer', [$this, 'appRoot'], 100);
     }
 }
