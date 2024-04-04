@@ -34,7 +34,7 @@ This WordPress plugin is split into a `client` and `server`. The client is all t
 
 #### Client
 
-The client contains all the frontend assets built with **React** using **Typescript** and bundled with **Vite**. You must run `npm` in the `./plugin` directory and it will create a `./plugin/build` for dev and production assets.
+The client contains all the frontend assets built with **React** using **Typescript** and bundled with **Vite**. Running `npm run dev/build` will create a `./plugin/build` for dev and production assets.
 
 #### Server
 

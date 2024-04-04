@@ -1,9 +1,7 @@
-/plugin/build/
-/plugin/vendor/
-/plugin/node_modules/
-/wp-content/*
-!/wp-content/.gitkeep
-.DS_Store
+# Project Builds
+/build/
+/vendor/
+/node_modules/
 
 # Logs
 logs

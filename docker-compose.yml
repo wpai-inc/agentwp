@@ -17,8 +17,7 @@ services:
         define('WP_DEBUG_DISPLAY', false);
         define('WP_ENVIRONMENT_TYPE', 'development');
     volumes:
-      - ./wp-content:/var/www/html/wp-content
-      - ./plugin:/var/www/html/wp-content/plugins/agent-wp
+      - ./:/var/www/html/wp-content/plugins/agent-wp
   db:
     image: mysql:8.0
     restart: always
