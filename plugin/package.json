@@ -11,21 +11,31 @@
     "format:fix": "prettier --write ."
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
     "@wordpress/components": "^27.0.0",
     "@wordpress/element": "^5.29.0",
     "@wordpress/i18n": "^4.52.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.364.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@kucrut/vite-for-wp": "^0.8.0",
+    "@types/node": "^20.12.4",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
     "prettier": "npm:wp-prettier@^3.0.3-beta-4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup-plugin-external-globals": "^0.8.0",
+    "tailwindcss": "^3.4.3",
     "vite": "^4.4.11",
     "vite-plugin-external": "^4.0.1"
   }

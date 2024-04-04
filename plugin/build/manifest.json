@@ -1,0 +1,33 @@
+{
+  "Page/Admin/Chat.tsx": {
+    "file": "assets/chat-3b2ab1f3.js",
+    "imports": [
+      "_button-bd33f6cb.js"
+    ],
+    "isEntry": true,
+    "src": "Page/Admin/Chat.tsx"
+  },
+  "Page/Admin/Settings.tsx": {
+    "assets": [
+      "assets/logo-6bf6c764.png"
+    ],
+    "file": "assets/settings-3a4c6b36.js",
+    "imports": [
+      "_button-bd33f6cb.js"
+    ],
+    "isEntry": true,
+    "src": "Page/Admin/Settings.tsx"
+  },
+  "_button-bd33f6cb.js": {
+    "file": "assets/button-bd33f6cb.js"
+  },
+  "assets/logo.png": {
+    "file": "assets/logo-6bf6c764.png",
+    "src": "assets/logo.png"
+  },
+  "assets/styles/app.css": {
+    "file": "assets/app-0648a1b9.css",
+    "isEntry": true,
+    "src": "assets/styles/app.css"
+  }
+}

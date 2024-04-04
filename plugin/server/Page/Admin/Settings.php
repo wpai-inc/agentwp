@@ -2,27 +2,17 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
-use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Main;
+use WpAi\AgentWp\ReactClient;
+use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
 
-class Settings implements Registrable
+class Settings extends ReactClient
 {
-    use HasPage;
-
-    public function __construct(private Main $main)
-    {
-    }
+    use HasMenu, HasPage;
 
     public function register()
     {
-        $this
-            ->pageName('Admin/Settings')
-            ->menuName('Agent WP Settings')
-            ->registerPage();
-    }
-
-    public function onMenuLoad()
-    {
+        $this->hasFooter()->registerPage();
+        $this->menuName('Agent WP Settings')->registerMenu();
     }
 }

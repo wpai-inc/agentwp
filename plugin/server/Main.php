@@ -18,9 +18,9 @@ class Main
 
     const BUILD_DIR = 'build';
 
-    public $companyName = 'CodeWP';
+    public $companyName = 'Agent WP';
 
-    public $attributionUrl = 'https://codewp.ai/';
+    public $attributionUrl = 'https://agentwp.com';
 
     public function __construct(private string $file)
     {

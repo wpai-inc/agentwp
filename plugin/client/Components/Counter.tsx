@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { Button } from '@wordpress/components';
-import logo from '../assets/logo.png';
-import '@/Shared/App.css';
+import { Button } from '@/Components/ui/button';
+import logo from '@/assets/logo.png';
 
-function App() {
+export default function Counter() {
 	const [ count, setCount ] = useState( 0 );
-
 	return (
 		<>
 			<div>
@@ -15,9 +13,7 @@ function App() {
 			</div>
 			<h1>Vite + React + WordPress</h1>
 			<div className="card">
-				<Button onClick={ () => setCount( count => count + 1 ) } variant="primary">
-					count is # { count }
-				</Button>
+				<Button onClick={ () => setCount( count => count + 1 ) }>count is { count }</Button>
 				<p>
 					Edit <code>src/App.tsx</code> and save to test HMR
 				</p>
@@ -26,5 +22,3 @@ function App() {
 		</>
 	);
 }
-
-export default App;

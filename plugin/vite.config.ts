@@ -1,15 +1,18 @@
 import { v4wp } from '@kucrut/vite-for-wp';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { defineConfig } from 'vite';
 
-export default {
+export default defineConfig( {
 	root: 'client',
 	plugins: [
 		v4wp( {
 			input: {
-				settings: 'Page/Admin/Settings.tsx',
+				styles: '/assets/styles/app.css',
+				settings: '/Page/Admin/Settings.tsx',
+				chat: '/Page/Admin/Chat.tsx',
 			},
-			outDir: 'build',
+			outDir: '../build',
 		} ),
 		react(),
 	],
@@ -18,4 +21,4 @@ export default {
 			'@': path.resolve( __dirname, 'client' ),
 		},
 	},
-};
+} );
