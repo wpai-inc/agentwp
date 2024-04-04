@@ -34,13 +34,13 @@ This WordPress plugin is split into a `client` and `server`. The client is all t
 
 #### Client
 
-The client contains all the frontend assets built with **React** using **Typescript** and bundled with **Vite**. Running `npm run dev/build` will create a `./plugin/build` for dev and production assets.
+The client contains all the frontend assets built with **React** using **Typescript** and bundled with **Vite**. Running `npm run dev/build` will create a `./build` for dev and production assets.
 
 #### Server
 
 The server contains the backend PHP. It consists of a "Provier Registry" which is just a collection of service provider classes that hook into WordPress.
 
-All providers must have a `register()` method that contains the WordPress Hooks necessary to run the provider's service. They must implement `Registrable` and be registered in the plugin entrypoint `agent-wp.php` under the register method. They all have the `Main` plugin as a dependency which contains common configuration and methods. This is how we bootstrap the plugin and tell hook all of our code into WordPress's hook system (every provider class has a register method where it hooks itself).
+All providers must have a `register()` method that contains the WordPress Hooks necessary to run the provider's service. They must implement `Registrable` and be registered in the plugin entrypoint `agent-wp.php` under the register method. They all have the `Main` plugin as a dependency which contains common configuration and methods. This is how we bootstrap the plugin and hook all of our code into WordPress's hook system (every provider class has a register method where it hooks itself).
 
 ## Adding React Clients / Entrypoints
 
