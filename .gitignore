@@ -1,6 +1,6 @@
+/plugin/build/
 /plugin/vendor/
 /plugin/node_modules/
-/plugin/build/
 /wp-content/*
 !/wp-content/.gitkeep
 .DS_Store
