@@ -8,25 +8,27 @@ import React, {
 import { getStorage, setStorage } from '@/lib/utils';
 
 export type ClientSettings = {
-  sidebarWidth?: number | null;
-  navCollapsed?: boolean;
-  bannerDismissed?: boolean;
-  topBannerDismissed?: string;
+  chatOpen?: boolean;
 };
 
-type UiSettingValue = string | boolean | number | null;
+type ClientSettingValue = string | boolean | number | null;
 
 interface ContextProps {
   settings: ClientSettings;
   setSettings: React.Dispatch<React.SetStateAction<ClientSettings>>;
 }
 
-function setLocalStorage(key: keyof ClientSettings, value: UiSettingValue) {
-  setStorage(key, JSON.stringify(value));
+const namespace = 'awp_settings.';
+
+function setLocalStorage(key: keyof ClientSettings, value: ClientSettingValue) {
+  setStorage(namespace + key, JSON.stringify(value));
 }
 
-function getLocalStorage(key: keyof ClientSettings, defaultValue: any = null) {
-  const value = getStorage(key, defaultValue);
+function getLocalStorage(
+  key: keyof ClientSettings,
+  defaultValue: ClientSettingValue = null,
+) {
+  const value = getStorage(namespace + key, defaultValue);
   return value ? JSON.parse(value) : defaultValue;
 }
 
@@ -48,10 +50,7 @@ export const ClientSettingsProvider: FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [settings, setSettings] = useState<ClientSettings>({
-    sidebarWidth: getLocalStorage('sidebarWidth', null),
-    navCollapsed: getLocalStorage('navCollapsed', true),
-    bannerDismissed: getLocalStorage('bannerDismissed', false),
-    topBannerDismissed: getLocalStorage('topBannerDismissed', ''),
+    chatOpen: getLocalStorage('chatOpen'),
   });
 
   useEffect(() => {

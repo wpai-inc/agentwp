@@ -12,7 +12,7 @@ export default function ConvoContainer() {
       className={cn(
         'transition fixed top-0 right-0 h-screen w-[500px] z-50 bg-white/90 shadow-xl flex flex-col pt-[38px]',
         {
-          'translate-x-full': open,
+          'translate-x-full': !open,
         },
       )}
     >

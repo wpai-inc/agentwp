@@ -1,4 +1,5 @@
 import React, { useState, createContext, useContext } from 'react';
+import { useClientSettings } from './ClientSettingsProvider';
 
 type Message = {
   role: 'agent' | 'user';
@@ -26,7 +27,8 @@ export default function ChatProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [open, setOpen] = useState(false);
+  const { settings, setSettings } = useClientSettings();
+  const [open, setOpen] = useState(settings.chatOpen ?? false);
   const [conversation, setConversation] = useState<Message[]>([
     {
       role: 'agent',
@@ -47,7 +49,9 @@ export default function ChatProvider({
   ]);
 
   function toggle() {
-    setOpen(!open);
+    const newVal = !open;
+    setOpen(newVal);
+    setSettings({ chatOpen: newVal });
   }
 
   function sendMessage(message: string) {
