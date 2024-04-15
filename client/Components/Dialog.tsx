@@ -1,39 +1,23 @@
 import { cn } from '@/lib/utils';
-
-const conversation = [
-  {
-    role: 'agent',
-    message: 'Hello! How can I help you today?',
-  },
-  {
-    role: 'user',
-    message: 'I need help with my order.',
-  },
-  {
-    role: 'agent',
-    message: 'Sure! Can you provide me with your order number?',
-  },
-  {
-    role: 'user',
-    message: 'Yes, it is 123456.',
-  },
-];
+import { useChat } from '@/Providers/ChatProvider';
 
 export default function Dialog() {
+  const { conversation } = useChat();
   return (
-    <div className="bg-gray-100 p-4">
-      {conversation.map((item, index) => (
-        <div key={index} className="flex flex-col">
+    <div className="flex-1 overflow-y-auto">
+      <div className="p-4 text-white flex flex-col justify-end">
+        {conversation.map((item, index) => (
           <div
+            key={index}
             className={cn('p-2 my-2 rounded-lg w-3/4', {
-              'bg-blue-100 self-end': item.role === 'agent',
-              'bg-green-100': item.role === 'user',
+              'bg-blue-500/80 self-end': item.role === 'agent',
+              'bg-green-500/80': item.role === 'user',
             })}
           >
             {item.message}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

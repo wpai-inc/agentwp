@@ -8,7 +8,7 @@ export default function ConvoTrigger() {
     <button
       onClick={toggle}
       className={cn(
-        'fixed opacity-0 bottom-4 right-4 bg-white p-2 rounded-full shadow-xl transition',
+        'fixed opacity-0 bottom-4 right-4 p-2 rounded-full shadow-xl transition bg-white ring-2 ring-gray-200/80',
         {
           'z-50 opacity-100 transition': open,
         },
