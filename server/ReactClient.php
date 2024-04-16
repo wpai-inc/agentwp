@@ -33,7 +33,9 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
         if ($this->active) {
             add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
+            add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
             add_filter('admin_body_class', [$this, 'bodyClass']);
+            add_action('wp_ajax_'.$this->slug('_'), [$this, 'registerControllers']);
         }
     }
 
@@ -49,15 +51,15 @@ abstract class ReactClient implements ClientAppInterface, Registrable
      */
     public function clientPage(): string
     {
-        return 'Page/'.$this->pageName.'.tsx';
+        return 'Page/'.$this->pageName.'/Index.tsx';
     }
 
     /**
      * Unique page slug
      */
-    public function slug()
+    public function slug($sep = '-')
     {
-        return $this->main::SLUG.'-'.str_replace('/', '-', \strtolower($this->pageName));
+        return $this->main::SLUG.$sep.str_replace('/', $sep, \strtolower($this->pageName));
     }
 
     /**
@@ -98,5 +100,34 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         </noscript>
         <div id="<?php echo $this->slug() ?>"></div>
         <?php
+    }
+
+    public function pageProps(array $merge = []): array
+    {
+        return [
+            'nonce' => wp_create_nonce($this->main::nonce()),
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'page' => $this->slug(),
+            'url' => $this->main->url(),
+            'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),
+            ...$merge,
+        ];
+    }
+
+    public function registerPageProps()
+    {
+        wp_localize_script($this->slug('-'), $this->slug('_'), $this->pageProps());
+    }
+
+    public function registerControllers()
+    {
+        // Check the nonce for security
+        check_ajax_referer('my-plugin-ajax-nonce', 'nonce');
+
+        // Perform your AJAX action here
+        $response = ['success' => true, 'message' => 'AJAX request successful'];
+
+        // Return the response
+        wp_send_json_success($response);
     }
 }

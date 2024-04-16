@@ -14,20 +14,10 @@ trait HasPage
     public function registerPage()
     {
         $page = $_GET['page'] ?? null;
+
         if ($this->slug() !== $page) {
             $this->active = false;
-            add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
         }
-    }
-
-    public function pageProps(array $merge = []): array
-    {
-        return [
-            'nonce' => wp_create_nonce($this->main::nonce()),
-            'url' => $this->main->url(),
-            'notice_visible' => get_option('codewpai_notice_visible', 1),
-            ...$merge,
-        ];
     }
 
     public function updateFooter(): string
@@ -37,11 +27,5 @@ trait HasPage
             Made with love ❤️ by the <a href="{$this->main->attributionUrl}" target="_blank">{$this->main->companyName}</a>
             </div>
         HTML;
-    }
-
-    public function registerPageProps()
-    {
-        $slug = $this->slug();
-        wp_localize_script($slug, str_replace('-', '_', $slug), $this->pageProps());
     }
 }
