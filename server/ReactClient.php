@@ -59,7 +59,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
      */
     public function slug($sep = '-')
     {
-        return $this->main::SLUG.$sep.str_replace('/', $sep, \strtolower($this->pageName));
+        return str_replace('-', $sep, $this->main::SLUG).$sep.str_replace('/', $sep, \strtolower($this->pageName));
     }
 
     /**

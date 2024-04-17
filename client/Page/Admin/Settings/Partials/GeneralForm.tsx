@@ -23,7 +23,6 @@ const formSchema = z.object({
 export function GeneralForm() {
   const page = usePage();
 
-  console.log(page);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

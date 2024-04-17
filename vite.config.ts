@@ -9,8 +9,8 @@ export default defineConfig({
     v4wp({
       input: {
         styles: '/assets/styles/app.css',
-        settings: '/Page/Admin/Settings.tsx',
-        chat: '/Page/Admin/Chat.tsx',
+        settings: '/Page/Admin/Settings/Index.tsx',
+        chat: '/Page/Admin/Chat/Index.tsx',
       },
       outDir: '../build',
     }),

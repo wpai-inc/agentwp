@@ -10,7 +10,7 @@ if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <PageProvider page={(window as any)['agent_wp_admin_settings']}>
+      <PageProvider page={agent_wp_admin_settings}>
         <App>
           <div className="m-12">
             <div>

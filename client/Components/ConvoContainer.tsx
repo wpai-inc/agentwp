@@ -10,7 +10,7 @@ export default function ConvoContainer() {
   return (
     <div
       className={cn(
-        'transition fixed top-0 right-0 h-screen w-[500px] z-50 bg-white/90 shadow-xl flex flex-col pt-[38px]',
+        'transition fixed top-0 right-0 pt-[32px] h-screen w-[500px] z-50 bg-white/90 shadow-xl flex flex-col',
         {
           'translate-x-full': !open,
         },
