@@ -1,11 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-
+import type { Page } from '@/lib/bootstrap';
 export default class AdminRequest {
   private axiosInstance: AxiosInstance;
 
-  constructor() {
+  constructor(page: Page) {
     this.axiosInstance = axios.create({
-      baseURL: `${window.location.origin}/wp-admin/admin-ajax.php`,
+      baseURL: page.ajax_url,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
       },
@@ -16,7 +16,7 @@ export default class AdminRequest {
         // Add nonce to the request data
         config.data = {
           ...config.data,
-          nonce: window.wpData.nonce,
+          nonce: page.nonce,
         };
 
         return config;

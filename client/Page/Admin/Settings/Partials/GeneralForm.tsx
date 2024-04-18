@@ -21,7 +21,7 @@ const formSchema = z.object({
 });
 
 export function GeneralForm() {
-  const page = usePage();
+  const { admin } = usePage();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -31,7 +31,7 @@ export function GeneralForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    page.admin.request('POST', values);
+    admin.action('test_action').request(values);
     console.log(values);
   }
 

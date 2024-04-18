@@ -5,19 +5,25 @@ import ConvoContainer from '@/Components/ConvoContainer';
 import ChatProvider from '@/Providers/ChatProvider';
 import ConvoTrigger from '@/Components/ConvoTrigger';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
-const rootElement = document.getElementById('agent-wp-admin-chat');
+import { PageProvider } from '@/Providers/PageProvider';
+import setup from '@/lib/bootstrap';
+
+const { rootElement, page } = setup('Admin/Chat');
+
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <App>
-        <ClientSettingsProvider>
-          <ChatProvider>
-            <ConvoContainer />
-            <ConvoTrigger />
-          </ChatProvider>
-        </ClientSettingsProvider>
-      </App>
+      <PageProvider page={page}>
+        <App>
+          <ClientSettingsProvider>
+            <ChatProvider>
+              <ConvoContainer />
+              <ConvoTrigger />
+            </ChatProvider>
+          </ClientSettingsProvider>
+        </App>
+      </PageProvider>
     </React.StrictMode>,
   );
 } else {

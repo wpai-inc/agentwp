@@ -27,6 +27,7 @@ require_once __DIR__.'/vendor/autoload.php';
     \WpAi\AgentWp\Installer::class,
     \WpAi\AgentWp\Page\Admin\Settings::class,
     \WpAi\AgentWp\Page\Admin\Chat::class,
+    \WpAi\AgentWp\AdminActions::class,
 ]);
 
 // add a class to the admin body

@@ -3,14 +3,15 @@ import ReactDOM from 'react-dom/client';
 import App from '@/Shared/App';
 import { GeneralForm } from './Partials/GeneralForm';
 import { PageProvider } from '@/Providers/PageProvider';
+import setup from '@/lib/bootstrap';
 
-const rootElement = document.getElementById('agent-wp-admin-settings');
+const { rootElement, page } = setup('Admin/Settings');
 
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <PageProvider page={agent_wp_admin_settings}>
+      <PageProvider page={page}>
         <App>
           <div className="m-12">
             <div>
