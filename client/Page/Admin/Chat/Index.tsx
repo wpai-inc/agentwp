@@ -5,6 +5,8 @@ import ConvoContainer from '@/Components/ConvoContainer';
 import ChatProvider from '@/Providers/ChatProvider';
 import ConvoTrigger from '@/Components/ConvoTrigger';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
+import ScreenProvider from '@/Providers/ScreenProvider';
+
 const rootElement = document.getElementById('agent-wp-admin-chat');
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
@@ -12,10 +14,12 @@ if (rootElement) {
     <React.StrictMode>
       <App>
         <ClientSettingsProvider>
-          <ChatProvider>
-            <ConvoContainer />
-            <ConvoTrigger />
-          </ChatProvider>
+          <ScreenProvider>
+            <ChatProvider>
+              <ConvoContainer />
+              <ConvoTrigger />
+            </ChatProvider>
+          </ScreenProvider>
         </ClientSettingsProvider>
       </App>
     </React.StrictMode>,

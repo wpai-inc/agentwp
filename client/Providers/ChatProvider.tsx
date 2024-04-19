@@ -1,5 +1,7 @@
 import React, { useState, createContext, useContext } from 'react';
 import { useClientSettings } from './ClientSettingsProvider';
+import axios from 'axios';
+import { useScreen } from './ScreenProvider';
 
 type Message = {
   role: 'agent' | 'user';
@@ -27,6 +29,8 @@ export default function ChatProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const screen = useScreen();
+  console.log('screen', screen);
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
   const [conversation, setConversation] = useState<Message[]>([
@@ -54,7 +58,26 @@ export default function ChatProvider({
     setSettings({ chatOpen: newVal });
   }
 
+  async function userRequest(message: string) {
+    //@todo: dynamic site ID
+    const siteId = '9bd7360f-6aeb-4204-b1a6-624d004701a3';
+    const wp_user_id = 1;
+
+    const response = await axios.post(
+      `http://localhost/api/sites/${siteId}/request`,
+      {
+        message,
+        wp_user_id,
+        screen,
+      },
+    );
+    console.log(response);
+    return response;
+  }
+
   function sendMessage(message: string) {
+    userRequest(message);
+
     setConversation((prev) => [
       ...prev,
       {
