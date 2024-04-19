@@ -28,4 +28,5 @@ require_once __DIR__.'/vendor/autoload.php';
     \WpAi\AgentWp\Page\Admin\Settings::class,
     \WpAi\AgentWp\Page\Admin\Chat::class,
     \WpAi\AgentWp\SiteIndexer::class,
+    \WpAi\AgentWp\ErrorIndexer::class,
 ]);
