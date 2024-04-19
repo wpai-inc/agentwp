@@ -22,6 +22,12 @@ class Main
 
     public $attributionUrl = 'https://agentwp.com';
 
+    /**
+     * Temporary for demo,
+     * before auth is implemented.
+     */
+    public string $siteId = '9bd7360f-6aeb-4204-b1a6-624d004701a3';
+
     public function __construct(private string $file)
     {
     }

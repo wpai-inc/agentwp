@@ -27,11 +27,5 @@ require_once __DIR__.'/vendor/autoload.php';
     \WpAi\AgentWp\Installer::class,
     \WpAi\AgentWp\Page\Admin\Settings::class,
     \WpAi\AgentWp\Page\Admin\Chat::class,
+    \WpAi\AgentWp\SiteIndexer::class,
 ]);
-
-// add a class to the admin body
-add_filter('admin_body_class', function ($classes) {
-    $classes .= ' bg-slate-500';
-
-    return $classes;
-});
