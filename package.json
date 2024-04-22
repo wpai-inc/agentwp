@@ -26,6 +26,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@phosphor-icons/react": "^2.1.4",
     "@types/node": "^20.12.4",
     "@types/react": "^18.2.37",
