@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useScreen } from './ScreenProvider';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import type { MessageType } from '@/Components/Convo/Message';
+import { MessageAction } from '@wpai/schemas';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -91,17 +92,8 @@ export default function ChatProvider({
   ): Promise<CreateUserRequestResponse> {
     const response = await axios.post(
       `http://localhost/api/sites/${siteId}`,
-      {
-        message,
-        wp_user_id,
-        screen,
-      },
-      // bearer token
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      { message, wp_user_id, screen },
+      { headers: { Authorization: `Bearer ${token}` } },
     );
 
     return response.data;
@@ -136,11 +128,11 @@ export default function ChatProvider({
 
     await fetchEventSource(stream_url, {
       onmessage(ev) {
-        const data = JSON.parse(ev.data);
+        const data = JSON.parse(ev.data) as MessageAction;
         updateMessage({
           id: ev.id,
           role: 'agent',
-          content: data.text,
+          content: data,
         });
       },
     });

@@ -5,13 +5,17 @@ import type { MessageAction } from '@wpai/schemas';
 // const ajv = new Ajv();
 // const validate = ajv.compile(actionSchema);
 
-export default function AgentMessage({ action }: { action: string }) {
-  let parsedAction;
-  try {
-    parsedAction = JSON.parse(action) as MessageAction;
-  } catch (e) {
-    return <div>Error parsing action JSON.</div>;
-  }
+export default function AgentMessage({ action }: { action: MessageAction }) {
+  // let parsedAction;
+  // try {
+  //   parsedAction = JSON.parse(action) as MessageAction;
+  // } catch (e) {
+  //   return (
+  //     <div className="bg-blue-500 text-white w-2/3 ml-auto">
+  //       Error parsing action JSON.
+  //     </div>
+  //   );
+  // }
 
   // const valid = validate(parsedAction);
   // if (!valid) {
@@ -21,6 +25,7 @@ export default function AgentMessage({ action }: { action: string }) {
   //     </div>
   //   );
   // }
-
-  return <div className="bg-blue-500 text-white">{parsedAction.text}</div>;
+  return (
+    <div className="bg-blue-500 text-white w-2/3 ml-auto">{action.text}</div>
+  );
 }
