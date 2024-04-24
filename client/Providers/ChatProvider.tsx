@@ -3,12 +3,7 @@ import { useClientSettings } from './ClientSettingsProvider';
 import axios from 'axios';
 import { useScreen } from './ScreenProvider';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
-
-type Message = {
-  id: string;
-  role: 'agent' | 'user';
-  message: string;
-};
+import type { MessageType } from '@/Components/Convo/Message';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -19,7 +14,7 @@ const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
   toggle: () => {},
-  conversation: [] as Message[],
+  conversation: [] as MessageType[],
   sendMessage: (_message: string) => {},
 });
 
@@ -43,7 +38,7 @@ export default function ChatProvider({
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
-  const [conversation, setConversation] = useState<Message[]>([]);
+  const [conversation, setConversation] = useState<MessageType[]>([]);
 
   useEffect(() => {
     if (open) {
@@ -65,27 +60,28 @@ export default function ChatProvider({
     });
 
     response.data.forEach((userRequest: any) => {
-      let messages: Message[] = [];
+      let messages: MessageType[] = [];
 
       messages = [
         ...messages,
         {
           id: userRequest.id,
           role: 'user',
-          message: userRequest.message,
-        },
+          content: userRequest.message,
+        }
       ];
 
       if (userRequest.agent_actions) {
-        const agentMessages: Message[] = userRequest.agent_actions.map(
+        const agentMessages: MessageType[] = userRequest.agent_actions.map(
           (agentAction: any) => {
             return {
               id: agentAction.id,
               role: 'agent',
-              message: JSON.parse(agentAction.action).text,
+              content: agentAction.action,
             };
-          },
+          }
         );
+
         messages = [...messages, ...agentMessages];
       }
 
@@ -119,7 +115,7 @@ export default function ChatProvider({
    * @param msg
    * @returns void
    */
-  function updateMessage(msg: Message) {
+  function updateMessage(msg: MessageType) {
     setConversation((prev) => {
       const index = prev.findIndex((m) => m.id === msg.id);
       if (index !== -1) {
@@ -133,8 +129,12 @@ export default function ChatProvider({
 
   async function sendMessage(message: string) {
     const { stream_url, user_request_id } = await userRequest(message);
-    const msg: Message = { id: user_request_id, role: 'user', message };
-
+    const msg: MessageType = {
+      id: user_request_id,
+      role: 'user',
+      content: message,
+    };
+    
     updateMessage(msg);
 
     await fetchEventSource(stream_url, {
@@ -143,7 +143,7 @@ export default function ChatProvider({
         updateMessage({
           id: ev.id,
           role: 'agent',
-          message: data.text,
+          content: data.text,
         });
       },
     });

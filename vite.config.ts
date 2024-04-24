@@ -14,7 +14,7 @@ export default defineConfig({
       },
       outDir: '../build',
     }),
-    react(),
+    react()
   ],
   resolve: {
     alias: {
