@@ -8,11 +8,27 @@ use Psr\Http\Message\ResponseInterface;
 
 class AwpClient
 {
+    private string $baseUrl = 'http://laravel.test';
     private string $agentWpVersion = '0.1-alpha1';
-    private string $userAgent;
 
-    public function __construct(private string $token) {
-        $this->userAgent = "agent-wp-client-$this->agentWpVersion";
+    public function __construct(private string $token) {}
+
+    public function indexSite($siteId, $data)
+    {
+        return $this->request(
+            method: 'POST',
+            url: "$this->baseUrl/api/sites/$siteId/index/health",
+            body: $data
+        );
+    }
+
+    public function indexError($siteId, $data)
+    {
+        return $this->request(
+            method: 'POST',
+            url: "$this->baseUrl/api/sites/$siteId/index/errors",
+            body: $data
+        );
     }
 
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
@@ -22,7 +38,8 @@ class AwpClient
             [
                 'Authorization' => "Bearer $this->token",
                 'Accept' => 'application/json',
-                'User-Agent' => $this->userAgent
+                'Content-Type' => 'application/json',
+                'X-WP-AGENT-VERSION' => $this->agentWpVersion,
             ],
             $additionalHeaders,
         );

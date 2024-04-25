@@ -1,29 +1,48 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export default class AwpClient {
+  private baseUrl: string = 'http://laravel.test'
   private token: string;
-  private siteId: string;
   private httpClient: AxiosInstance;
 
   private agentWpVersion = '0.1-alpha1';
-  private readonly userAgent;
 
-  constructor(token, siteId) {
+  constructor(token) {
     this.token = token;
-    this.siteId = siteId;
-    this.userAgent = `agent-wp-client-${this.agentWpVersion}`;
 
     this.httpClient = axios.create({
       timeout: 15000,
       headers: {
         'Authorization': `Bearer ${this.token}`,
         'Accept': 'application/json',
-        'User-Agent': this.userAgent
+        'X-WP-AGENT-VERSION': this.agentWpVersion,
       },
     });
   }
 
-  request(method: string, url: string, params: object, data: object, additionalHeaders: object) {
+  async getConversation(siteId: string): Promise<AxiosResponse> {
+    return this.request(
+      'GET',
+      `${this.baseUrl}/api/sites/${siteId}`,
+    );
+  }
+
+  async storeConversation(siteId: string, data: object): Promise<AxiosResponse> {
+    return this.request(
+      'POST',
+      `${this.baseUrl}/api/sites/${siteId}`,
+      {},
+      data
+    )
+  }
+
+  request(
+    method: string,
+    url: string,
+    params: object = {},
+    data: object = {},
+    additionalHeaders: object = {}
+  ): Promise<AxiosResponse> {
     return this.httpClient.request({
       method,
       url,
@@ -35,9 +54,5 @@ export default class AwpClient {
 
   setToken(token) {
     this.token = token;
-  }
-
-  setSiteId(siteId) {
-    this.siteId = siteId;
   }
 }

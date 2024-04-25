@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Services\AwpClient;
 
 class SiteIndexer implements Registrable
 {
@@ -23,12 +24,7 @@ class SiteIndexer implements Registrable
     public function indexSite()
     {
         $debug_data = SiteData::getDebugData();
-        $response = wp_remote_post("http://laravel.test/api/sites/{$this->main->siteId}/index/health", [
-            'body' => json_encode($debug_data),
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer '.$this->main->token,
-            ],
-        ]);
+        $awpClient = new AwpClient($this->main->token);
+        $response = $awpClient->indexSite($this->main->siteId, json_encode($debug_data));
     }
 }

@@ -1,10 +1,10 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClientSettings } from './ClientSettingsProvider';
-import axios from 'axios';
 import { useScreen } from './ScreenProvider';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import type { MessageType } from '@/Components/Convo/Message';
 import { MessageAction } from '@wpai/schemas';
+import AwpClient from '@/Services/AwpClient';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -57,11 +57,8 @@ export default function ChatProvider({
   }
 
   async function getConversation() {
-    const response = await axios.get(`http://localhost/api/sites/${siteId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const awpClient = new AwpClient(token);
+    const response = await awpClient.getConversation(siteId);
 
     const messages = response.data.reduce(
       (acc: MessageType[], userRequest: any) => {
@@ -90,11 +87,8 @@ export default function ChatProvider({
   async function userRequest(
     message: string,
   ): Promise<CreateUserRequestResponse> {
-    const response = await axios.post(
-      `http://localhost/api/sites/${siteId}`,
-      { message, wp_user_id, screen },
-      { headers: { Authorization: `Bearer ${token}` } },
-    );
+    const awpClient = new AwpClient(token);
+    const response = await awpClient.storeConversation(siteId, { message, wp_user_id, screen });
 
     return response.data;
   }
