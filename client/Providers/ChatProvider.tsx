@@ -32,14 +32,10 @@ export default function ChatProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // const siteId = '9bd7360f-6aeb-4204-b1a6-624d004701a3';
-  const siteId = '9be4bd1a-1c36-4c1a-bc92-80aafc7bb8f5';
+  const siteId = '9be4d289-ec6a-429e-9ae8-b673befcab77';
   const wp_user_id = 1;
-  // Greg Laptop
-  // const token = `eyJpdiI6InYrRXJBOHdWd0ovVGpabXBpRUdhaVE9PSIsInZhbHVlIjoiQnFLWC9ka0xCNHEycWZBbjN1MzQ5SkZxVmZic2UxTEtwQzdGQTk2aWIvMTVoU3N1b0RmVE13TDkvd3JNYmNTV1VYWXY2bnF1WU9mTEo0VkdnT2tmUmc9PSIsIm1hYyI6ImIzZGUwMWYyNzRmZGZjYTMzZjZjNjRiMzI0OTVlNTM5Y2RlM2Q4ZGY0ZWEwNTJhN2YxZjQxZGRlZTc3OTdlNmIiLCJ0YWciOiIifQ==`;
-  // Greg Mini
   const token =
-    'eyJpdiI6InpOdHhuODFvMkN0RnMxbkNONExDVkE9PSIsInZhbHVlIjoic2NTdGlaUzJVSDZOMDN3b2Y0Z3pSNHovVU5YWUw1dVJtd1hReWpSTkMxcjQ4WEdTQmJNaFBhRWdyMjNZYUI4MmRqN2VRTGxWNERmVkt0aGFIWXcxMUE9PSIsIm1hYyI6ImMxMjYyOWQ5NjgwNGI1Njg4MzE1MjQ4ZmQzYjlhYzJlZGRlZjk0YmVmMTY1NDBkNDMyZTY1NGQ4NmUwYzU0ZTIiLCJ0YWciOiIifQ==';
+    'eyJpdiI6Im5ZQzJ3U3FkUmpscUpjeE9yMVJjbWc9PSIsInZhbHVlIjoiRDVDc3RtOGVpRXJDVnBTR2Z5OC9PUi82TWZUbGR0enpNNlRJN05Pb1I3V3lrV01xa3l1OG9RMnkyTnRXNEtFTUoyYkZqaC9GQ1duL0R2Um5yOWdQcGc9PSIsIm1hYyI6IjJiNmJmMzM0MTNlY2RlNDYwZWRmZThmZWY3MDc1NmYzMjgxYjI2NzZkMGI1MGIzODlkYWY1Yzg4MmMyN2Y2NWEiLCJ0YWciOiIifQ==';
 
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();

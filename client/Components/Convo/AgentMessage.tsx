@@ -1,6 +1,7 @@
 // import Ajv from 'ajv';
 // import { actionSchema } from '@wpai/schemas';
 import type { MessageAction } from '@wpai/schemas';
+import MD from '@/Components/MD';
 
 // const ajv = new Ajv();
 // const validate = ajv.compile(actionSchema);
@@ -25,7 +26,5 @@ export default function AgentMessage({ action }: { action: MessageAction }) {
   //     </div>
   //   );
   // }
-  return (
-    <div className="bg-blue-500 text-white w-2/3 ml-auto">{action.text}</div>
-  );
+  return <MD>{action?.text ?? 'something went wrong'}</MD>;
 }

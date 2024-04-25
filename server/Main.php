@@ -26,9 +26,9 @@ class Main
      * Temporary for demo,
      * before auth is implemented.
      */
-    public string $siteId = '9be4bd1a-1c36-4c1a-bc92-80aafc7bb8f5';
+    public string $siteId = '9be4d289-ec6a-429e-9ae8-b673befcab77';
 
-    public string $token = 'eyJpdiI6InpOdHhuODFvMkN0RnMxbkNONExDVkE9PSIsInZhbHVlIjoic2NTdGlaUzJVSDZOMDN3b2Y0Z3pSNHovVU5YWUw1dVJtd1hReWpSTkMxcjQ4WEdTQmJNaFBhRWdyMjNZYUI4MmRqN2VRTGxWNERmVkt0aGFIWXcxMUE9PSIsIm1hYyI6ImMxMjYyOWQ5NjgwNGI1Njg4MzE1MjQ4ZmQzYjlhYzJlZGRlZjk0YmVmMTY1NDBkNDMyZTY1NGQ4NmUwYzU0ZTIiLCJ0YWciOiIifQ==';
+    public string $token = 'eyJpdiI6Im5ZQzJ3U3FkUmpscUpjeE9yMVJjbWc9PSIsInZhbHVlIjoiRDVDc3RtOGVpRXJDVnBTR2Z5OC9PUi82TWZUbGR0enpNNlRJN05Pb1I3V3lrV01xa3l1OG9RMnkyTnRXNEtFTUoyYkZqaC9GQ1duL0R2Um5yOWdQcGc9PSIsIm1hYyI6IjJiNmJmMzM0MTNlY2RlNDYwZWRmZThmZWY3MDc1NmYzMjgxYjI2NzZkMGI1MGIzODlkYWY1Yzg4MmMyN2Y2NWEiLCJ0YWciOiIifQ==';
 
     public function __construct(private string $file)
     {
