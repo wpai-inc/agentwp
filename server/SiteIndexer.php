@@ -12,7 +12,7 @@ class SiteIndexer implements Registrable
 
     public function register()
     {
-        add_action('shutdown', [$this, 'indexSite']);
+        add_action('init', [$this, 'indexSite']);
     }
 
     /**
@@ -27,6 +27,7 @@ class SiteIndexer implements Registrable
             'body' => json_encode($debug_data),
             'headers' => [
                 'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer '.$this->main->token,
             ],
         ]);
     }
