@@ -21,6 +21,7 @@
     },
     "require": {
         "kucrut/vite-for-wp": "^0.8.0",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "vlucas/phpdotenv": "^5.6"
     }
 }

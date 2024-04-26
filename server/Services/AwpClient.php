@@ -8,10 +8,12 @@ use Psr\Http\Message\ResponseInterface;
 
 class AwpClient
 {
-    private string $baseUrl = 'http://laravel.test';
+    private string $baseUrl;
     private string $agentWpVersion = '0.1-alpha1';
 
-    public function __construct(private string $token) {}
+    public function __construct(private string $token) {
+        $this->baseUrl = config('AGENT_WP_BASE_URL');
+    }
 
     public function indexSite($siteId, $data)
     {
