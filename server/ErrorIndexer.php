@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Factory\AwpClientFactory;
 use WpAi\AgentWp\Services\AwpClient;
 
 /**
@@ -44,7 +45,7 @@ class ErrorIndexer implements Registrable
             'context' => $error_context, // Be cautious with sensitive information
         ];
 
-        $awpClient = new AwpClient($this->main->token);
+        $awpClient = AwpClientFactory::create($this->main->token);
         $response = $awpClient->indexError($this->main->siteId, json_encode($error_data));
 
         return false; // Let PHP handle the error as well

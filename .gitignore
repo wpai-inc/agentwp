@@ -26,5 +26,4 @@ dist-ssr
 *.sw?
 
 .env
-client/.env
 .idea/

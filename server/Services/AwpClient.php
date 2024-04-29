@@ -5,6 +5,7 @@ namespace WpAi\AgentWp\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
+use function WpAi\AgentWp\config;
 
 class AwpClient
 {
@@ -12,7 +13,7 @@ class AwpClient
     private string $agentWpVersion = '0.1-alpha1';
 
     public function __construct(private string $token) {
-        $this->baseUrl = config('AGENT_WP_BASE_URL');
+        $this->baseUrl = config('AGENT_WP_SERVER_BASE_URL');
     }
 
     public function indexSite($siteId, $data)

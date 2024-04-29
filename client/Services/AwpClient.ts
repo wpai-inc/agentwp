@@ -1,7 +1,9 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
+require('dotenv').config({ path: '../.env' });
+
 export default class AwpClient {
-  private baseUrl: string = 'http://laravel.test'
+  private baseUrl: string;
   private token: string;
   private httpClient: AxiosInstance;
 
@@ -9,6 +11,7 @@ export default class AwpClient {
 
   constructor(token) {
     this.token = token;
+    this.baseUrl = process.env.AGENT_WP_CLIENT_BASE_URL;
 
     this.httpClient = axios.create({
       timeout: 15000,
@@ -50,6 +53,10 @@ export default class AwpClient {
       data,
       headers: additionalHeaders
     })
+  }
+
+  setBaseUrl(baseUrl) {
+    this.baseUrl = baseUrl;
   }
 
   setToken(token) {

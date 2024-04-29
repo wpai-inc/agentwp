@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Factory\AwpClientFactory;
 use WpAi\AgentWp\Services\AwpClient;
 
 class SiteIndexer implements Registrable
@@ -24,7 +25,7 @@ class SiteIndexer implements Registrable
     public function indexSite()
     {
         $debug_data = SiteData::getDebugData();
-        $awpClient = new AwpClient($this->main->token);
+        $awpClient = AwpClientFactory::create($this->main->token);
         $response = $awpClient->indexSite($this->main->siteId, json_encode($debug_data));
     }
 }
