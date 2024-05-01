@@ -26,11 +26,14 @@ export default function MessageBox() {
   }
 
   return (
-    <form className="p-2" onSubmit={submit}>
+    <form
+      className="p-2 m-2 bg-white focus-within:ring-2 focus-within:ring-blue-400 ring-1 ring-gray-200"
+      onSubmit={submit}
+    >
       <textarea
         onChange={(e) => setMessage(e.target.value)}
         value={message}
-        className="w-full h-24 bg-white p-4 ring-1 ring-gray-400 focus:ring-2 focus:ring-blue-400 border"
+        className="w-full h-24 p-2 focus:ring-0"
         placeholder="Type your message here..."
         onKeyDown={handleKeyDown}
       />

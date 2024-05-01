@@ -3,6 +3,7 @@ import ActionNavigate from './Actions/ActionNavigate';
 import ActionMessage from './Actions/ActionMessage';
 import UserMessage from './UserMessage';
 import { cn } from '@/lib/utils';
+import AgentMessage from './AgentMessage';
 
 type Role = 'agent' | 'user';
 
@@ -33,15 +34,11 @@ const AgentMessageComponent = ({ action }: { action: BaseAction }) => {
 
 export default function Message({ id, role, content }: MessageType) {
   return (
-    <div
-      id={id}
-      className={cn('text-white w-2/3 py-2 px-3 rounded-xl', {
-        'ml-auto bg-blue-500': role === 'agent',
-        'bg-green-500': role === 'user',
-      })}
-    >
+    <div id={id} className="py-2 px-3">
       {role === 'agent' && typeof content !== 'string' && content.ability ? (
-        <AgentMessageComponent action={content} />
+        <AgentMessage>
+          <AgentMessageComponent action={content} />
+        </AgentMessage>
       ) : (
         <UserMessage message={content} />
       )}
