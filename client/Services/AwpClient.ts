@@ -1,7 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-require('dotenv').config({ path: '../.env' });
-
 export default class AwpClient {
   private baseUrl: string;
   private token: string;
@@ -11,32 +9,32 @@ export default class AwpClient {
 
   constructor(token) {
     this.token = token;
-    this.baseUrl = process.env.AGENT_WP_CLIENT_BASE_URL;
+    this.baseUrl = 'http://localhost';
 
     this.httpClient = axios.create({
       timeout: 15000,
       headers: {
-        'Authorization': `Bearer ${this.token}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
         'X-WP-AGENT-VERSION': this.agentWpVersion,
       },
     });
   }
 
   async getConversation(siteId: string): Promise<AxiosResponse> {
-    return this.request(
-      'GET',
-      `${this.baseUrl}/api/sites/${siteId}`,
-    );
+    return this.request('GET', `${this.baseUrl}/api/sites/${siteId}`);
   }
 
-  async storeConversation(siteId: string, data: object): Promise<AxiosResponse> {
+  async storeConversation(
+    siteId: string,
+    data: object,
+  ): Promise<AxiosResponse> {
     return this.request(
       'POST',
       `${this.baseUrl}/api/sites/${siteId}`,
       {},
-      data
-    )
+      data,
+    );
   }
 
   request(
@@ -44,15 +42,15 @@ export default class AwpClient {
     url: string,
     params: object = {},
     data: object = {},
-    additionalHeaders: object = {}
+    additionalHeaders: object = {},
   ): Promise<AxiosResponse> {
     return this.httpClient.request({
       method,
       url,
       params,
       data,
-      headers: additionalHeaders
-    })
+      headers: additionalHeaders,
+    });
   }
 
   setBaseUrl(baseUrl) {
