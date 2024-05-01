@@ -30,7 +30,7 @@ export default function MessageBox() {
       <textarea
         onChange={(e) => setMessage(e.target.value)}
         value={message}
-        className="w-full h-24 bg-gray-200/90 p-4 ring-1 ring-gray-400 focus:ring-2 focus:ring-blue-400 border"
+        className="w-full h-24 bg-white p-4 ring-1 ring-gray-400 focus:ring-2 focus:ring-blue-400 border"
         placeholder="Type your message here..."
         onKeyDown={handleKeyDown}
       />

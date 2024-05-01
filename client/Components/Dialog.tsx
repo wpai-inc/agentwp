@@ -5,7 +5,7 @@ export default function Dialog() {
   const { conversation } = useChat();
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="p-4 text-white flex flex-col space-y-6">
+      <div className="p-4 flex flex-col space-y-6">
         {conversation.map((msg) => (
           <Message key={msg.id} {...msg} />
         ))}

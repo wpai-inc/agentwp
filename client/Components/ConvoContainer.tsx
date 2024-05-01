@@ -10,13 +10,16 @@ export default function ConvoContainer() {
   return (
     <div
       className={cn(
-        'transition fixed top-0 right-0 pt-[32px] h-screen w-[500px] z-50 bg-white/90 shadow-xl flex flex-col',
+        'transition fixed bottom-4 right-4 pt-[32px] h-[800px] w-[500px] z-50 bg-gray-100 shadow-xl flex flex-col border border-gray-200 rounded-xl',
         {
           'translate-x-full': !open,
         },
       )}
     >
-      <button className="p-2" onClick={toggle}>
+      <button
+        className="absolute p-2 -right-4 -top-4 bg-gray-100 border border-gray-200 rounded-xl"
+        onClick={toggle}
+      >
         <XSquare size="28" />
       </button>
       <Dialog />
