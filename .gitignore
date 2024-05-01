@@ -27,3 +27,5 @@ dist-ssr
 
 .env
 .idea/
+
+*storybook.log
