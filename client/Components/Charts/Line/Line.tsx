@@ -1,48 +1,47 @@
 /**
- * Docs for this component at https://recharts.org/en-US/api/BarChart
+ * Docs for this component at https://recharts.org/en-US/api/LineChart
  */
 import React from 'react';
-
 import {
-  ResponsiveContainer,
-  Bar as RootBar,
-  BarChart,
+  Line as RootLine,
   CartesianGrid,
   Legend,
+  LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis
 } from 'recharts';
 
-interface BarProps {
+interface LineProps {
   width?: number | string;
   height?: number | string;
   xDataKey?: string;
   valueDataKey: string;
   data: object[];
-  fillColor?: string;
+  strokeColor?: string;
 }
 
-const Bar = ({
+const Line = ({
   width = 730,
   height = 250,
   xDataKey,
   valueDataKey,
   data,
-  fillColor = '#8884d8'
-}: BarProps) => {
+  strokeColor = '#8884d8'
+}: LineProps) => {
   return (
     <ResponsiveContainer width={width} height={height}>
-      <BarChart data={data}>
+      <LineChart data={data}>
         <CartesianGrid strokeDasharray="2 2" />
         <XAxis dataKey={xDataKey} />
         <YAxis />
         <Tooltip />
         <Legend />
-        <RootBar dataKey={valueDataKey} fill={fillColor} />
-      </BarChart>
+        <RootLine dataKey={valueDataKey} stroke={strokeColor} />
+      </LineChart>
     </ResponsiveContainer>
   );
 };
 
-export default Bar;
+export default Line;

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Bar from './Bar';
+import Line from './Line';
 
 export default {
-  title: 'Wpai/Charts/Bar',
-  component: Bar,
-};
+  title: 'Wpai/Charts/Line',
+  component: Line,
+}
 
 export const Simple = {
   args: {},
