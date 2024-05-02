@@ -7,7 +7,7 @@ export default class AwpClient {
 
   private agentWpVersion = '0.1-alpha1';
 
-  constructor(token) {
+  constructor(token: string) {
     this.token = token;
     this.baseUrl = 'http://localhost';
 
@@ -23,6 +23,18 @@ export default class AwpClient {
 
   async getConversation(siteId: string): Promise<AxiosResponse> {
     return this.request('GET', `${this.baseUrl}/api/sites/${siteId}`);
+  }
+
+  async storeAgentResult(
+    actionId: string,
+    data: object,
+  ): Promise<AxiosResponse> {
+    return this.request(
+      'POST',
+      `${this.baseUrl}/api/action/${actionId}/result`,
+      {},
+      data,
+    );
   }
 
   async storeConversation(
@@ -53,11 +65,11 @@ export default class AwpClient {
     });
   }
 
-  setBaseUrl(baseUrl) {
+  setBaseUrl(baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
-  setToken(token) {
+  setToken(token: string) {
     this.token = token;
   }
 }
