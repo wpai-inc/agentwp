@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Abilities } from '@wpai/schemas';
+import { set } from 'react-hook-form';
 
 export const StreamContext = createContext<any | undefined>(undefined);
 
@@ -26,8 +27,10 @@ export default function StreamProvider({
   const [liveAction, setLiveAction] = useState<AgentAction | null>(null);
   const [action, setAction] = useState<AgentAction | null>(null);
   const [streamClosed, setStreamClosed] = useState(true);
+  const [userRequestId, setUserRequestId] = useState<string | null>(null);
 
-  async function startStream(stream_url: string) {
+  async function startStream(stream_url: string, user_request_id: string) {
+    setUserRequestId(user_request_id);
     resetStream();
     try {
       await fetchEventSource(stream_url, {
@@ -51,6 +54,7 @@ export default function StreamProvider({
     setStreamClosed(false);
     setAction(null);
     setLiveAction(null);
+    setUserRequestId(null);
   }
 
   function closeStream() {
@@ -60,7 +64,7 @@ export default function StreamProvider({
 
   return (
     <StreamContext.Provider
-      value={{ startStream, action, liveAction, streamClosed }}
+      value={{ startStream, action, liveAction, streamClosed, userRequestId }}
     >
       {children}
     </StreamContext.Provider>

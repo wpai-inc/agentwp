@@ -2,8 +2,26 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
 import { useStream } from '@/Providers/StreamProvider';
-import type { MessageType } from '@/Components/Convo/Message';
 import useAwpClient from '@/Hooks/useAwpClient';
+import { MessageAction, NavigateAction } from '@wpai/schemas';
+
+export type UserRequestType = {
+  id: string;
+  message: string;
+  wp_user_id?: number;
+  created_at?: string;
+  agent_actions: AgentAction[];
+};
+
+export type ActionType = NavigateAction | MessageAction;
+
+export type AgentAction = {
+  id: string;
+  action: ActionType;
+  final: boolean;
+  recipe_idx: number;
+  result: any;
+};
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -39,8 +57,8 @@ export default function ChatProvider({
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
-  const [conversation, setConversation] = useState<MessageType[]>([]);
-  const { startStream, liveAction } = useStream();
+  const [conversation, setConversation] = useState<UserRequest[]>([]);
+  const { startStream, liveAction, userRequestId } = useStream();
 
   useEffect(() => {
     getConversation();
@@ -48,11 +66,7 @@ export default function ChatProvider({
 
   useEffect(() => {
     if (liveAction) {
-      updateMessage({
-        id: liveAction.id,
-        role: 'agent',
-        content: liveAction.action,
-      });
+      updateAgentMessage(userRequestId, liveAction.id, liveAction.action);
     }
   }, [liveAction]);
 
@@ -65,29 +79,7 @@ export default function ChatProvider({
   async function getConversation() {
     const awpClient = useAwpClient(token);
     const response = await awpClient.getConversation(siteId);
-
-    const messages = response.data.reduce(
-      (acc: MessageType[], userRequest: any) => {
-        const userMessage = {
-          id: userRequest.id,
-          role: 'user',
-          content: userRequest.message,
-        };
-
-        const agentMessages = userRequest.agent_actions
-          ? userRequest.agent_actions.map((agentAction: any) => ({
-              id: agentAction.id,
-              role: 'agent',
-              content: agentAction.action,
-            }))
-          : [];
-
-        return [...acc, userMessage, ...agentMessages];
-      },
-      [],
-    );
-
-    setConversation(messages);
+    setConversation(response.data);
   }
 
   async function userRequest(
@@ -108,26 +100,39 @@ export default function ChatProvider({
    * @param msg
    * @returns void
    */
-  function updateMessage(msg: MessageType) {
+  function updateAgentMessage(
+    userRequestId: string,
+    aaId: string,
+    updatedAction: ActionType,
+  ) {
     setConversation((prev) => {
-      const index = prev.findIndex((m) => m.id === msg.id);
-      if (index !== -1) {
-        prev[index] = msg;
-        return [...prev];
-      } else {
-        return [...prev, msg];
-      }
+      const newConversation = prev.map((msg) => {
+        if (msg.id === userRequestId) {
+          return {
+            ...msg,
+            agent_actions: msg.agent_actions.map((aa) =>
+              aa.id === aaId ? updatedAction : aa,
+            ),
+          };
+        }
+        return msg;
+      });
+
+      return newConversation;
     });
+  }
+
+  function addUserRequest(msg: UserRequestType) {
+    setConversation([...conversation, msg]);
   }
 
   async function sendMessage(message: string) {
     const { stream_url, user_request_id } = await userRequest(message);
-    updateMessage({
+    addUserRequest({
       id: user_request_id,
-      role: 'user',
-      content: message,
-    } as MessageType);
-    startStream(stream_url);
+      message: message,
+    } as UserRequestType);
+    startStream(stream_url, user_request_id);
   }
 
   return (
