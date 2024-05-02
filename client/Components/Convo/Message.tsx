@@ -35,7 +35,7 @@ const AgentMessageComponent = ({ action }: { action: BaseAction }) => {
 export default function Message({ id, role, content }: MessageType) {
   return (
     <div id={id} className="py-2 px-3">
-      {role === 'agent' && typeof content !== 'string' && content.ability ? (
+      {role === 'agent' && typeof content !== 'string' && content?.ability ? (
         <AgentMessage>
           <AgentMessageComponent action={content} />
         </AgentMessage>
