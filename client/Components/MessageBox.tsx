@@ -1,9 +1,11 @@
 import { useState, useCallback } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
+import { useStream } from '@/Providers/StreamProvider';
 
 export default function MessageBox() {
   const { sendMessage } = useChat();
+  const { streamClosed } = useStream();
   const [message, setMessage] = useState('');
 
   const send = useCallback(
@@ -38,7 +40,9 @@ export default function MessageBox() {
         onKeyDown={handleKeyDown}
       />
       <div className="flex justify-end items-center">
-        <Button type="submit">Send</Button>
+        <Button type="submit" disabled={!streamClosed}>
+          {streamClosed ? 'Send' : 'Pending...'}
+        </Button>
       </div>
     </form>
   );

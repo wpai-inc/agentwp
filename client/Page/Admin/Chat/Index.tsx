@@ -6,6 +6,8 @@ import ChatProvider from '@/Providers/ChatProvider';
 import ConvoTrigger from '@/Components/ConvoTrigger';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import ScreenProvider from '@/Providers/ScreenProvider';
+import StreamProvider from '@/Providers/StreamProvider';
+import ActionListenerProvider from '@/Providers/ActionListenerProvider';
 
 const rootElement = document.getElementById('agent-wp-admin-chat');
 if (rootElement) {
@@ -15,10 +17,14 @@ if (rootElement) {
       <App>
         <ClientSettingsProvider>
           <ScreenProvider>
-            <ChatProvider>
-              <ConvoContainer />
-              <ConvoTrigger />
-            </ChatProvider>
+            <StreamProvider>
+              <ActionListenerProvider>
+                <ChatProvider>
+                  <ConvoContainer />
+                  <ConvoTrigger />
+                </ChatProvider>
+              </ActionListenerProvider>
+            </StreamProvider>
           </ScreenProvider>
         </ClientSettingsProvider>
       </App>

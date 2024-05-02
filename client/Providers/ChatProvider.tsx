@@ -1,9 +1,8 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { useClientSettings } from './ClientSettingsProvider';
-import { useScreen } from './ScreenProvider';
-import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { useScreen } from '@/Providers/ScreenProvider';
+import { useStream } from '@/Providers/StreamProvider';
 import type { MessageType } from '@/Components/Convo/Message';
-import { MessageAction } from '@wpai/schemas';
 import useAwpClient from '@/Hooks/useAwpClient';
 
 type CreateUserRequestResponse = {
@@ -41,10 +40,21 @@ export default function ChatProvider({
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
   const [conversation, setConversation] = useState<MessageType[]>([]);
+  const { startStream, liveAction } = useStream();
 
   useEffect(() => {
     getConversation();
   }, []);
+
+  useEffect(() => {
+    if (liveAction) {
+      updateMessage({
+        id: liveAction.id,
+        role: 'agent',
+        content: liveAction.action,
+      });
+    }
+  }, [liveAction]);
 
   function toggle() {
     const newVal = !open;
@@ -84,7 +94,11 @@ export default function ChatProvider({
     message: string,
   ): Promise<CreateUserRequestResponse> {
     const awpClient = useAwpClient(token);
-    const response = await awpClient.storeConversation(siteId, { message, wp_user_id, screen });
+    const response = await awpClient.storeConversation(siteId, {
+      message,
+      wp_user_id,
+      screen,
+    });
 
     return response.data;
   }
@@ -108,24 +122,12 @@ export default function ChatProvider({
 
   async function sendMessage(message: string) {
     const { stream_url, user_request_id } = await userRequest(message);
-    const msg: MessageType = {
+    updateMessage({
       id: user_request_id,
       role: 'user',
       content: message,
-    };
-
-    updateMessage(msg);
-
-    await fetchEventSource(stream_url, {
-      onmessage(ev) {
-        const data = JSON.parse(ev.data) as MessageAction;
-        updateMessage({
-          id: ev.id,
-          role: 'agent',
-          content: data,
-        });
-      },
-    });
+    } as MessageType);
+    startStream(stream_url);
   }
 
   return (
