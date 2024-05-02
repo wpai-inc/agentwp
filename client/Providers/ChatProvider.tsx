@@ -3,25 +3,11 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import useAwpClient from '@/Hooks/useAwpClient';
-import { MessageAction, NavigateAction } from '@wpai/schemas';
-
-export type UserRequestType = {
-  id: string;
-  message: string;
-  wp_user_id?: number;
-  created_at?: string;
-  agent_actions: AgentAction[];
-};
-
-export type ActionType = NavigateAction | MessageAction;
-
-export type AgentAction = {
-  id: string;
-  action: ActionType;
-  final: boolean;
-  recipe_idx: number;
-  result: any;
-};
+import type {
+  UserRequestType,
+  ActionType,
+} from '@/Providers/UserRequestsProvider';
+import { useUserRequests } from '@/Providers/UserRequestsProvider';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -32,7 +18,7 @@ const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
   toggle: () => {},
-  conversation: [] as MessageType[],
+  conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
 });
 
@@ -57,29 +43,24 @@ export default function ChatProvider({
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
-  const [conversation, setConversation] = useState<UserRequest[]>([]);
-  const { startStream, liveAction, userRequestId } = useStream();
+  const { conversation, setConversation, currentUserRequestId } =
+    useUserRequests();
+  const { startStream, liveAction } = useStream();
 
   useEffect(() => {
-    getConversation();
-  }, []);
-
-  useEffect(() => {
-    if (liveAction) {
-      updateAgentMessage(userRequestId, liveAction.id, liveAction.action);
+    if (liveAction && currentUserRequestId) {
+      updateAgentMessage(
+        currentUserRequestId,
+        liveAction.id,
+        liveAction.action,
+      );
     }
-  }, [liveAction]);
+  }, [liveAction, currentUserRequestId]);
 
   function toggle() {
     const newVal = !open;
     setOpen(newVal);
     setSettings({ chatOpen: newVal });
-  }
-
-  async function getConversation() {
-    const awpClient = useAwpClient(token);
-    const response = await awpClient.getConversation(siteId);
-    setConversation(response.data);
   }
 
   async function userRequest(
@@ -101,13 +82,13 @@ export default function ChatProvider({
    * @returns void
    */
   function updateAgentMessage(
-    userRequestId: string,
+    urId: string,
     aaId: string,
     updatedAction: ActionType,
   ) {
-    setConversation((prev) => {
-      const newConversation = prev.map((msg) => {
-        if (msg.id === userRequestId) {
+    setConversation((prev: UserRequestType[]) => {
+      return prev.map(function (msg) {
+        if (msg.id === urId) {
           return {
             ...msg,
             agent_actions: msg.agent_actions.map((aa) =>
@@ -117,8 +98,6 @@ export default function ChatProvider({
         }
         return msg;
       });
-
-      return newConversation;
     });
   }
 

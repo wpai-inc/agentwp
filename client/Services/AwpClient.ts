@@ -2,12 +2,12 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export default class AwpClient {
   private baseUrl: string;
-  private token: string;
+  private token?: string;
   private httpClient: AxiosInstance;
 
   private agentWpVersion = '0.1-alpha1';
 
-  constructor(token: string) {
+  constructor(token?: string) {
     this.token = token;
     this.baseUrl = 'http://localhost';
 
@@ -19,6 +19,10 @@ export default class AwpClient {
         'X-WP-AGENT-VERSION': this.agentWpVersion,
       },
     });
+  }
+
+  getStreamUrl(userRequestId: string) {
+    return `${this.baseUrl}/api/request/${userRequestId}/stream`;
   }
 
   async getConversation(siteId: string): Promise<AxiosResponse> {

@@ -1,8 +1,8 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Abilities } from '@wpai/schemas';
-import { set } from 'react-hook-form';
-
+import { useUserRequests } from './UserRequestsProvider';
+import useAwpClient from '@/Hooks/useAwpClient';
 export const StreamContext = createContext<any | undefined>(undefined);
 
 export function useStream() {
@@ -27,13 +27,25 @@ export default function StreamProvider({
   const [liveAction, setLiveAction] = useState<AgentAction | null>(null);
   const [action, setAction] = useState<AgentAction | null>(null);
   const [streamClosed, setStreamClosed] = useState(true);
-  const [userRequestId, setUserRequestId] = useState<string | null>(null);
+  const { setCurrentUserRequestId, currentUserRequestId, currentAction } =
+    useUserRequests();
+  const client = useAwpClient();
+  const ctrl = new AbortController();
 
   async function startStream(stream_url: string, user_request_id: string) {
-    setUserRequestId(user_request_id);
+    console.log('startstream');
+    setCurrentUserRequestId(user_request_id);
     resetStream();
     try {
       await fetchEventSource(stream_url, {
+        credentials: 'include',
+        async onopen(response) {
+          if (response.status === 500) {
+            console.error('Server Error: HTTP 500');
+            closeStream();
+            return; // Prevents the stream from continuing when a 500 error is encountered
+          }
+        },
         onmessage(ev) {
           setLiveAction({
             id: ev.id,
@@ -41,8 +53,13 @@ export default function StreamProvider({
             action: JSON.parse(ev.data),
           } as AgentAction);
         },
-        onerror: closeStream,
+        onerror(err) {
+          closeStream();
+          throw err;
+        },
         onclose: closeStream,
+        signal: ctrl.signal,
+        openWhenHidden: true,
       });
     } catch (e) {
       console.error('Error starting stream', e);
@@ -50,11 +67,21 @@ export default function StreamProvider({
     }
   }
 
+  useEffect(() => {
+    if (!currentAction?.final && currentUserRequestId) {
+      startStreamFromRequest(currentUserRequestId);
+    }
+  }, [currentAction, currentUserRequestId]);
+
+  async function startStreamFromRequest(user_request_id: string) {
+    const url = client.getStreamUrl(user_request_id);
+    await startStream(url, user_request_id);
+  }
+
   function resetStream() {
     setStreamClosed(false);
     setAction(null);
     setLiveAction(null);
-    setUserRequestId(null);
   }
 
   function closeStream() {
@@ -64,7 +91,13 @@ export default function StreamProvider({
 
   return (
     <StreamContext.Provider
-      value={{ startStream, action, liveAction, streamClosed, userRequestId }}
+      value={{
+        startStream,
+        startStreamFromRequest,
+        action,
+        liveAction,
+        streamClosed,
+      }}
     >
       {children}
     </StreamContext.Provider>
