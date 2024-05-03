@@ -31,10 +31,10 @@ export default function ChatProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const siteId = '9be4d289-ec6a-429e-9ae8-b673befcab77';
+  const siteId = '9bf34f11-304c-42c8-8b80-54b6628fe151';
   const wp_user_id = 1;
   const token =
-    'eyJpdiI6Im5ZQzJ3U3FkUmpscUpjeE9yMVJjbWc9PSIsInZhbHVlIjoiRDVDc3RtOGVpRXJDVnBTR2Z5OC9PUi82TWZUbGR0enpNNlRJN05Pb1I3V3lrV01xa3l1OG9RMnkyTnRXNEtFTUoyYkZqaC9GQ1duL0R2Um5yOWdQcGc9PSIsIm1hYyI6IjJiNmJmMzM0MTNlY2RlNDYwZWRmZThmZWY3MDc1NmYzMjgxYjI2NzZkMGI1MGIzODlkYWY1Yzg4MmMyN2Y2NWEiLCJ0YWciOiIifQ==';
+    'eyJpdiI6Imc3bnJaM3RrN2tBYmREd3lMQlpIVUE9PSIsInZhbHVlIjoiNXM1T1ZpbGZpV0ZpZVBQK3VUYThKUDZYR2ZIQkpxa2RkUVVrZXZzZnBtQ1NBeWtNTU53STlwQWJJVGttVVh0Tk1WTUVZY1VtWHBXcHdvaUFDcVhiUFE9PSIsIm1hYyI6ImUxNDBmMzVhYzViNGZjMmY2ZGViNzVmNmExNWJhNThlY2Q4NGU5MzA0N2ZhOGM5YjE4NzRhY2NhYzhhN2YzN2YiLCJ0YWciOiIifQ==';
 
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();

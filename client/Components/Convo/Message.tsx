@@ -1,47 +1,42 @@
-import { BaseAction, MessageAction, NavigateAction } from '@wpai/schemas';
-import ActionNavigate from './Actions/ActionNavigate';
-import ActionMessage from './Actions/ActionMessage';
+import React from 'react';
+import { BaseAction } from '@wpai/schemas';
 import UserMessage from './UserMessage';
-import { cn } from '@/lib/utils';
 import AgentMessage from './AgentMessage';
+import RichMessage from "@/Components/RichMessage";
 
 type Role = 'agent' | 'user';
+
+/**
+ * TODO there is a mismatch in BaseAction, MessageAction, NavigateAcion, etc...
+ * In this code we are looking for `ability` which is correct according to the
+ * JSON schema https://github.com/wpai-inc/schemas/blob/main/src/schemas/action.schema.json
+ * But the imported library has `capability` property.
+ * We must update the @wpai/schemas repo
+ */
 
 export type MessageType = {
   id: string;
   role: Role;
-  content: string | Action;
+  content: string | BaseAction;
 };
 
-type Action = MessageAction | NavigateAction;
+const isAgentMessage = (role, content) => {
+  return role === 'agent' && typeof content !== 'string' && content?.ability;
+}
 
-const isMessageAction = (action: BaseAction): action is MessageAction => {
-  return action.ability === 'message';
-};
-
-const isNavigateAction = (action: BaseAction): action is NavigateAction => {
-  return action.ability === 'navigate';
-};
-
-const AgentMessageComponent = ({ action }: { action: BaseAction }) => {
-  if (isMessageAction(action)) {
-    return <ActionMessage action={action} />;
-  } else if (isNavigateAction(action)) {
-    return <ActionNavigate action={action} />;
-  }
-  return null;
-};
+const isUserMessage = (role) => {
+  return role === 'user';
+}
 
 export default function Message({ id, role, content }: MessageType) {
   return (
     <div id={id} className="py-2 px-3">
-      {role === 'agent' && typeof content !== 'string' && content?.ability ? (
+      {isAgentMessage(role, content) ? (
         <AgentMessage>
-          <AgentMessageComponent action={content} />
+          <RichMessage action={content as BaseAction} />
         </AgentMessage>
-      ) : (
-        <UserMessage message={content} />
-      )}
+      ) : null}
+      {isUserMessage(role) ? <UserMessage message={content as string} /> : null}
     </div>
   );
 }

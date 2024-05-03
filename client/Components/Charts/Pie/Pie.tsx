@@ -5,7 +5,8 @@ import React from 'react';
 import {
   Pie as RootPie,
   PieChart,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Tooltip
 } from 'recharts';
 
 interface PieProps {
@@ -22,20 +23,24 @@ const Pie = ({
   width = 730,
   height = 250,
   outerRadius = 50,
+  valueDataKey,
+  dataKey,
   fillColor = '#8884d8',
   data
 }: PieProps) => {
   return (
-    <ResponsiveContainer>
-      <PieChart width={width} height={height}>
+    <ResponsiveContainer width={width} height={height}>
+      <PieChart>
+        <Tooltip />
         <RootPie
           data={data}
-          dataKey="value"
-          nameKey="name"
+          dataKey={valueDataKey}
+          nameKey={dataKey}
           cx="50%"
           cy="50%"
           outerRadius={outerRadius}
           fill={fillColor}
+          label
         />
       </PieChart>
     </ResponsiveContainer>
