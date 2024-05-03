@@ -24,7 +24,7 @@ type UserRequestsContextType = {
   conversation: UserRequestType[];
   setConversation: React.Dispatch<React.SetStateAction<UserRequestType[]>>;
   currentUserRequestId: string | null;
-  setCurrentUserRequestId: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUserRequestId: React.Dispatch<React.SetStateAction<string | null>>;
   currentAction: AgentAction | null;
 };
 
@@ -80,7 +80,7 @@ export default function UserRequestsProvider({
   async function getConversation() {
     const awpClient = useAwpClient(token);
     const response = await awpClient.getConversation(siteId);
-    setCurrentUserRequestId(response.data[response.data.length - 1].id);
+    setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
     setConversation(response.data);
   }
 

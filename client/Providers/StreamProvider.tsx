@@ -69,11 +69,15 @@ export default function StreamProvider({
   }
 
   useEffect(() => {
-    if (!currentAction?.final && currentUserRequestId) {
-      console.log('retrying stream');
+    if (
+      currentAction &&
+      !currentAction.final &&
+      streamClosed &&
+      currentUserRequestId
+    ) {
       startStreamFromRequest(currentUserRequestId);
     }
-  }, [currentAction, currentUserRequestId]);
+  }, [currentAction, streamClosed, currentUserRequestId]);
 
   async function startStreamFromRequest(user_request_id: string) {
     const url = client.getStreamUrl(user_request_id);

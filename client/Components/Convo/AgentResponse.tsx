@@ -5,6 +5,7 @@ import { Abilities } from '@wpai/schemas';
 import ActionIncomplete from './Actions/ActionIncomplete';
 import ActionPending from './Actions/ActionPending';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
+import { useStream } from '@/Providers/StreamProvider';
 
 type ActionComponentsType = {
   [key in Abilities]?: React.ComponentType<AgentAction>;
@@ -17,10 +18,13 @@ const ActionComponents: ActionComponentsType = {
 
 export default function AgentResponse({
   agentActions,
+  userRequestId,
 }: {
   agentActions?: AgentAction[];
+  userRequestId: string;
 }) {
   const { currentAction } = useUserRequests();
+  const { streamClosed } = useStream();
   return (
     <div className="flex gap-4 p-4">
       <div className="w-8 h-8 flex items-center justify-center font-bold bg-blue-500 text-white rounded-full">
@@ -32,7 +36,13 @@ export default function AgentResponse({
         <div className="flex-1">
           {agentActions.map((aa) => {
             if (!aa.action) {
-              return <ActionIncomplete key={aa.id} />;
+              return (
+                <ActionIncomplete
+                  key={aa.id}
+                  userRequestId={userRequestId}
+                  {...aa}
+                />
+              );
             } else {
               const ActionComponent =
                 ActionComponents[aa.action.ability as Abilities];
@@ -46,7 +56,9 @@ export default function AgentResponse({
             }
           })}
 
-          {!currentAction?.final && <p>Waiting on next action...</p>}
+          {!currentAction?.final && streamClosed && (
+            <p>Waiting on next action...</p>
+          )}
         </div>
       ) : (
         <div>No actions</div>

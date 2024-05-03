@@ -7,5 +7,9 @@ export type MessageAgentAction = Omit<AgentAction, 'action'> & {
 };
 
 export default function ActionMessage({ action }: MessageAgentAction) {
-  return <MD>{action?.text ?? 'something went wrong'}</MD>;
+  return (
+    <div className="border-b border-gray-300 py-2">
+      <MD>{action?.text ?? 'something went wrong'}</MD>
+    </div>
+  );
 }
