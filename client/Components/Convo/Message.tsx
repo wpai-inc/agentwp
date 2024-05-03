@@ -1,6 +1,6 @@
 import AgentResponse from './AgentResponse';
 import UserRequest from './UserRequest';
-import type { UserRequestType } from '@/Providers/ChatProvider';
+import type { UserRequestType } from '@/Providers/UserRequestsProvider';
 
 export default function Message(userRequest: UserRequestType) {
   return (
