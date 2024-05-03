@@ -20,20 +20,34 @@ class AwpClient
 
     public function indexSite($siteId, $data)
     {
-        return $this->request(
-            method: 'POST',
-            url: "$this->baseUrl/api/sites/$siteId/index/health",
-            body: $data
-        );
+        try {
+            return $this->request(
+                method: 'POST',
+                url: "$this->baseUrl/api/sites/$siteId/index/health",
+                body: $data
+            );
+        } catch (\Exception $e) {
+            // Handle the exception
+            error_log($e->getMessage());
+
+            return null;
+        }
     }
 
     public function indexError($siteId, $data)
     {
-        return $this->request(
-            method: 'POST',
-            url: "$this->baseUrl/api/sites/$siteId/index/errors",
-            body: $data
-        );
+        try {
+            return $this->request(
+                method: 'POST',
+                url: "$this->baseUrl/api/sites/$siteId/index/errors",
+                body: $data
+            );
+        } catch (\Exception $e) {
+            // Handle the exception
+            error_log($e->getMessage());
+
+            return null;
+        }
     }
 
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
