@@ -5,15 +5,17 @@ namespace WpAi\AgentWp\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
-use function WpAi\AgentWp\config;
+use WpAi\AgentWp\Helper;
 
 class AwpClient
 {
     private string $baseUrl;
+
     private string $agentWpVersion = '0.1-alpha1';
 
-    public function __construct(private string $token) {
-        $this->baseUrl = config('AGENT_WP_SERVER_BASE_URL');
+    public function __construct(private string $token)
+    {
+        $this->baseUrl = Helper::config('AGENT_WP_SERVER_BASE_URL');
     }
 
     public function indexSite($siteId, $data)
