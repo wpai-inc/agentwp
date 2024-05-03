@@ -33,12 +33,11 @@ export default function StreamProvider({
   const ctrl = new AbortController();
 
   async function startStream(stream_url: string, user_request_id: string) {
-    console.log('startstream');
     setCurrentUserRequestId(user_request_id);
     resetStream();
     try {
       await fetchEventSource(stream_url, {
-        credentials: 'include',
+        // credentials: 'include',
         async onopen(response) {
           if (response.status === 500) {
             console.error('Server Error: HTTP 500');
@@ -47,11 +46,13 @@ export default function StreamProvider({
           }
         },
         onmessage(ev) {
-          setLiveAction({
-            id: ev.id,
-            ability: ev.event,
-            action: JSON.parse(ev.data),
-          } as AgentAction);
+          if (ev.event !== 'close') {
+            setLiveAction({
+              id: ev.id,
+              ability: ev.event,
+              action: JSON.parse(ev.data),
+            } as AgentAction);
+          }
         },
         onerror(err) {
           closeStream();
@@ -69,6 +70,7 @@ export default function StreamProvider({
 
   useEffect(() => {
     if (!currentAction?.final && currentUserRequestId) {
+      console.log('retrying stream');
       startStreamFromRequest(currentUserRequestId);
     }
   }, [currentAction, currentUserRequestId]);

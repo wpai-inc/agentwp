@@ -33,17 +33,17 @@ export default function AgentResponse({
           {agentActions.map((aa) => {
             if (!aa.action) {
               return <ActionIncomplete key={aa.id} />;
+            } else {
+              const ActionComponent =
+                ActionComponents[aa.action.ability as Abilities];
+              if (!ActionComponent) {
+                console.error(
+                  `No component found for ability: ${aa.action.ability}`,
+                );
+                return null; // Or render some fallback UI
+              }
+              return <ActionComponent key={aa.id} {...aa} />;
             }
-
-            const ActionComponent =
-              ActionComponents[aa.action.ability as Abilities];
-            if (!ActionComponent) {
-              console.error(
-                `No component found for ability: ${aa.action.ability}`,
-              );
-              return null; // Or render some fallback UI
-            }
-            return <ActionComponent key={aa.id} {...aa} />;
           })}
 
           {!currentAction?.final && <p>Waiting on next action...</p>}

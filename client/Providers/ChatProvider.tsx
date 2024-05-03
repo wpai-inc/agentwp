@@ -5,7 +5,7 @@ import { useStream } from '@/Providers/StreamProvider';
 import useAwpClient from '@/Hooks/useAwpClient';
 import type {
   UserRequestType,
-  ActionType,
+  AgentAction,
 } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 
@@ -49,11 +49,7 @@ export default function ChatProvider({
 
   useEffect(() => {
     if (liveAction && currentUserRequestId) {
-      updateAgentMessage(
-        currentUserRequestId,
-        liveAction.id,
-        liveAction.action,
-      );
+      updateAgentMessage(currentUserRequestId, liveAction);
     }
   }, [liveAction, currentUserRequestId]);
 
@@ -81,19 +77,19 @@ export default function ChatProvider({
    * @param msg
    * @returns void
    */
-  function updateAgentMessage(
-    urId: string,
-    aaId: string,
-    updatedAction: ActionType,
-  ) {
+  function updateAgentMessage(urId: string, updatedAa: AgentAction) {
     setConversation((prev: UserRequestType[]) => {
       return prev.map(function (msg) {
         if (msg.id === urId) {
           return {
             ...msg,
-            agent_actions: msg.agent_actions.map((aa) =>
-              aa.id === aaId ? updatedAction : aa,
-            ),
+            agent_actions: msg.agent_actions.some(
+              (aa) => aa.id === updatedAa.id,
+            )
+              ? msg.agent_actions.map((aa) =>
+                  aa.id === updatedAa.id ? updatedAa : aa,
+                )
+              : [...msg.agent_actions, updatedAa],
           };
         }
         return msg;

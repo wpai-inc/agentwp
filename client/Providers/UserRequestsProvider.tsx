@@ -1,7 +1,6 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import useAwpClient from '@/Hooks/useAwpClient';
 import { MessageAction, NavigateAction } from '@wpai/schemas';
-import { set } from 'react-hook-form';
 
 export type ActionType = NavigateAction | MessageAction;
 
@@ -23,9 +22,9 @@ export type UserRequestType = {
 
 type UserRequestsContextType = {
   conversation: UserRequestType[];
-  setConversation: (conversation: UserRequestType[]) => void;
+  setConversation: React.Dispatch<React.SetStateAction<UserRequestType[]>>;
   currentUserRequestId: string | null;
-  setCurrentUserRequestId: (userRequestId: string | null) => void;
+  setCurrentUserRequestId: React.Dispatch<React.SetStateAction<string>>;
   currentAction: AgentAction | null;
 };
 

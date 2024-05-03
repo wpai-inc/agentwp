@@ -3,6 +3,7 @@ import UserRequest from './UserRequest';
 import type { UserRequestType } from '@/Providers/UserRequestsProvider';
 
 export default function Message(userRequest: UserRequestType) {
+  console.log(userRequest.agent_actions);
   return (
     <div id={userRequest.id} className="space-y-6 divide-y-2">
       <UserRequest message={userRequest.message} />
