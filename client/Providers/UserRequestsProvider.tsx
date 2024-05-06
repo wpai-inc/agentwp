@@ -46,6 +46,83 @@ export function useUserRequests() {
   return chat;
 }
 
+const sampleRichMessages: UserRequestType[] = [
+  {
+    id: "4000",
+    message: 'Show me user growth for the current year',
+    agent_actions: [
+      {
+        id: "4001",
+        final: true,
+        recipe_idx: 0,
+        result: {},
+        action: {
+          ability: 'message',
+          text: "Here's a chart with user growth for the current year",
+          graph: {
+            graphType: 'line',
+            data: [
+              { label: 'Jan', value: 300 },
+              { label: 'Feb', value: 500 },
+              { label: 'Mar', value: 600 },
+              { label: 'Apr', value: 900 },
+            ]
+          }
+        },
+      },
+    ]
+  },
+  {
+    id: '4002',
+    message: 'Show me user growth for the current year in a bar chart',
+    agent_actions: [
+      {
+        id: '4003',
+        final: true,
+        recipe_idx: 0,
+        result: {},
+        action: {
+          ability: 'message',
+          text: "Here's a chart with user growth for the current year",
+          graph: {
+            graphType: 'bar',
+            data: [
+              { label: 'Jan', value: 300 },
+              { label: 'Feb', value: 500 },
+              { label: 'Mar', value: 600 },
+              { label: 'Apr', value: 900 },
+            ]
+          }
+        },
+      },
+    ],
+  },
+  {
+    id: '4004',
+    message: 'Show me how many of my users are paid vs free',
+    agent_actions: [
+      {
+        id: '4005',
+        final: true,
+        recipe_idx: 0,
+        result: {},
+        action: {
+          ability: 'message',
+          text: "Here's a chart comparing free vs paid users",
+          graph: {
+            graphType: 'pie',
+            data: [
+              { label: 'Free', value: 300 },
+              { label: 'Paid', value: 500 },
+            ]
+          }
+        },
+      }
+    ],
+  },
+];
+
+
 export default function UserRequestsProvider({
   children,
 }: {
@@ -55,7 +132,7 @@ export default function UserRequestsProvider({
   const token =
     'eyJpdiI6InFnS2prSm9mSURWTWZpVFBuM0NsOGc9PSIsInZhbHVlIjoieWpmYmwza0l4NFpXTzRSSUxITk11TjhKSVRJaWtsenhGRndvd2VUZ1c0WjN2dFNjT0hIWXhpcnhieXp5YmExRGEweVY4YVNRQUt2RytOS2prYjFuaUE9PSIsIm1hYyI6IjFlNTA2ZGE0ODE0YzlmNjU0MTc5OGMyYTA4MTAyM2ZjYWFmOGVhMDEwNWRmMDExOWJhZjI1OTZmNDlkZjc2ZDAiLCJ0YWciOiIifQ==';
 
-  const [conversation, setConversation] = useState<UserRequestType[]>([]);
+  const [conversation, setConversation] = useState<UserRequestType[]>(sampleRichMessages);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
     string | null
   >(null);
@@ -81,7 +158,7 @@ export default function UserRequestsProvider({
     const awpClient = useAwpClient(token);
     const response = await awpClient.getConversation(siteId);
     setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
-    setConversation(response.data);
+    setConversation([...conversation, ...response.data]);
   }
 
   return (
