@@ -102,11 +102,15 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         <?php
     }
 
-    public function pageProps(array $merge = []): array
+    public function pageProps(): array
     {
+
+        $merge = $this->pageData ?? [];
+
         return [
-            'nonce' => wp_create_nonce($this->main::nonce()),
             'ajax_url' => admin_url('admin-ajax.php'),
+            'api_host' => $this->main->apiHost(),
+            'site_id' => get_option('agentwp_site_id')['site_id'] ?? null,
             'page' => $this->slug(),
             'url' => $this->main->url(),
             'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),

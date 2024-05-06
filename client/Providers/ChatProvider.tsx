@@ -1,15 +1,18 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClientSettings } from './ClientSettingsProvider';
-import axios from 'axios';
 import { useScreen } from './ScreenProvider';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import type { MessageType } from '@/Components/Convo/Message';
 import { MessageAction } from '@wpai/schemas';
+import apiRequest from "@/lib/apiRequest";
 
 type CreateUserRequestResponse = {
   user_request_id: string;
   stream_url: string;
 };
+
+declare const agentwp_settings: agentwpSettings;
+
 
 const ChatContext = createContext({
   open: false,
@@ -27,16 +30,12 @@ export function useChat() {
   return chat;
 }
 
+
 export default function ChatProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const siteId = '9be4d289-ec6a-429e-9ae8-b673befcab77';
-  const wp_user_id = 1;
-  const token =
-    'eyJpdiI6Im5ZQzJ3U3FkUmpscUpjeE9yMVJjbWc9PSIsInZhbHVlIjoiRDVDc3RtOGVpRXJDVnBTR2Z5OC9PUi82TWZUbGR0enpNNlRJN05Pb1I3V3lrV01xa3l1OG9RMnkyTnRXNEtFTUoyYkZqaC9GQ1duL0R2Um5yOWdQcGc9PSIsIm1hYyI6IjJiNmJmMzM0MTNlY2RlNDYwZWRmZThmZWY3MDc1NmYzMjgxYjI2NzZkMGI1MGIzODlkYWY1Yzg4MmMyN2Y2NWEiLCJ0YWciOiIifQ==';
-
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
@@ -53,11 +52,7 @@ export default function ChatProvider({
   }
 
   async function getConversation() {
-    const response = await axios.get(`http://localhost/api/sites/${siteId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiRequest.get( `/api/sites/${agentwp_settings.site_id}`);
 
     const messages = response.data.reduce(
       (acc: MessageType[], userRequest: any) => {
@@ -86,10 +81,9 @@ export default function ChatProvider({
   async function userRequest(
     message: string,
   ): Promise<CreateUserRequestResponse> {
-    const response = await axios.post(
-      `http://localhost/api/sites/${siteId}`,
-      { message, wp_user_id, screen },
-      { headers: { Authorization: `Bearer ${token}` } },
+    const response = await apiRequest.post(
+      `/api/sites/${agentwp_settings.site_id}`,
+      { message, screen },
     );
 
     return response.data;
