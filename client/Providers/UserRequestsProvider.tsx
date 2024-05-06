@@ -158,7 +158,8 @@ export default function UserRequestsProvider({
     const awpClient = useAwpClient(token);
     const response = await awpClient.getConversation(siteId);
     setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
-    setConversation([...conversation, ...response.data]);
+    // setConversation([...conversation, ...response.data]);
+    setConversation(response.data);
   }
 
   return (
