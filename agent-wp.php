@@ -13,9 +13,13 @@
  * Requires at least: 6.4
  * Requires PHP: 7.0
  */
+
 defined('ABSPATH') || exit;
 
 require_once __DIR__.'/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 /**
  * Registers all of the service providers

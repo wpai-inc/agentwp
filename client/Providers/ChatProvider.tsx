@@ -1,10 +1,13 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { useClientSettings } from './ClientSettingsProvider';
-import { useScreen } from './ScreenProvider';
-import { fetchEventSource } from '@microsoft/fetch-event-source';
-import type { MessageType } from '@/Components/Convo/Message';
-import { MessageAction } from '@wpai/schemas';
-import apiRequest from "@/lib/apiRequest";
+import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { useScreen } from '@/Providers/ScreenProvider';
+import { useStream } from '@/Providers/StreamProvider';
+import useAwpClient from '@/Hooks/useAwpClient';
+import type {
+  UserRequestType,
+  AgentAction,
+} from '@/Providers/UserRequestsProvider';
+import { useUserRequests } from '@/Providers/UserRequestsProvider';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -18,7 +21,7 @@ const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
   toggle: () => {},
-  conversation: [] as MessageType[],
+  conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
 });
 
@@ -36,14 +39,19 @@ export default function ChatProvider({
 }: {
   children: React.ReactNode;
 }) {
+
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
-  const [conversation, setConversation] = useState<MessageType[]>([]);
+  const { conversation, setConversation, currentUserRequestId } =
+    useUserRequests();
+  const { startStream, liveAction } = useStream();
 
   useEffect(() => {
-    getConversation();
-  }, []);
+    if (liveAction && currentUserRequestId) {
+      updateAgentMessage(currentUserRequestId, liveAction);
+    }
+  }, [liveAction, currentUserRequestId]);
 
   function toggle() {
     const newVal = !open;
@@ -51,40 +59,15 @@ export default function ChatProvider({
     setSettings({ chatOpen: newVal });
   }
 
-  async function getConversation() {
-    const response = await apiRequest.get( `/api/sites/${agentwp_settings.site_id}`);
-
-    const messages = response.data.reduce(
-      (acc: MessageType[], userRequest: any) => {
-        const userMessage = {
-          id: userRequest.id,
-          role: 'user',
-          content: userRequest.message,
-        };
-
-        const agentMessages = userRequest.agent_actions
-          ? userRequest.agent_actions.map((agentAction: any) => ({
-              id: agentAction.id,
-              role: 'agent',
-              content: agentAction.action,
-            }))
-          : [];
-
-        return [...acc, userMessage, ...agentMessages];
-      },
-      [],
-    );
-
-    setConversation(messages);
-  }
-
   async function userRequest(
     message: string,
   ): Promise<CreateUserRequestResponse> {
-    const response = await apiRequest.post(
-      `/api/sites/${agentwp_settings.site_id}`,
-      { message, screen },
-    );
+    const awpClient = useAwpClient(token);
+    const response = await awpClient.storeConversation(siteId, {
+      message,
+      wp_user_id,
+      screen,
+    });
 
     return response.data;
   }
@@ -94,38 +77,39 @@ export default function ChatProvider({
    * @param msg
    * @returns void
    */
-  function updateMessage(msg: MessageType) {
-    setConversation((prev) => {
-      const index = prev.findIndex((m) => m.id === msg.id);
-      if (index !== -1) {
-        prev[index] = msg;
-        return [...prev];
-      } else {
-        return [...prev, msg];
-      }
+  function updateAgentMessage(urId: string, updatedAa: AgentAction) {
+    setConversation((prev: UserRequestType[]) => {
+      return prev.map(function (msg) {
+        if (msg.id === urId) {
+          return {
+            ...msg,
+            agent_actions: msg.agent_actions
+              ? msg.agent_actions.some((aa) => aa.id === updatedAa.id)
+                ? msg.agent_actions.map((aa) =>
+                    aa.id === updatedAa.id ? updatedAa : aa,
+                  )
+                : [...msg.agent_actions, updatedAa]
+              : [updatedAa],
+          };
+        }
+        return msg;
+      });
     });
+  }
+
+  function addUserRequest(msg: UserRequestType) {
+    setConversation([...conversation, msg]);
   }
 
   async function sendMessage(message: string) {
     const { stream_url, user_request_id } = await userRequest(message);
-    const msg: MessageType = {
+    addUserRequest({
       id: user_request_id,
-      role: 'user',
-      content: message,
-    };
+      message: message,
+    } as UserRequestType);
 
-    updateMessage(msg);
-
-    await fetchEventSource(stream_url, {
-      onmessage(ev) {
-        const data = JSON.parse(ev.data) as MessageAction;
-        updateMessage({
-          id: ev.id,
-          role: 'agent',
-          content: data,
-        });
-      },
-    });
+    console.log('sending message');
+    startStream(stream_url, user_request_id);
   }
 
   return (

@@ -3,6 +3,8 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Factory\AwpClientFactory;
+use WpAi\AgentWp\Services\AwpClient;
 
 /**
  * Temporary for demo, poor performance
@@ -43,12 +45,8 @@ class ErrorIndexer implements Registrable
             'context' => $error_context, // Be cautious with sensitive information
         ];
 
-        $response = wp_remote_post("http://laravel.test/api/sites/{$this->main->siteId}/index/errors", [
-            'body' => json_encode($error_data),
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+        $awpClient = AwpClientFactory::create($this->main->token);
+        $response = $awpClient->indexError($this->main->siteId, json_encode($error_data));
 
         return false; // Let PHP handle the error as well
     }

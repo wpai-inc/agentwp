@@ -1,30 +1,15 @@
-import { MessageAction } from '@wpai/schemas';
-import AgentMessage from './AgentMessage';
-import UserMessage from './UserMessage';
-import { cn } from '@/lib/utils';
+import AgentResponse from './AgentResponse';
+import UserRequest from './UserRequest';
+import type { UserRequestType } from '@/Providers/UserRequestsProvider';
 
-type Role = 'agent' | 'user';
-
-export type MessageType = {
-  id: string;
-  role: Role;
-  content: string | MessageAction;
-};
-
-export default function Message({ id, role, content }: MessageType) {
+export default function Message(userRequest: UserRequestType) {
   return (
-    <div
-      id={id}
-      className={cn('text-white w-2/3 py-2 px-3 rounded-xl', {
-        'ml-auto bg-blue-500': role === 'agent',
-        'bg-green-500': role === 'user',
-      })}
-    >
-      {role === 'agent' ? (
-        <AgentMessage action={content} />
-      ) : (
-        <UserMessage message={content} />
-      )}
+    <div id={userRequest.id} className="space-y-6 divide-y-2">
+      <UserRequest message={userRequest.message} />
+      <AgentResponse
+        userRequestId={userRequest.id}
+        agentActions={userRequest.agent_actions}
+      />
     </div>
   );
 }

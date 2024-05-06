@@ -27,6 +27,7 @@ class Main
      * before auth is implemented.
      */
     public string $siteId;
+
     private string $clientId;
 
     public function __construct(private string $file)

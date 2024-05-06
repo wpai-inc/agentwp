@@ -20,6 +20,8 @@
         "php-stubs/wordpress-stubs": "^6.4"
     },
     "require": {
-        "kucrut/vite-for-wp": "^0.8.0"
+        "kucrut/vite-for-wp": "^0.8.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "vlucas/phpdotenv": "^5.6"
     }
 }
