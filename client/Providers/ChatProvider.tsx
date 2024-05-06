@@ -14,6 +14,9 @@ type CreateUserRequestResponse = {
   stream_url: string;
 };
 
+declare const agentwp_settings: agentwpSettings;
+
+
 const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
@@ -30,15 +33,12 @@ export function useChat() {
   return chat;
 }
 
+
 export default function ChatProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const siteId = '9bf52c59-0edf-4495-a566-cef381e428e4';
-  const wp_user_id = 1;
-  const token =
-    'eyJpdiI6InFnS2prSm9mSURWTWZpVFBuM0NsOGc9PSIsInZhbHVlIjoieWpmYmwza0l4NFpXTzRSSUxITk11TjhKSVRJaWtsenhGRndvd2VUZ1c0WjN2dFNjT0hIWXhpcnhieXp5YmExRGEweVY4YVNRQUt2RytOS2prYjFuaUE9PSIsIm1hYyI6IjFlNTA2ZGE0ODE0YzlmNjU0MTc5OGMyYTA4MTAyM2ZjYWFmOGVhMDEwNWRmMDExOWJhZjI1OTZmNDlkZjc2ZDAiLCJ0YWciOiIifQ==';
 
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
