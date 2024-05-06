@@ -51,9 +51,9 @@ export default function UserRequestsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const siteId = '9be4d289-ec6a-429e-9ae8-b673befcab77';
+  const siteId = '9bf52c59-0edf-4495-a566-cef381e428e4';
   const token =
-    'eyJpdiI6Im5ZQzJ3U3FkUmpscUpjeE9yMVJjbWc9PSIsInZhbHVlIjoiRDVDc3RtOGVpRXJDVnBTR2Z5OC9PUi82TWZUbGR0enpNNlRJN05Pb1I3V3lrV01xa3l1OG9RMnkyTnRXNEtFTUoyYkZqaC9GQ1duL0R2Um5yOWdQcGc9PSIsIm1hYyI6IjJiNmJmMzM0MTNlY2RlNDYwZWRmZThmZWY3MDc1NmYzMjgxYjI2NzZkMGI1MGIzODlkYWY1Yzg4MmMyN2Y2NWEiLCJ0YWciOiIifQ==';
+    'eyJpdiI6InFnS2prSm9mSURWTWZpVFBuM0NsOGc9PSIsInZhbHVlIjoieWpmYmwza0l4NFpXTzRSSUxITk11TjhKSVRJaWtsenhGRndvd2VUZ1c0WjN2dFNjT0hIWXhpcnhieXp5YmExRGEweVY4YVNRQUt2RytOS2prYjFuaUE9PSIsIm1hYyI6IjFlNTA2ZGE0ODE0YzlmNjU0MTc5OGMyYTA4MTAyM2ZjYWFmOGVhMDEwNWRmMDExOWJhZjI1OTZmNDlkZjc2ZDAiLCJ0YWciOiIifQ==';
 
   const [conversation, setConversation] = useState<UserRequestType[]>([]);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
@@ -70,9 +70,9 @@ export default function UserRequestsProvider({
       (request) => request.id === currentUserRequestId,
     );
 
-    const currentAction: AgentAction | null =
-      currentRequest?.agent_actions[currentRequest?.agent_actions.length - 1] ??
-      null;
+    const currentAction: AgentAction | null = currentRequest?.agent_actions
+      ? currentRequest?.agent_actions[currentRequest?.agent_actions.length - 1]
+      : null;
 
     setCurrentAction(currentAction);
   }, [currentUserRequestId]);

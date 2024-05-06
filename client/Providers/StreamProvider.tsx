@@ -40,13 +40,14 @@ export default function StreamProvider({
         // credentials: 'include',
         async onopen(response) {
           if (response.status === 500) {
-            console.error('Server Error: HTTP 500');
             closeStream();
-            return; // Prevents the stream from continuing when a 500 error is encountered
+            throw new Error('Server Error: HTTP 500');
           }
         },
         onmessage(ev) {
-          if (ev.event !== 'close') {
+          if (ev.event === 'close') {
+            closeStream();
+          } else {
             setLiveAction({
               id: ev.id,
               ability: ev.event,
@@ -75,6 +76,12 @@ export default function StreamProvider({
       streamClosed &&
       currentUserRequestId
     ) {
+      console.log(
+        'action not final',
+        currentAction,
+        streamClosed,
+        currentUserRequestId,
+      );
       startStreamFromRequest(currentUserRequestId);
     }
   }, [currentAction, streamClosed, currentUserRequestId]);

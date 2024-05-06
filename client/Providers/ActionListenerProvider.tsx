@@ -5,7 +5,7 @@ import useAwpClient from '@/Hooks/useAwpClient';
 const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { liveAction } = useStream();
+  const { liveAction, action } = useStream();
   const client = useAwpClient();
 
   useEffect(() => {
@@ -16,7 +16,14 @@ const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
       });
       window.location.href = liveAction.action.url;
     }
-  }, [liveAction]);
+
+    if (action && action.ability === 'message') {
+      client.storeAgentResult(action.id, {
+        status: 'success',
+        data: action.action,
+      });
+    }
+  }, [liveAction, action]);
 
   return <>{children}</>;
 };

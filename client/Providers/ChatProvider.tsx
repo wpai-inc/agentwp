@@ -35,10 +35,10 @@ export default function ChatProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const siteId = '9be4d289-ec6a-429e-9ae8-b673befcab77';
+  const siteId = '9bf52c59-0edf-4495-a566-cef381e428e4';
   const wp_user_id = 1;
   const token =
-    'eyJpdiI6Im5ZQzJ3U3FkUmpscUpjeE9yMVJjbWc9PSIsInZhbHVlIjoiRDVDc3RtOGVpRXJDVnBTR2Z5OC9PUi82TWZUbGR0enpNNlRJN05Pb1I3V3lrV01xa3l1OG9RMnkyTnRXNEtFTUoyYkZqaC9GQ1duL0R2Um5yOWdQcGc9PSIsIm1hYyI6IjJiNmJmMzM0MTNlY2RlNDYwZWRmZThmZWY3MDc1NmYzMjgxYjI2NzZkMGI1MGIzODlkYWY1Yzg4MmMyN2Y2NWEiLCJ0YWciOiIifQ==';
+    'eyJpdiI6InFnS2prSm9mSURWTWZpVFBuM0NsOGc9PSIsInZhbHVlIjoieWpmYmwza0l4NFpXTzRSSUxITk11TjhKSVRJaWtsenhGRndvd2VUZ1c0WjN2dFNjT0hIWXhpcnhieXp5YmExRGEweVY4YVNRQUt2RytOS2prYjFuaUE9PSIsIm1hYyI6IjFlNTA2ZGE0ODE0YzlmNjU0MTc5OGMyYTA4MTAyM2ZjYWFmOGVhMDEwNWRmMDExOWJhZjI1OTZmNDlkZjc2ZDAiLCJ0YWciOiIifQ==';
 
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
@@ -83,13 +83,13 @@ export default function ChatProvider({
         if (msg.id === urId) {
           return {
             ...msg,
-            agent_actions: msg.agent_actions.some(
-              (aa) => aa.id === updatedAa.id,
-            )
-              ? msg.agent_actions.map((aa) =>
-                  aa.id === updatedAa.id ? updatedAa : aa,
-                )
-              : [...msg.agent_actions, updatedAa],
+            agent_actions: msg.agent_actions
+              ? msg.agent_actions.some((aa) => aa.id === updatedAa.id)
+                ? msg.agent_actions.map((aa) =>
+                    aa.id === updatedAa.id ? updatedAa : aa,
+                  )
+                : [...msg.agent_actions, updatedAa]
+              : [updatedAa],
           };
         }
         return msg;
@@ -107,6 +107,8 @@ export default function ChatProvider({
       id: user_request_id,
       message: message,
     } as UserRequestType);
+
+    console.log('sending message');
     startStream(stream_url, user_request_id);
   }
 

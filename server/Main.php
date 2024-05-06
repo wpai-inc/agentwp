@@ -26,12 +26,14 @@ class Main
      * Temporary for demo,
      * before auth is implemented.
      */
-    public string $siteId = '9be4d289-ec6a-429e-9ae8-b673befcab77';
+    public string $siteId;
 
-    public string $token = 'eyJpdiI6Im5ZQzJ3U3FkUmpscUpjeE9yMVJjbWc9PSIsInZhbHVlIjoiRDVDc3RtOGVpRXJDVnBTR2Z5OC9PUi82TWZUbGR0enpNNlRJN05Pb1I3V3lrV01xa3l1OG9RMnkyTnRXNEtFTUoyYkZqaC9GQ1duL0R2Um5yOWdQcGc9PSIsIm1hYyI6IjJiNmJmMzM0MTNlY2RlNDYwZWRmZThmZWY3MDc1NmYzMjgxYjI2NzZkMGI1MGIzODlkYWY1Yzg4MmMyN2Y2NWEiLCJ0YWciOiIifQ==';
+    public string $token;
 
     public function __construct(private string $file)
     {
+        $this->siteId = Helper::config('SITE_ID');
+        $this->token = Helper::config('USER_TOKEN');
     }
 
     public function buildPath(): string
