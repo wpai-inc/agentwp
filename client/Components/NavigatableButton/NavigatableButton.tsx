@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 interface Props {
   text: string;
   link: string;
-  className: string;
+  className?: string;
 }
 
 const NavigatableButton = ({
