@@ -9,28 +9,34 @@ import ScreenProvider from '@/Providers/ScreenProvider';
 import StreamProvider from '@/Providers/StreamProvider';
 import ActionListenerProvider from '@/Providers/ActionListenerProvider';
 import UserRequestsProvider from '@/Providers/UserRequestsProvider';
+import { PageProvider } from '@/Providers/PageProvider';
 
 const rootElement = document.getElementById('agent-wp-admin-chat');
+
+declare const agentwp_settings: agentwpSettings;
+
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <App>
-        <ClientSettingsProvider>
-          <ScreenProvider>
-            <UserRequestsProvider>
-              <StreamProvider>
-                <ActionListenerProvider>
-                  <ChatProvider>
-                    <ConvoContainer />
-                    <ConvoTrigger />
-                  </ChatProvider>
-                </ActionListenerProvider>
-              </StreamProvider>
-            </UserRequestsProvider>
-          </ScreenProvider>
-        </ClientSettingsProvider>
-      </App>
+      <PageProvider page={agentwp_settings}>
+        <App>
+          <ClientSettingsProvider>
+            <ScreenProvider>
+              <UserRequestsProvider>
+                <StreamProvider>
+                  <ActionListenerProvider>
+                    <ChatProvider>
+                      <ConvoContainer />
+                      <ConvoTrigger />
+                    </ChatProvider>
+                  </ActionListenerProvider>
+                </StreamProvider>
+              </UserRequestsProvider>
+            </ScreenProvider>
+          </ClientSettingsProvider>
+        </App>
+      </PageProvider>
     </React.StrictMode>,
   );
 } else {

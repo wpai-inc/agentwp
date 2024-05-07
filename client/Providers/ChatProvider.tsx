@@ -8,6 +8,7 @@ import type {
   AgentAction,
 } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
+import { usePage } from '@/Providers/PageProvider';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -15,7 +16,6 @@ type CreateUserRequestResponse = {
 };
 
 declare const agentwp_settings: agentwpSettings;
-
 
 const ChatContext = createContext({
   open: false,
@@ -33,15 +33,14 @@ export function useChat() {
   return chat;
 }
 
-
 export default function ChatProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
-  const siteId = "9bf52c59-0edf-4495-a566-cef381e428e4";
-  const wp_user_id = 1;
+  const page = usePage();
+  const siteId = page.site_id;
+  const wp_user_id = parseInt(page.user.ID);
 
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
