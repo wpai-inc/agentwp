@@ -29,6 +29,12 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      colors: {
+        brand: {
+          primary: '#4991F7',
+          secondary: '#FF70A6',
+        }
+      }
     },
   },
   // corePlugins: {

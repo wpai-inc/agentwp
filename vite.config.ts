@@ -2,6 +2,7 @@ import { v4wp } from 'vite-for-wp';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
   root: 'client',
@@ -14,7 +15,8 @@ export default defineConfig({
       },
       outDir: '../build',
     }),
-    react()
+    react(),
+    svgr(),
   ],
   resolve: {
     alias: {

@@ -14,13 +14,15 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     text: 'Primary',
-    link: '#'
+    link: '#',
+    styleType: 'primary',
   }
 };
 
 export const Secondary: Story = {
   args: {
     text: 'Secondary',
-    link: '#'
+    link: '#',
+    styleType: 'secondary',
   }
 };
