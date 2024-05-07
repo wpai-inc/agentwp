@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "STORYBOOK_ENV=1 storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {

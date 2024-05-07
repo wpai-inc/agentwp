@@ -1,7 +1,7 @@
 import Bar from '@/Components/Charts/Bar';
 import Line from '@/Components/Charts/Line';
 import Pie from '@/Components/Charts/Pie';
-import NavigatableButton from '@/Components/Button';
+import NavigatableButton from '@/Components/NavigatableButton';
 import ActionSimpleMessage from "@/Components/Convo/Actions/ActionSimpleMessage";
 import type { MessageAgentAction } from '@/Components/Convo/Actions/ActionMessage';
 
