@@ -40,6 +40,9 @@ export default function ChatProvider({
   children: React.ReactNode;
 }) {
 
+  const siteId = "9bf52c59-0edf-4495-a566-cef381e428e4";
+  const wp_user_id = 1;
+
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
@@ -62,7 +65,7 @@ export default function ChatProvider({
   async function userRequest(
     message: string,
   ): Promise<CreateUserRequestResponse> {
-    const awpClient = useAwpClient(token);
+    const awpClient = useAwpClient();
     const response = await awpClient.storeConversation(siteId, {
       message,
       wp_user_id,

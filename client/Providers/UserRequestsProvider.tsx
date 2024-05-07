@@ -132,7 +132,7 @@ export default function UserRequestsProvider({
   const token =
     'eyJpdiI6InFnS2prSm9mSURWTWZpVFBuM0NsOGc9PSIsInZhbHVlIjoieWpmYmwza0l4NFpXTzRSSUxITk11TjhKSVRJaWtsenhGRndvd2VUZ1c0WjN2dFNjT0hIWXhpcnhieXp5YmExRGEweVY4YVNRQUt2RytOS2prYjFuaUE9PSIsIm1hYyI6IjFlNTA2ZGE0ODE0YzlmNjU0MTc5OGMyYTA4MTAyM2ZjYWFmOGVhMDEwNWRmMDExOWJhZjI1OTZmNDlkZjc2ZDAiLCJ0YWciOiIifQ==';
 
-  const [conversation, setConversation] = useState<UserRequestType[]>(sampleRichMessages);
+  const [conversation, setConversation] = useState<UserRequestType[]>([]);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
     string | null
   >(null);
