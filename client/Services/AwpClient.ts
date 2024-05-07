@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+declare const agentwp_settings: agentwpSettings;
 
 export default class AwpClient {
   private baseUrl: string;
@@ -9,7 +10,7 @@ export default class AwpClient {
 
   constructor(token?: string) {
     this.token = token;
-    this.baseUrl = 'http://localhost';
+    this.baseUrl = agentwp_settings.api_host;
 
     this.httpClient = axios.create({
       timeout: 15000,

@@ -122,15 +122,16 @@ const sampleRichMessages: UserRequestType[] = [
   },
 ];
 
+declare const agentwp_settings: agentwpSettings;
+
 
 export default function UserRequestsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const siteId = '9bf52c59-0edf-4495-a566-cef381e428e4';
-  const token =
-    'eyJpdiI6InFnS2prSm9mSURWTWZpVFBuM0NsOGc9PSIsInZhbHVlIjoieWpmYmwza0l4NFpXTzRSSUxITk11TjhKSVRJaWtsenhGRndvd2VUZ1c0WjN2dFNjT0hIWXhpcnhieXp5YmExRGEweVY4YVNRQUt2RytOS2prYjFuaUE9PSIsIm1hYyI6IjFlNTA2ZGE0ODE0YzlmNjU0MTc5OGMyYTA4MTAyM2ZjYWFmOGVhMDEwNWRmMDExOWJhZjI1OTZmNDlkZjc2ZDAiLCJ0YWciOiIifQ==';
+  const siteId = agentwp_settings.site_id;
+  const token = agentwp_settings.access_token;
 
   const [conversation, setConversation] = useState<UserRequestType[]>([]);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<

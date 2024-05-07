@@ -7,7 +7,7 @@ declare const agentwp_settings: agentwpSettings;
 export default function connectToAwp() {
 
     function isLoggedIn() {
-        return !!agentwp_settings.access_token?.access_token;
+        return !!agentwp_settings.access_token;
     }
     const [loggedIn, setLoggedIn] = useState(isLoggedIn());
 
