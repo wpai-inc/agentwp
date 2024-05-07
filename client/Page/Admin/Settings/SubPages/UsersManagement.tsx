@@ -51,7 +51,7 @@ export default function UsersManagement() {
                 </tr>
                 </thead>
                 <tbody>
-                {users.map((user: any) => {
+                {users?.map((user: any) => {
                     return (
                         <tr key={user.id}>
                             <td>

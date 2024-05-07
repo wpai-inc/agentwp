@@ -7,7 +7,7 @@ declare const agentwp_settings: agentwpSettings;
 export default function connectToAwp() {
 
     function isLoggedIn() {
-        return !!agentwp_settings.access_token.access_token;
+        return !!agentwp_settings.access_token?.access_token;
     }
     const [loggedIn, setLoggedIn] = useState(isLoggedIn());
 
@@ -38,8 +38,7 @@ export default function connectToAwp() {
     return (
         <div>
             {!agentwp_settings.site_id && <Button onClick={connect} variant="primary" className="button" disabled={connecting} isBusy={connecting}>
-                {connecting && "Connecting to awp. Please wait..."}
-                {!connecting && "Connect To AWP"}
+                {connecting ? "Connecting to awp. Please wait..." : "Connect To AWP"}
             </Button>}
             {agentwp_settings.site_id && <div>Your site is connected to agentwp. Your site ID is {agentwp_settings.site_id}</div>}
 

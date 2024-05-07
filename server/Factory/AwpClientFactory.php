@@ -2,14 +2,18 @@
 
 namespace WpAi\AgentWp\Factory;
 
+use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Services\AwpClient;
 
 class AwpClientFactory
 {
-    private function __construct() {}
-
-    public static function create(string $token): AwpClient
+    public static function create(Main $main): AwpClient
     {
-        return new AwpClient($token);
+        $client = new AwpClient($main->apiHost());
+        if ($t = $main->auth()->getAccessToken()) {
+            $client->setToken($t);
+        }
+
+        return $client;
     }
 }

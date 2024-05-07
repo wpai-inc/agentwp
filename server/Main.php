@@ -22,18 +22,17 @@ class Main
 
     public $attributionUrl = 'https://agentwp.com';
 
-    /**
-     * Temporary for demo,
-     * before auth is implemented.
-     */
-    public string $siteId;
+    private ?string $clientId;
 
-    private string $clientId;
+    private Settings $settings;
+
+    private UserAuth $auth;
 
     public function __construct(private string $file)
     {
-        $this->siteId   = get_option('agentwp_site_id')['site_id'] ?? '';
-        $this->clientId = get_option('agentwp_site_id')['client_id'] ?? '';
+        $this->settings = new Settings();
+        $this->auth = new UserAuth(wp_get_current_user());
+        $this->clientId = $this->settings->client_id;
         add_action('admin_head', [$this, 'printDefaultVars']);
     }
 
@@ -42,9 +41,19 @@ class Main
         return $this->path(self::BUILD_DIR);
     }
 
+    public function siteId(): ?string
+    {
+        return $this->settings->site_id;
+    }
+
+    public function auth(): UserAuth
+    {
+        return $this->auth;
+    }
+
     public function asset(?string $path = null): string
     {
-        return $this->url(self::BUILD_DIR . '/' . $path);
+        return $this->url(self::BUILD_DIR.'/'.$path);
     }
 
     public function pluginPath(): string
@@ -54,7 +63,7 @@ class Main
 
     public function path(?string $path = null): string
     {
-        return plugin_dir_path($this->file) . ltrim($path, '/');
+        return plugin_dir_path($this->file).ltrim($path, '/');
     }
 
     public function url(?string $path = null): string
@@ -69,51 +78,37 @@ class Main
 
     public function apiHost()
     {
-        return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://api.agentwp.com';
+        return Helper::config('AGENT_WP_SERVER_BASE_URL') ?? $this->runtimeApiHost();
+    }
+
+    public function apiClientHost()
+    {
+        return Helper::config('AGENT_WP_CLIENT_BASE_URL') ?? $this->runtimeApiHost();
     }
 
     public function printDefaultVars()
     {
-
-        $awp_settings      = get_option('agentwp_site_id');
-        $current_user_role = wp_get_current_user()->roles[0] ?? '';
-
-        $is_agentwp_manager = current_user_can('agentwp_manager');
-
-        $can_manage_users  = current_user_can('manage_agentwp_users') || $is_agentwp_manager;
-        if (empty($awp_settings['site_id'])) {
-            if ($current_user_role === 'administrator') {
-                $can_manage_users = true;
-                $is_agentwp_manager = true;
-            }
-        }
-        $has_agentwp_access = false;
-        $access_token   = '';
-        if (current_user_can('agentwp_access') || $can_manage_users || $is_agentwp_manager) {
-            $has_agentwp_access = true;
-            $access_token   = get_option('agentwp_access_token');
-            if (extension_loaded('openssl')) {
-                $access_token['access_token'] = openssl_decrypt($access_token['access_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
-                $access_token['refresh_token'] = openssl_encrypt($access_token['refresh_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
-            }
-        }
-
         $agentwp_settings = [
-            'nonce'                 => wp_create_nonce('agentwp_settings'),
-            'is_admin'              => $current_user_role === 'administrator' || $current_user_role === 'super_admin',
-            'agentwp_manager'       => $is_agentwp_manager,
-            'agentwp_users_manager' => $can_manage_users,
-            'agentwp_access'        => $has_agentwp_access,
-            'access_token'          => $access_token,
-            'site_id'               => $this->siteId,
-            'client_id'             => $this->clientId,
-            'api_host'              => $this->apiHost(),
-            'user_email'            => wp_get_current_user()->user_email ?? '',
+            'nonce' => wp_create_nonce('agentwp_settings'),
+            'is_admin' => $this->auth->isAdmin(),
+            'agentwp_manager' => $this->auth->isManager(),
+            'agentwp_users_manager' => $this->auth->canManageUsers(),
+            'agentwp_access' => $this->auth->hasAccess(),
+            'access_token' => $this->auth->getAccessToken(),
+            'site_id' => $this->siteId(),
+            'client_id' => $this->clientId,
+            'api_host' => $this->apiClientHost(),
+            'user_email' => wp_get_current_user()->user_email ?? '',
         ];
-?>
+        ?>
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
 <?php
+    }
+
+    private function runtimeApiHost()
+    {
+        return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://api.agentwp.com';
     }
 }

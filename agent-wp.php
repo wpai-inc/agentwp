@@ -13,7 +13,6 @@
  * Requires at least: 6.4
  * Requires PHP: 7.0
  */
-
 defined('ABSPATH') || exit;
 
 require_once __DIR__.'/vendor/autoload.php';
@@ -25,12 +24,14 @@ $dotenv->safeLoad();
  * Registers all of the service providers
  * with a Main dependency.
  */
-(new \WpAi\AgentWp\ProviderRegistry(
-    new \WpAi\AgentWp\Main(__FILE__)
-))->register([
-    \WpAi\AgentWp\Installer::class,
-    \WpAi\AgentWp\Page\Admin\Settings::class,
-    \WpAi\AgentWp\Page\Admin\Chat::class,
-    \WpAi\AgentWp\SiteIndexer::class,
-    \WpAi\AgentWp\ErrorIndexer::class,
-]);
+add_action('plugins_loaded', function () {
+    (new \WpAi\AgentWp\ProviderRegistry(
+        new \WpAi\AgentWp\Main(__FILE__)
+    ))->register([
+        \WpAi\AgentWp\Installer::class,
+        \WpAi\AgentWp\Page\Admin\Settings::class,
+        \WpAi\AgentWp\Page\Admin\Chat::class,
+        \WpAi\AgentWp\SiteIndexer::class,
+        \WpAi\AgentWp\ErrorIndexer::class,
+    ]);
+});

@@ -4,7 +4,6 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Factory\AwpClientFactory;
-use WpAi\AgentWp\Services\AwpClient;
 
 /**
  * Temporary for demo, poor performance
@@ -37,6 +36,11 @@ class ErrorIndexer implements Registrable
         int $error_line,
         array $error_context = []
     ): bool {
+        $siteId = $this->main->siteId();
+        if (! $siteId) {
+            return false;
+        }
+
         $error_data = [
             'level' => $error_level,
             'message' => $error_message,
@@ -45,8 +49,8 @@ class ErrorIndexer implements Registrable
             'context' => $error_context, // Be cautious with sensitive information
         ];
 
-        $awpClient = AwpClientFactory::create($this->main->token);
-        $response = $awpClient->indexError($this->main->siteId, json_encode($error_data));
+        $awpClient = AwpClientFactory::create($this->main);
+        $response = $awpClient->indexError($siteId, json_encode($error_data));
 
         return false; // Let PHP handle the error as well
     }
