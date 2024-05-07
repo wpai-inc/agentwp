@@ -12,12 +12,18 @@ const preview: Preview = {
       },
     },
   },
-
   globalTypes: {
     darkMode: {
       defaultValue: true,
     },
   },
+  decorators: [
+    Story => (
+      <div>
+        <Story />
+      </div>
+    )
+  ]
 };
 
 export const parameters = {};
