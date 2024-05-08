@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import { useStream } from '@/Providers/StreamProvider';
+import { cn } from '@/lib/utils';
+import UpArrowIcon from '@material-design-icons/svg/round/arrow_upward.svg?react';
 
 export default function MessageBox() {
   const { sendMessage } = useChat();
@@ -29,19 +31,28 @@ export default function MessageBox() {
 
   return (
     <form
-      className="p-2 m-2 bg-white focus-within:ring-2 focus-within:ring-blue-400 ring-1 ring-gray-200"
+      className="p-2 m-2 bg-white"
       onSubmit={submit}
     >
       <textarea
         onChange={(e) => setMessage(e.target.value)}
         value={message}
-        className="w-full h-24 p-2 focus:ring-0"
-        placeholder="Type your message here..."
+        className="w-full h-24 p-2 resize-none text-base"
+        placeholder="Message..."
         onKeyDown={handleKeyDown}
       />
       <div className="flex justify-end items-center">
-        <Button type="submit" disabled={!streamClosed}>
-          {streamClosed ? 'Send' : 'Pending...'}
+        <Button
+          type="submit"
+          className={cn(
+            'bg-brand-primary rounded px-2'
+          )}
+          disabled={!streamClosed}
+        >
+          {streamClosed ?
+            <UpArrowIcon /> :
+            'Pending...'
+          }
         </Button>
       </div>
     </form>
