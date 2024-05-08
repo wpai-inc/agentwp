@@ -33,6 +33,10 @@ module.exports = {
         brand: {
           primary: '#4991F7',
           secondary: '#FF70A6',
+          gray: {
+            DEFAULT: '#F6F7F7',
+            25: '#E8E8E9',
+          }
         }
       }
     },

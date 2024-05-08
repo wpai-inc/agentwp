@@ -156,7 +156,7 @@ export default function UserRequestsProvider({
   }, [currentUserRequestId]);
 
   async function getConversation() {
-    const awpClient = useAwpClient(token);
+    const awpClient = useAwpClient(token?.access_token);
     const response = await awpClient.getConversation(siteId);
     setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
     // setConversation([...conversation, ...response.data]);
