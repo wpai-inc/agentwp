@@ -28,6 +28,11 @@ class UserAuth
         return current_user_can('agentwp_manager');
     }
 
+    public function wpUserId(): int
+    {
+        return $this->user->ID;
+    }
+
     public function canManageUsers(): bool
     {
         return true;

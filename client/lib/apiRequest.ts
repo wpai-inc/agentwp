@@ -6,7 +6,7 @@ const apiRequest = axios.create({
     baseURL: agentwp_settings.api_host,
     headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${agentwp_settings.access_token.access_token}`
+        "Authorization": `Bearer ${agentwp_settings.access_token}`
     }
 });
 

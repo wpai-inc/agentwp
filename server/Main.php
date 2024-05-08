@@ -98,7 +98,7 @@ class Main
             'site_id' => $this->siteId(),
             'client_id' => $this->clientId,
             'api_host' => $this->apiClientHost(),
-            'user_email' => wp_get_current_user()->user_email ?? '',
+            'user' => wp_get_current_user()->data,
         ];
         ?>
         <script>

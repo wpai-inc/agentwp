@@ -22,7 +22,7 @@ class Settings extends ReactClient
         add_action('wp_ajax_nopriv_agentwp_validate_website', [$this, 'validate_website']);
         add_action('wp_ajax_nopriv_agentwp_save_connection', [$this, 'save_connection']);
 
-        add_action('plugins_loaded', [$this, 'get_site_users']);
+        add_action('init', [$this, 'get_site_users']);
 
         add_action('wp_ajax_agentwp_update_user', [$this, 'update_user_capabilities']);
 
