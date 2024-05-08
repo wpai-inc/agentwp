@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
+use WpAi\AgentWp\Factory\AwpClientFactory;
 use WpAi\AgentWp\ReactClient;
 use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
@@ -11,10 +12,13 @@ class Settings extends ReactClient
     use HasMenu, HasPage;
 
     public $pageData = [];
+    private \WpAi\AgentWp\Services\AwpClient $awpClient;
 
     public function __construct(\WpAi\AgentWp\Main $main)
     {
         parent::__construct($main);
+
+        $this->awpClient = AwpClientFactory::create($this->main);
 
         add_action('current_screen', [$this, 'maybe_get_token']);
 
@@ -27,6 +31,7 @@ class Settings extends ReactClient
         add_action('wp_ajax_agentwp_update_user', [$this, 'update_user_capabilities']);
 
         add_action('wp_ajax_agentwp_logout', [$this, 'logout']);
+        add_action('wp_ajax_agentwp_disconnect_site', [$this, 'disconnect_site']);
     }
 
     public function registrations(): void
@@ -86,7 +91,7 @@ class Settings extends ReactClient
     {
 
         if (empty($_GET['uid'])) {
-            wp_send_error([
+            wp_send_json_error([
                 'status' => 'failed',
             ]);
         }
@@ -94,7 +99,7 @@ class Settings extends ReactClient
         $verification_key = get_option('agentwp_verification_key');
 
         if ($key !== $verification_key) {
-            wp_send_error([
+            wp_send_json_error([
                 'status' => 'failed',
             ]);
         }
@@ -202,7 +207,21 @@ class Settings extends ReactClient
 
     public function logout(): void
     {
+        $this->revoke_api_token();
         delete_option('agentwp_access_token');
         wp_send_json_success();
+    }
+
+    public function disconnect_site(): void
+    {
+        $this->revoke_api_token();
+        update_option('agentwp_site_id', []);
+        update_option('agentwp_access_token', []);
+        wp_send_json_success();
+    }
+
+    private function revoke_api_token(): void
+    {
+        $this->awpClient->request('POST', $this->main->apiHost() . '/api/site/disconnect');
     }
 }
