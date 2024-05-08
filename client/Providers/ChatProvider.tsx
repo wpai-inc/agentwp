@@ -110,7 +110,6 @@ export default function ChatProvider({
       message: message,
     } as UserRequestType);
 
-    console.log('sending message');
     startStream(stream_url, user_request_id);
   }
 

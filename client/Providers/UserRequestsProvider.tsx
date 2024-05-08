@@ -1,6 +1,7 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import useAwpClient from '@/Hooks/useAwpClient';
 import { MessageAction, NavigateAction } from '@wpai/schemas';
+import { usePage } from './PageProvider';
 
 export type ActionType = NavigateAction | MessageAction;
 
@@ -10,6 +11,7 @@ export type AgentAction = {
   final: boolean;
   recipe_idx: number;
   result: any;
+  hasExecuted: boolean;
 };
 
 export type UserRequestType = {
@@ -26,6 +28,7 @@ type UserRequestsContextType = {
   currentUserRequestId: string | null;
   setCurrentUserRequestId: React.Dispatch<React.SetStateAction<string | null>>;
   currentAction: AgentAction | null;
+  setCurrentAction: (action: AgentAction | null) => void;
 };
 
 const UserRequestsContext = createContext<UserRequestsContextType>({
@@ -34,6 +37,7 @@ const UserRequestsContext = createContext<UserRequestsContextType>({
   currentUserRequestId: null,
   setCurrentUserRequestId: () => {},
   currentAction: null,
+  setCurrentAction: () => {},
 });
 
 export function useUserRequests() {
@@ -46,92 +50,16 @@ export function useUserRequests() {
   return chat;
 }
 
-const sampleRichMessages: UserRequestType[] = [
-  {
-    id: "4000",
-    message: 'Show me user growth for the current year',
-    agent_actions: [
-      {
-        id: "4001",
-        final: true,
-        recipe_idx: 0,
-        result: {},
-        action: {
-          ability: 'message',
-          text: "Here's a chart with user growth for the current year",
-          graph: {
-            graphType: 'line',
-            data: [
-              { label: 'Jan', value: 300 },
-              { label: 'Feb', value: 500 },
-              { label: 'Mar', value: 600 },
-              { label: 'Apr', value: 900 },
-            ]
-          }
-        },
-      },
-    ]
-  },
-  {
-    id: '4002',
-    message: 'Show me user growth for the current year in a bar chart',
-    agent_actions: [
-      {
-        id: '4003',
-        final: true,
-        recipe_idx: 0,
-        result: {},
-        action: {
-          ability: 'message',
-          text: "Here's a chart with user growth for the current year",
-          graph: {
-            graphType: 'bar',
-            data: [
-              { label: 'Jan', value: 300 },
-              { label: 'Feb', value: 500 },
-              { label: 'Mar', value: 600 },
-              { label: 'Apr', value: 900 },
-            ]
-          }
-        },
-      },
-    ],
-  },
-  {
-    id: '4004',
-    message: 'Show me how many of my users are paid vs free',
-    agent_actions: [
-      {
-        id: '4005',
-        final: true,
-        recipe_idx: 0,
-        result: {},
-        action: {
-          ability: 'message',
-          text: "Here's a chart comparing free vs paid users",
-          graph: {
-            graphType: 'pie',
-            data: [
-              { label: 'Free', value: 300 },
-              { label: 'Paid', value: 500 },
-            ]
-          }
-        },
-      }
-    ],
-  },
-];
-
 declare const agentwp_settings: agentwpSettings;
-
 
 export default function UserRequestsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const siteId = agentwp_settings.site_id;
-  const token = agentwp_settings.access_token;
+  const page = usePage();
+  const siteId = page.site_id;
+  const token = page.access_token;
 
   const [conversation, setConversation] = useState<UserRequestType[]>([]);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
@@ -153,14 +81,15 @@ export default function UserRequestsProvider({
       : null;
 
     setCurrentAction(currentAction);
-  }, [currentUserRequestId]);
+  }, [currentUserRequestId, conversation]);
 
   async function getConversation() {
     const awpClient = useAwpClient(token);
     const response = await awpClient.getConversation(siteId);
-    setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
-    // setConversation([...conversation, ...response.data]);
-    setConversation(response.data);
+    if (response.data.length > 0) {
+      setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
+      setConversation(response.data);
+    }
   }
 
   return (
@@ -171,6 +100,7 @@ export default function UserRequestsProvider({
         currentUserRequestId,
         setCurrentUserRequestId,
         currentAction,
+        setCurrentAction,
       }}
     >
       {children}
