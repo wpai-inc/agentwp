@@ -3,7 +3,8 @@ import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import { cn } from '@/lib/utils';
-import UpArrowIcon from '@material-design-icons/svg/round/arrow_upward.svg?react';
+import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
+import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 
 export default function MessageBox() {
   const { sendMessage } = useChat();
@@ -29,6 +30,11 @@ export default function MessageBox() {
     }
   }
 
+  function onSettingsClick(e: React.FormEvent) {
+    e.preventDefault();
+
+  }
+
   return (
     <form
       className="p-2 m-2 bg-white"
@@ -41,7 +47,15 @@ export default function MessageBox() {
         placeholder="Message..."
         onKeyDown={handleKeyDown}
       />
-      <div className="flex justify-end items-center">
+      <div className="flex justify-between items-center">
+        <Button
+          onClick={onSettingsClick}
+          variant="ghost"
+          size="icon"
+          className="text-brand-gray-50"
+        >
+          <TuneIcon />
+        </Button>
         <Button
           type="submit"
           className={cn(

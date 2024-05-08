@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import SettingsIcons from '@material-design-icons/svg/filled/settings.svg?react';
 import AccountIcon from '@material-design-icons/svg/outlined/account_circle.svg?react';
 import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
 
 export default function ChatTopBar() {
   function onUpgradeClick(e: React.FormEvent) {
@@ -23,8 +24,12 @@ export default function ChatTopBar() {
         'flex justify-between'
       )}
     >
-      <div></div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
+        <Badge className="bg-brand-primary hover:bg-brand-primary">
+          Free
+        </Badge>
+      </div>
+      <div className="flex items-center gap-2">
         <Button
           onClick={onUpgradeClick}
           size="sm"
@@ -34,10 +39,22 @@ export default function ChatTopBar() {
         >
           Upgrade
         </Button>
-        <Button onClick={onSettingsClick} variant="ghost" size="icon">
+        <Button
+          asChild
+          onClick={onSettingsClick}
+          variant="ghost"
+          size="icon"
+          className="cursor-pointer"
+        >
           <SettingsIcons className="h-7 w-7" />
         </Button>
-        <Button onClick={onProfileClick} variant="ghost" size="icon">
+        <Button
+          asChild
+          onClick={onProfileClick}
+          variant="ghost"
+          size="icon"
+          className="cursor-pointer"
+        >
           <AccountIcon className="h-7 w-7" />
         </Button>
       </div>
