@@ -10,6 +10,7 @@ import StreamProvider from '@/Providers/StreamProvider';
 import ActionListenerProvider from '@/Providers/ActionListenerProvider';
 import UserRequestsProvider from '@/Providers/UserRequestsProvider';
 import { PageProvider } from '@/Providers/PageProvider';
+import { ClientProvider } from '@/Providers/ClientProvider';
 
 const rootElement = document.getElementById('agent-wp-admin-chat');
 
@@ -21,20 +22,22 @@ if (rootElement) {
     <React.StrictMode>
       <PageProvider page={agentwp_settings}>
         <App>
-          <ClientSettingsProvider>
-            <ScreenProvider>
-              <UserRequestsProvider>
-                <StreamProvider>
-                  <ActionListenerProvider>
-                    <ChatProvider>
-                      <ConvoContainer />
-                      <ConvoTrigger />
-                    </ChatProvider>
-                  </ActionListenerProvider>
-                </StreamProvider>
-              </UserRequestsProvider>
-            </ScreenProvider>
-          </ClientSettingsProvider>
+          <ClientProvider>
+            <ClientSettingsProvider>
+              <ScreenProvider>
+                <UserRequestsProvider>
+                  <StreamProvider>
+                    <ActionListenerProvider>
+                      <ChatProvider>
+                        <ConvoContainer />
+                        <ConvoTrigger />
+                      </ChatProvider>
+                    </ActionListenerProvider>
+                  </StreamProvider>
+                </UserRequestsProvider>
+              </ScreenProvider>
+            </ClientSettingsProvider>
+          </ClientProvider>
         </App>
       </PageProvider>
     </React.StrictMode>,

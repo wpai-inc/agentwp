@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import useAwpClient from '@/Hooks/useAwpClient';
+import { useClient } from '@/Providers/ClientProvider';
 import { MessageAction, NavigateAction } from '@wpai/schemas';
 import { usePage } from './PageProvider';
 
@@ -59,7 +59,7 @@ export default function UserRequestsProvider({
 }) {
   const page = usePage();
   const siteId = page.site_id;
-  const token = page.access_token;
+  const client = useClient();
 
   const [conversation, setConversation] = useState<UserRequestType[]>([]);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
@@ -84,8 +84,7 @@ export default function UserRequestsProvider({
   }, [currentUserRequestId, conversation]);
 
   async function getConversation() {
-    const awpClient = useAwpClient(token);
-    const response = await awpClient.getConversation(siteId);
+    const response = await client.getConversation(siteId);
     if (response.data.length > 0) {
       setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
       setConversation(response.data);

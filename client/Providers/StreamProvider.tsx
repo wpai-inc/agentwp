@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Abilities } from '@wpai/schemas';
 import { useUserRequests } from './UserRequestsProvider';
-import useAwpClient from '@/Hooks/useAwpClient';
+import { useClient } from '@/Providers/ClientProvider';
 export const StreamContext = createContext<any | undefined>(undefined);
 
 export function useStream() {
@@ -28,7 +28,7 @@ export default function StreamProvider({
   const [streamClosed, setStreamClosed] = useState(true);
   const [streamCompleted, setStreamCompleted] = useState(false);
   const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
-  const client = useAwpClient();
+  const client = useClient();
   const ctrl = new AbortController();
 
   async function startStream(stream_url: string, user_request_id: string) {
