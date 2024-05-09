@@ -1,3 +1,4 @@
+import React from 'react';
 import { cn } from '@/lib/utils';
 import SettingsIcons from '@material-design-icons/svg/filled/settings.svg?react';
 import AccountIcon from '@material-design-icons/svg/outlined/account_circle.svg?react';
@@ -25,7 +26,9 @@ export default function ChatTopBar() {
       )}
     >
       <div className="flex items-center gap-2">
-        <Badge className="bg-brand-primary hover:bg-brand-primary">
+        <Badge className={cn(
+          'bg-brand-primary hover:bg-brand-primary font-bold'
+        )}>
           Free
         </Badge>
       </div>

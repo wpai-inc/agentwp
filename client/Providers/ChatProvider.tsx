@@ -21,6 +21,7 @@ const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
   toggle: () => {},
+  expandChatWindow: () => {},
   conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
 });
@@ -59,6 +60,10 @@ export default function ChatProvider({
     const newVal = !open;
     setOpen(newVal);
     setSettings({ chatOpen: newVal });
+  }
+
+  function expandChatWindow() {
+
   }
 
   async function userRequest(
@@ -116,7 +121,7 @@ export default function ChatProvider({
 
   return (
     <ChatContext.Provider
-      value={{ open, setOpen, toggle, conversation, sendMessage }}
+      value={{ open, setOpen, toggle, expandChatWindow, conversation, sendMessage }}
     >
       {children}
     </ChatContext.Provider>

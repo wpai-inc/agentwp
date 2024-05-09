@@ -9,6 +9,10 @@ import { getStorage, setStorage } from '@/lib/utils';
 
 export type ClientSettings = {
   chatOpen?: boolean;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
 };
 
 type ClientSettingValue = string | boolean | number | null;
@@ -51,6 +55,10 @@ export const ClientSettingsProvider: FC<{ children: React.ReactNode }> = ({
 }) => {
   const [settings, setSettings] = useState<ClientSettings>({
     chatOpen: getLocalStorage('chatOpen'),
+    x: getLocalStorage('x'),
+    y: getLocalStorage('y'),
+    width: getLocalStorage('width'),
+    height: getLocalStorage('height'),
   });
 
   useEffect(() => {
