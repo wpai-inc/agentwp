@@ -13,7 +13,7 @@ const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
   const client = useClient();
 
   useEffect(() => {
-    if (currentAction && streamClosed)
+    if (currentAction && streamClosed && currentAction.action)
       if (!currentAction.hasExecuted) {
         /**
          * Executes the current action
