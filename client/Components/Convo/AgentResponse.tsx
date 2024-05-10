@@ -23,11 +23,15 @@ export default function AgentResponse({
   agentActions?: AgentAction[];
   userRequestId: string;
 }) {
-  const { currentAction } = useUserRequests();
+  const { currentAction, currentUserRequestId } = useUserRequests();
   return (
     <div className="flex gap-4 p-4">
       <div className="w-8 h-8 flex items-center justify-center font-bold bg-blue-500 text-white rounded-full">
-        {currentAction?.final ? 'A' : <LoaderIcon className="animate-spin" />}
+        {!currentAction?.final && userRequestId === currentUserRequestId ? (
+          <LoaderIcon className="animate-spin" />
+        ) : (
+          'A'
+        )}
       </div>
       {agentActions === undefined ? (
         <ActionPending />

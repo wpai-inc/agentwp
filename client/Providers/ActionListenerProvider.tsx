@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
-import useAwpClient from '@/Hooks/useAwpClient';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
+import { useClient } from '@/Providers/ClientProvider';
 
 const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -10,10 +10,10 @@ const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
   const { currentAction, setCurrentAction, currentUserRequestId } =
     useUserRequests();
 
-  const client = useAwpClient();
+  const client = useClient();
 
   useEffect(() => {
-    if (currentAction && streamClosed)
+    if (currentAction && streamClosed && currentAction.action)
       if (!currentAction.hasExecuted) {
         /**
          * Executes the current action

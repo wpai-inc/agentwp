@@ -2,13 +2,13 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
 import { useStream } from '@/Providers/StreamProvider';
-import useAwpClient from '@/Hooks/useAwpClient';
 import type {
   UserRequestType,
   AgentAction,
 } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { usePage } from '@/Providers/PageProvider';
+import { useClient } from '@/Providers/ClientProvider';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -41,7 +41,7 @@ export default function ChatProvider({
   const page = usePage();
   const siteId = page.site_id;
   const wp_user_id = parseInt(page.user.ID);
-
+  const client = useClient();
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
@@ -64,8 +64,7 @@ export default function ChatProvider({
   async function userRequest(
     message: string,
   ): Promise<CreateUserRequestResponse> {
-    const awpClient = useAwpClient();
-    const response = await awpClient.storeConversation(siteId, {
+    const response = await client.storeConversation(siteId, {
       message,
       wp_user_id,
       screen,
