@@ -61,6 +61,11 @@ export default class AwpClient {
     data: object = {},
     additionalHeaders: object = {},
   ): Promise<AxiosResponse> {
+
+      if (!this.token) {
+          return Promise.reject(new Error('Token is undefined or empty'));
+      }
+
     return this.httpClient.request({
       method,
       url,

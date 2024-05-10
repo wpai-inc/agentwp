@@ -2,10 +2,13 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
+use Laravel\Passport\Passport;
 use WpAi\AgentWp\Factory\AwpClientFactory;
 use WpAi\AgentWp\ReactClient;
+use WpAi\AgentWp\Services\AwpRestRoute;
 use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
+use WpAi\AgentWp\UserAuth;
 
 class Settings extends ReactClient
 {
@@ -13,25 +16,34 @@ class Settings extends ReactClient
 
     public $pageData = [];
     private \WpAi\AgentWp\Services\AwpClient $awpClient;
+    private \WpAi\AgentWp\Settings $settings;
+    private UserAuth $user;
 
     public function __construct(\WpAi\AgentWp\Main $main)
     {
         parent::__construct($main);
 
+        $this->settings  = new \WpAi\AgentWp\Settings();
+        $this->user      = new UserAuth();
         $this->awpClient = AwpClientFactory::create($this->main);
 
         add_action('current_screen', [$this, 'maybe_get_token']);
 
-        add_action('wp_ajax_agentwp_generate_unique_verification_key', [$this, 'generate_unique_verification_key']);
-        add_action('wp_ajax_nopriv_agentwp_validate_website', [$this, 'validate_website']);
-        add_action('wp_ajax_nopriv_agentwp_save_connection', [$this, 'save_connection']);
+        new AwpRestRoute('agentwp_generate_unique_verification_key', [$this, 'generate_unique_verification_key'], [$this->user, 'canGenerateVerificationKey']);
 
-        add_action('init', [$this, 'get_site_users']);
+        new AwpRestRoute('agentwp_validate_website', [$this, 'validate_website'], [$this->user, 'hasValidVerificationKey']);
 
-        add_action('wp_ajax_agentwp_update_user', [$this, 'update_user_capabilities']);
+        (new AwpRestRoute('agentwp_save_connection', [$this, 'save_connection'], [$this->user, 'hasValidVerificationKey']))->method('POST');
 
-        add_action('wp_ajax_agentwp_logout', [$this, 'logout']);
-        add_action('wp_ajax_agentwp_disconnect_site', [$this, 'disconnect_site']);
+        new AwpRestRoute('agentwp_update_user', [$this, 'update_user_capabilities'], UserAuth::CAP_MANAGE_AGENTWP_USERS);
+
+        new AwpRestRoute('agentwp_update_user', [$this, 'update_user_capabilities'], UserAuth::CAP_MANAGE_AGENTWP_USERS);
+
+        new AwpRestRoute('agentwp_logout', [$this, 'logout'], UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
+
+        new AwpRestRoute('agentwp_disconnect_site', [$this, 'disconnect_site'], UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
+
+        (new AwpRestRoute('agentwp_manual_activation', [$this, 'manual_activation'], [$this->user, 'canGenerateVerificationKey']))->method('POST');
     }
 
     public function registrations(): void
@@ -40,32 +52,10 @@ class Settings extends ReactClient
         $this->menuName('Agent WP Settings')->registerMenu();
     }
 
-    public function get_agentwp_settings(): void
-    {
-        $settings = get_option('agentwp_settings');
-        if ( ! $settings) {
-            $settings = [
-                'api_key' => '',
-            ];
-        }
-        wp_send_json($settings);
-    }
-
-    public function save_agentwp_settings($request): void
-    {
-        $settings = json_decode($request->get_body(), true);
-        update_option('agentwp_settings', $settings);
-        wp_send_json($settings);
-    }
-
-    public function check_api_key(): void
-    {
-    }
-
     public function generate_unique_verification_key(): void
     {
-        $key = uniqid();
-        update_option('agentwp_verification_key', $key);
+        $key = uniqid('agentwp-', true);
+        $this->settings->set('verification_key', $key);
         wp_send_json([
             'key'      => $key,
             'home_url' => home_url(),
@@ -74,14 +64,17 @@ class Settings extends ReactClient
 
     public function validate_website(): void
     {
-        $key              = sanitize_text_field($_GET['uid']);
-        $verification_key = get_option('agentwp_verification_key');
-        if ($key === $verification_key) {
+        $key = sanitize_text_field($_REQUEST['verification_key']);
+        if (
+            $this->settings->verification_key
+            && ! empty($key)
+            && $key === $this->settings->verification_key
+        ) {
             wp_send_json([
                 'status' => 'success',
             ]);
         } else {
-            wp_send_json([
+            wp_send_json_error([
                 'status' => 'failed',
             ]);
         }
@@ -90,92 +83,67 @@ class Settings extends ReactClient
     public function save_connection(): void
     {
 
-        if (empty($_GET['uid'])) {
+        $key = sanitize_text_field($_REQUEST['verification_key'] ?? '');
+        if (
+            ! $this->settings->verification_key
+            || empty($key)
+               && $key !== $this->settings->verification_key
+        ) {
             wp_send_json_error([
                 'status' => 'failed',
             ]);
         }
-        $key              = sanitize_text_field($_GET['uid']);
-        $verification_key = get_option('agentwp_verification_key');
 
-        if ($key !== $verification_key) {
-            wp_send_json_error([
-                'status' => 'failed',
-            ]);
-        }
+        $this->settings->delete('verification_key');
 
-        delete_option('agentwp_verification_key');
+        $data = json_decode(file_get_contents('php://input'), true);
 
-        $request       = file_get_contents('php://input');
-        $data          = json_decode($request, true);
-        $site_id       = $data['site_id'];
-        $client_id     = $data['client_id'];
-        $client_secret = $data['client_secret'];
-
-        update_option('agentwp_site_id', [
-            'site_id'       => $site_id,
-            'client_id'     => $client_id,
-            'client_secret' => $client_secret,
+        $this->settings->set([
+            'site_id'       => sanitize_text_field($data['site_id']),
+            'client_id'     => sanitize_text_field($data['client_id']),
+            'client_secret' => sanitize_text_field($data['client_secret']),
         ]);
 
-        // Make the current user an AWP users manager
-        $user = get_user_by('email', $_GET['user_email']);
 
-        $user->add_cap('manage_agentwp_users');
-        $user->add_cap('agentwp_access');
+        // Make the current user an AWP users manager
+        $user_email = sanitize_text_field($data['user_email']);
+        $user       = get_user_by('email', $user_email);
+
+        $user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
+        $user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_USERS);
+        $user->add_cap(UserAuth::CAP_AGENTWP_ACCESS);
 
         wp_send_json([
             'status' => 'success',
         ]);
-
     }
 
     public function maybe_get_token(): void
     {
         $screen = get_current_screen();
         if ($screen->id === 'settings_page_agent-wp-admin-settings' && isset($_GET['code'])) {
-            $site_id  = get_option('agentwp_site_id');
-            $response = wp_remote_post($this->main->apiHost() . '/oauth/token', [
+            $code         = sanitize_text_field($_GET['code']);
+            $response_raw = wp_remote_post($this->main->apiHost().'/oauth/token', [
                 'body' => [
                     'grant_type'    => 'authorization_code',
-                    'client_id'     => $site_id['client_id'],
-                    'client_secret' => $site_id['client_secret'],
+                    'client_id'     => $this->settings->client_id,
+                    'client_secret' => $this->settings->client_secret,
                     'redirect_uri'  => admin_url('options-general.php?page=agent-wp-admin-settings'),
-                    'code'          => $_GET['code'],
+                    'code'          => $code,
                 ],
             ]);
-            $response = json_decode($response['body'], true);
+            $response     = json_decode($response_raw['body'], true);
 
             $response['expires_in'] = $response['expires_in'] * 1000;
 
             $current_user = wp_get_current_user();
-            $current_user->add_cap('agentwp_manager');
+            $current_user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
 
             if ($response['access_token']) {
-                // of module openssl is enabled
-                if (extension_loaded('openssl')) {
-                    $response['access_token']  = openssl_encrypt($response['access_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
-                    $response['refresh_token'] = openssl_encrypt($response['refresh_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
-                }
-                update_option('agentwp_access_token', $response, false);
+                $this->settings->setAccessToken($response);
             }
             wp_redirect(admin_url('options-general.php?page=agent-wp-admin-settings'));
         }
-    }
-
-    public function get_site_users(): void
-    {
-        $users = get_users([
-            'role__in' => ['administrator', 'editor', 'author', 'contributor', 'subscriber'],
-            'fields'   => ['ID', 'user_email', 'display_name'],
-        ]);
-        foreach ($users as $user) {
-            $user->manage_agentwp_users = user_can($user->ID, 'manage_agentwp_users');
-            $user->agentwp_access       = user_can($user->ID, 'agentwp_access');
-        }
-
-        $this->pageData['users'] = $users;
-
     }
 
     public function update_user_capabilities(): void
@@ -190,16 +158,16 @@ class Settings extends ReactClient
         if (isset($data['agentwp_access'])) {
             $agentwp_access = sanitize_text_field($data['agentwp_access']);
             if ($agentwp_access) {
-                $user->add_cap('agentwp_access');
+                $user->add_cap(UserAuth::CAP_AGENTWP_ACCESS);
             } else {
-                $user->remove_cap('agentwp_access');
+                $user->remove_cap(UserAuth::CAP_AGENTWP_ACCESS);
             }
         } elseif (isset($data['manage_agentwp_users'])) {
             $manage_agentwp_users = sanitize_text_field($data['manage_agentwp_users']);
             if ($manage_agentwp_users) {
-                $user->add_cap('manage_agentwp_users');
+                $user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_USERS);
             } else {
-                $user->remove_cap('manage_agentwp_users');
+                $user->remove_cap(UserAuth::CAP_MANAGE_AGENTWP_USERS);
             }
         }
         wp_send_json_success();
@@ -208,20 +176,36 @@ class Settings extends ReactClient
     public function logout(): void
     {
         $this->revoke_api_token();
-        delete_option('agentwp_access_token');
+        $this->settings->delete(['token', 'verification_key']);
         wp_send_json_success();
     }
 
     public function disconnect_site(): void
     {
         $this->revoke_api_token();
-        update_option('agentwp_site_id', []);
-        update_option('agentwp_access_token', []);
+        $this->settings->delete(['site_id', 'client_id', 'client_secret', 'token', 'verification_key']);
         wp_send_json_success();
     }
 
     private function revoke_api_token(): void
     {
-        $this->awpClient->request('POST', $this->main->apiHost() . '/api/site/disconnect');
+        $this->awpClient->request('POST', $this->main->apiHost().'/api/site/disconnect');
+    }
+
+    public function manual_activation(): void
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $data = json_decode(base64_decode($data['apiKey']), true);
+        $this->settings->set([
+            'site_id'       => sanitize_text_field($data['site_id']),
+            'client_id'     => sanitize_text_field($data['client_id']),
+            'client_secret' => sanitize_text_field($data['client_secret']),
+        ]);
+        $this->settings->setAccessToken([
+            'access_token'  => sanitize_text_field($data['token']['access_token']),
+            'token_type'    => 'Bearer',
+            'refresh_token' => '',
+            'expires_in'    => sanitize_text_field($data['token']['expires_in']),
+        ]);
     }
 }

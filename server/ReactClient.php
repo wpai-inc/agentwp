@@ -11,11 +11,13 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     protected string $pageName;
 
     protected bool $active = true;
+    private Settings $settings;
 
     public function __construct(protected Main $main)
     {
         $this->pageName =
         str_replace('\\', '/', str_replace(__NAMESPACE__.'\\Page\\', '', get_class($this)));
+        $this->settings = new Settings();
     }
 
     /**
@@ -110,7 +112,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         return [
             'ajax_url' => admin_url('admin-ajax.php'),
             'api_host' => $this->main->apiHost(),
-            'site_id' => get_option('agentwp_site_id')['site_id'] ?? null,
+            'site_id' => $this->settings->site_id,
             'page' => $this->slug(),
             'url' => $this->main->url(),
             'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),

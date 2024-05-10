@@ -2,13 +2,26 @@
 
 namespace WpAi\AgentWp;
 
+/**
+ * @property string|null $client_id The AWP client ID.
+ * @property string|null $client_secret The AWP client secret.
+ * @property string|null $site_id The AWP site ID.
+ * @property string|null $onboarding_completed The AWP site ID.
+ * @property string|null $verification_key The verification key of the site. This is a unique key that is used to verify the site. This key should have a short lifespan.
+ * @property array|null $token [ access_token: string, refresh_token: string, expires_in: int, token_type: string] The token data
+ */
 class Settings
 {
+
     private mixed $data;
 
     public function __construct()
     {
-        $this->data = get_option('agentwp_site_id');
+        $data = get_option('agentwp_settings');
+        if(!is_array($data)) {
+            $data = [];
+        }
+        $this->data = $data;
     }
 
     public function __get($name)
@@ -16,24 +29,70 @@ class Settings
         return $this->data[$name] ?? null;
     }
 
-    public function has($name): bool
+    public function set(string|array $key, $value = null): bool
     {
-        return isset($this->data[$name]) && ! empty($this->data[$name]);
+
+        if (is_array($key)) {
+            $this->data = array_merge($this->data ?? [], $key);
+        } elseif ($value === null) {
+            unset($this->data[$key]);
+        } else {
+            $this->data[$key] = $value;
+        }
+
+        return update_option('agentwp_settings', $this->data);
     }
 
-    public function getAccessToken(): ?array
+    public function delete(string|array $key): bool
     {
-        $access_token = get_option('agentwp_access_token');
+        if (is_array($key)) {
+            foreach ($key as $k) {
+                if (isset($this->data[$k])) {
+                    unset($this->data[$k]);
+                }
+            }
+        } else {
+            if (isset($this->data[$key])) {
+                unset($this->data[$key]);
+            }
+        }
 
-        if ($access_token === false) {
+        return update_option('agentwp_settings', $this->data);
+    }
+
+    public function has($key): bool
+    {
+        return isset($this->data[$key]) && $this->data[$key] !== '';
+    }
+
+    public function setAccessToken(mixed $token): bool
+    {
+        if (extension_loaded('openssl') && defined('AUTH_KEY') && ! empty(AUTH_KEY)) {
+            $token['access_token']  = openssl_encrypt($token['access_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
+            $token['refresh_token'] = $token['refresh_token'] ? openssl_encrypt($token['refresh_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY) : '';
+        }
+
+        if($token['expires_in']) {
+            $token['expires_at'] = time() + (int)$token['expires_in'];
+        }
+
+        return $this->set('token', $token);
+    }
+
+    public function getAccessToken(): ?string
+    {
+
+        if (empty($this->data['token']['access_token'])) {
             return null;
         }
-
-        if (extension_loaded('openssl') && isset($access_token['access_token'], $access_token['refresh_token'])) {
-            $access_token['access_token'] = openssl_decrypt($access_token['access_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
-            $access_token['refresh_token'] = openssl_encrypt($access_token['refresh_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
+        if (extension_loaded('openssl') && defined('AUTH_KEY') && ! empty(AUTH_KEY)) {
+            return openssl_decrypt($this->data['token']['access_token'], 'aes-256-cbc', AUTH_KEY, 0, AUTH_KEY);
         }
+        return $this->data['token']['access_token'];
+    }
 
-        return $access_token;
+    public function isConnectedToAwp(): bool
+    {
+        return ! empty($this->data['site_id']) && ! empty($this->data['client_id']) && ! empty($this->data['client_secret']);
     }
 }
