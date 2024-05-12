@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Abilities } from '@wpai/schemas';
 import { useUserRequests } from './UserRequestsProvider';
-import useAwpClient from '@/Hooks/useAwpClient';
+import { useClient } from '@/Providers/ClientProvider';
 export const StreamContext = createContext<any | undefined>(undefined);
 
 export function useStream() {
@@ -25,11 +25,10 @@ export default function StreamProvider({
   children: React.ReactNode;
 }) {
   const [liveAction, setLiveAction] = useState<AgentAction | null>(null);
-  const [action, setAction] = useState<AgentAction | null>(null);
   const [streamClosed, setStreamClosed] = useState(true);
-  const { setCurrentUserRequestId, currentUserRequestId, currentAction } =
-    useUserRequests();
-  const client = useAwpClient();
+  const [streamCompleted, setStreamCompleted] = useState(false);
+  const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
+  const client = useClient();
   const ctrl = new AbortController();
 
   async function startStream(stream_url: string, user_request_id: string) {
@@ -47,12 +46,9 @@ export default function StreamProvider({
         onmessage(ev) {
           if (ev.event === 'close') {
             closeStream();
+            setStreamCompleted(true);
           } else {
-            setLiveAction({
-              id: ev.id,
-              ability: ev.event,
-              action: JSON.parse(ev.data),
-            } as AgentAction);
+            setLiveAction(JSON.parse(ev.data) as AgentAction);
           }
         },
         onerror(err) {
@@ -69,23 +65,6 @@ export default function StreamProvider({
     }
   }
 
-  useEffect(() => {
-    if (
-      currentAction &&
-      !currentAction.final &&
-      streamClosed &&
-      currentUserRequestId
-    ) {
-      console.log(
-        'action not final',
-        currentAction,
-        streamClosed,
-        currentUserRequestId,
-      );
-      startStreamFromRequest(currentUserRequestId);
-    }
-  }, [currentAction, streamClosed, currentUserRequestId]);
-
   async function startStreamFromRequest(user_request_id: string) {
     const url = client.getStreamUrl(user_request_id);
     await startStream(url, user_request_id);
@@ -93,13 +72,14 @@ export default function StreamProvider({
 
   function resetStream() {
     setStreamClosed(false);
-    setAction(null);
     setLiveAction(null);
   }
 
   function closeStream() {
     setStreamClosed(true);
-    setAction(liveAction);
+    if (streamCompleted && liveAction) {
+      setCurrentAction(liveAction);
+    }
   }
 
   return (
@@ -107,7 +87,6 @@ export default function StreamProvider({
       value={{
         startStream,
         startStreamFromRequest,
-        action,
         liveAction,
         streamClosed,
       }}

@@ -13,7 +13,7 @@ const apiRequest = axios.create({
 apiRequest.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response.status === 401) {
+        if (error.response?.status === 401) {
             console.error("You need to login to access this page.");
         }
         return Promise.reject(error);

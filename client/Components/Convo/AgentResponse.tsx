@@ -5,7 +5,7 @@ import { Abilities } from '@wpai/schemas';
 import ActionIncomplete from './Actions/ActionIncomplete';
 import ActionPending from './Actions/ActionPending';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import { useStream } from '@/Providers/StreamProvider';
+import { LoaderIcon } from 'lucide-react';
 
 type ActionComponentsType = {
   [key in Abilities]?: React.ComponentType<AgentAction>;
@@ -23,12 +23,15 @@ export default function AgentResponse({
   agentActions?: AgentAction[];
   userRequestId: string;
 }) {
-  const { currentAction } = useUserRequests();
-  const { streamClosed } = useStream();
+  const { currentAction, currentUserRequestId } = useUserRequests();
   return (
     <div className="flex gap-4 p-4">
       <div className="w-8 h-8 flex items-center justify-center font-bold bg-blue-500 text-white rounded-full">
-        A
+        {!currentAction?.final && userRequestId === currentUserRequestId ? (
+          <LoaderIcon className="animate-spin" />
+        ) : (
+          'A'
+        )}
       </div>
       {agentActions === undefined ? (
         <ActionPending />
@@ -55,10 +58,6 @@ export default function AgentResponse({
               return <ActionComponent key={aa.id} {...aa} />;
             }
           })}
-
-          {!currentAction?.final && streamClosed && (
-            <p>Waiting on next action...</p>
-          )}
         </div>
       ) : (
         <div>No actions</div>
