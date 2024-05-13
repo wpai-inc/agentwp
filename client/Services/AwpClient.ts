@@ -22,6 +22,13 @@ export default class AwpClient {
     });
   }
 
+  isAuthorized() {
+    if (!this.token) {
+      return null;
+    }
+    return this;
+  }
+
   getStreamUrl(userRequestId: string) {
     return `${this.baseUrl}/api/request/${userRequestId}/stream`;
   }
@@ -61,10 +68,9 @@ export default class AwpClient {
     data: object = {},
     additionalHeaders: object = {},
   ): Promise<AxiosResponse> {
-
-      if (!this.token) {
-          return Promise.reject(new Error('Token is undefined or empty'));
-      }
+    if (!this.token) {
+      return Promise.reject(new Error('Token is undefined or empty'));
+    }
 
     return this.httpClient.request({
       method,

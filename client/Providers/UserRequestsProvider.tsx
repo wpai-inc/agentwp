@@ -84,8 +84,8 @@ export default function UserRequestsProvider({
   }, [currentUserRequestId, conversation]);
 
   async function getConversation() {
-    const response = await client.getConversation(siteId);
-    if (response.data.length > 0) {
+    const response = await client.isAuthorized()?.getConversation(siteId);
+    if (response && response.data.length > 0) {
       setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
       setConversation(response.data);
     }
