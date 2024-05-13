@@ -23,12 +23,43 @@ export default function ChatTopBar() {
   }
 
   function startDrag(e) {
-    let currentPosX = e.clientX - e.target.getBoundingClientRect().left;
-    let currentPosY = e.clientY - e.target.getBoundingClientRect().top;
+    const containerElement = document.getElementById('wpbody');
+    const containerCoords = containerElement.getBoundingClientRect();
+    let startPosX = e.clientX - e.target.getBoundingClientRect().left;
+    let startPosY = e.clientY - e.target.getBoundingClientRect().top;
+
+    const disableDrag = (e) => {
+      setSettings({
+        x: e.target.parentNode.style.left,
+        y: e.target.parentNode.style.top,
+      });
+      e.target.removeEventListener('mousemove', handleDrag);
+      e.target.onmouseup = null;
+      e.target.mouseleave = null;
+    }
 
     const drag = (target, x, y) => {
-      target.style.left = x - currentPosX + 'px';
-      target.style.top = y - currentPosY + 'px';
+      const chatWindowCoords = target.getBoundingClientRect();
+
+      // get thew new bounding rect it will be moved to
+      const newPositionLeft = x - startPosX;
+      const newPositionRight = x - startPosX + chatWindowCoords.width;
+      const newPositionTop = y - startPosY;
+      const newPositionBottom = y - startPosY + chatWindowCoords.height;
+
+      // check if any of the new bounding rects are out of bounds
+      const leftOutOfBounds = newPositionLeft < containerCoords.left;
+      const rightOutOfBounds = newPositionRight > containerCoords.right;
+      const topOutOfBounds = newPositionTop < containerCoords.top;
+      const bottomOutOfBounds = newPositionBottom > containerCoords.bottom;
+
+      // deny drag accordingly
+      if (!leftOutOfBounds && !rightOutOfBounds) {
+        target.style.left = newPositionLeft + 'px';
+      }
+      if (!topOutOfBounds && !bottomOutOfBounds) {
+        target.style.top = newPositionTop + 'px';
+      }
     }
 
     const handleDrag = (e) => {
@@ -38,14 +69,8 @@ export default function ChatTopBar() {
     drag(e.target.parentNode, e.pageX, e.pageY);
 
     e.target.addEventListener('mousemove', handleDrag);
-    e.target.addEventListener('mouseup', () => {
-      setSettings({
-        x: e.target.parentNode.style.left,
-        y: e.target.parentNode.style.top,
-      });
-      e.target.removeEventListener('mousemove', handleDrag);
-      e.target.onmouseup = null;
-    });
+    e.target.addEventListener('mouseup', disableDrag);
+    e.target.addEventListener('mouseleave', disableDrag);
   }
 
   useEffect(() => {
