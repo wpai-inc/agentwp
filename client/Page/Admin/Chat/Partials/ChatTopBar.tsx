@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import SettingsIcons from '@material-design-icons/svg/filled/settings.svg?react';
+import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
+import HistoryIcon from '@material-design-icons/svg/outlined/history.svg?react';
+import SettingsIcon from '@material-design-icons/svg/outlined/settings.svg?react';
 import AccountIcon from '@material-design-icons/svg/outlined/account_circle.svg?react';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -11,6 +13,14 @@ export default function ChatTopBar() {
   const topBarRef = useRef(null);
 
   function onUpgradeClick(e: React.FormEvent) {
+    e.preventDefault();
+  }
+
+  function onAddClick(e: React.FormEvent) {
+    e.preventDefault();
+  }
+
+  function onHistoryClick(e: React.FormEvent) {
     e.preventDefault();
   }
 
@@ -96,16 +106,34 @@ export default function ChatTopBar() {
         )}>
           Free
         </Badge>
-      </div>
-      <div className="flex items-center gap-2">
         <Button
           onClick={onUpgradeClick}
           size="sm"
           className={cn(
-            'font-semibold h-7 px-8 rounded-full',
+            'font-semibold h-7 px-6 rounded-full bg-zinc-600',
           )}
         >
           Upgrade
+        </Button>
+      </div>
+      <div className="flex items-center gap-2">
+        <Button
+          asChild
+          onClick={onAddClick}
+          variant="ghost"
+          size="icon"
+          className="cursor-pointer"
+        >
+          <AddIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          asChild
+          onClick={onHistoryClick}
+          variant="ghost"
+          size="icon"
+          className="cursor-pointer"
+        >
+          <HistoryIcon className="h-6 w-6" />
         </Button>
         <Button
           asChild
@@ -114,7 +142,7 @@ export default function ChatTopBar() {
           size="icon"
           className="cursor-pointer"
         >
-          <SettingsIcons className="h-7 w-7" />
+          <SettingsIcon className="h-6 w-6" />
         </Button>
         <Button
           asChild
@@ -123,7 +151,7 @@ export default function ChatTopBar() {
           size="icon"
           className="cursor-pointer"
         >
-          <AccountIcon className="h-7 w-7" />
+          <AccountIcon className="h-6 w-6" />
         </Button>
       </div>
     </div>
