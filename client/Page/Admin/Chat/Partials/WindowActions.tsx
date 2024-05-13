@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 
 export default function WindowActions() {
-  const { toggle, expandChatWindow } = useChat();
+  const { toggle, maximizeChatWindow } = useChat();
 
   return (
     <div className={cn(
@@ -16,13 +16,13 @@ export default function WindowActions() {
     )}
     >
       <MinimizeIcon
-        onClick={() => {}}
+        onClick={toggle}
         className={cn(
-          'h-5 w-5 text-brand-gray-50 cursor-pointer hover:text-sky-500'
+          'h-5 w-5 text-brand-gray-50 cursor-pointer hover:text-amber-500'
         )}
       />
       <ExpandIcon
-        onClick={expandChatWindow}
+        onClick={maximizeChatWindow}
         className={cn(
           'h-4 w-4 text-brand-gray-50 cursor-pointer hover:text-teal-500'
         )}

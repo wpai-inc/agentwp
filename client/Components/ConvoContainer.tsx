@@ -9,7 +9,7 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
 export default function ConvoContainer() {
   const windowRef = useRef<HTMLDivElement>(null);
-  const { open } = useChat();
+  const { open, minimizing, expanding } = useChat();
   const { settings, setSettings } = useClientSettings();
 
   useEffect(() => {
@@ -43,10 +43,13 @@ export default function ConvoContainer() {
         'h-[90vh] w-[500px] z-[1000] bg-brand-gray',
         'shadow-xl flex flex-col border border-gray-200 rounded-xl',
         {
-          'translate-x-full': !open,
+          'w-0 h-0 overflow-hidden': !open,
+          'minimize': minimizing,
+          'expand': expanding,
         },
       )}
     >
+      <div className="minimize-overlay"></div>
       <ChatTopBar />
       <Dialog />
       <MessageBox />
