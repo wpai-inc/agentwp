@@ -1,8 +1,6 @@
 import MD from '@/Components/MD';
-import type { MessageAgentAction } from '@/Components/Convo/Actions/ActionMessage';
+import { AgentAction } from '@/Providers/UserRequestsProvider';
 
-export default function ActionSimpleMessage({ action }: MessageAgentAction) {
-    return (
-        <MD>{action?.text ?? 'something went wrong'}</MD>
-    );
+export default function ActionSimpleMessage({ action }: AgentAction) {
+  return <MD content={(action?.text ?? 'something went wrong').toString()} />;
 }
