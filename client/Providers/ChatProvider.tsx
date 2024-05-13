@@ -15,8 +15,6 @@ type CreateUserRequestResponse = {
   stream_url: string;
 };
 
-declare const agentwp_settings: agentwpSettings;
-
 const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
@@ -48,7 +46,7 @@ export default function ChatProvider({
   const [open, setOpen] = useState(settings.chatOpen ?? false);
   const { conversation, setConversation, currentUserRequestId } =
     useUserRequests();
-  const { startStream, liveAction } = useStream();
+  const { startStream, liveAction, error } = useStream();
 
   useEffect(() => {
     if (liveAction && currentUserRequestId) {
@@ -56,15 +54,19 @@ export default function ChatProvider({
     }
   }, [liveAction, currentUserRequestId]);
 
+  useEffect(() => {
+    if (error) {
+      console.error('Stream error:', error);
+    }
+  }, [error]);
+
   function toggle() {
     const newVal = !open;
     setOpen(newVal);
     setSettings({ chatOpen: newVal });
   }
 
-  function expandChatWindow() {
-
-  }
+  function expandChatWindow() {}
 
   async function userRequest(
     message: string,
@@ -114,12 +116,23 @@ export default function ChatProvider({
       message: message,
     } as UserRequestType);
 
-    startStream(stream_url, user_request_id);
+    try {
+      startStream(stream_url, user_request_id);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return (
     <ChatContext.Provider
-      value={{ open, setOpen, toggle, expandChatWindow, conversation, sendMessage }}
+      value={{
+        open,
+        setOpen,
+        toggle,
+        expandChatWindow,
+        conversation,
+        sendMessage,
+      }}
     >
       {children}
     </ChatContext.Provider>
