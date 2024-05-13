@@ -50,8 +50,6 @@ export function useUserRequests() {
   return chat;
 }
 
-declare const agentwp_settings: agentwpSettings;
-
 export default function UserRequestsProvider({
   children,
 }: {

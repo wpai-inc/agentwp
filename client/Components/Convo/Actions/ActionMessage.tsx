@@ -1,15 +1,10 @@
-import { MessageAction } from '@wpai/schemas';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
 import RichMessage from '@/Components/Convo/Actions/RichMessage';
 
-export type MessageAgentAction = Omit<AgentAction, 'action'> & {
-  action: MessageAction;
-};
-
-export default function ActionMessage(props: MessageAgentAction) {
+export default function ActionMessage(props: AgentAction) {
   return (
     <div>
-      <RichMessage action={props} />
+      <RichMessage {...props} />
     </div>
   );
 }
