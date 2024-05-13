@@ -32,7 +32,7 @@ export default function connectToAwp() {
                     agentwp_settings.api_host
                 }/connect_site?website=${encodeURIComponent(
                     response.data.home_url
-                )}&user_email=${agentwp_settings.user.user_email}&uid=${
+                )}&user_email=${agentwp_settings.user.user_email}&verification_key=${
                     response.data.key
                 }`;
             });

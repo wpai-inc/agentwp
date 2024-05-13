@@ -1,11 +1,11 @@
 import axios from 'axios';
+import { agentwpSettings } from "@/Types/types";
 
-declare const ajaxurl: string;
 declare const agentwp_settings: agentwpSettings;
 
 
 const adminRequest = axios.create({
-    baseURL: ajaxurl,
+    baseURL: '/?rest_route=/agentwp/v1/',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     }

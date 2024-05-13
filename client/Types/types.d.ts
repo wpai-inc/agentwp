@@ -1,4 +1,4 @@
-type agentwpSettings = {
+export type agentwpSettings = {
   nonce: string;
   site_id: string;
   client_id: string;
@@ -24,4 +24,5 @@ type agentwpSettings = {
     expires_at: number;
     refresh_token: string;
   };
+  onboarding_completed: boolean;
 };

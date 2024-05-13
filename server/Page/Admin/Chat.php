@@ -13,8 +13,6 @@ class Chat extends ReactClient
 
     public function registerChat(): void
     {
-        if ($this->main->auth()->canManageUsers()) {
-            add_action('admin_footer', [$this, 'appRoot'], 100);
-        }
+        add_action('admin_footer', [$this, 'appRoot'], 100);
     }
 }

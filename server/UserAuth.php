@@ -6,11 +6,39 @@ use WP_User;
 
 class UserAuth
 {
+
+    const CAP_MANAGE_AGENTWP_CONNECTION = 'agentwp_manager';
+    const CAP_MANAGE_AGENTWP_USERS = 'manage_agentwp_users';
+    const CAP_AGENTWP_ACCESS = 'agentwp_access';
+
     private Settings $settings;
 
-    public function __construct(private WP_User $user)
+    public function __construct(private WP_User|null $user = null)
     {
+        if ( ! $user) {
+            $this->user = wp_get_current_user();
+        }
         $this->settings = new Settings();
+    }
+
+    public function canGenerateVerificationKey(): bool
+    {
+        if ($this->settings->has('site_id')) {
+            return $this->user->has_cap(self::CAP_MANAGE_AGENTWP_CONNECTION);
+        }
+
+        return $this->isAdmin();
+    }
+
+    public function hasValidVerificationKey(): bool
+    {
+        if (empty($_REQUEST['verification_key'])) {
+            return false;
+        }
+        $verification_key = sanitize_text_field($_REQUEST['verification_key']);
+        $local_verification_key = $this->settings->verification_key;
+
+        return ! empty($local_verification_key) && $verification_key === $local_verification_key;
     }
 
     public function isAdmin(): bool
@@ -20,12 +48,11 @@ class UserAuth
 
     public function isManager(): bool
     {
-        return true;
-        if ($this->settings->has('site_id') && $this->isRole('administrator')) {
-            return true;
+        if ($this->settings->isConnectedToAwp()) {
+            return $this->user->has_cap(self::CAP_MANAGE_AGENTWP_CONNECTION);
         }
 
-        return current_user_can('agentwp_manager');
+        return $this->isAdmin();
     }
 
     public function wpUserId(): int
@@ -35,28 +62,25 @@ class UserAuth
 
     public function canManageUsers(): bool
     {
-        return true;
-        if ($this->settings->has('site_id') && $this->isRole('administrator')) {
-            return true;
+        if ($this->settings->isConnectedToAwp()) {
+            return $this->user->has_cap(self::CAP_MANAGE_AGENTWP_USERS);
         }
 
-        return current_user_can('manage_agentwp_users') || $this->isManager();
+        return $this->isAdmin();
     }
 
     public function hasAccess(): bool
     {
-        return current_user_can('agentwp_access') || $this->canManageUsers() || $this->isManager();
+        return $this->user->has_cap(self::CAP_AGENTWP_ACCESS) || $this->canManageUsers() || $this->isManager();
     }
 
     public function getAccessToken(): ?string
     {
-        if (! $this->hasAccess()) {
+        if ( ! $this->hasAccess()) {
             return null;
         }
 
-        $token = $this->settings->getAccessToken();
-
-        return $token['access_token'] ?? null;
+        return $this->settings->getAccessToken();
     }
 
     private function isRole(string $role): bool

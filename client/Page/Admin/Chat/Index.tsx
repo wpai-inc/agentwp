@@ -10,7 +10,9 @@ import StreamProvider from '@/Providers/StreamProvider';
 import ActionListenerProvider from '@/Providers/ActionListenerProvider';
 import UserRequestsProvider from '@/Providers/UserRequestsProvider';
 import { PageProvider } from '@/Providers/PageProvider';
+import type { agentwpSettings } from "@/Types/types";
 import { ClientProvider } from '@/Providers/ClientProvider';
+
 
 const rootElement = document.getElementById('agent-wp-admin-chat');
 
