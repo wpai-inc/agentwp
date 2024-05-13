@@ -10,12 +10,27 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 export default function ConvoContainer() {
   const windowRef = useRef(null);
   const { open } = useChat();
-  const { settings } = useClientSettings();
+  const { settings, setSettings } = useClientSettings();
 
   useEffect(() => {
     const windowElement = windowRef.current;
     windowElement.style.left = settings.x;
     windowElement.style.top = settings.y;
+
+    const resetChatWindow = () => {
+      windowElement.style.top = "";
+      windowElement.style.left = "";
+      setSettings({
+        x: null,
+        y: null,
+      })
+    }
+
+    window.addEventListener("resize", resetChatWindow);
+
+    return () => {
+      window.removeEventListener("resize", resetChatWindow);
+    }
   }, []);
 
   return (

@@ -9,8 +9,8 @@ import { getStorage, setStorage } from '@/lib/utils';
 
 export type ClientSettings = {
   chatOpen?: boolean;
-  x?: number;
-  y?: number;
+  x?: number | null;
+  y?: number | null;
   width?: number;
   height?: number;
 };
