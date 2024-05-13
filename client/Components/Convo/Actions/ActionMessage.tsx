@@ -1,6 +1,6 @@
 import { MessageAction } from '@wpai/schemas';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
-import RichMessage from '@/Components/RichMessage';
+import RichMessage from '@/Components/Convo/Actions/RichMessage';
 
 export type MessageAgentAction = Omit<AgentAction, 'action'> & {
   action: MessageAction;
