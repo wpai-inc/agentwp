@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from './Dialog';
@@ -8,28 +8,30 @@ import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
 export default function ConvoContainer() {
-  const windowRef = useRef(null);
+  const windowRef = useRef<HTMLDivElement>(null);
   const { open } = useChat();
   const { settings, setSettings } = useClientSettings();
 
   useEffect(() => {
     const windowElement = windowRef.current;
-    windowElement.style.left = settings.x;
-    windowElement.style.top = settings.y;
+    if (windowElement) {
+      windowElement.style.left = settings.x + 'px';
+      windowElement.style.top = settings.y + 'px';
 
-    const resetChatWindow = () => {
-      windowElement.style.top = "";
-      windowElement.style.left = "";
-      setSettings({
-        x: null,
-        y: null,
-      })
-    }
+      const resetChatWindow = () => {
+        windowElement.style.top = '';
+        windowElement.style.left = '';
+        setSettings({
+          x: null,
+          y: null,
+        });
+      };
 
-    window.addEventListener("resize", resetChatWindow);
+      window.addEventListener('resize', resetChatWindow);
 
-    return () => {
-      window.removeEventListener("resize", resetChatWindow);
+      return () => {
+        window.removeEventListener('resize', resetChatWindow);
+      };
     }
   }, []);
 
