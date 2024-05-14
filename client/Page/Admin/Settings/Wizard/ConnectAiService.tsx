@@ -7,6 +7,9 @@ export default function ConnectAiService() {
 
     return (
         <div className="max-w-[380px] mx-auto text-base mt-12">
+            <div className="text-center">
+                ICON
+            </div>
             <div className="text-4xl font-bold text-center ">
                 Connect Example Site to AgentWP Services
             </div>
@@ -65,7 +68,7 @@ export default function ConnectAiService() {
             </div>
             <div className="mt-4">
                 <ConnectButton />
-                or
+                <div className="text-center">or</div>
                 <ManualAwpActivation />
             </div>
             <div className="mt-4 text-sm">

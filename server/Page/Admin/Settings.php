@@ -35,10 +35,6 @@ class Settings extends ReactClient
 
         (new AwpRestRoute('agentwp_save_connection', [$this, 'save_connection'], [$this->user, 'hasValidVerificationKey']))->method('POST');
 
-        new AwpRestRoute('agentwp_update_user', [$this, 'update_user_capabilities'], UserAuth::CAP_MANAGE_AGENTWP_USERS);
-
-        new AwpRestRoute('agentwp_update_user', [$this, 'update_user_capabilities'], UserAuth::CAP_MANAGE_AGENTWP_USERS);
-
         new AwpRestRoute('agentwp_logout', [$this, 'logout'], UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
 
         new AwpRestRoute('agentwp_disconnect_site', [$this, 'disconnect_site'], UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
@@ -144,33 +140,6 @@ class Settings extends ReactClient
             }
             wp_redirect(admin_url('options-general.php?page=agent-wp-admin-settings'));
         }
-    }
-
-    public function update_user_capabilities(): void
-    {
-        if ( ! wp_verify_nonce($_GET['nonce'], 'agentwp_settings')) {
-            wp_send_json_error('Invalid nonce');
-        }
-
-        $data    = json_decode(file_get_contents('php://input'), true);
-        $user_id = sanitize_text_field($data['user']);
-        $user    = new \WP_User($user_id);
-        if (isset($data['agentwp_access'])) {
-            $agentwp_access = sanitize_text_field($data['agentwp_access']);
-            if ($agentwp_access) {
-                $user->add_cap(UserAuth::CAP_AGENTWP_ACCESS);
-            } else {
-                $user->remove_cap(UserAuth::CAP_AGENTWP_ACCESS);
-            }
-        } elseif (isset($data['manage_agentwp_users'])) {
-            $manage_agentwp_users = sanitize_text_field($data['manage_agentwp_users']);
-            if ($manage_agentwp_users) {
-                $user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_USERS);
-            } else {
-                $user->remove_cap(UserAuth::CAP_MANAGE_AGENTWP_USERS);
-            }
-        }
-        wp_send_json_success();
     }
 
     public function logout(): void

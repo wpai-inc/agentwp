@@ -26,10 +26,12 @@ export function ManualAwpActivation() {
             </Button>
             {fieldsVisible && (
                 <div>
-                    <div><a target="_blank" href="https://awp.ovi.work/manually_connect_site">Get your api key</a></div>
+                    <div className="flex justify-between text-center pt-4">
+                        <Label htmlFor={'manual-api-token'}>API key</Label>
+                        <a target="_blank" href="https://awp.ovi.work/manually_connect_site">Get your api key</a>
+                    </div>
                     <div>
-                        <Label>API key</Label>
-                        <textarea value={apiKey} className="w-full block" onChange={(ev) => setApiKey(ev.target.value)} />
+                        <textarea value={apiKey} id="manual-api-token" className="w-full block p-2 h-32" onChange={(ev) => setApiKey(ev.target.value)} />
                     </div>
                     <Button className="button w-full" onClick={() => saveManualToken()}>Connect</Button>
                 </div>

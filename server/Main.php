@@ -31,7 +31,7 @@ class Main
     public function __construct(private string $file)
     {
         $this->settings = new Settings();
-        $this->auth = new UserAuth();
+        $this->auth     = new UserAuth();
         $this->clientId = $this->settings->client_id;
         add_action('admin_head', [$this, 'printDefaultVars']);
     }
@@ -53,7 +53,7 @@ class Main
 
     public function asset(?string $path = null): string
     {
-        return $this->url(self::BUILD_DIR . '/' . $path);
+        return $this->url(self::BUILD_DIR.'/'.$path);
     }
 
     public function pluginPath(): string
@@ -63,7 +63,7 @@ class Main
 
     public function path(?string $path = null): string
     {
-        return plugin_dir_path($this->file) . ltrim($path, '/');
+        return plugin_dir_path($this->file).ltrim($path, '/');
     }
 
     public function url(?string $path = null): string
@@ -89,23 +89,30 @@ class Main
     public function printDefaultVars()
     {
         $agentwp_settings = [
-            'nonce' => wp_create_nonce(self::nonce()),
-            'is_admin' => $this->auth->isAdmin(),
-            'agentwp_manager' => $this->auth->isManager(),
+            'nonce'                 => wp_create_nonce(self::nonce()),
+            'wp_rest_nonce'         => wp_create_nonce('wp_rest'),
+            'is_admin'              => $this->auth->isAdmin(),
+            'agentwp_manager'       => $this->auth->isManager(),
             'agentwp_users_manager' => $this->auth->canManageUsers(),
-            'agentwp_access' => $this->auth->hasAccess(),
-            'access_token' => $this->auth->getAccessToken(),
-            'site_id' => $this->siteId(),
-            'client_id' => $this->clientId,
-            'api_host' => $this->apiClientHost(),
-            'user' => wp_get_current_user()->data,
-            'onboard_completed' => $this->settings->onboarding_completed,
+            'agentwp_access'        => $this->auth->hasAccess(),
+            'access_token'          => $this->auth->getAccessToken(),
+            'site_id'               => $this->siteId(),
+            'client_id'             => $this->clientId,
+            'api_host'              => $this->apiClientHost(),
+            'rest_route'            => rest_url(),
+            'user'                  => wp_get_current_user()->data,
+            'onboard_completed'     => $this->settings->onboarding_completed,
         ];
-?>
+        ?>
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
-<?php
+        <style>
+            body.agent-wp-admin-settings {
+                background-color: #ffffff;
+            }
+        </style>
+        <?php
     }
 
     private function runtimeApiHost()

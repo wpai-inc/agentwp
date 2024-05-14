@@ -4,16 +4,17 @@ import { agentwpSettings } from "@/Types/types";
 declare const agentwp_settings: agentwpSettings;
 
 
-const adminRequest = axios.create({
-    baseURL: agentwp_settings.rest_route + 'agentwp/v1/',
+const wpRequest = axios.create({
+    baseURL: agentwp_settings.rest_route,
     headers: {
         'X-WP-Nonce': agentwp_settings.wp_rest_nonce
-    }
+    },
+    withCredentials: true
 });
 
 // add nonce to the request
-adminRequest.interceptors.request.use((config) => {
-    const nonce = agentwp_settings.nonce;
+wpRequest.interceptors.request.use((config) => {
+    const nonce = agentwp_settings.wp_rest_nonce;
     if (nonce) {
         config.params = {
             ...config.params,
@@ -23,4 +24,4 @@ adminRequest.interceptors.request.use((config) => {
     return config;
 });
 
-export default adminRequest;
+export default wpRequest;

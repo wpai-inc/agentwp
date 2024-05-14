@@ -1,4 +1,5 @@
 import axios from "axios";
+import { agentwpSettings } from "@/Types/types";
 
 declare const agentwp_settings: agentwpSettings;
 

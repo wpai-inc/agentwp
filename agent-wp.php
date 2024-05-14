@@ -31,6 +31,7 @@ add_action('plugins_loaded', function () {
         \WpAi\AgentWp\Installer::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
+        \WpAi\AgentWp\Services\UsersManagement::class,
         \WpAi\AgentWp\SiteIndexer::class,
         \WpAi\AgentWp\ErrorIndexer::class,
     ]);

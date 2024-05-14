@@ -1,7 +1,7 @@
 import { useState } from "react";
 import adminRequest from "@/lib/adminRequest.js";
-import { Button } from "@wordpress/components";
 import type { agentwpSettings } from "@/Types/types.js";
+import { Button } from "@/Components/ui/button";
 
 declare const agentwp_settings: agentwpSettings;
 export default function ConnectButton() {
