@@ -31,4 +31,9 @@ class BaseController
 
         return current_user_can($this->permission);
     }
+
+    public function respond(array $response): void
+    {
+        wp_send_json($response);
+    }
 }

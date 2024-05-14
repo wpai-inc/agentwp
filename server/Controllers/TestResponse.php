@@ -8,7 +8,8 @@ class TestResponse extends BaseController
     {
         $key = uniqid('agentwp-', true);
         $this->main->settings->set('verification_key', $key);
-        wp_send_json([
+
+        $this->respond([
             'key' => $key,
             'home_url' => home_url(),
         ]);
