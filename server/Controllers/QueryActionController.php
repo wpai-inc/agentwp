@@ -2,18 +2,16 @@
 
 namespace WpAi\AgentWp\Controllers;
 
-class TestResponse extends BaseController
+class QueryActionController extends BaseController
 {
-    public function test_response(): void
+    public function query(): void
     {
-
         $key = uniqid('agentwp-', true);
         $this->main->settings->set('verification_key', $key);
 
         $this->respond([
             'key' => $key,
             'home_url' => home_url(),
-            'foo' => $this->request->query->get('foo'),
         ]);
     }
 }

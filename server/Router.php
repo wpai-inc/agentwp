@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Controllers\QueryActionController;
 use WpAi\AgentWp\Controllers\TestResponse;
 
 class Router implements Registrable
@@ -11,6 +12,7 @@ class Router implements Registrable
 
     protected array $routes = [
         'test_route' => [TestResponse::class, 'test_response'],
+        'run_action_query' => [QueryActionController::class, 'query'],
     ];
 
     public function __construct(private Main $main)

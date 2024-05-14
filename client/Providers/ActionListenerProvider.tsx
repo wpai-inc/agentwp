@@ -14,9 +14,15 @@ const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
   const client = useClient();
 
   useEffect(() => {
-    adminRequest.get('test_route').then((response) => {
-      console.log('test_route', response.data);
-    });
+    adminRequest
+      .get('test_route', {
+        params: {
+          foo: 'bar',
+        },
+      })
+      .then((response) => {
+        console.log('test_route', response.data);
+      });
   }, []);
 
   useEffect(() => {
