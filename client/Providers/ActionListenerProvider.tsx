@@ -3,6 +3,7 @@ import { useStream } from '@/Providers/StreamProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
+import { AxiosResponse } from 'axios';
 
 const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -14,18 +15,6 @@ const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
   const client = useClient();
 
   useEffect(() => {
-    adminRequest
-      .get('test_route', {
-        params: {
-          foo: 'bar',
-        },
-      })
-      .then((response) => {
-        console.log('test_route', response.data);
-      });
-  }, []);
-
-  useEffect(() => {
     if (currentAction && streamClosed && currentAction.action)
       if (!currentAction.hasExecuted) {
         /**
@@ -33,23 +22,29 @@ const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
          */
         switch (currentAction.action.ability) {
           case 'query':
-            client.storeAgentResult(currentAction.id, {
-              status: 'success',
-              data: currentAction.action,
-            });
-            // window.location.href = currentAction.action.url;
+            adminRequest
+              .get('run_action_query', {
+                params: {
+                  sql: currentAction.action.sql,
+                  params: currentAction.action.params,
+                },
+              })
+              .then((response: AxiosResponse) => {
+                client.storeAgentResult(currentAction.id, {
+                  status: 'success',
+                  data: response.data.results,
+                });
+              });
             break;
           case 'navigate':
             client.storeAgentResult(currentAction.id, {
               status: 'success',
-              data: currentAction.action,
             });
             window.location.href = currentAction.action.url;
             break;
           case 'message':
             client.storeAgentResult(currentAction.id, {
               status: 'success',
-              data: currentAction.action,
             });
             break;
         }

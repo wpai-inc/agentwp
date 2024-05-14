@@ -43,3 +43,7 @@ export function AdminRouteProvider({
     </AdminRouteContext.Provider>
   );
 }
+
+export type RouteRunActionQuery = {
+  results: any[];
+};

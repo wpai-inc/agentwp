@@ -6,12 +6,17 @@ class QueryActionController extends BaseController
 {
     public function query(): void
     {
-        $key = uniqid('agentwp-', true);
-        $this->main->settings->set('verification_key', $key);
+        global $wpdb;
+        // unescape slashes
+        $sql = stripslashes($this->request->query->get('sql'));
+        $params = $this->request->query->get('params');
+
+        $prepared_query = $wpdb->prepare($sql, $params);
+
+        $results = $wpdb->get_results($prepared_query);
 
         $this->respond([
-            'key' => $key,
-            'home_url' => home_url(),
+            'results' => $results,
         ]);
     }
 }
