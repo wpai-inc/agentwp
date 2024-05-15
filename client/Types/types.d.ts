@@ -1,8 +1,9 @@
-export type agentwpSettings = {
+export type PageData = {
   nonce: string;
-  site_id: string;
+  site_id?: string;
   client_id: string;
   api_host: string;
+  rest_endpoint: string;
   user: {
     ID: string;
     display_name: string;

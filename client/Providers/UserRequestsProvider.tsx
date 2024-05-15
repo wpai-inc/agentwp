@@ -1,9 +1,9 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
-import { MessageAction, NavigateAction } from '@wpai/schemas';
+import { MessageAction, NavigateAction, QueryAction } from '@wpai/schemas';
 import { usePage } from './PageProvider';
 
-export type ActionType = NavigateAction | MessageAction;
+export type ActionType = NavigateAction | MessageAction | QueryAction;
 
 export type AgentAction = {
   id: string;

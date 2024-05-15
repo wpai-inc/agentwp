@@ -8,5 +8,15 @@ export default {
 }
 
 export const Simple = {
-  args: {},
+  args: {
+    dataKey: 'label',
+    valueDataKey: 'value',
+    outerRadius: 80,
+    data: [
+      { label: 'Agriculture', value: 150 },
+      { label: 'Energy', value: 170 },
+      { label: 'Finance', value: 200 },
+      { label: 'Manufacturing', value: 300 },
+    ]
+  },
 };

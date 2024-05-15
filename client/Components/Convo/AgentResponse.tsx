@@ -1,6 +1,7 @@
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
 import ActionNavigate from '@/Components/Convo/Actions/ActionNavigate';
 import ActionMessage from '@/Components/Convo/Actions/ActionMessage';
+import ActionQuery from '@/Components/Convo/Actions/ActionQuery';
 import { Abilities } from '@wpai/schemas';
 import ActionIncomplete from './Actions/ActionIncomplete';
 import ActionPending from './Actions/ActionPending';
@@ -14,6 +15,7 @@ type ActionComponentsType = {
 const ActionComponents: ActionComponentsType = {
   message: ActionMessage,
   navigate: ActionNavigate,
+  query: ActionQuery,
 };
 
 export default function AgentResponse({
