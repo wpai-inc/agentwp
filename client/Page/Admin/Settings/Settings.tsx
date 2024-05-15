@@ -3,6 +3,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import UsersManagement from "@/Page/Admin/Settings/SubPages/UsersManagement";
 import Info from "@/Page/Admin/Settings/SubPages/Info";
 import type { agentwpSettings } from "@/Types/types.d.ts";
+import UserAccess from "@/Page/Admin/Settings/Wizard/UserAccess";
 
 declare const agentwp_settings: agentwpSettings;
 
@@ -27,24 +28,24 @@ export default function Settings() {
                 defaultValue={initialTab}
                 onValueChange={value => handleTabChange(value)}
             >
-                <Tabs.List className="shrink-0 flex border-b border-mauve6" aria-label="Manage your account">
+                <Tabs.List className="flex border-b border-mauve6" aria-label="Manage your account">
                     <Tabs.Trigger
-                        className="bg-white px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black outline-none cursor-default"
+                        className="bg-white px-5 h-[45px] flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current outline-none cursor-pointer"
                         value="info"
                     >
-                        Info
+                        About
                     </Tabs.Trigger>
                     {agentwp_settings.agentwp_manager &&
                         <Tabs.Trigger
-                            className="bg-white px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black outline-none cursor-default"
+                            className="bg-white px-5 h-[45px] flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current outline-none cursor-pointer"
                             value="connect"
                         >
-                            Connect
+                            AI Connection Manager
                         </Tabs.Trigger>
                     }
                     {agentwp_settings.agentwp_users_manager &&
                         <Tabs.Trigger
-                            className="bg-white px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black outline-none cursor-default"
+                            className="bg-white px-5 h-[45px] flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current outline-none cursor-pointer"
                             value="users"
                         >
                             Users
@@ -52,22 +53,22 @@ export default function Settings() {
                     }
                 </Tabs.List>
                 <Tabs.Content
-                    className="grow p-5 bg-white rounded-b-md outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
+                    className="grow p-5 bg-white rounded-b-md outline-none"
                     value="info"
                 >
                     <Info />
                 </Tabs.Content>
                 <Tabs.Content
-                    className="grow p-5 bg-white rounded-b-md outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
+                    className="grow p-5 bg-white rounded-b-md outline-none"
                     value="connect"
                 >
                     <ConnectToAwp />
                 </Tabs.Content>
                 <Tabs.Content
-                    className="grow p-5 bg-white rounded-b-md outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
+                    className="grow p-5 bg-white rounded-b-md outline-none"
                     value="users"
                 >
-                    <UsersManagement />
+                    <UsersManagement  onGoToAboutPage={() => false}/>
                 </Tabs.Content>
             </Tabs.Root>
         </div>

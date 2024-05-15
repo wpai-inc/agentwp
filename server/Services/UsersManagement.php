@@ -13,14 +13,13 @@ class UsersManagement implements Registrable
     public function __construct(private Main $main)
     {
         $this->user = new UserAuth();
-
     }
 
     public function register(): void
     {
         new AwpRestRoute('agentwp_users', [$this, 'get_users'], [$this->user, 'canGenerateVerificationKey']);
         (new AwpRestRoute('user', [$this, 'update_user_capabilities'], UserAuth::CAP_MANAGE_AGENTWP_USERS))->method('POST');
-
+        (new AwpRestRoute('onboarding_completed', [$this, 'onboarding_completed'], UserAuth::CAP_MANAGE_AGENTWP_USERS))->method('POST');
     }
 
     public function get_users(): void
@@ -69,7 +68,7 @@ class UsersManagement implements Registrable
 
     public function update_user_capabilities(): void
     {
-        if ( ! wp_verify_nonce($_GET['agentwp_nonce'], $this->main::SLUG)) {
+        if (!wp_verify_nonce($_GET['agentwp_nonce'], $this->main::SLUG)) {
             wp_send_json_error('Invalid nonce');
         }
 
@@ -94,4 +93,10 @@ class UsersManagement implements Registrable
         wp_send_json_success();
     }
 
+    public function onboarding_completed(): void
+    {
+        $this->main->verify_nonce();
+        $this->main->settings->set('onboarding_completed', true);
+        wp_send_json_success();
+    }
 }

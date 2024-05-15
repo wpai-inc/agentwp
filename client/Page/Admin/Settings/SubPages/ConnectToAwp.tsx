@@ -1,6 +1,7 @@
 import adminRequest from "@/lib/adminRequest";
-import { Button } from "@wordpress/components";
 import { useState } from "react";
+import type { agentwpSettings } from "@/Types/types";
+import { Button } from "@/Components/ui/button";
 
 declare const agentwp_settings: agentwpSettings;
 
@@ -26,7 +27,7 @@ export default function connectToAwp() {
         // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
         // this will return the url that AWP can use to get the initial website data
         adminRequest
-            .get("?action=agentwp_generate_unique_verification_key")
+            .get("agentwp_generate_unique_verification_key")
             .then((response) => {
                 document.location = `${
                     agentwp_settings.api_host
@@ -45,7 +46,7 @@ export default function connectToAwp() {
         // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
         // this will return the url that AWP can use to get the initial website data
         adminRequest
-            .get("?action=agentwp_disconnect_site")
+            .get("agentwp_disconnect_site")
             .then(() => {
                 setDisconnecting(false);
                 setLoggedIn(false);
@@ -58,8 +59,7 @@ export default function connectToAwp() {
             {!agentwp_settings.site_id && (
                 <Button
                     onClick={connect}
-                    variant="primary"
-                    className="button"
+                    variant="brand"
                     disabled={connecting}
                     isBusy={connecting}
                 >
@@ -78,8 +78,7 @@ export default function connectToAwp() {
                 <div  className="flex gap-4">
                     <Button
                         onClick={authorize}
-                        variant="primary"
-                        className="button"
+                        variant="brand"
                         disabled={authorizing}
                         isBusy={authorizing}
                     >
@@ -87,8 +86,7 @@ export default function connectToAwp() {
                     </Button>
                     <Button
                         onClick={disconnect}
-                        variant="primary"
-                        className="button"
+                        variant="brand"
                         disabled={disconnecting}
                         isBusy={disconnecting}
                     >
@@ -100,8 +98,7 @@ export default function connectToAwp() {
                 <div className="flex gap-4">
                     <Button
                         onClick={disconnect}
-                        variant="primary"
-                        className="button"
+                        variant="brand"
                         disabled={disconnecting}
                         isBusy={disconnecting}
                     >

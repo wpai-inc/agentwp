@@ -16,15 +16,15 @@ if (rootElement) {
     const root = ReactDOM.createRoot(rootElement);
 
     root.render(
-        <React.StrictMode>
-            <PageProvider page={agent_wp_admin_settings}>
-                <App>
-                    {agentwp_settings?.onboard_completed && <Settings />}
-                    {!agentwp_settings?.onboard_completed && <Wizard />}
 
-                </App>
-            </PageProvider>
-        </React.StrictMode>
+        <PageProvider page={agent_wp_admin_settings}>
+            <App>
+                {agentwp_settings?.onboarding_completed && <Settings />}
+                {!agentwp_settings?.onboarding_completed && <Wizard />}
+
+            </App>
+        </PageProvider>
+
     );
 } else {
     // Handle the case where the root element is not found

@@ -17,7 +17,7 @@ apiRequest.interceptors.response.use(
         if (error.response?.status === 401) {
             console.error("You need to login to access this page.");
         }
-        return Promise.reject(error);
+        return Promise.reject("You need to login to access this page.");
     }
 );
 

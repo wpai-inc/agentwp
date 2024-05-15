@@ -165,16 +165,27 @@ class Settings extends ReactClient
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $data = json_decode(base64_decode($data['apiKey']), true);
-        $this->settings->set([
+
+        if(!$data['site_id'] || !$data['client_id'] || !$data['client_secret'] || !$data['token']['access_token'] || !$data['token']['expires_in']){
+            wp_send_json_error([
+                'message' => 'Invalid data',
+            ]);
+        }
+
+        $this->main->settings->set([
             'site_id'       => sanitize_text_field($data['site_id']),
             'client_id'     => sanitize_text_field($data['client_id']),
             'client_secret' => sanitize_text_field($data['client_secret']),
         ]);
-        $this->settings->setAccessToken([
+        $this->main->settings->setAccessToken([
             'access_token'  => sanitize_text_field($data['token']['access_token']),
             'token_type'    => 'Bearer',
             'refresh_token' => '',
             'expires_in'    => sanitize_text_field($data['token']['expires_in']),
+        ]);
+
+        wp_send_json_success([
+            'settings' => $this->main->settings->data,
         ]);
     }
 }

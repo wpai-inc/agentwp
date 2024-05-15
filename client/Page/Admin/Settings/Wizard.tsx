@@ -1,10 +1,9 @@
 import ConnectAiService from "./Wizard/ConnectAiService";
 import CheckedText from "@/Icon/CheckedText";
-import apiRequest from "@/lib/apiRequest";
 import type { agentwpSettings } from "@/Types/types";
 import { useEffect, useState } from "react";
 import UserAccess from "@/Page/Admin/Settings/Wizard/UserAccess";
-import AboutThePlugin from "@/Page/Admin/Settings/Wizard/AboutThePlugin";
+import adminRequest from "@/lib/adminRequest";
 
 declare const agentwp_settings: agentwpSettings;
 
@@ -19,54 +18,45 @@ export default function Wizard() {
         {
             text: "Connect AI",
             checked: false,
-            active: true,
+            active: true
         },
         {
             text: "User Access",
             checked: false,
-            active: false,
-        },
-        {
-            text: "About the Plugin",
-            checked: false,
-            active: false,
+            active: false
         }
     ]);
 
-    const [isConnectedChecked, setIsConnectedChecked] = useState(false);
-
     function isConnected() {
-        return apiRequest.get(`/api/sites/${agentwp_settings.site_id}`);
+        return !!agentwp_settings.access_token;
     }
 
     function goToAboutPage() {
-        setSteps(steps => steps.map((step, index) => {
-            if (index === 2) {
-                return { ...step, checked: true, active: false };
-            }
-            if (index === 3) {
-                return { ...step, active: true };
-            }
-            return step;
-        }));
-
+        adminRequest.post(`/onboarding_completed`).then(() => {
+            document.location.reload();
+        });
     }
 
     useEffect(() => {
-        isConnected().then(() => {
-            setSteps(steps => steps.map((step, index) => {
+        if (isConnected()) {
+            setSteps(steps.map((step, index) => {
                 if (index === 1) {
-                    return { ...step, checked: true, active: false };
+                    return {
+                        ...step,
+                        checked: true,
+                        active: false
+                    };
                 }
                 if (index === 2) {
-                    return { ...step, active: true };
+                    return {
+                        ...step,
+                        checked: false,
+                        active: true
+                    };
                 }
                 return step;
             }));
-            setIsConnectedChecked(true);
-        }).catch(() => {
-            setIsConnectedChecked(true);
-        })
+        }
     }, []);
 
     return (
@@ -76,13 +66,8 @@ export default function Wizard() {
                     <CheckedText key={index} active={step.active} checked={step.checked} text={step.text} />
                 ))}
             </div>
-            {isConnectedChecked &&
-            <>
-                {steps[1].active && <ConnectAiService />}
-                {steps[2].active && <UserAccess onGoToAboutPage={() => goToAboutPage()}  />}
-                {steps[3].active && <AboutThePlugin />}
-            </>
-            }
+            {steps[1].active && <ConnectAiService />}
+            {steps[2].active && <UserAccess onGoToAboutPage={() => goToAboutPage()} />}
         </div>
     );
 }

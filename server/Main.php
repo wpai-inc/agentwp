@@ -24,15 +24,17 @@ class Main
 
     private ?string $clientId;
 
-    private Settings $settings;
+    public Settings $settings;
 
     private UserAuth $auth;
+    public string $pluginUrl;
 
     public function __construct(private string $file)
     {
-        $this->settings = new Settings();
-        $this->auth     = new UserAuth();
-        $this->clientId = $this->settings->client_id;
+        $this->settings  = new Settings();
+        $this->auth      = new UserAuth();
+        $this->clientId  = $this->settings->client_id;
+        $this->pluginUrl = plugin_dir_url($this->file);
         add_action('admin_head', [$this, 'printDefaultVars']);
     }
 
@@ -89,6 +91,8 @@ class Main
     public function printDefaultVars()
     {
         $agentwp_settings = [
+            'home_url'              => home_url(),
+            'plugin_url'            => $this->pluginUrl,
             'nonce'                 => wp_create_nonce(self::nonce()),
             'wp_rest_nonce'         => wp_create_nonce('wp_rest'),
             'is_admin'              => $this->auth->isAdmin(),
@@ -101,7 +105,7 @@ class Main
             'api_host'              => $this->apiClientHost(),
             'rest_route'            => rest_url(),
             'user'                  => wp_get_current_user()->data,
-            'onboard_completed'     => $this->settings->onboarding_completed,
+            'onboarding_completed'  => $this->settings->onboarding_completed,
         ];
         ?>
         <script>
@@ -118,5 +122,12 @@ class Main
     private function runtimeApiHost()
     {
         return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://api.agentwp.com';
+    }
+
+    public function verify_nonce()
+    {
+        if ( ! wp_verify_nonce($_GET['agentwp_nonce'], self::SLUG)) {
+            wp_send_json_error('Invalid nonce');
+        }
     }
 }

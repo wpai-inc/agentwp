@@ -1,4 +1,6 @@
 export type agentwpSettings = {
+    home_url: string;
+    plugin_url: string;
     nonce: string;
     wp_rest_nonce: string;
     site_id: string;
@@ -21,11 +23,7 @@ export type agentwpSettings = {
     agentwp_manager: boolean;
     agentwp_users_manager: boolean;
     agentwp_access: boolean;
-    access_token: {
-        access_token: string;
-        expires_at: number;
-        refresh_token: string;
-    };
+    access_token: string;
     onboarding_completed: boolean;
 };
 

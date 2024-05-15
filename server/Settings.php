@@ -13,7 +13,7 @@ namespace WpAi\AgentWp;
 class Settings
 {
 
-    private mixed $data;
+    public mixed $data;
 
     public function __construct()
     {

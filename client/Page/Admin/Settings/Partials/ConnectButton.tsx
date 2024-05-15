@@ -22,9 +22,16 @@ export default function ConnectButton() {
                 }`;
             });
     }
-  return (
-    <>
-        <Button disabled={connecting} onClick={connect} className="button w-full">Connect AI Services</Button>
-    </>
-  );
+
+    return (
+        <>
+            <Button
+                disabled={connecting}
+                onClick={connect}
+                className=" w-full"
+                variant="brand"
+                isBusy={connecting}
+            >Connect AI Services</Button>
+        </>
+    );
 }
