@@ -75,11 +75,8 @@ export function ManualAwpActivation() {
               <a
                 target="_blank"
                 className="underline"
-                href={`${
-                  page.api_host
-                }/manually_connect_site?url=${encodeURIComponent(
-                  page.home_url,
-                )}`}
+                // prettier-ignore
+                href={`${page.api_host}/manually_connect_site?url=${encodeURIComponent(page.home_url)}`}
               >
                 Get your api key
               </a>

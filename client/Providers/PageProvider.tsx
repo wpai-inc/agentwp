@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
-import type { agentwpSettings } from "@/Types/types";
+import type { PageData } from '@/Types/types';
 export const PageContext = createContext<any | undefined>(undefined);
 
-declare const agentwp_settings: agentwpSettings;
+declare const agentwp_settings: PageData;
 
 export function usePage() {
   const page = useContext(PageContext);

@@ -1,12 +1,16 @@
-import { agentwpSettings } from "@/Types/types";
+import { usePage } from '@/Providers/PageProvider';
 
-declare const agentwp_settings: agentwpSettings;
 interface LogoProps {
-    className: string | undefined
+  className: string | undefined;
 }
 
 export function Logo({ className }: LogoProps) {
+  const page = usePage();
   return (
-        <img className={className} src={agentwp_settings.plugin_url + '/assets/images/awp.png'} alt="Agent WP" />
+    <img
+      className={className}
+      src={page.plugin_url + '/assets/images/awp.png'}
+      alt="Agent WP"
+    />
   );
 }
