@@ -141,10 +141,4 @@ class Main
         return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://api.agentwp.com';
     }
 
-    public function verify_nonce()
-    {
-        if ( ! wp_verify_nonce($_GET['nonce'], self::SLUG)) {
-            wp_send_json_error('Invalid nonce', 403);
-        }
-    }
 }
