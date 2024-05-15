@@ -1,12 +1,15 @@
 import { createContext, useContext } from 'react';
+import type { agentwpSettings } from "@/Types/types";
 export const PageContext = createContext<any | undefined>(undefined);
+
+declare const agentwp_settings: agentwpSettings;
 
 export function usePage() {
   const page = useContext(PageContext);
   if (page === undefined) {
     throw new Error('usePage must be used within a PageProvider');
   }
-  return page;
+  return { ...page, ...agentwp_settings };
 }
 
 export function PageProvider({
