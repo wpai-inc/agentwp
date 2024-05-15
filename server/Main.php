@@ -36,7 +36,7 @@ class Main
     public function __construct(private string $file)
     {
         $this->settings = new Settings();
-        $this->auth = new UserAuth();
+        $this->auth     = new UserAuth();
         $this->clientId = $this->settings->client_id;
         add_action('admin_head', [$this, 'pageData']);
         $this->pluginUrl = plugin_dir_url($this->file);
@@ -94,23 +94,35 @@ class Main
 
     public function pageData()
     {
+
+        $current_user_data = wp_get_current_user()->data;
+        // only keep the necessary data
+        $current_user = [
+            'ID' => $current_user_data->ID,
+            'user_email' => $current_user_data->user_email,
+            'user_login' => $current_user_data->user_login,
+            'user_nicename' => $current_user_data->user_nicename,
+            'display_name' => $current_user_data->display_name,
+            'roles' => wp_get_current_user()->roles,
+        ];
+
         $agentwp_settings = [
             'home_url'              => home_url(),
             'plugin_url'            => $this->pluginUrl,
-            'nonce' => wp_create_nonce(self::nonce()),
+            'nonce'                 => wp_create_nonce(self::nonce()),
             'wp_rest_nonce'         => wp_create_nonce('wp_rest'),
-            'is_admin' => $this->auth->isAdmin(),
-            'agentwp_manager' => $this->auth->isManager(),
+            'is_admin'              => $this->auth->isAdmin(),
+            'agentwp_manager'       => $this->auth->isManager(),
             'agentwp_users_manager' => $this->auth->canManageUsers(),
-            'agentwp_access' => $this->auth->hasAccess(),
-            'access_token' => $this->auth->getAccessToken(),
-            'site_id' => $this->siteId(),
-            'client_id' => $this->clientId,
-            'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
-            'api_host' => $this->apiClientHost(),
+            'agentwp_access'        => $this->auth->hasAccess(),
+            'access_token'          => $this->auth->getAccessToken(),
+            'site_id'               => $this->siteId(),
+            'client_id'             => $this->clientId,
+            'rest_endpoint'         => AwpRestRoute::REST_ROUTE_ENDPOINT,
+            'api_host'              => $this->apiClientHost(),
             'rest_route'            => rest_url(),
-            'user' => wp_get_current_user()->data,
-            'onboard_completed' => $this->settings->onboarding_completed,
+            'user'                  => $current_user,
+            'onboarding_completed'     => $this->settings->onboarding_completed,
         ];
         ?>
         <script>
@@ -131,8 +143,8 @@ class Main
 
     public function verify_nonce()
     {
-        if ( ! wp_verify_nonce($_GET['agentwp_nonce'], self::SLUG)) {
-            wp_send_json_error('Invalid nonce');
+        if ( ! wp_verify_nonce($_GET['nonce'], self::SLUG)) {
+            wp_send_json_error('Invalid nonce', 403);
         }
     }
 }

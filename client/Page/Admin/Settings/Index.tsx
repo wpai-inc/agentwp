@@ -16,7 +16,7 @@ if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
 
   root.render(
-        <React.StrictMode>
+    <React.StrictMode>
       <PageProvider page={agent_wp_admin_settings}>
         <App>
           <AdminRouteProvider>

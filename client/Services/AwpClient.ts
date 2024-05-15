@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import type { PageData } from '@/Types/types';
 declare const agentwp_settings: PageData;
 
 export default class AwpClient {

@@ -25,9 +25,7 @@ class UsersManagement implements Registrable
     public function get_users(): void
     {
         // validate nonce
-        if (!wp_verify_nonce($_REQUEST['agentwp_nonce'], $this->main::SLUG)) {
-            wp_send_json_error('Invalid nonce', 401);
-        }
+        $this->main->verify_nonce();
         $search_term = $_GET['search'] ?? '';
 
         $query = new \WP_User_Query(array(
