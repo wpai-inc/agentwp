@@ -24,7 +24,7 @@ export function ManualAwpActivation() {
     event.preventDefault();
     setSaving(true);
     adminRequest
-      .post('/agentwp/v1/agentwp_manual_activation', { apiKey })
+      .post('/agentwp/v1/manual_activation', { apiKey })
       .then((response: any) => {
         const data = response.data;
         if (!data.success) {

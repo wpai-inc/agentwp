@@ -27,11 +27,11 @@ class Router implements Registrable
         'update_user'                 => [UpdateUserCapabilities::class, 'update_user_capabilities'],
         'onboarding_completed'        => [MakeOnboardingAsCompleted::class, 'onboarding_completed'],
         'get_unique_verification_key' => [GenerateUniqueVerificationKey::class, 'generate_unique_verification_key'],
-        'agentwp_validate_website'    => [ValidateWebsite::class, 'validate_website'],
-        'agentwp_save_connection'     => [SaveConnection::class, 'save_connection'],
-        'agentwp_logout'              => [Logout::class, 'logout'],
-        'agentwp_disconnect_site'     => [DisconnectSite::class, 'disconnect_site'],
-        'agentwp_manual_activation'   => [ManuallyActivateAgent::class, 'activate'],
+        'validate_website'            => [ValidateWebsite::class, 'validate_website'],
+        'save_connection'             => [SaveConnection::class, 'save_connection'],
+        'logout'                      => [Logout::class, 'logout'],
+        'disconnect_site'             => [DisconnectSite::class, 'disconnect_site'],
+        'manual_activation'           => [ManuallyActivateAgent::class, 'activate'],
     ];
 
     public function __construct(private Main $main)

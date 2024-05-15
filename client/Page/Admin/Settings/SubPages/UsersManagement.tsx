@@ -36,7 +36,7 @@ export default function UsersManagement() {
         },
       })
       .then((response: any) => {
-        setUsers(response.data);
+        setUsers(response.data.data);
         setSearching(false);
       });
   }

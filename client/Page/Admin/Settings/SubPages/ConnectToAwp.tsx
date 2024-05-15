@@ -41,7 +41,7 @@ export default function connectToAwp() {
     setDisconnecting(true);
     // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
     // this will return the url that AWP can use to get the initial website data
-    adminRequest.get('/agentwp/v1/agentwp_disconnect_site').then(() => {
+    adminRequest.get('/agentwp/v1/disconnect_site').then(() => {
       setDisconnecting(false);
       setLoggedIn(false);
       window.location.reload();
