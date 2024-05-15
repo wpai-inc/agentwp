@@ -4,10 +4,13 @@ import { Button } from "@/Components/ui/button";
 import Textarea from "@/Components/ui/Textarea";
 import * as Form from "@radix-ui/react-form";
 import { agentwpSettings } from "@/Types/types";
+import { usePage } from "@/Providers/PageProvider";
 
 declare const agentwp_settings: agentwpSettings;
 
 export function ManualAwpActivation() {
+
+    const page = usePage();
 
     const [fieldsVisible, setFieldsVisible] = useState(false);
     const [apiKey, setApiKey] = useState("");
@@ -27,17 +30,21 @@ export function ManualAwpActivation() {
             .then((response) => {
                 const data = response.data;
                 if (!data.success) {
-                    setServerErrors({...serverErrors, apiKey: data.data.message});
+                    setServerErrors({ ...serverErrors, apiKey: data.data.message });
                     console.error(data.data.message);
-                }else{
-                    setServerErrors({...serverErrors, apiKey: ""});
+                } else {
+                    setServerErrors({ ...serverErrors, apiKey: "" });
+                    //todo: Go to users management page
+                    // TODO: Improve this
+                    document.location.reload();
+
                 }
                 setSaving(false);
             }).catch((err) => {
-            console.error(err);
-            setSaving(false);
-            setServerErrors({...serverErrors, apiKey: err.response.data.message});
-        });
+                console.error(err);
+                setSaving(false);
+                setServerErrors({ ...serverErrors, apiKey: err.response?.data.message || 'Error' });
+            });
     }
 
 
@@ -53,7 +60,7 @@ export function ManualAwpActivation() {
             {fieldsVisible && (
                 <Form.Root
                     onSubmit={(event) => saveManualToken(event)}
-                    onClearServerErrors={() => setServerErrors({...serverErrors, apiKey: ""})}
+                    onClearServerErrors={() => setServerErrors({ ...serverErrors, apiKey: "" })}
                 >
                     <Textarea
                         name="apiKey"
@@ -66,7 +73,7 @@ export function ManualAwpActivation() {
                             missing: "Please enter your API key",
                             custom: serverErrors.apiKey
                         }}
-                        labelInstructions={<a target="_blank" className="underline" href={`${agentwp_settings.api_host}/manually_connect_site?url=${encodeURIComponent(agentwp_settings.home_url)}`}>Get your api key</a>}
+                        labelInstructions={<a target="_blank" className="underline" href={`${page.api_host}/manually_connect_site?url=${encodeURIComponent(agentwp_settings.home_url)}`}>Get your api key</a>}
                     ></Textarea>
                     <Form.Submit asChild>
                         <Button
