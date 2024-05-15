@@ -9,8 +9,6 @@ const RichMessage = (props: AgentAction) => {
   const isGraph = !!props.action.graph;
   const areButtons = !!props.action.buttons;
 
-  console.log(props.action);
-
   if (isGraph) {
     const graphType = props.action.graph.graphType;
     const data = props.action.graph.data;
