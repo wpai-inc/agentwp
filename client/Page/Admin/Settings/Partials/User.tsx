@@ -9,12 +9,12 @@ export function User({ user }: { user: agentwpUser }) {
   const [theUser, setTheUser] = useState<agentwpUser>(user);
   // function setManageAgentwpUsers() {
   //     setTheUser({ ...theUser, manage_agentwp_users: !theUser.manage_agentwp_users });
-  //     adminRequest.post("/agentwp/v1/agentwp_update_user", { user: theUser.id, manage_agentwp_users: !theUser.manage_agentwp_users });
+  //     adminRequest.post("/agentwp/v1/update_user", { user: theUser.id, manage_agentwp_users: !theUser.manage_agentwp_users });
   // }
 
   function setAgentwpAccess() {
     setTheUser({ ...theUser, agentwp_access: !theUser.agentwp_access });
-    adminRequest.post('/agentwp/v1/user', {
+    adminRequest.post('/agentwp/v1/update_user', {
       user: theUser.id,
       agentwp_access: !theUser.agentwp_access,
     });

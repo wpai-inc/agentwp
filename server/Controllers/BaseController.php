@@ -31,10 +31,10 @@ class BaseController
         }
 
         if($this->permission === 'canGenerateVerificationKey') {
-            return call_user_func([$this->main->auth::class, 'canGenerateVerificationKey']);
+            return call_user_func([$this->main->auth, 'canGenerateVerificationKey']);
         }
         if($this->permission === 'hasValidVerificationKey') {
-            return call_user_func([$this->main->auth::class, 'hasValidVerificationKey']);
+            return call_user_func([$this->main->auth, 'hasValidVerificationKey']);
         }
 
         if (is_array($this->permission) && is_callable($this->permission)) {
@@ -44,7 +44,7 @@ class BaseController
         return current_user_can($this->permission);
     }
 
-    protected function respond(mixed $response): void
+    protected function respond(array|string|null $response = null): void
     {
         wp_send_json_success($response);
     }

@@ -12,10 +12,15 @@ export default function UsersManagement() {
 
   function getUsers() {
     setSearching(true);
-    adminRequest.get('/agentwp/v1/agentwp_users').then((response: any) => {
-      setUsers(response.data);
-      setSearching(false);
-    });
+    adminRequest
+      .get('/agentwp/v1/agentwp_users')
+      .then((response: any) => {
+        setUsers(response.data.data);
+        setSearching(false);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
   }
 
   useEffect(() => {
