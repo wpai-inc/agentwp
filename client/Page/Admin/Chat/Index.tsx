@@ -16,13 +16,13 @@ import { ClientProvider } from '@/Providers/ClientProvider';
 
 const rootElement = document.getElementById('agent-wp-admin-chat');
 
-declare const agentwp_settings: agentwpSettings;
+declare const agent_wp_admin_chat: any;
 
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <PageProvider page={agentwp_settings}>
+      <PageProvider page={agent_wp_admin_chat}>
         <App>
           <ClientProvider>
             <ClientSettingsProvider>

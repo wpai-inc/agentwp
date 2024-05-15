@@ -21,7 +21,6 @@ if (rootElement) {
             <App>
                 {agentwp_settings?.onboarding_completed && <Settings />}
                 {!agentwp_settings?.onboarding_completed && <Wizard />}
-
             </App>
         </PageProvider>
 

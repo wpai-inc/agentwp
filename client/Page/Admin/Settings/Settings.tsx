@@ -4,10 +4,12 @@ import UsersManagement from "@/Page/Admin/Settings/SubPages/UsersManagement";
 import Info from "@/Page/Admin/Settings/SubPages/Info";
 import type { agentwpSettings } from "@/Types/types.d.ts";
 import UserAccess from "@/Page/Admin/Settings/Wizard/UserAccess";
+import { usePage } from "@/Providers/PageProvider";
 
-declare const agentwp_settings: agentwpSettings;
 
 export default function Settings() {
+
+    const pageData = usePage();
 
     const url = new URL(window.location.href);
     const initialTab = url.searchParams.get("tab") || "info";
@@ -35,7 +37,7 @@ export default function Settings() {
                     >
                         About
                     </Tabs.Trigger>
-                    {agentwp_settings.agentwp_manager &&
+                    {pageData.agentwp_manager &&
                         <Tabs.Trigger
                             className="bg-white px-5 h-[45px] flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current outline-none cursor-pointer"
                             value="connect"
@@ -43,7 +45,7 @@ export default function Settings() {
                             AI Connection Manager
                         </Tabs.Trigger>
                     }
-                    {agentwp_settings.agentwp_users_manager &&
+                    {pageData.agentwp_users_manager &&
                         <Tabs.Trigger
                             className="bg-white px-5 h-[45px] flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current outline-none cursor-pointer"
                             value="users"
@@ -68,7 +70,7 @@ export default function Settings() {
                     className="grow p-5 bg-white rounded-b-md outline-none"
                     value="users"
                 >
-                    <UsersManagement  onGoToAboutPage={() => false}/>
+                    <UsersManagement />
                 </Tabs.Content>
             </Tabs.Root>
         </div>

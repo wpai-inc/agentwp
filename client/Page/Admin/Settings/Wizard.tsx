@@ -1,13 +1,13 @@
 import ConnectAiService from "./Wizard/ConnectAiService";
 import CheckedText from "@/Icon/CheckedText";
-import type { agentwpSettings } from "@/Types/types";
 import { useEffect, useState } from "react";
 import UserAccess from "@/Page/Admin/Settings/Wizard/UserAccess";
 import adminRequest from "@/lib/adminRequest";
-
-declare const agentwp_settings: agentwpSettings;
+import { usePage } from "@/Providers/PageProvider";
 
 export default function Wizard() {
+
+    const pageData = usePage();
 
     const [steps, setSteps] = useState([
         {
@@ -28,7 +28,7 @@ export default function Wizard() {
     ]);
 
     function isConnected() {
-        return !!agentwp_settings.access_token;
+        return !!pageData.access_token;
     }
 
     function goToAboutPage() {
