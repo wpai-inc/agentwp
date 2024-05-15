@@ -15,6 +15,7 @@ class SiteIndexer implements Registrable
     {
         add_action('init', [$this, 'indexSite']);
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
+        add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
     }
 
     /**
@@ -57,6 +58,24 @@ class SiteIndexer implements Registrable
                     }
                 }
             }
+        }
+
+        return $info;
+    }
+
+    public function add_db_schema_to_debug_info($info)
+    {
+        global $wpdb;
+        $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
+        $tables = array_map('current', $tables);
+        foreach ($tables as $table) {
+            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
+            $header = array_keys($rows[0]);
+            array_unshift($rows, $header);
+            $info['db-schema']['fields'][$table] = array_map(function ($row) {
+                return implode(',', $row);
+            }, $rows);
+
         }
 
         return $info;
