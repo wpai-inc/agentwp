@@ -7,7 +7,7 @@ export default function UserRequest({ message }: { message: string }) {
         U
       </div>
       <div className="flex-1">
-        <MD>{message}</MD>
+        <MD content={message} />
       </div>
     </div>
   );

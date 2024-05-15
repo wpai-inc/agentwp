@@ -1,11 +1,11 @@
 import ActionContainer from '../ActionContainer';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
 
-export default function ActionNavigate(props: AgentAction) {
+export default function ActionQuery(props: AgentAction) {
   return (
     <ActionContainer pending={!props.result}>
       <p>
-        Navigated to <strong>{props.action.url}</strong>
+        Ran query <strong>{props.action.sql}</strong>
       </p>
     </ActionContainer>
   );
