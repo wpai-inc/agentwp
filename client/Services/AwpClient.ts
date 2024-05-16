@@ -21,7 +21,6 @@ export default class AwpClient {
   }
 
   isAuthorized() {
-    console.log(this.token);
     if (!this.token) {
       return null;
     }

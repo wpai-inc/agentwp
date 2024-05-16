@@ -39,6 +39,7 @@ export default function ChatContainer() {
   return (
     <div
       ref={windowRef}
+      id="awp-chat"
       className={cn(
         'transition fixed bottom-4 right-10',
         'max-h-[95vh] min-h-[500px] w-[500px] z-20 bg-brand-gray',

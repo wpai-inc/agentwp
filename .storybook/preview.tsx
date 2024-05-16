@@ -69,7 +69,6 @@ const preview: Preview = {
   },
   decorators: [
     function (Story, { parameters }) {
-      console.log(parameters);
       return (
         <PageProvider page={page}>
           <App>
