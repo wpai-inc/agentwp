@@ -10,7 +10,7 @@
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "storybook": "STORYBOOK_ENV=1 storybook dev -p 6006",
-    "build-storybook": "STORYBOOK_ENV=1 storybook build"
+    "build-storybook": "STORYBOOK_ENV=1 storybook build && cp -r build/* storybook-static"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
