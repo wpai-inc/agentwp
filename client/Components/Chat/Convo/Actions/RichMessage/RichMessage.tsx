@@ -2,17 +2,16 @@ import Bar from '@/Components/Charts/Bar';
 import Line from '@/Components/Charts/Line';
 import Pie from '@/Components/Charts/Pie';
 import NavigatableButton from '@/Components/NavigatableButton';
-import ActionSimpleMessage from '@/Components/Convo/Actions/ActionSimpleMessage';
+import ActionSimpleMessage from '@/Components/Chat/Convo/Actions/ActionSimpleMessage';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { MessageAction } from '@wpai/schemas';
 
 type GraphDataPoint = {
   label: string;
   value: string;
-}
+};
 
 const RichMessage = (props: AgentAction) => {
-
   if (props.action.ability === 'message') {
     const isGraph = !!props.action.graph;
     const areButtons = !!props.action.buttons;
@@ -65,8 +64,8 @@ const RichMessage = (props: AgentAction) => {
           <ActionSimpleMessage {...props} />
           {buttons.length > 0
             ? buttons.map((b) => (
-              <NavigatableButton text={b.label} link={b.url} className={''} />
-            ))
+                <NavigatableButton text={b.label} link={b.url} className={''} />
+              ))
             : null}
         </>
       );

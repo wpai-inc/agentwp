@@ -1,7 +1,7 @@
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
-import ActionNavigate from '@/Components/Convo/Actions/ActionNavigate';
-import ActionMessage from '@/Components/Convo/Actions/ActionMessage';
-import ActionQuery from '@/Components/Convo/Actions/ActionQuery';
+import ActionNavigate from '@/Components/Chat/Convo/Actions/ActionNavigate';
+import ActionMessage from '@/Components/Chat/Convo/Actions/ActionMessage';
+import ActionQuery from '@/Components/Chat/Convo/Actions/ActionQuery';
 import { Abilities } from '@wpai/schemas';
 import ActionIncomplete from './Actions/ActionIncomplete';
 import ActionPending from './Actions/ActionPending';

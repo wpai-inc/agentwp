@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils';
 import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
 import { useChat } from '@/Providers/ChatProvider';
-import { Button } from "@/Components/ui/button";
+import { Button } from '@/Components/ui/button';
 
-export default function ConvoTrigger() {
+export default function ChatTrigger() {
   const { open, toggle, expanding } = useChat();
 
   return (
@@ -17,7 +17,7 @@ export default function ConvoTrigger() {
         'justify-center items-center',
         {
           'z-50 block transition': !open,
-          'hidden': expanding,
+          hidden: expanding,
         },
       )}
     >
