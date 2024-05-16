@@ -19,7 +19,9 @@ const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
   toggle: () => {},
-  expandChatWindow: () => {},
+  maximizeChatWindow: () => {},
+  minimizing: false,
+  expanding: false,
   conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
 });
@@ -44,6 +46,8 @@ export default function ChatProvider({
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [open, setOpen] = useState(settings.chatOpen ?? false);
+  const [minimizing, setMinimizing] = useState(false);
+  const [expanding, setExpanding] = useState(false);
   const { conversation, setConversation, currentUserRequestId } =
     useUserRequests();
   const { startStream, liveAction, error } = useStream();
@@ -62,11 +66,20 @@ export default function ChatProvider({
 
   function toggle() {
     const newVal = !open;
-    setOpen(newVal);
-    setSettings({ chatOpen: newVal });
+    if (newVal) {
+      setExpanding(true);
+    } else {
+      setMinimizing(true);
+    }
+    setTimeout(() => {
+      setOpen(newVal);
+      setExpanding(false);
+      setMinimizing(false);
+      setSettings({ chatOpen: newVal });
+    }, 1200);
   }
 
-  function expandChatWindow() {}
+  function maximizeChatWindow() {}
 
   async function userRequest(
     message: string,
@@ -129,10 +142,12 @@ export default function ChatProvider({
         open,
         setOpen,
         toggle,
-        expandChatWindow,
+        maximizeChatWindow,
+        minimizing,
+        expanding,
         conversation,
-        sendMessage,
-      }}
+        sendMessage
+    }}
     >
       {children}
     </ChatContext.Provider>

@@ -124,7 +124,7 @@ export default function ChatTopBar() {
           size="icon"
           className="cursor-pointer"
         >
-          <AddIcon className="h-6 w-6" />
+          <AddIcon className="h-6 w-6 text-gray-500 hover:text-black" />
         </Button>
         <Button
           asChild
@@ -133,7 +133,7 @@ export default function ChatTopBar() {
           size="icon"
           className="cursor-pointer"
         >
-          <HistoryIcon className="h-6 w-6" />
+          <HistoryIcon className="h-6 w-6 text-gray-500 hover:text-black" />
         </Button>
         <Button
           asChild
@@ -142,7 +142,7 @@ export default function ChatTopBar() {
           size="icon"
           className="cursor-pointer"
         >
-          <SettingsIcon className="h-6 w-6" />
+          <SettingsIcon className="h-6 w-6 text-gray-500 hover:text-black" />
         </Button>
         <Button
           asChild
@@ -151,7 +151,7 @@ export default function ChatTopBar() {
           size="icon"
           className="cursor-pointer"
         >
-          <AccountIcon className="h-6 w-6" />
+          <AccountIcon className="h-6 w-6 text-gray-500 hover:text-black" />
         </Button>
       </div>
     </div>
