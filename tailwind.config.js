@@ -7,6 +7,16 @@ module.exports = {
     // important: 'div[id^="agent-wp"]',
     prefix: '',
     theme: {
+        fontSize: {
+            xs: '0.625rem',
+            sm: '0.75rem',
+            base: '0.875rem',
+            xl: '1rem',
+            '2xl': '1.25rem',
+            '3xl': '1.5rem',
+            '4xl': '2rem',
+            '5xl': '3rem',
+        },
         container: {
             center: true,
             padding: "2rem",

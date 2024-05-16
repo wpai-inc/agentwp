@@ -16,6 +16,7 @@ export type PageData = {
     user_email: string;
     user_login: string;
     user_nicename: string;
+    avatar_url: string;
     roles: string[];
   };
   is_admin: boolean;

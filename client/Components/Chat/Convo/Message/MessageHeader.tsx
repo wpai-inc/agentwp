@@ -3,5 +3,7 @@ export default function MessageHeader({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="flex items-center justify-between">{children}</div>;
+  return (
+    <div className="flex items-center justify-between mb-4">{children}</div>
+  );
 }

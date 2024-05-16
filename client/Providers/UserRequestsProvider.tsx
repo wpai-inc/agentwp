@@ -19,6 +19,10 @@ export type AgentAction = {
 export type UserRequestType = {
   id: string;
   message: string;
+  user: {
+    name: string;
+    email: string;
+  };
   created_at: string;
   human_created_at: string;
   wp_user_id?: number;

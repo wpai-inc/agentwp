@@ -13,6 +13,10 @@ const userRequest: UserRequestType = {
   created_at: '2021-10-01T00:00:00',
   human_created_at: '2 hours ago',
   message: 'Can you please change my Store Address to 123 main street?',
+  user: {
+    name: 'James Lepage',
+    email: 'james@codewp.ai',
+  },
   agent_actions: [
     {
       id: '9c0b2f24-516a-470f-9ac4-b09659f3db0c',

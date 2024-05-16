@@ -9,11 +9,8 @@ export default function Message(userRequest: UserRequestType) {
     !currentAction?.final && userRequest.id === currentUserRequestId;
 
   return (
-    <div id={userRequest.id}>
-      <UserRequest
-        message={userRequest.message}
-        time={userRequest.human_created_at}
-      />
+    <div id={userRequest.id} className="border-b border-brand-gray-25 mb-4">
+      <UserRequest {...userRequest} />
       <AgentResponse
         userRequestId={userRequest.id}
         time={userRequest.human_created_at}

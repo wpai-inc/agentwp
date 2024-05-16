@@ -6,6 +6,13 @@ import MessageHeader from './MessageHeader';
 import Avatar from '../../Avatar/Avatar';
 import Feedback from '@/Components/Chat/Feedback';
 import ActionComponent from '../Actions/ActionComponent';
+import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
+import Logo from '@/Components/Logo';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/Components/ui/popover';
 
 export default function AgentResponse({
   agentActions,
@@ -46,8 +53,21 @@ export default function AgentResponse({
       ) : null}
 
       <MessageHeader>
-        <Avatar name="AgentWP" time={time} />
-        <Feedback />
+        <Avatar name="AgentWP" time={time} image={<Logo />} />
+        <div className="flex items-center gap-4">
+          <Feedback />
+          <Popover>
+            <PopoverTrigger>
+              <IconMore className="text-brand-gray-15" />
+            </PopoverTrigger>
+            <PopoverContent>
+              <dl className="grid grid-cols-2 gap-4 text-sm">
+                <dt className="text-right font-bold">Responding Actions</dt>
+                <dd>{agentActions?.length}</dd>
+              </dl>
+            </PopoverContent>
+          </Popover>
+        </div>
       </MessageHeader>
 
       {pending && (

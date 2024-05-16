@@ -7,6 +7,7 @@ import AccountIcon from '@material-design-icons/svg/outlined/account_circle.svg?
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import Logo from '@/Components/Logo';
 
 export default function ChatTopBar() {
   const { setSettings } = useClientSettings();
@@ -46,7 +47,7 @@ export default function ChatTopBar() {
       e.target.removeEventListener('mousemove', handleDrag);
       e.target.onmouseup = null;
       e.target.mouseleave = null;
-    }
+    };
 
     const drag = (target, x, y) => {
       const chatWindowCoords = target.getBoundingClientRect();
@@ -70,11 +71,11 @@ export default function ChatTopBar() {
       if (!topOutOfBounds && !bottomOutOfBounds) {
         target.style.top = newPositionTop + 'px';
       }
-    }
+    };
 
     const handleDrag = (e) => {
       drag(e.target.parentNode, e.pageX, e.pageY);
-    }
+    };
 
     drag(e.target.parentNode, e.pageX, e.pageY);
 
@@ -89,7 +90,7 @@ export default function ChatTopBar() {
 
     return () => {
       element.removeEventListener('mousedown', startDrag);
-    }
+    };
   }, []);
 
   return (
@@ -97,21 +98,20 @@ export default function ChatTopBar() {
       ref={topBarRef}
       className={cn(
         'py-2 px-2 border-b border-b-brand-gray-25',
-        'flex justify-between cursor-move'
+        'flex justify-between cursor-move',
       )}
     >
       <div className="flex items-center gap-2">
-        <Badge className={cn(
-          'bg-brand-primary hover:bg-brand-primary font-bold'
-        )}>
+        <Logo className="w-6 h-6" />
+        <Badge
+          className={cn('bg-brand-primary hover:bg-brand-primary font-bold')}
+        >
           Free
         </Badge>
         <Button
           onClick={onUpgradeClick}
           size="sm"
-          className={cn(
-            'font-semibold h-7 px-6 rounded-full bg-zinc-600',
-          )}
+          className={cn('font-semibold h-7 px-6 rounded-full bg-zinc-600')}
         >
           Upgrade
         </Button>
