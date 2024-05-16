@@ -8,5 +8,14 @@ export default {
 };
 
 export const Simple = {
-  args: {},
+  args: {
+    xDataKey: 'label',
+    valueDataKey: 'value',
+    data: [
+      { label: 'Honduras', value: 40 },
+      { label: 'Romania', value: 80 },
+      { label: 'Brasil', value: 20 },
+      { label: 'United States', value: 40 },
+    ]
+  },
 };

@@ -1,7 +1,6 @@
 /**
  * Docs for this component at https://recharts.org/en-US/api/BarChart
  */
-import React from 'react';
 
 import {
   ResponsiveContainer,
@@ -11,7 +10,7 @@ import {
   Legend,
   Tooltip,
   XAxis,
-  YAxis
+  YAxis,
 } from 'recharts';
 
 interface BarProps {
@@ -29,7 +28,7 @@ const Bar = ({
   xDataKey,
   valueDataKey,
   data,
-  fillColor = '#8884d8'
+  fillColor = '#8884d8',
 }: BarProps) => {
   return (
     <ResponsiveContainer width={width} height={height}>

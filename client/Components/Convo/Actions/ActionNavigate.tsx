@@ -1,12 +1,7 @@
 import ActionContainer from '../ActionContainer';
-import { NavigateAction } from '@wpai/schemas';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
 
-export type NavigateAgentAction = Omit<AgentAction, 'action'> & {
-  action: NavigateAction;
-};
-
-export default function ActionNavigate(props: NavigateAgentAction) {
+export default function ActionNavigate(props: AgentAction) {
   return (
     <ActionContainer pending={!props.result}>
       <p>

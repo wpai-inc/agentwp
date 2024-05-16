@@ -10,13 +10,13 @@ import StreamProvider from '@/Providers/StreamProvider';
 import ActionListenerProvider from '@/Providers/ActionListenerProvider';
 import UserRequestsProvider from '@/Providers/UserRequestsProvider';
 import { PageProvider } from '@/Providers/PageProvider';
-import type { agentwpSettings } from "@/Types/types";
+import type { PageData } from '@/Types/types';
 import { ClientProvider } from '@/Providers/ClientProvider';
-
+import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 
 const rootElement = document.getElementById('agent-wp-admin-chat');
 
-declare const agentwp_settings: agentwpSettings;
+declare const agentwp_settings: PageData;
 
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
@@ -24,22 +24,24 @@ if (rootElement) {
     <React.StrictMode>
       <PageProvider page={agentwp_settings}>
         <App>
-          <ClientProvider>
-            <ClientSettingsProvider>
-              <ScreenProvider>
-                <UserRequestsProvider>
-                  <StreamProvider>
-                    <ActionListenerProvider>
-                      <ChatProvider>
-                        <ConvoContainer />
-                        <ConvoTrigger />
-                      </ChatProvider>
-                    </ActionListenerProvider>
-                  </StreamProvider>
-                </UserRequestsProvider>
-              </ScreenProvider>
-            </ClientSettingsProvider>
-          </ClientProvider>
+          <AdminRouteProvider>
+            <ClientProvider>
+              <ClientSettingsProvider>
+                <ScreenProvider>
+                  <UserRequestsProvider>
+                    <StreamProvider>
+                      <ActionListenerProvider>
+                        <ChatProvider>
+                          <ConvoContainer />
+                          <ConvoTrigger />
+                        </ChatProvider>
+                      </ActionListenerProvider>
+                    </StreamProvider>
+                  </UserRequestsProvider>
+                </ScreenProvider>
+              </ClientSettingsProvider>
+            </ClientProvider>
+          </AdminRouteProvider>
         </App>
       </PageProvider>
     </React.StrictMode>,

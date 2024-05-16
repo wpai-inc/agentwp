@@ -110,9 +110,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         $merge = $this->pageData ?? [];
 
         return [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'api_host' => $this->main->apiHost(),
-            'site_id' => $this->settings->site_id,
             'page' => $this->slug(),
             'url' => $this->main->url(),
             'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),
