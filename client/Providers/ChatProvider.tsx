@@ -35,8 +35,10 @@ export function useChat() {
 }
 
 export default function ChatProvider({
+  defaultOpen = false,
   children,
 }: {
+  defaultOpen?: boolean;
   children: React.ReactNode;
 }) {
   const page = usePage();
@@ -45,13 +47,12 @@ export default function ChatProvider({
   const client = useClient();
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
-  const [open, setOpen] = useState(settings.chatOpen ?? false);
+  const [open, setOpen] = useState(settings.chatOpen ?? defaultOpen);
   const [minimizing, setMinimizing] = useState(false);
   const [expanding, setExpanding] = useState(false);
   const { conversation, setConversation, currentUserRequestId } =
     useUserRequests();
   const { startStream, liveAction, error } = useStream();
-
   useEffect(() => {
     if (liveAction && currentUserRequestId) {
       updateAgentMessage(currentUserRequestId, liveAction);
@@ -146,8 +147,8 @@ export default function ChatProvider({
         minimizing,
         expanding,
         conversation,
-        sendMessage
-    }}
+        sendMessage,
+      }}
     >
       {children}
     </ChatContext.Provider>

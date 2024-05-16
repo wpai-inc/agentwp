@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 export const ClientContext = createContext<any | undefined>(undefined);
 import AwpClient from '@/Services/AwpClient';
+import { usePage } from '@/Providers/PageProvider';
 
 export function useClient() {
   const client = useContext(ClientContext);
@@ -11,8 +12,8 @@ export function useClient() {
 }
 
 export function ClientProvider({ children }: { children: React.ReactNode }) {
-  const client = new AwpClient();
-
+  const page = usePage();
+  const client = new AwpClient(page.access_token).setBaseUrl(page.api_host);
   return (
     <ClientContext.Provider value={client}>{children}</ClientContext.Provider>
   );

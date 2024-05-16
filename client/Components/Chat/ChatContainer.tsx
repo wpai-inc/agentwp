@@ -11,6 +11,7 @@ export default function ChatContainer() {
   const windowRef = useRef<HTMLDivElement>(null);
   const { open, minimizing, expanding } = useChat();
   const { settings, setSettings } = useClientSettings();
+  const { conversation } = useChat();
 
   useEffect(() => {
     const windowElement = windowRef.current;
@@ -51,7 +52,7 @@ export default function ChatContainer() {
     >
       <div className="minimize-overlay"></div>
       <ChatTopBar />
-      <Dialog />
+      <Dialog conversation={conversation} />
       <MessageBox />
       <WindowActions />
     </div>

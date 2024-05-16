@@ -21,6 +21,7 @@ const RichMessage = (props: AgentAction) => {
       const graphType = action.graph?.graphType;
       const data = action.graph?.data;
       if (graphType === 'bar') {
+        console.log(data);
         return (
           <div className="flex flex-col gap-4">
             <ActionSimpleMessage {...props} />

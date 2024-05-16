@@ -9,7 +9,6 @@ import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 
 const rootElement = document.getElementById('agent-wp-admin-settings');
 
-declare const agent_wp_admin_settings: any;
 declare const agentwp_settings: PageData;
 
 if (rootElement) {
@@ -17,7 +16,7 @@ if (rootElement) {
 
   root.render(
     <React.StrictMode>
-      <PageProvider page={agent_wp_admin_settings}>
+      <PageProvider page={agentwp_settings}>
         <App>
           <AdminRouteProvider>
             {agentwp_settings?.onboarding_completed ? <Settings /> : <Wizard />}

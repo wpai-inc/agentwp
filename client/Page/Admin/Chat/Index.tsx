@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from '@/Shared/App';
-import ConvoContainer from '@/Components/Chat/ChatContainer';
+import Chat from '@/Components/Chat/Chat';
 import ChatProvider from '@/Providers/ChatProvider';
-import ChatTrigger from '@/Components/Chat/ChatTrigger';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import ScreenProvider from '@/Providers/ScreenProvider';
 import StreamProvider from '@/Providers/StreamProvider';
@@ -32,8 +31,7 @@ if (rootElement) {
                     <StreamProvider>
                       <ActionListenerProvider>
                         <ChatProvider>
-                          <ConvoContainer />
-                          <ChatTrigger />
+                          <Chat />
                         </ChatProvider>
                       </ActionListenerProvider>
                     </StreamProvider>

@@ -5,7 +5,6 @@ import ActionQuery from '@/Components/Chat/Convo/Actions/ActionQuery';
 import { Abilities } from '@wpai/schemas';
 import ActionIncomplete from './Actions/ActionIncomplete';
 import ActionPending from './Actions/ActionPending';
-import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { LoaderIcon } from 'lucide-react';
 
 type ActionComponentsType = {
@@ -21,19 +20,16 @@ const ActionComponents: ActionComponentsType = {
 export default function AgentResponse({
   agentActions,
   userRequestId,
+  pending = false,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
+  pending?: boolean;
 }) {
-  const { currentAction, currentUserRequestId } = useUserRequests();
   return (
     <div className="flex gap-4 p-4">
       <div className="w-8 h-8 flex items-center justify-center font-bold bg-blue-500 text-white rounded-full">
-        {!currentAction?.final && userRequestId === currentUserRequestId ? (
-          <LoaderIcon className="animate-spin" />
-        ) : (
-          'A'
-        )}
+        {pending ? <LoaderIcon className="animate-spin" /> : 'A'}
       </div>
       {agentActions === undefined ? (
         <ActionPending />

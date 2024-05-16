@@ -51,15 +51,17 @@ export function useUserRequests() {
 }
 
 export default function UserRequestsProvider({
+  messages = [],
   children,
 }: {
+  messages?: UserRequestType[];
   children: React.ReactNode;
 }) {
   const page = usePage();
   const siteId = page.site_id;
   const client = useClient();
 
-  const [conversation, setConversation] = useState<UserRequestType[]>([]);
+  const [conversation, setConversation] = useState<UserRequestType[]>(messages);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
     string | null
   >(null);
@@ -83,6 +85,7 @@ export default function UserRequestsProvider({
 
   async function getConversation() {
     const response = await client.isAuthorized()?.getConversation(siteId);
+
     if (response && response.data.length > 0) {
       setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
       setConversation(response.data);
