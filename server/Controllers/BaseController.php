@@ -29,6 +29,14 @@ class BaseController
         if ($this->permission === 'all') {
             return true;
         }
+
+        if($this->permission === 'canGenerateVerificationKey') {
+            return call_user_func([$this->main->auth, 'canGenerateVerificationKey']);
+        }
+        if($this->permission === 'hasValidVerificationKey') {
+            return call_user_func([$this->main->auth, 'hasValidVerificationKey']);
+        }
+
         if (is_array($this->permission) && is_callable($this->permission)) {
             return call_user_func($this->permission);
         }
@@ -36,13 +44,20 @@ class BaseController
         return current_user_can($this->permission);
     }
 
-    protected function respond(mixed $response): void
+    protected function respond(array|string|null $response = null): void
     {
-        wp_send_json($response);
+        wp_send_json_success($response);
     }
 
-    protected function error(mixed $response): void
+    protected function error(mixed $response, $status_code=null): void
     {
-        wp_send_json_error($response);
+        $this->respond($response, $status_code);
+    }
+
+    protected function verifyNonce(): void
+    {
+        if ( ! wp_verify_nonce($_GET['nonce'], $this->main::SLUG)) {
+            $this->error('Invalid nonce', 403);
+        }
     }
 }

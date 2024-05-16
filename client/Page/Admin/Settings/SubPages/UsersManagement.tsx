@@ -1,86 +1,54 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { agentwpUser } from '@/Types/types';
+import { User } from '@/Page/Admin/Settings/Partials/User';
+import SearchUser from '@/Page/Admin/Settings/Partials/SearchUser';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 
-declare const agent_wp_admin_settings: any;
 export default function UsersManagement() {
-  const [users, setUsers] = useState(agent_wp_admin_settings.users);
   const adminRequest = useAdminRoute();
 
-  function setManageAgentwpUsers(user: any) {
-    const newUsers = users.map((u: any) => {
-      if (u.id === user.id) {
-        return {
-          ...u,
-          manage_agentwp_users: !u.manage_agentwp_users,
-        };
-      }
-      return u;
-    });
+  const [users, setUsers] = useState<agentwpUser[]>([]);
+  const [searching, setSearching] = useState(false);
 
-    adminRequest.post('?action=agentwp_update_user', {
-      user: user.id,
-      manage_agentwp_users: !user.manage_agentwp_users,
-    });
-
-    setUsers(newUsers);
+  function getUsers() {
+    setSearching(true);
+    adminRequest
+      .get('/agentwp/v1/agentwp_users')
+      .then((response: any) => {
+        setUsers(response.data.data);
+        setSearching(false);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
   }
 
-  function setAgentwpAccess(user: any) {
-    const newUsers = users.map((u: any) => {
-      if (u.id === user.id) {
-        return {
-          ...u,
-          agentwp_access: !u.agentwp_access,
-        };
-      }
-      return u;
-    });
+  useEffect(() => {
+    getUsers();
+  }, []);
 
-    adminRequest.post('?action=agentwp_update_user', {
-      user: user.id,
-      agentwp_access: !user.agentwp_access,
-    });
-
-    setUsers(newUsers);
+  function searchUsers(value: string) {
+    setSearching(true);
+    adminRequest
+      .get('/agentwp/v1/agentwp_users', {
+        params: {
+          search: value,
+        },
+      })
+      .then((response: any) => {
+        setUsers(response.data.data);
+        setSearching(false);
+      });
   }
 
   return (
-    <div>
-      Users Management
-      <table className="wp-list-table widefat striped table-view-list">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Can access the agent</th>
-            <th>Can manage users</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users?.map((user: any) => {
-            return (
-              <tr key={user.id}>
-                <td>
-                  {user.display_name} ({user.user_email})
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={user.agentwp_access}
-                    onChange={() => setAgentwpAccess(user)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={user.manage_agentwp_users}
-                    onChange={() => setManageAgentwpUsers(user)}
-                  />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <div className="max-w-[720px] text-base mt-12">
+      <SearchUser searchUsers={searchUsers} searching={searching} />
+      <div>
+        {users.map((user) => (
+          <User user={user} key={user.id} />
+        ))}
+      </div>
     </div>
   );
 }
