@@ -60,7 +60,6 @@ export default function UserRequestsProvider({
   const page = usePage();
   const siteId = page.site_id;
   const client = useClient();
-
   const [conversation, setConversation] = useState<UserRequestType[]>(messages);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
     string | null

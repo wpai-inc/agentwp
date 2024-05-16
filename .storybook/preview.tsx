@@ -64,29 +64,32 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story, { parameters }) => (
-      <PageProvider page={page}>
-        <App>
-          <AdminRouteProvider>
-            <ClientProvider>
-              <ClientSettingsProvider>
-                <ScreenProvider>
-                  <UserRequestsProvider messages={parameters.messages}>
-                    <StreamProvider>
-                      <ActionListenerProvider>
-                        <ChatProvider defaultOpen={parameters.open}>
-                          <Story />
-                        </ChatProvider>
-                      </ActionListenerProvider>
-                    </StreamProvider>
-                  </UserRequestsProvider>
-                </ScreenProvider>
-              </ClientSettingsProvider>
-            </ClientProvider>
-          </AdminRouteProvider>
-        </App>
-      </PageProvider>
-    ),
+    function (Story, { parameters }) {
+      console.log(parameters);
+      return (
+        <PageProvider page={page}>
+          <App>
+            <AdminRouteProvider>
+              <ClientProvider>
+                <ClientSettingsProvider>
+                  <ScreenProvider>
+                    <UserRequestsProvider messages={parameters.messages}>
+                      <StreamProvider>
+                        <ActionListenerProvider>
+                          <ChatProvider defaultOpen={parameters.open}>
+                            <Story />
+                          </ChatProvider>
+                        </ActionListenerProvider>
+                      </StreamProvider>
+                    </UserRequestsProvider>
+                  </ScreenProvider>
+                </ClientSettingsProvider>
+              </ClientProvider>
+            </AdminRouteProvider>
+          </App>
+        </PageProvider>
+      );
+    },
   ],
 };
 

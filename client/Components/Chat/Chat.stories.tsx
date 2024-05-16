@@ -91,7 +91,7 @@ const sampleRichMessages: UserRequestType[] = [
 ];
 
 export const ChatStory: Story = {
-  args: {
+  parameters: {
     messages: sampleRichMessages,
     chatOpen: true,
   },
