@@ -41,7 +41,7 @@ export default function ChatContainer() {
       ref={windowRef}
       className={cn(
         'transition fixed bottom-4 right-10',
-        'h-[800px] w-[500px] z-[1000] bg-brand-gray',
+        'max-h-[95vh] min-h-[500px] w-[500px] z-[1000] bg-brand-gray',
         'shadow-xl flex flex-col border border-gray-200 rounded-xl',
         {
           'w-0 h-0 overflow-hidden': !open,
