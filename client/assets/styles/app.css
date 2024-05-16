@@ -8,8 +8,8 @@ svg {
 
 .minimize {
     overflow: hidden;
-    animation-name: minimize-width, minimize-height, hide-chat;
-    animation-delay: 0.2s, 0.6s, 1.1s;
+    animation-name: minimize-height, minimize-width, hide-chat;
+    animation-delay: 0s, 0.6s, 1.1s;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
 }
@@ -18,9 +18,9 @@ svg {
     width: 30px;
     height: 30px;
     overflow: hidden;
-    animation-name: show-chat, expand-height, expand-width;
-    animation-delay: 0.2s, 0.6s, 1.1s;
-    animation-duration: 0.5s;
+    animation-name: show-chat, expand-width, expand-height;
+    animation-delay: 0s, 0.4s, 1s;
+    animation-duration: 0.4s, 0.5s, 0.5s;
     animation-fill-mode: forwards;
 }
 
@@ -28,14 +28,13 @@ svg {
     height: 100%;
     width: 100%;
     position: absolute;
-    animation-name: minimize-overlay;
-    animation-duration: 0.2s;
-    animation-fill-mode: forwards;
+    background-color: #FFF;
 }
 
 @keyframes hide-chat {
     to {
-        opacity: 0;
+        right: -100px;
+        bottom: 16px;
     }
 }
 
@@ -59,10 +58,12 @@ svg {
 
 @keyframes show-chat {
     from {
-        opacity: 0;
+        right: -50px;
+        bottom: 16px;
     }
     to {
-        opacity: 1;
+        right: 40px;
+        bottom: 16px;
     }
 }
 

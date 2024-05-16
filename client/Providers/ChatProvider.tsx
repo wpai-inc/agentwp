@@ -76,7 +76,7 @@ export default function ChatProvider({
       setExpanding(false);
       setMinimizing(false);
       setSettings({ chatOpen: newVal });
-    }, 1200);
+    }, 1600);
   }
 
   function maximizeChatWindow() {}

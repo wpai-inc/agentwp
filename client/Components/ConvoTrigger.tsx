@@ -1,21 +1,27 @@
 import { cn } from '@/lib/utils';
-import { ChatCircle } from '@phosphor-icons/react';
+import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
 import { useChat } from '@/Providers/ChatProvider';
+import { Button } from "@/Components/ui/button";
 
 export default function ConvoTrigger() {
   const { open, toggle, expanding } = useChat();
 
   return (
-    <button
+    <Button
       onClick={toggle}
+      variant="ghost"
       className={cn(
-        'fixed opacity-0 bottom-4 right-4 p-2 rounded-full shadow-xl transition bg-white ring-2 ring-gray-200/80',
+        'fixed hidden bottom-12 right-0 p-2',
+        'rounded-none rounded-tl-lg rounded-bl-lg',
+        'transition bg-white ',
+        'justify-center items-center',
         {
-          'z-50 opacity-100 transition': (!open || expanding),
+          'z-50 block transition': !open,
+          'hidden': expanding,
         },
       )}
     >
-      <ChatCircle size="32" />
-    </button>
+      <ArrowRightIcon />
+    </Button>
   );
 }
