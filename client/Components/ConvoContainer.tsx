@@ -40,12 +40,12 @@ export default function ConvoContainer() {
       ref={windowRef}
       className={cn(
         'transition fixed bottom-4 right-10',
-        'h-[90vh] w-[500px] z-[1000] bg-brand-gray',
+        'h-[800px] w-[500px] z-[1000] bg-brand-gray',
         'shadow-xl flex flex-col border border-gray-200 rounded-xl',
         {
           'w-0 h-0 overflow-hidden': !open,
-          'minimize': minimizing,
-          'expand': expanding,
+          minimize: minimizing,
+          expand: expanding,
         },
       )}
     >
