@@ -20,9 +20,9 @@ export function AdminRouteProvider({
   const page = usePage();
 
   const adminRequest = axios.create({
-    baseURL: '/?rest_route=/agentwp/v1/',
+    baseURL: page.rest_route,
     headers: {
-      'X-Requested-With': 'XMLHttpRequest',
+      'X-WP-Nonce': page.wp_rest_nonce,
     },
   });
 
