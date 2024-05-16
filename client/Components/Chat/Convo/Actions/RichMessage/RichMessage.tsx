@@ -11,7 +11,7 @@ type GraphDataPoint = {
   value: string;
 };
 
-const RichMessage = (props: AgentAction) => {
+export default function RichMessage(props: AgentAction) {
   if (props.action.ability === 'message') {
     const isGraph = !!props.action.graph;
     const areButtons = !!props.action.buttons;
@@ -21,9 +21,8 @@ const RichMessage = (props: AgentAction) => {
       const graphType = action.graph?.graphType;
       const data = action.graph?.data;
       if (graphType === 'bar') {
-        console.log(data);
         return (
-          <div className="flex flex-col gap-4">
+          <GraphContainer>
             <ActionSimpleMessage {...props} />
             <Bar
               data={data ?? []}
@@ -31,11 +30,11 @@ const RichMessage = (props: AgentAction) => {
               xDataKey="label"
               width={'100%'}
             />
-          </div>
+          </GraphContainer>
         );
       } else if (graphType === 'line') {
         return (
-          <div className="flex flex-col gap-4">
+          <GraphContainer>
             <ActionSimpleMessage {...props} />
             <Line
               data={data ?? []}
@@ -43,11 +42,11 @@ const RichMessage = (props: AgentAction) => {
               xDataKey="label"
               width={'100%'}
             />
-          </div>
+          </GraphContainer>
         );
       } else if (graphType === 'pie') {
         return (
-          <div className="flex flex-col gap-4">
+          <GraphContainer>
             <ActionSimpleMessage {...props} />
             <Pie
               data={data ?? []}
@@ -55,7 +54,7 @@ const RichMessage = (props: AgentAction) => {
               dataKey="label"
               width={'100%'}
             />
-          </div>
+          </GraphContainer>
         );
       }
     } else if (areButtons) {
@@ -80,6 +79,8 @@ const RichMessage = (props: AgentAction) => {
       <p>There was an error rendering this component</p>
     </div>
   );
-};
+}
 
-export default RichMessage;
+function GraphContainer({ children }: { children: React.ReactNode }) {
+  return <div className="flex flex-col pt-4 gap-4">{children}</div>;
+}

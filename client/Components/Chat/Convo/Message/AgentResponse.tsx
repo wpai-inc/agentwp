@@ -1,41 +1,35 @@
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
-import ActionNavigate from '@/Components/Chat/Convo/Actions/ActionNavigate';
-import ActionMessage from '@/Components/Chat/Convo/Actions/ActionMessage';
-import ActionQuery from '@/Components/Chat/Convo/Actions/ActionQuery';
-import { Abilities } from '@wpai/schemas';
 import ActionIncomplete from '../Actions/ActionIncomplete';
 import ActionPending from '../Actions/ActionPending';
 import { LoaderIcon } from 'lucide-react';
-
-type ActionComponentsType = {
-  [key in Abilities]?: React.ComponentType<AgentAction>;
-};
-
-const ActionComponents: ActionComponentsType = {
-  message: ActionMessage,
-  navigate: ActionNavigate,
-  query: ActionQuery,
-};
+import MessageHeader from './MessageHeader';
+import Avatar from '../../Avatar/Avatar';
+import Feedback from '@/Components/Chat/Feedback';
+import ActionComponent from '../Actions/ActionComponent';
 
 export default function AgentResponse({
   agentActions,
   userRequestId,
+  time,
   pending = false,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
+  time: string;
   pending?: boolean;
 }) {
+  const messageAction = agentActions?.find(
+    (aa) => aa.action?.ability === 'message',
+  ) as AgentAction | undefined;
+
+  const otherActions =
+    agentActions?.filter((aa) => aa.action?.ability !== 'message') ?? [];
+
   return (
-    <div className="flex gap-4 p-4">
-      <div className="w-8 h-8 flex items-center justify-center font-bold bg-blue-500 text-white rounded-full">
-        {pending ? <LoaderIcon className="animate-spin" /> : 'A'}
-      </div>
-      {agentActions === undefined ? (
-        <ActionPending />
-      ) : agentActions.length > 0 ? (
+    <div className="text-black/60 py-4 border-t border-gray-25">
+      {otherActions.length > 0 ? (
         <div className="flex-1">
-          {agentActions.map((aa) => {
+          {otherActions.map((aa) => {
             if (!aa.action) {
               return (
                 <ActionIncomplete
@@ -45,21 +39,24 @@ export default function AgentResponse({
                 />
               );
             } else {
-              const ActionComponent =
-                ActionComponents[aa.action.ability as Abilities];
-              if (!ActionComponent) {
-                console.error(
-                  `No component found for ability: ${aa.action.ability}`,
-                );
-                return null; // Or render some fallback UI
-              }
               return <ActionComponent key={aa.id} {...aa} />;
             }
           })}
         </div>
-      ) : (
-        <div>No actions</div>
+      ) : null}
+
+      <MessageHeader>
+        <Avatar name="AgentWP" time={time} />
+        <Feedback />
+      </MessageHeader>
+
+      {pending && (
+        <div className="p-4 rounded-lg border border-gray-25">
+          <LoaderIcon className="animate-spin" /> Thinking...
+        </div>
       )}
+      {agentActions === undefined && <ActionPending />}
+      {messageAction && <ActionComponent {...messageAction} />}
     </div>
   );
 }

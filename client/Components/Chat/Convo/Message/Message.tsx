@@ -9,13 +9,14 @@ export default function Message(userRequest: UserRequestType) {
     !currentAction?.final && userRequest.id === currentUserRequestId;
 
   return (
-    <div id={userRequest.id} className="space-y-6 divide-y-2 text-black/60">
+    <div id={userRequest.id}>
       <UserRequest
         message={userRequest.message}
         time={userRequest.human_created_at}
       />
       <AgentResponse
         userRequestId={userRequest.id}
+        time={userRequest.human_created_at}
         agentActions={userRequest.agent_actions}
         pending={pending}
       />

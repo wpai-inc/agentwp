@@ -1,5 +1,7 @@
 import MD from '@/Components/MD';
 import Avatar from '../../Avatar/Avatar';
+import MessageHeader from './MessageHeader';
+import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 
 export default function UserRequest({
   message,
@@ -9,9 +11,14 @@ export default function UserRequest({
   time: string;
 }) {
   return (
-    <div className="flex gap-4">
-      <Avatar name="James Lepage" time={time} />
-      <div className="flex-1">
+    <div className="text-black/60">
+      <MessageHeader>
+        <Avatar name="James Lepage" time={time} />
+        <button>
+          <IconMore />
+        </button>
+      </MessageHeader>
+      <div className="my-4 pr-4 text-md">
         <MD content={message} />
       </div>
     </div>

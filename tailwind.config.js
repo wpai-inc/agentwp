@@ -35,6 +35,7 @@ module.exports = {
                     secondary: '#FF70A6',
                     gray: {
                         DEFAULT: '#F6F7F7',
+                        15: '#D9D9D9',
                         20: '#EEEEEE',
                         25: '#E8E8E9',
                         30: '#ABABAB',

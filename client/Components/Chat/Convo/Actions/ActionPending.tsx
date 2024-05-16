@@ -1,4 +1,4 @@
-import ActionContainer from '../ActionContainer';
+import ActionContainer from './ActionContainer';
 
 export default function ActionPending() {
   return (

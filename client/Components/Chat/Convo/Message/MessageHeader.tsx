@@ -1,5 +1,7 @@
-import React from 'react';
-
-export default function MessageHeader({ children }) {
+export default function MessageHeader({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <div className="flex items-center justify-between">{children}</div>;
 }
