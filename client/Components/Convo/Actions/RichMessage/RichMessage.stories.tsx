@@ -1,13 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import RichMessage from './RichMessage';
-import { MessageAction } from '@wpai/schemas';
-import { AgentAction } from "@/Providers/UserRequestsProvider";
+import { AgentAction } from '@/Providers/UserRequestsProvider';
 
 export default {
   title: 'Wpai/RichMessage',
   component: RichMessage,
-}
+};
 
 export const BarGraphMessage = {
   args: {
@@ -21,9 +18,9 @@ export const BarGraphMessage = {
           { label: '2021', value: 1500 },
           { label: '2022', value: 3000 },
           { label: '2023', value: 4000 },
-        ]
-      }
-    }
+        ],
+      },
+    },
   } as AgentAction,
 };
 
@@ -39,9 +36,9 @@ export const LineGraphMessage = {
           { label: '2021', value: 1500 },
           { label: '2022', value: 3000 },
           { label: '2023', value: 4000 },
-        ]
-      }
-    }
+        ],
+      },
+    },
   } as AgentAction,
 };
 
@@ -57,8 +54,8 @@ export const PieGraphMessage = {
           { label: '2021', value: 1500 },
           { label: '2022', value: 3000 },
           { label: '2023', value: 4000 },
-        ]
-      }
-    }
+        ],
+      },
+    },
   } as AgentAction,
 };

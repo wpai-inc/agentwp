@@ -1,12 +1,11 @@
 /**
  * Docs for this component at https://recharts.org/en-US/api/PieChart
  */
-import React from 'react';
 import {
   Pie as RootPie,
   PieChart,
   ResponsiveContainer,
-  Tooltip
+  Tooltip,
 } from 'recharts';
 
 interface PieProps {
@@ -25,8 +24,8 @@ const Pie = ({
   outerRadius = 50,
   valueDataKey,
   dataKey,
-  fillColor = '#8884d8',
-  data
+  fillColor = '#4991f7',
+  data,
 }: PieProps) => {
   return (
     <ResponsiveContainer width={width} height={height}>

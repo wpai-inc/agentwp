@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
+  YAxis,
 } from 'recharts';
 
 interface LineProps {
@@ -28,7 +28,7 @@ const Line = ({
   xDataKey,
   valueDataKey,
   data,
-  strokeColor = '#8884d8'
+  strokeColor = '#4991f7',
 }: LineProps) => {
   return (
     <ResponsiveContainer width={width} height={height}>

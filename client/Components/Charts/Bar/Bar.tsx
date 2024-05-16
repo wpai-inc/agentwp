@@ -28,7 +28,7 @@ const Bar = ({
   xDataKey,
   valueDataKey,
   data,
-  fillColor = '#8884d8',
+  fillColor = '#4991f7',
 }: BarProps) => {
   return (
     <ResponsiveContainer width={width} height={height}>
