@@ -7,6 +7,8 @@ export type ActionType = NavigateAction | MessageAction | QueryAction;
 
 export type AgentAction = {
   id: string;
+  created_at: string;
+  human_created_at: string;
   action: ActionType;
   final: boolean;
   recipe_idx: number;
@@ -17,8 +19,9 @@ export type AgentAction = {
 export type UserRequestType = {
   id: string;
   message: string;
+  created_at: string;
+  human_created_at: string;
   wp_user_id?: number;
-  created_at?: string;
   agent_actions: AgentAction[];
 };
 

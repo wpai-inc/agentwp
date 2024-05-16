@@ -3,8 +3,8 @@ import ActionNavigate from '@/Components/Chat/Convo/Actions/ActionNavigate';
 import ActionMessage from '@/Components/Chat/Convo/Actions/ActionMessage';
 import ActionQuery from '@/Components/Chat/Convo/Actions/ActionQuery';
 import { Abilities } from '@wpai/schemas';
-import ActionIncomplete from './Actions/ActionIncomplete';
-import ActionPending from './Actions/ActionPending';
+import ActionIncomplete from '../Actions/ActionIncomplete';
+import ActionPending from '../Actions/ActionPending';
 import { LoaderIcon } from 'lucide-react';
 
 type ActionComponentsType = {

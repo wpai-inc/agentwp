@@ -48,6 +48,10 @@ const preview: Preview = {
           name: 'wordpress',
           value: '#f0f0f1',
         },
+        {
+          name: 'chatContainer',
+          value: '#ffffff',
+        },
       ],
     },
     actions: { argTypesRegex: '^on[A-Z ].*' },

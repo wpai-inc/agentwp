@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
-import MessageBox from './MessageBox';
+import MessageBox from './MessageBox/MessageBox';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';

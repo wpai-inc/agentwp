@@ -1,4 +1,4 @@
-import Message from '@/Components/Chat/Convo/Message';
+import Message from '@/Components/Chat/Convo/Message/Message';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
 
 export default function Dialog({
