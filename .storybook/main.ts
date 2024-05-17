@@ -1,4 +1,6 @@
-import type { StorybookConfig } from '@storybook/react-vite';
+import { mergeConfig } from 'vite';
+import baseConfig from '../vite.storybook.config.ts';
+import { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: [
@@ -21,10 +23,14 @@ const config: StorybookConfig = {
   },
   typescript: {
     check: false,
-    checkOptions: {},
     reactDocgen: 'react-docgen',
-    reactDocgenTypescriptOptions: {}, // Available only when reactDocgen is set to 'react-docgen-typescript'
+    reactDocgenTypescriptOptions: {},
     skipCompiler: true,
   },
+  viteFinal: async (config) => {
+    // Merge base Vite config with Storybook-specific config
+    return mergeConfig(config, baseConfig);
+  },
 };
+
 export default config;
