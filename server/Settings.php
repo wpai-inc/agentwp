@@ -18,7 +18,7 @@ class Settings
     public function __construct()
     {
         $data = get_option('agentwp_settings');
-        if(!is_array($data)) {
+        if (!is_array($data)) {
             $data = [];
         }
         $this->data = $data;
@@ -67,13 +67,13 @@ class Settings
 
     public function setAccessToken(mixed $token): bool
     {
-        if (extension_loaded('openssl') && defined('AUTH_KEY') && ! empty(AUTH_KEY)) {
+        if (extension_loaded('openssl') && defined('AUTH_KEY') && !empty(AUTH_KEY)) {
             $iv = substr(AUTH_KEY, 0, 16);
             $token['access_token']  = openssl_encrypt($token['access_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv);
             $token['refresh_token'] = $token['refresh_token'] ? openssl_encrypt($token['refresh_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv) : '';
         }
 
-        if($token['expires_in']) {
+        if ($token['expires_in']) {
             $token['expires_at'] = time() + (int)$token['expires_in'];
         }
 
@@ -86,15 +86,15 @@ class Settings
         if (empty($this->data['token']['access_token'])) {
             return null;
         }
-        if (extension_loaded('openssl') && defined('AUTH_KEY') && ! empty(AUTH_KEY)) {
+        if (extension_loaded('openssl') && defined('AUTH_KEY') && !empty(AUTH_KEY)) {
             $iv = substr(AUTH_KEY, 0, 16);
-            return openssl_decrypt($this->data['token']['access_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv);
+            return openssl_decrypt($this->data['token']['access_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv) . 'ooo';
         }
         return $this->data['token']['access_token'];
     }
 
     public function isConnectedToAwp(): bool
     {
-        return ! empty($this->data['site_id']) && ! empty($this->data['client_id']) && ! empty($this->data['client_secret']);
+        return !empty($this->data['site_id']) && !empty($this->data['client_id']) && !empty($this->data['client_secret']);
     }
 }

@@ -6,6 +6,8 @@ import Settings from './Settings';
 import Wizard from './Wizard';
 import type { PageData } from '@/Types/types';
 import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
+import { NotificationsProvider } from '@/Providers/useNotificationsContext';
+import { Notifications } from '@/Components/Notifications';
 
 const rootElement = document.getElementById('agent-wp-admin-settings');
 
@@ -18,11 +20,18 @@ if (rootElement) {
   root.render(
     <React.StrictMode>
       <PageProvider page={agent_wp_admin_settings}>
-        <App>
-          <AdminRouteProvider>
-            {agentwp_settings?.onboarding_completed ? <Settings /> : <Wizard />}
-          </AdminRouteProvider>
-        </App>
+        <NotificationsProvider>
+          <App>
+            <AdminRouteProvider>
+              {agentwp_settings?.onboarding_completed ? (
+                <Settings />
+              ) : (
+                <Wizard />
+              )}
+              <Notifications />
+            </AdminRouteProvider>
+          </App>
+        </NotificationsProvider>
       </PageProvider>
     </React.StrictMode>,
   );

@@ -59,7 +59,7 @@ class Main
 
     public function asset(?string $path = null): string
     {
-        return $this->url(self::BUILD_DIR.'/'.$path);
+        return $this->url(self::BUILD_DIR . '/' . $path);
     }
 
     public function pluginPath(): string
@@ -69,7 +69,7 @@ class Main
 
     public function path(?string $path = null): string
     {
-        return plugin_dir_path($this->file).ltrim($path, '/');
+        return plugin_dir_path($this->file) . ltrim($path, '/');
     }
 
     public function url(?string $path = null): string
@@ -124,7 +124,7 @@ class Main
             'user'                  => $current_user,
             'onboarding_completed'     => $this->settings->onboarding_completed,
         ];
-        ?>
+?>
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
@@ -132,13 +132,43 @@ class Main
             body.agent-wp-admin-settings {
                 background-color: #ffffff;
             }
+
+            .agentwp-components-snackbar-list {
+                position: fixed;
+                top: 38px;
+                right: 32px;
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: flex-end;
+            }
+
+            .agentwp-components-snackbar-list-left {
+                left: 32px;
+                right: unset;
+            }
+
+            .components-snackbar {
+                padding: 10px 40px;
+                color: #fff;
+            }
+
+            .agentwp-error-notification {
+                background: #ab0909;
+            }
+
+            .agentwp-info-notification {
+                background: #646464;
+            }
+
+            .agentwp-default-notification {
+                background: #0e876a;
+            }
         </style>
-        <?php
+<?php
     }
 
     private function runtimeApiHost()
     {
         return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://api.agentwp.com';
     }
-
 }

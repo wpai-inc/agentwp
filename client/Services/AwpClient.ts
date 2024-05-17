@@ -1,5 +1,9 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import type { PageData } from '@/Types/types';
+import { usePage } from '@/Providers/PageProvider';
+import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useNotificationsContext } from '@/Providers/useNotificationsContext';
+
 declare const agentwp_settings: PageData;
 
 export default class AwpClient {
@@ -10,7 +14,10 @@ export default class AwpClient {
   private agentWpVersion = '0.1-alpha1';
 
   constructor(token?: string) {
-    this.token = token;
+    const page = usePage();
+    const { addNotification } = useNotificationsContext();
+    const adminRequest = useAdminRoute();
+    this.token = token || page.access_token;
     this.baseUrl = agentwp_settings.api_host;
 
     this.httpClient = axios.create({
@@ -21,6 +28,26 @@ export default class AwpClient {
         'X-WP-AGENT-VERSION': this.agentWpVersion,
       },
     });
+
+    this.httpClient.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          // Logout user or redirect to login page
+          addNotification(
+            'Your API token is invalid or expired. Please login again.',
+            'error',
+          );
+          adminRequest.get('/agentwp/v1/logout');
+          throw new Error(
+            'Your API token is invalid or expired. Please login again.',
+          );
+        }
+        return Promise.reject(error);
+      },
+    );
   }
 
   isAuthorized() {

@@ -13,6 +13,8 @@ import { PageProvider } from '@/Providers/PageProvider';
 import type { PageData } from '@/Types/types';
 import { ClientProvider } from '@/Providers/ClientProvider';
 import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
+import { NotificationsProvider } from '@/Providers/useNotificationsContext';
+import { Notifications } from '@/Components/Notifications';
 
 const rootElement = document.getElementById('agent-wp-admin-chat');
 
@@ -23,26 +25,29 @@ if (rootElement) {
   root.render(
     <React.StrictMode>
       <PageProvider page={agentwp_settings}>
-        <App>
-          <AdminRouteProvider>
-            <ClientProvider>
-              <ClientSettingsProvider>
-                <ScreenProvider>
-                  <UserRequestsProvider>
-                    <StreamProvider>
-                      <ActionListenerProvider>
-                        <ChatProvider>
-                          <ConvoContainer />
-                          <ChatTrigger />
-                        </ChatProvider>
-                      </ActionListenerProvider>
-                    </StreamProvider>
-                  </UserRequestsProvider>
-                </ScreenProvider>
-              </ClientSettingsProvider>
-            </ClientProvider>
-          </AdminRouteProvider>
-        </App>
+        <NotificationsProvider>
+          <App>
+            <AdminRouteProvider>
+              <ClientProvider>
+                <ClientSettingsProvider>
+                  <ScreenProvider>
+                    <UserRequestsProvider>
+                      <StreamProvider>
+                        <ActionListenerProvider>
+                          <ChatProvider>
+                            <ConvoContainer />
+                            <ChatTrigger />
+                            <Notifications />
+                          </ChatProvider>
+                        </ActionListenerProvider>
+                      </StreamProvider>
+                    </UserRequestsProvider>
+                  </ScreenProvider>
+                </ClientSettingsProvider>
+              </ClientProvider>
+            </AdminRouteProvider>
+          </App>
+        </NotificationsProvider>
       </PageProvider>
     </React.StrictMode>,
   );
