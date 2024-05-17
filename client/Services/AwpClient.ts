@@ -1,24 +1,26 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+
 import type { PageData } from '@/Types/types';
 import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { useNotificationsContext } from '@/Providers/useNotificationsContext';
 
-declare const agentwp_settings: PageData;
 
 export default class AwpClient {
-  private baseUrl: string;
+  private baseUrl: string = 'https://api.agentwp.com';
   private token?: string;
   private httpClient: AxiosInstance;
 
   private agentWpVersion = '0.1-alpha1';
 
   constructor(token?: string) {
+
     const page = usePage();
     const { addNotification } = useNotificationsContext();
     const adminRequest = useAdminRoute();
     this.token = token || page.access_token;
-    this.baseUrl = agentwp_settings.api_host;
+    this.baseUrl = page.api_host;
+
 
     this.httpClient = axios.create({
       timeout: 15000,
@@ -111,6 +113,7 @@ export default class AwpClient {
 
   setBaseUrl(baseUrl: string) {
     this.baseUrl = baseUrl;
+    return this;
   }
 
   setToken(token: string) {

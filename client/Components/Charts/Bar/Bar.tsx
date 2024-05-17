@@ -34,8 +34,12 @@ const Bar = ({
     <ResponsiveContainer width={width} height={height}>
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="2 2" />
-        <XAxis dataKey={xDataKey} />
-        <YAxis />
+        {/* TODO: causing error: chunk-5OZJXOSV.js?v=528fe26e:521 Warning: YAxis:
+        Support for defaultProps will be removed from function components in a
+        future major release. Use JavaScript default parameters instead.
+        https://github.com/recharts/recharts/issues/3615 */}
+        {/* <XAxis dataKey={xDataKey} />
+        <YAxis /> */}
         <Tooltip />
         <Legend />
         <RootBar dataKey={valueDataKey} fill={fillColor} />

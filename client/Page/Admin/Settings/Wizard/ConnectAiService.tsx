@@ -1,6 +1,6 @@
 import ConnectButton from '@/Page/Admin/Settings/Partials/ConnectButton';
 import { ManualAwpActivation } from '@/Page/Admin/Settings/Partials/ManualAwpActivation';
-import { Logo } from '@/Components/Logo';
+import Logo from '@/Components/Logo';
 
 export default function ConnectAiService() {
   return (

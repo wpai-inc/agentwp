@@ -7,6 +7,8 @@ export type ActionType = NavigateAction | MessageAction | QueryAction;
 
 export type AgentAction = {
   id: string;
+  created_at: string;
+  human_created_at: string;
   action: ActionType;
   final: boolean;
   recipe_idx: number;
@@ -17,8 +19,13 @@ export type AgentAction = {
 export type UserRequestType = {
   id: string;
   message: string;
+  user: {
+    name: string;
+    email: string;
+  };
+  created_at: string;
+  human_created_at: string;
   wp_user_id?: number;
-  created_at?: string;
   agent_actions: AgentAction[];
 };
 
@@ -51,15 +58,16 @@ export function useUserRequests() {
 }
 
 export default function UserRequestsProvider({
+  messages = [],
   children,
 }: {
+  messages?: UserRequestType[];
   children: React.ReactNode;
 }) {
   const page = usePage();
   const siteId = page.site_id;
   const client = useClient();
-
-  const [conversation, setConversation] = useState<UserRequestType[]>([]);
+  const [conversation, setConversation] = useState<UserRequestType[]>(messages);
   const [currentUserRequestId, setCurrentUserRequestId] = useState<
     string | null
   >(null);
@@ -83,6 +91,7 @@ export default function UserRequestsProvider({
 
   async function getConversation() {
     const response = await client.isAuthorized()?.getConversation(siteId);
+
     if (response && response.data.length > 0) {
       setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
       setConversation(response.data);

@@ -31,6 +31,24 @@ svg {
     background-color: #FFF;
 }
 
+.animate-open-chat-overlay {
+    animation-name: open-chat-overlay;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.animate-close-chat-overlay {
+    animation-name: close-chat-overlay;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 @keyframes hide-chat {
     to {
         right: -100px;
@@ -49,7 +67,7 @@ svg {
 
 @keyframes minimize-height {
     25% {
-        height: 93vh;
+        height: 90vh;
     }
     100% {
         height: 30px;
@@ -69,10 +87,10 @@ svg {
 
 @keyframes expand-height {
     75% {
-        height: 93vh;
+        height: 90vh;
     }
     100% {
-        height: 90vh;
+        height: 85vh;
     }
 }
 
@@ -91,6 +109,30 @@ svg {
     }
     to {
         background-color: #FFF;
+    }
+}
+
+@keyframes open-chat-overlay {
+    from {
+        width: 50%;
+        height: 30px;
+    }
+    to {
+        width: 95%;
+        height: 98%;
+    }
+}
+
+@keyframes close-chat-overlay {
+    from {
+        width: 95%;
+        height: 98%;
+        opacity: 1;
+    }
+    to {
+        width: 50%;
+        height: 0;
+        opacity: 0;
     }
 }
 

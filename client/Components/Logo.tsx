@@ -1,12 +1,5 @@
-import { usePage } from "@/Providers/PageProvider";
+import LogoImg from '@/assets/awp.png';
 
-export function Logo({ ...props }) {
-    const page = usePage();
-    return (
-        <img
-            {...props}
-            src={page.plugin_url + "/assets/images/awp.png"}
-            alt="Agent WP"
-        />
-    );
+export default function Logo({ ...props }) {
+  return <img src={LogoImg} alt="Agent WP" {...props} />;
 }

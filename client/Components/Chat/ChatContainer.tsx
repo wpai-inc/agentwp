@@ -2,15 +2,17 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
-import MessageBox from './MessageBox';
+import MessageBox from './MessageBox/MessageBox';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import ChatOverlay from '@/Components/Chat/ChatOverlay';
 
 export default function ChatContainer() {
   const windowRef = useRef<HTMLDivElement>(null);
   const { open, minimizing, expanding } = useChat();
   const { settings, setSettings } = useClientSettings();
+  const { conversation, overlayChildren } = useChat();
 
   useEffect(() => {
     const windowElement = windowRef.current;
@@ -38,12 +40,13 @@ export default function ChatContainer() {
   return (
     <div
       ref={windowRef}
+      id="awp-chat"
       className={cn(
         'transition fixed bottom-4 right-10',
-        'h-[800px] w-[500px] z-[1000] bg-brand-gray',
-        'shadow-xl flex flex-col border border-gray-200 rounded-xl',
+        'h-[85vh] w-[500px] z-20 bg-brand-gray',
+        'shadow-xl flex flex-col border border-gray-200 rounded-xl opacity-100',
         {
-          'w-0 h-0 overflow-hidden': !open,
+          'w-0 h-0 overflow-hidden border-0': !open,
           minimize: minimizing,
           expand: expanding,
         },
@@ -51,9 +54,14 @@ export default function ChatContainer() {
     >
       <div className="minimize-overlay"></div>
       <ChatTopBar />
-      <Dialog />
+      <Dialog conversation={conversation} />
       <MessageBox />
       <WindowActions />
+      {overlayChildren && (
+        <ChatOverlay>
+          {overlayChildren}
+        </ChatOverlay>
+      )}
     </div>
   );
 }

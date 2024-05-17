@@ -7,7 +7,7 @@ import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?re
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 
 export default function MessageBox() {
-  const { sendMessage } = useChat();
+  const { sendMessage, openChatOverlay } = useChat();
   const { streamClosed } = useStream();
   const [message, setMessage] = useState('');
 
@@ -32,7 +32,7 @@ export default function MessageBox() {
 
   function onSettingsClick(e: React.FormEvent) {
     e.preventDefault();
-
+    openChatOverlay('Settings');
   }
 
   return (

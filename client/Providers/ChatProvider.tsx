@@ -24,6 +24,9 @@ const ChatContext = createContext({
   expanding: false,
   conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
+  openChatOverlay: (children) => {},
+  closeChatOverlay: () => {},
+  overlayChildren: null,
 });
 
 export function useChat() {
@@ -35,8 +38,10 @@ export function useChat() {
 }
 
 export default function ChatProvider({
+  defaultOpen = false,
   children,
 }: {
+  defaultOpen?: boolean;
   children: React.ReactNode;
 }) {
   const page = usePage();
@@ -45,13 +50,13 @@ export default function ChatProvider({
   const client = useClient();
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
-  const [open, setOpen] = useState(settings.chatOpen ?? false);
+  const [open, setOpen] = useState(settings.chatOpen ?? defaultOpen);
   const [minimizing, setMinimizing] = useState(false);
   const [expanding, setExpanding] = useState(false);
+  const [overlayChildren, setOverlayChildren] = useState(null);
   const { conversation, setConversation, currentUserRequestId } =
     useUserRequests();
   const { startStream, liveAction, error } = useStream();
-
   useEffect(() => {
     if (liveAction && currentUserRequestId) {
       updateAgentMessage(currentUserRequestId, liveAction);
@@ -80,6 +85,14 @@ export default function ChatProvider({
   }
 
   function maximizeChatWindow() {}
+
+  function openChatOverlay(children) {
+    setOverlayChildren(children);
+  }
+
+  function closeChatOverlay() {
+    setOverlayChildren(null);
+  }
 
   async function userRequest(
     message: string,
@@ -146,8 +159,11 @@ export default function ChatProvider({
         minimizing,
         expanding,
         conversation,
-        sendMessage
-    }}
+        sendMessage,
+        openChatOverlay,
+        closeChatOverlay,
+        overlayChildren
+      }}
     >
       {children}
     </ChatContext.Provider>

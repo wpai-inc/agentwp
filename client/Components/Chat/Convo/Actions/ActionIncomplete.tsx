@@ -1,5 +1,5 @@
 import { useStream } from '@/Providers/StreamProvider';
-import ActionContainer from '../ActionContainer';
+import ActionContainer from './ActionContainer';
 import { RefreshCw } from 'lucide-react';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
 
