@@ -18,7 +18,7 @@ class Main
 
     const PLUGIN_VERSION = '0.1.0';
 
-    const BUILD_DIR = 'build';
+    const BUILD_DIR = 'client/build';
 
     public $companyName = 'Agent WP';
 
