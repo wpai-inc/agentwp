@@ -1,5 +1,4 @@
 import { mergeConfig } from 'vite';
-import baseConfig from '../vite.storybook.config.ts';
 import { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
@@ -28,8 +27,11 @@ const config: StorybookConfig = {
     skipCompiler: true,
   },
   viteFinal: async (config) => {
-    // Merge base Vite config with Storybook-specific config
-    return mergeConfig(config, baseConfig);
+    if(config.plugins) {
+      config.plugins = config.plugins.filter((plugin) => plugin.name !== 'v4wp');
+    }
+
+    return config;
   },
 };
 
