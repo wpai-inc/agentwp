@@ -34,8 +34,7 @@ if (rootElement) {
                       <StreamProvider>
                         <ActionListenerProvider>
                           <ChatProvider>
-                            <ConvoContainer />
-                            <ChatTrigger />
+                            <Chat />
                             <Notifications />
                           </ChatProvider>
                         </ActionListenerProvider>

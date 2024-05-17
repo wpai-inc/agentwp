@@ -88,7 +88,7 @@ class Settings
         }
         if (extension_loaded('openssl') && defined('AUTH_KEY') && !empty(AUTH_KEY)) {
             $iv = substr(AUTH_KEY, 0, 16);
-            return openssl_decrypt($this->data['token']['access_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv) . 'ooo';
+            return openssl_decrypt($this->data['token']['access_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv);
         }
         return $this->data['token']['access_token'];
     }
