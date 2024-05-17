@@ -24,6 +24,9 @@ const ChatContext = createContext({
   expanding: false,
   conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
+  openChatOverlay: (children) => {},
+  closeChatOverlay: () => {},
+  overlayChildren: null,
 });
 
 export function useChat() {
@@ -50,6 +53,7 @@ export default function ChatProvider({
   const [open, setOpen] = useState(settings.chatOpen ?? defaultOpen);
   const [minimizing, setMinimizing] = useState(false);
   const [expanding, setExpanding] = useState(false);
+  const [overlayChildren, setOverlayChildren] = useState(null);
   const { conversation, setConversation, currentUserRequestId } =
     useUserRequests();
   const { startStream, liveAction, error } = useStream();
@@ -81,6 +85,14 @@ export default function ChatProvider({
   }
 
   function maximizeChatWindow() {}
+
+  function openChatOverlay(children) {
+    setOverlayChildren(children);
+  }
+
+  function closeChatOverlay() {
+    setOverlayChildren(null);
+  }
 
   async function userRequest(
     message: string,
@@ -148,6 +160,9 @@ export default function ChatProvider({
         expanding,
         conversation,
         sendMessage,
+        openChatOverlay,
+        closeChatOverlay,
+        overlayChildren
       }}
     >
       {children}

@@ -8,45 +8,54 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import Logo from '@/Components/Logo';
+import { useChat } from '@/Providers/ChatProvider';
 
 export default function ChatTopBar() {
   const { setSettings } = useClientSettings();
+  const { openChatOverlay } = useChat();
   const topBarRef = useRef(null);
 
   function onUpgradeClick(e: React.FormEvent) {
     e.preventDefault();
+    openChatOverlay('Upgrading')
   }
 
   function onAddClick(e: React.FormEvent) {
     e.preventDefault();
+    openChatOverlay('Adding')
   }
 
   function onHistoryClick(e: React.FormEvent) {
     e.preventDefault();
+    openChatOverlay('History')
   }
 
   function onSettingsClick(e: React.FormEvent) {
     e.preventDefault();
+    openChatOverlay('Settings')
   }
 
   function onProfileClick(e: React.FormEvent) {
     e.preventDefault();
+    openChatOverlay('Profile')
   }
 
   function startDrag(e) {
+    e.preventDefault();
+    const bodyElement = document.getElementsByTagName('body')[0];
     const containerElement = document.getElementById('wpbody');
     const containerCoords = containerElement.getBoundingClientRect();
     let startPosX = e.clientX - e.target.getBoundingClientRect().left;
     let startPosY = e.clientY - e.target.getBoundingClientRect().top;
+    const chatWindow = e.target.parentNode;
 
     const disableDrag = (e) => {
       setSettings({
-        x: e.target.parentNode.style.left,
-        y: e.target.parentNode.style.top,
+        x: chatWindow.style.left,
+        y: chatWindow.style.top,
       });
-      e.target.removeEventListener('mousemove', handleDrag);
-      e.target.onmouseup = null;
-      e.target.mouseleave = null;
+      bodyElement.removeEventListener('mousemove', handleDrag);
+      bodyElement.onmouseup = null;
     };
 
     const drag = (target, x, y) => {
@@ -74,14 +83,13 @@ export default function ChatTopBar() {
     };
 
     const handleDrag = (e) => {
-      drag(e.target.parentNode, e.pageX, e.pageY);
+      drag(chatWindow, e.pageX, e.pageY);
     };
 
-    drag(e.target.parentNode, e.pageX, e.pageY);
+    drag(chatWindow, e.pageX, e.pageY);
 
-    e.target.addEventListener('mousemove', handleDrag);
-    e.target.addEventListener('mouseup', disableDrag);
-    e.target.addEventListener('mouseleave', disableDrag);
+    bodyElement.addEventListener('mousemove', handleDrag);
+    bodyElement.addEventListener('mouseup', disableDrag);
   }
 
   useEffect(() => {
