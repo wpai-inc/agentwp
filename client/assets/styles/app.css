@@ -33,7 +33,7 @@ svg {
 
 .animate-open-chat-overlay {
     animation-name: open-chat-overlay;
-    animation-duration: 0.8s;
+    animation-duration: 0.5s;
     animation-fill-mode: forwards;
     bottom: 5px;
     left: 50%;
@@ -42,7 +42,7 @@ svg {
 
 .animate-close-chat-overlay {
     animation-name: close-chat-overlay;
-    animation-duration: 0.8s;
+    animation-duration: 0.5s;
     animation-fill-mode: forwards;
     bottom: 5px;
     left: 50%;

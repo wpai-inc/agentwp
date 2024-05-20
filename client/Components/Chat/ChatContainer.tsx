@@ -54,14 +54,16 @@ export default function ChatContainer() {
     >
       <div className="minimize-overlay"></div>
       <ChatTopBar />
-      <Dialog conversation={conversation} />
-      <MessageBox />
-      <WindowActions />
-      {overlayChildren && (
-        <ChatOverlay>
-          {overlayChildren}
-        </ChatOverlay>
-      )}
+      <div className="h-full flex flex-col relative">
+        <Dialog conversation={conversation} />
+        <MessageBox />
+        <WindowActions />
+        {overlayChildren && (
+          <ChatOverlay>
+            {overlayChildren}
+          </ChatOverlay>
+        )}
+      </div>
     </div>
   );
 }
