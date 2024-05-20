@@ -19,6 +19,7 @@ class RevokeApiToken
             $awp_client->request('POST', $this->main->apiHost() . '/api/site/disconnect');
         } catch (\Exception $e) {
             // Do nothing
+            error_log($e->getMessage());
         }
     }
 }

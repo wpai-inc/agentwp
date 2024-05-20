@@ -10,6 +10,7 @@ use WpAi\AgentWp\Controllers\Logout;
 use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
 use WpAi\AgentWp\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Controllers\QueryActionController;
+use WpAi\AgentWp\Controllers\RefreshToken;
 use WpAi\AgentWp\Controllers\SaveConnection;
 use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
@@ -31,6 +32,7 @@ class Router implements Registrable
         'logout'                      => [Logout::class, 'logout'],
         'disconnect_site'             => [DisconnectSite::class, 'disconnect_site'],
         'manual_activation'           => [ManuallyActivateAgent::class, 'activate'],
+        'refresh_token'               => [RefreshToken::class, 'refresh'],
     ];
 
     public function __construct(private Main $main)

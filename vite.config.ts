@@ -13,7 +13,7 @@ export default defineConfig({
         settings: '/Page/Admin/Settings/Index.tsx',
         chat: '/Page/Admin/Chat/Index.tsx',
       },
-      outDir: 'build',
+      outDir: '../build',
     }),
     react(),
     svgr(),

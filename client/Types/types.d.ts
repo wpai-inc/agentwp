@@ -38,16 +38,3 @@ export type agentwpUser = {
   role: string;
 };
 
-export type Notification = {
-  id: string;
-  content: string;
-  className: string;
-};
-
-export type Notifications = Notification[] | null;
-
-export type NotificationContext = {
-  notifications: Notifications;
-  addNotification: (notification: string, type?: string) => void;
-  removeNotification: (id: string) => void;
-};

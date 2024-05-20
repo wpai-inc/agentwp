@@ -116,6 +116,7 @@ class Main
             'agentwp_users_manager' => $this->auth->canManageUsers(),
             'agentwp_access' => $this->auth->hasAccess(),
             'access_token' => $this->auth->getAccessToken(),
+            'refresh_token' => $this->auth->getRefreshToken(),
             'site_id' => $this->siteId(),
             'client_id' => $this->clientId,
             'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
