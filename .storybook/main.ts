@@ -1,4 +1,5 @@
-import type { StorybookConfig } from '@storybook/react-vite';
+import { mergeConfig } from 'vite';
+import { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: [
@@ -21,10 +22,17 @@ const config: StorybookConfig = {
   },
   typescript: {
     check: false,
-    checkOptions: {},
     reactDocgen: 'react-docgen',
-    reactDocgenTypescriptOptions: {}, // Available only when reactDocgen is set to 'react-docgen-typescript'
+    reactDocgenTypescriptOptions: {},
     skipCompiler: true,
   },
+  viteFinal: async (config) => {
+    if(config.plugins) {
+      config.plugins = config.plugins.filter((plugin) => plugin.name !== 'v4wp');
+    }
+
+    return config;
+  },
 };
+
 export default config;

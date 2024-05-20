@@ -17,27 +17,27 @@ export default function ChatTopBar() {
 
   function onUpgradeClick(e: React.FormEvent) {
     e.preventDefault();
-    openChatOverlay('Upgrading')
+    openChatOverlay('Upgrading');
   }
 
   function onAddClick(e: React.FormEvent) {
     e.preventDefault();
-    openChatOverlay('Adding')
+    openChatOverlay('Adding');
   }
 
   function onHistoryClick(e: React.FormEvent) {
     e.preventDefault();
-    openChatOverlay('History')
+    openChatOverlay('History');
   }
 
   function onSettingsClick(e: React.FormEvent) {
     e.preventDefault();
-    openChatOverlay('Settings')
+    openChatOverlay('Settings');
   }
 
   function onProfileClick(e: React.FormEvent) {
     e.preventDefault();
-    openChatOverlay('Profile')
+    openChatOverlay('Profile');
   }
 
   function startDrag(e) {
@@ -111,11 +111,7 @@ export default function ChatTopBar() {
     >
       <div className="flex items-center gap-2">
         <Logo className="w-6 h-6" />
-        <Badge
-          className={cn('bg-brand-primary hover:bg-brand-primary font-bold')}
-        >
-          Free
-        </Badge>
+        <Badge>Free</Badge>
         <Button
           onClick={onUpgradeClick}
           size="sm"
