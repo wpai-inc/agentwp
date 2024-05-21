@@ -22,3 +22,9 @@ export const removeStorage = (key: string) => {
     window.localStorage.removeItem(key);
   }
 };
+
+export const resetChatWindowPosition = (chatWindowElement) => {
+  if (chatWindowElement) {
+    chatWindowElement.style.transform = 'translate(0px, 0px)'
+  }
+}

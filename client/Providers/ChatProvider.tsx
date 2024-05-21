@@ -19,9 +19,13 @@ const ChatContext = createContext({
   open: false,
   setOpen: (_open: boolean) => {},
   toggle: () => {},
-  maximizeChatWindow: () => {},
+  maximizeChatWindow: (element) => {},
+  reduceWindow: () => {},
+  isMaximized: false,
   minimizing: false,
   expanding: false,
+  maximizing: false,
+  reducing: false,
   conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
   openChatOverlay: (children) => {},
@@ -53,6 +57,9 @@ export default function ChatProvider({
   const [open, setOpen] = useState(settings.chatOpen ?? defaultOpen);
   const [minimizing, setMinimizing] = useState(false);
   const [expanding, setExpanding] = useState(false);
+  const [maximizing, setMaximizing] = useState(false);
+  const [reducing, setReducing] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(settings.chatMaximized ?? false);
   const [overlayChildren, setOverlayChildren] = useState(null);
   const { conversation, setConversation, currentUserRequestId } =
     useUserRequests();
@@ -80,11 +87,38 @@ export default function ChatProvider({
       setOpen(newVal);
       setExpanding(false);
       setMinimizing(false);
-      setSettings({ chatOpen: newVal });
-    }, 1600);
+      setIsMaximized(false);
+      setSettings({
+        chatOpen: newVal,
+        chatMaximized: false,
+        x: 0,
+        y: 0,
+      });
+    }, 1400);
   }
 
-  function maximizeChatWindow() {}
+  function maximizeChatWindow(chatWindowElement) {
+    setMaximizing(true);
+    setTimeout(() => {
+      setMaximizing(false);
+      setIsMaximized(true);
+      chatWindowElement.style.transform = 'translate(0px, 0px)';
+      setSettings({
+        chatMaximized: true,
+        x: 0,
+        y: 0,
+      });
+    }, 1000);
+  }
+
+  function reduceWindow() {
+    setReducing(true);
+    setTimeout(() => {
+      setReducing(false);
+      setIsMaximized(false);
+      setSettings({ chatMaximized: false });
+    }, 1000);
+  }
 
   function openChatOverlay(children) {
     setOverlayChildren(children);
@@ -156,6 +190,10 @@ export default function ChatProvider({
         setOpen,
         toggle,
         maximizeChatWindow,
+        reduceWindow,
+        isMaximized,
+        maximizing,
+        reducing,
         minimizing,
         expanding,
         conversation,

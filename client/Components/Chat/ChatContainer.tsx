@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, resetChatWindowPosition } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
 import MessageBox from './MessageBox/MessageBox';
@@ -10,22 +10,27 @@ import ChatOverlay from '@/Components/Chat/ChatOverlay';
 
 export default function ChatContainer() {
   const windowRef = useRef<HTMLDivElement>(null);
-  const { open, minimizing, expanding } = useChat();
+  const {
+    open,
+    minimizing,
+    expanding,
+    maximizing,
+    reducing,
+    isMaximized,
+  } = useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, overlayChildren } = useChat();
 
   useEffect(() => {
     const windowElement = windowRef.current;
     if (windowElement) {
-      windowElement.style.left = settings.x + 'px';
-      windowElement.style.top = settings.y + 'px';
+      windowElement.style.transform = `translate(${settings.x}px, ${settings.y}px)`;
 
       const resetChatWindow = () => {
-        windowElement.style.top = '';
-        windowElement.style.left = '';
+        windowElement.style.transform = `translate(0px, 0px)`;
         setSettings({
-          x: null,
-          y: null,
+          x: 0,
+          y: 0,
         });
       };
 
@@ -42,13 +47,16 @@ export default function ChatContainer() {
       ref={windowRef}
       id="awp-chat"
       className={cn(
-        'transition fixed bottom-4 right-10',
+        'fixed bottom-4 right-10',
         'h-[85vh] w-[500px] z-20 bg-brand-gray',
         'shadow-xl flex flex-col border border-gray-200 rounded-xl opacity-100',
         {
           'w-0 h-0 overflow-hidden border-0': !open,
           minimize: minimizing,
           expand: expanding,
+          maximize: maximizing,
+          reduce: reducing,
+          maximized: isMaximized,
         },
       )}
     >
