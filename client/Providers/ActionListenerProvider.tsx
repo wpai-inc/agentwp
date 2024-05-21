@@ -23,7 +23,7 @@ const ActionListenerProvider: React.FC<{ children: React.ReactNode }> = ({
         switch (currentAction.action.ability) {
           case 'query':
             adminRequest
-              .get('run_action_query', {
+              .get('/run_action_query', {
                 params: {
                   sql: currentAction.action.sql,
                   params: currentAction.action.params,

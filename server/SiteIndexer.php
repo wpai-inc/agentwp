@@ -13,7 +13,7 @@ class SiteIndexer implements Registrable
 
     public function register()
     {
-        add_action('init', [$this, 'indexSite']);
+        add_action('admin_init', [$this, 'indexSite']);
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
     }
@@ -22,14 +22,31 @@ class SiteIndexer implements Registrable
      * Temporary for demo, terrible performance.
      * Needs to run intermittently and check for hash changes before sending
      * Explore: transients or cron jobs
+     * 2024-05-20: Hash check implemented; It will only be sent on admin init if is not an AJAX request
+     * TODO: probably use a cron job to send the data (BUT the cron job can be disabled)
      */
     public function indexSite()
     {
         if ($siteId = $this->main->siteId()) {
+
+            if (defined('DOING_AJAX') && DOING_AJAX) {
+                return;
+            }
+
             $debug_data = SiteData::getDebugData();
             $awpClient = AwpClientFactory::create($this->main);
 
-            $response = $awpClient->indexSite($siteId, json_encode($debug_data));
+            $data = json_encode($debug_data);
+            $data_hash = md5($data);
+
+            $last_hash = get_option('agentwp_last_hash');
+            if ($last_hash === $data_hash) {
+                return;
+            }
+
+            update_option('agentwp_last_hash', $data_hash, true);
+
+            $awpClient->indexSite($siteId, json_encode($data));
         }
     }
 
@@ -46,7 +63,7 @@ class SiteIndexer implements Registrable
                 if ($plugin_slug === '.') {
                     $plugin_slug = basename($plugin, '.php');
                 }
-                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR.'/'.$plugin);
+                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
             }
 
             foreach ($info['wp-plugins-active']['fields'] as $plugin_name => $plugin_info) {
@@ -69,13 +86,12 @@ class SiteIndexer implements Registrable
         $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
         $tables = array_map('current', $tables);
         foreach ($tables as $table) {
-            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
+            $rows = $wpdb->get_results('DESCRIBE ' . $table, ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
             $info['db-schema']['fields'][$table] = array_map(function ($row) {
                 return implode(',', $row);
             }, $rows);
-
         }
 
         return $info;

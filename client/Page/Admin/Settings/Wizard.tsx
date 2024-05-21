@@ -6,10 +6,10 @@ import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 
 export default function Wizard() {
-  const pageData = usePage();
+  const { page } = usePage();
   const adminRequest = useAdminRoute();
 
-  const [steps, setSteps] = useState([
+  const [ steps, setSteps ] = useState( [
     {
       text: 'Install Plugin',
       checked: true,
@@ -25,30 +25,30 @@ export default function Wizard() {
       checked: false,
       active: false,
     },
-  ]);
+  ] );
 
   function isConnected() {
-    return !!pageData.access_token;
+    return !! page.access_token;
   }
 
   function goToAboutPage() {
-    adminRequest.post(`/agentwp/v1/onboarding_completed`).then(() => {
+    adminRequest.post( `/agentwp/v1/onboarding_completed` ).then( () => {
       document.location.reload();
-    });
+    } );
   }
 
-  useEffect(() => {
-    if (isConnected()) {
+  useEffect( () => {
+    if ( isConnected() ) {
       setSteps(
-        steps.map((step, index) => {
-          if (index === 1) {
+        steps.map( ( step, index ) => {
+          if ( index === 1 ) {
             return {
               ...step,
               checked: true,
               active: false,
             };
           }
-          if (index === 2) {
+          if ( index === 2 ) {
             return {
               ...step,
               checked: false,
@@ -56,27 +56,25 @@ export default function Wizard() {
             };
           }
           return step;
-        }),
+        } ),
       );
     }
-  }, []);
+  }, [] );
 
   return (
     <div>
       <div className="flex justify-center items-center gap-4 mt-8">
-        {steps.map((step, index) => (
+        { steps.map( ( step, index ) => (
           <CheckedText
-            key={index}
-            active={step.active}
-            checked={step.checked}
-            text={step.text}
+            key={ index }
+            active={ step.active }
+            checked={ step.checked }
+            text={ step.text }
           />
-        ))}
+        ) ) }
       </div>
-      {steps[1].active && <ConnectAiService />}
-      {steps[2].active && (
-        <UserAccess onGoToAboutPage={() => goToAboutPage()} />
-      )}
+      { steps[ 1 ].active && <ConnectAiService /> }
+      { steps[ 2 ].active && <UserAccess onGoToAboutPage={ () => goToAboutPage() } /> }
     </div>
   );
 }

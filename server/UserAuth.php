@@ -15,7 +15,7 @@ class UserAuth
 
     public function __construct(private WP_User|null $user = null)
     {
-        if ( ! $user) {
+        if (!$user) {
             $this->user = wp_get_current_user();
         }
         $this->settings = new Settings();
@@ -38,7 +38,7 @@ class UserAuth
         $verification_key = sanitize_text_field($_REQUEST['verification_key']);
         $local_verification_key = $this->settings->verification_key;
 
-        return ! empty($local_verification_key) && $verification_key === $local_verification_key;
+        return !empty($local_verification_key) && $verification_key === $local_verification_key;
     }
 
     public function isAdmin(): bool
@@ -76,11 +76,19 @@ class UserAuth
 
     public function getAccessToken(): ?string
     {
-        if ( ! $this->hasAccess()) {
+        if (!$this->hasAccess()) {
             return null;
         }
 
         return $this->settings->getAccessToken();
+    }
+    public function getRefreshToken(): ?string
+    {
+        if (!$this->hasAccess()) {
+            return null;
+        }
+
+        return $this->settings->getRefreshToken();
     }
 
     private function isRole(string $role): bool

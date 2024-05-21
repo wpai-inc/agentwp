@@ -2,10 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
 import { useStream } from '@/Providers/StreamProvider';
-import type {
-  UserRequestType,
-  AgentAction,
-} from '@/Providers/UserRequestsProvider';
+import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { usePage } from '@/Providers/PageProvider';
 import { useClient } from '@/Providers/ClientProvider';
@@ -15,9 +12,9 @@ type CreateUserRequestResponse = {
   stream_url: string;
 };
 
-const ChatContext = createContext({
+const ChatContext = createContext( {
   open: false,
-  setOpen: (_open: boolean) => {},
+  setOpen: ( _open: boolean ) => {},
   toggle: () => {},
   maximizeChatWindow: (element) => {},
   reduceWindow: () => {},
@@ -27,30 +24,30 @@ const ChatContext = createContext({
   maximizing: false,
   reducing: false,
   conversation: [] as UserRequestType[],
-  sendMessage: (_message: string) => {},
-  openChatOverlay: (children) => {},
+  sendMessage: ( _message: string ) => {},
+  openChatOverlay: children => {},
   closeChatOverlay: () => {},
   overlayChildren: null,
-});
+} );
 
 export function useChat() {
-  const chat = useContext(ChatContext);
-  if (!chat) {
-    throw new Error('useChat must be used within a ChatProvider');
+  const chat = useContext( ChatContext );
+  if ( ! chat ) {
+    throw new Error( 'useChat must be used within a ChatProvider' );
   }
   return chat;
 }
 
-export default function ChatProvider({
+export default function ChatProvider( {
   defaultOpen = false,
   children,
 }: {
   defaultOpen?: boolean;
   children: React.ReactNode;
-}) {
-  const page = usePage();
+} ) {
+  const { page } = usePage();
   const siteId = page.site_id;
-  const wp_user_id = parseInt(page.user.ID);
+  const wp_user_id = parseInt( page.user?.ID );
   const client = useClient();
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
@@ -64,25 +61,26 @@ export default function ChatProvider({
   const { conversation, setConversation, currentUserRequestId } =
     useUserRequests();
   const { startStream, liveAction, error } = useStream();
-  useEffect(() => {
-    if (liveAction && currentUserRequestId) {
-      updateAgentMessage(currentUserRequestId, liveAction);
+  useEffect( () => {
+    if ( liveAction && currentUserRequestId ) {
+      updateAgentMessage( currentUserRequestId, liveAction );
     }
-  }, [liveAction, currentUserRequestId]);
+  }, [ liveAction, currentUserRequestId ] );
 
-  useEffect(() => {
-    if (error) {
-      console.error('Stream error:', error);
+  useEffect( () => {
+    if ( error ) {
+      console.error( 'Stream error:', error );
     }
-  }, [error]);
+  }, [ error ] );
 
   function toggle() {
-    const newVal = !open;
-    if (newVal) {
-      setExpanding(true);
+    const newVal = ! open;
+    if ( newVal ) {
+      setExpanding( true );
     } else {
-      setMinimizing(true);
+      setMinimizing( true );
     }
+
     setTimeout(() => {
       setOpen(newVal);
       setExpanding(false);
@@ -120,22 +118,20 @@ export default function ChatProvider({
     }, 1000);
   }
 
-  function openChatOverlay(children) {
-    setOverlayChildren(children);
+  function openChatOverlay( children ) {
+    setOverlayChildren( children );
   }
 
   function closeChatOverlay() {
-    setOverlayChildren(null);
+    setOverlayChildren( null );
   }
 
-  async function userRequest(
-    message: string,
-  ): Promise<CreateUserRequestResponse> {
-    const response = await client.storeConversation(siteId, {
+  async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
+    const response = await client.storeConversation( siteId, {
       message,
       wp_user_id,
       screen,
-    });
+    } );
 
     return response.data;
   }
@@ -145,47 +141,45 @@ export default function ChatProvider({
    * @param msg
    * @returns void
    */
-  function updateAgentMessage(urId: string, updatedAa: AgentAction) {
-    setConversation((prev: UserRequestType[]) => {
-      return prev.map(function (msg) {
-        if (msg.id === urId) {
+  function updateAgentMessage( urId: string, updatedAa: AgentAction ) {
+    setConversation( ( prev: UserRequestType[] ) => {
+      return prev.map( function ( msg ) {
+        if ( msg.id === urId ) {
           return {
             ...msg,
             agent_actions: msg.agent_actions
-              ? msg.agent_actions.some((aa) => aa.id === updatedAa.id)
-                ? msg.agent_actions.map((aa) =>
-                    aa.id === updatedAa.id ? updatedAa : aa,
-                  )
-                : [...msg.agent_actions, updatedAa]
-              : [updatedAa],
+              ? msg.agent_actions.some( aa => aa.id === updatedAa.id )
+                ? msg.agent_actions.map( aa => ( aa.id === updatedAa.id ? updatedAa : aa ) )
+                : [ ...msg.agent_actions, updatedAa ]
+              : [ updatedAa ],
           };
         }
         return msg;
-      });
-    });
+      } );
+    } );
   }
 
-  function addUserRequest(msg: UserRequestType) {
-    setConversation([...conversation, msg]);
+  function addUserRequest( msg: UserRequestType ) {
+    setConversation( [ ...conversation, msg ] );
   }
 
-  async function sendMessage(message: string) {
-    const { stream_url, user_request_id } = await userRequest(message);
-    addUserRequest({
+  async function sendMessage( message: string ) {
+    const { stream_url, user_request_id } = await userRequest( message );
+    addUserRequest( {
       id: user_request_id,
       message: message,
-    } as UserRequestType);
+    } as UserRequestType );
 
     try {
-      startStream(stream_url, user_request_id);
-    } catch (e) {
-      console.error(e);
+      startStream( stream_url, user_request_id );
+    } catch ( e ) {
+      console.error( e );
     }
   }
 
   return (
     <ChatContext.Provider
-      value={{
+      value={ {
         open,
         setOpen,
         toggle,
@@ -200,10 +194,9 @@ export default function ChatProvider({
         sendMessage,
         openChatOverlay,
         closeChatOverlay,
-        overlayChildren
-      }}
-    >
-      {children}
+        overlayChildren,
+      } }>
+      { children }
     </ChatContext.Provider>
   );
 }

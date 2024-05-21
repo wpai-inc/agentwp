@@ -32,13 +32,13 @@ export default function UserRequest({
           <PopoverContent>
             <dl className="grid grid-cols-2 gap-4">
               <dt className="text-right font-bold">Message ID</dt>
-              <dd>{userRequest.id}</dd>
+              <dd>{ userRequest.id }</dd>
             </dl>
           </PopoverContent>
         </Popover>
       </MessageHeader>
       <div className="my-4 pr-4">
-        <MD content={userRequest.message} />
+        <MD content={ userRequest.message } />
       </div>
     </div>
   );
