@@ -42,8 +42,7 @@ export default function ChatTopBar() {
 
   function startDrag(e) {
     e.preventDefault();
-
-    const chatWindow = e.target.parentNode;
+    const chatWindow = document.getElementById('awp-chat');
     if (chatWindow.classList.contains('maximized')) {
       return;
     }
@@ -52,7 +51,7 @@ export default function ChatTopBar() {
     const containerCoords = containerElement.getBoundingClientRect();
     const initialMousePositionX = e.clientX;
     const initialMousePositionY = e.clientY;
-    const computedStyle = window.getComputedStyle(e.target.parentNode);
+    const computedStyle = window.getComputedStyle(chatWindow);
     const matrix = new DOMMatrixReadOnly(computedStyle.transform);
 
     const initialPositionX = matrix.m41;
