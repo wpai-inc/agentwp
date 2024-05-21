@@ -13,7 +13,6 @@ import type { PageData } from '@/Types/types';
 import { ClientProvider } from '@/Providers/ClientProvider';
 import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
-import { Notifications } from '@/Components/Notifications';
 
 const rootElement = document.getElementById( 'agent-wp-admin-chat' );
 

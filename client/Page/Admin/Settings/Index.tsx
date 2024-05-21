@@ -7,7 +7,6 @@ import Wizard from './Wizard';
 import type { PageData } from '@/Types/types';
 import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
-import { Notifications } from '@/Components/Notifications';
 import { ClientProvider } from '@/Providers/ClientProvider';
 
 const rootElement = document.getElementById( 'agent-wp-admin-settings' );
