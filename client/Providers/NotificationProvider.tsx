@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { nextId } from '@/lib/utils';
+import { Notifications } from '@/Components/Notifications';
 
 type Notification = {
   id: string;
@@ -52,6 +53,7 @@ export const NotificationsProvider = ( { children }: { children: ReactNode } ) =
         removeNotification,
       } }>
       { children }
+      <Notifications />
     </NotificationsContext.Provider>
   );
 };

@@ -25,7 +25,6 @@ if ( rootElement ) {
             <AdminRouteProvider>
               <ClientProvider>
                 { agentwp_settings?.onboarding_completed ? <Settings /> : <Wizard /> }
-                <Notifications />
               </ClientProvider>
             </AdminRouteProvider>
           </App>
