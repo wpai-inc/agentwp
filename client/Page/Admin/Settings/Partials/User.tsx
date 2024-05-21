@@ -1,13 +1,13 @@
 import { Tag } from '@/Components/Tag';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
-import type { agentwpUser } from '@/Types/types';
+import type { AgentWpUser } from '@/Types/types';
 import { useState } from 'react';
 
-export function User({ user }: { user: agentwpUser }) {
+export function User({ user }: { user: AgentWpUser }) {
   const adminRequest = useAdminRoute();
 
-  const [theUser, setTheUser] = useState<agentwpUser>(user);
-  // function setManageAgentwpUsers() {
+  const [theUser, setTheUser] = useState<AgentWpUser>(user);
+  // function setManageAgentWpUsers() {
   //     setTheUser({ ...theUser, manage_agentwp_users: !theUser.manage_agentwp_users });
   //     adminRequest.post("/agentwp/v1/update_user", { user: theUser.id, manage_agentwp_users: !theUser.manage_agentwp_users });
   // }

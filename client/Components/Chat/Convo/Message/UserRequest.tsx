@@ -8,13 +8,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/Components/ui/popover';
+import { WpUser } from '@/Types/types';
 
-export default function UserRequest(userRequest: UserRequestType) {
+export default function UserRequest({
+  userRequest,
+  user,
+}: {
+  userRequest: UserRequestType;
+  user: WpUser;
+}) {
   return (
     <div className="text-black/60">
       <MessageHeader>
         <Avatar
-          name={userRequest.user.name}
+          name={user.display_name}
+          image={user.avatar_url}
           time={userRequest.human_created_at}
         />
         <Popover>

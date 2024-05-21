@@ -7,7 +7,7 @@ import Avatar from '../../Avatar/Avatar';
 import Feedback from '@/Components/Chat/Feedback';
 import ActionComponent from '../Actions/ActionComponent';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
-import Logo from '@/Components/Logo';
+import { logoUrl } from '@/Components/Logo';
 import {
   Popover,
   PopoverContent,
@@ -53,7 +53,7 @@ export default function AgentResponse({
       ) : null}
 
       <MessageHeader>
-        <Avatar name="AgentWP" time={time} image={<Logo />} />
+        <Avatar name="AgentWP" time={time} image={logoUrl} />
         <div className="flex items-center gap-4">
           <Feedback />
           <Popover>

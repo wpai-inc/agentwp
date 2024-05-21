@@ -10,15 +10,7 @@ export type PageData = {
   api_host: string;
   rest_route: string;
   rest_endpoint: string;
-  user: {
-    ID: string;
-    display_name: string;
-    user_email: string;
-    user_login: string;
-    user_nicename: string;
-    avatar_url: string;
-    roles: string[];
-  };
+  user: WpUser;
   is_admin: boolean;
   agentwp_manager: boolean;
   agentwp_users_manager: boolean;
@@ -27,7 +19,17 @@ export type PageData = {
   onboarding_completed: boolean;
 };
 
-export type agentwpUser = {
+export type WpUser = {
+  ID: string;
+  display_name: string;
+  user_email: string;
+  user_login: string;
+  user_nicename: string;
+  avatar_url: string;
+  roles: string[];
+};
+
+export type AgentWpUser = {
   id: number;
   name: string;
   email: string;

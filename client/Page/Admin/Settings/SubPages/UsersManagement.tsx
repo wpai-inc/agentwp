@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { agentwpUser } from '@/Types/types';
+import type { AgentWpUser } from '@/Types/types';
 import { User } from '@/Page/Admin/Settings/Partials/User';
 import SearchUser from '@/Page/Admin/Settings/Partials/SearchUser';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
@@ -7,7 +7,7 @@ import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 export default function UsersManagement() {
   const adminRequest = useAdminRoute();
 
-  const [users, setUsers] = useState<agentwpUser[]>([]);
+  const [users, setUsers] = useState<AgentWpUser[]>([]);
   const [searching, setSearching] = useState(false);
 
   function getUsers() {

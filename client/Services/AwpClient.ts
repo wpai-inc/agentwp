@@ -31,8 +31,14 @@ export default class AwpClient {
     return `${this.baseUrl}/api/request/${userRequestId}/stream`;
   }
 
-  async getConversation(siteId: string): Promise<AxiosResponse> {
-    return this.request('GET', `${this.baseUrl}/api/sites/${siteId}`);
+  async getConversation(
+    siteId: string,
+    wpUserId: string,
+  ): Promise<AxiosResponse> {
+    return this.request(
+      'GET',
+      `${this.baseUrl}/api/sites/${siteId}/wpuser/${wpUserId}`,
+    );
   }
 
   async storeAgentResult(

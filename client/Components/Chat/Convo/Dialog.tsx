@@ -7,7 +7,7 @@ export default function Dialog({
   conversation: UserRequestType[];
 }) {
   return (
-    <div className="flex-1 overflow-y-auto p-4">
+    <div className="flex-1 flex flex-col-reverse overflow-y-auto p-4">
       {conversation.map((msg) => (
         <Message key={msg.id} {...msg} />
       ))}

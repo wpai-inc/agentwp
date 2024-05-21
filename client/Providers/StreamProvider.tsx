@@ -37,7 +37,7 @@ export default function StreamProvider({
     resetStream();
     try {
       await fetchEventSource(stream_url, {
-        // credentials: 'include',
+        credentials: 'include',
         async onopen(response) {
           if (response.status > 300) {
             closeStream();
