@@ -55,8 +55,8 @@ export const ClientSettingsProvider: FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [settings, setSettings] = useState<ClientSettings>({
-    chatOpen: getLocalStorage('chatOpen'),
-    chatMaximized: getLocalStorage('chatMaximized'),
+    chatOpen: getLocalStorage('chatOpen', false),
+    chatMaximized: getLocalStorage('chatMaximized', false),
     x: getLocalStorage('x', 0),
     y: getLocalStorage('y', 0),
     width: getLocalStorage('width'),

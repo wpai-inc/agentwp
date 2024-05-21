@@ -12,9 +12,8 @@ import { useChat } from '@/Providers/ChatProvider';
 
 export default function ChatTopBar() {
   const { setSettings } = useClientSettings();
-  const { openChatOverlay, isMaximized, maximizing, minimizing, reducing } = useChat();
+  const { openChatOverlay } = useChat();
   const topBarRef = useRef(null);
-  const shouldDisableDragRef = useRef(isMaximized || maximizing || minimizing ||reducing);
 
   function onUpgradeClick(e: React.FormEvent) {
     e.preventDefault();
@@ -44,6 +43,13 @@ export default function ChatTopBar() {
   function startDrag(e) {
     e.preventDefault();
 
+    const chatWindow = e.target.parentNode;
+    if (chatWindow.classList.contains('maximized')) {
+      return;
+    }
+    const bodyElement = document.getElementsByTagName('body')[0];
+    const containerElement = document.getElementById('wpbody');
+    const containerCoords = containerElement.getBoundingClientRect();
     const initialMousePositionX = e.clientX;
     const initialMousePositionY = e.clientY;
     const computedStyle = window.getComputedStyle(e.target.parentNode);
@@ -54,12 +60,8 @@ export default function ChatTopBar() {
     let lastPositionX = matrix.m41;
     let lastPositionY = matrix.m42;
 
-    const bodyElement = document.getElementsByTagName('body')[0];
-    const containerElement = document.getElementById('wpbody');
-    const containerCoords = containerElement.getBoundingClientRect();
     let startPosX = e.clientX - e.target.getBoundingClientRect().left;
     let startPosY = e.clientY - e.target.getBoundingClientRect().top;
-    const chatWindow = e.target.parentNode;
 
     const disableDrag = (e) => {
       setSettings({

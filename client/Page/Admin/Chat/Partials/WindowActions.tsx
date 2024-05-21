@@ -14,6 +14,11 @@ export default function WindowActions() {
     reduceWindow,
   } = useChat();
 
+  function onMaximizeClick() {
+    const element = document.getElementById('awp-chat');
+    maximizeChatWindow(element);
+  }
+
   return (
     <div className={cn(
       'absolute bg-brand-gray h-20 w-6 -left-6 top-16',
@@ -36,7 +41,7 @@ export default function WindowActions() {
         />
       ): (
         <MaximizeIcon
-          onClick={maximizeChatWindow}
+          onClick={onMaximizeClick}
           className={cn(
             'h-4 w-4 text-brand-gray-50 cursor-pointer hover:text-teal-500'
           )}

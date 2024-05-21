@@ -27,8 +27,7 @@ export default function ChatContainer() {
       windowElement.style.transform = `translate(${settings.x}px, ${settings.y}px)`;
 
       const resetChatWindow = () => {
-        windowElement.style.top = '';
-        windowElement.style.left = '';
+        windowElement.style.transform = `translate(0px, 0px)`;
         setSettings({
           x: 0,
           y: 0,

@@ -42,6 +42,7 @@ Classes for enabling animations for maximizing, expanding and minimizing
 }
 
 .maximized {
+    transform: translate(0px, 0px);
     width: calc(100vw - 240px);
     height: calc(100vh - 60px);
 }
@@ -134,6 +135,7 @@ Animations for maximizing, expanding and minimizing
         width: 500px;
     }
     to {
+        transform: translate(0px, 0px);
         width: calc(100vw - 240px);
     }
 }
@@ -200,6 +202,7 @@ Animations for maximizing, expanding and minimizing
 
 @media screen and (max-width: 960px) {
     .maximized {
+        transform: translate(0px, 0px);
         width: calc(100vw - 110px);
     }
 
@@ -225,6 +228,7 @@ Animations for maximizing, expanding and minimizing
 
 @media screen and (max-width: 782px) {
     .maximized {
+        transform: translate(0px, 0px);
         width: calc(100vw - 70px);
     }
 
