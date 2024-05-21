@@ -3,6 +3,7 @@
 export type PageData = {
   home_url: string;
   plugin_url: string;
+  admin_route: string;
   nonce: string;
   wp_rest_nonce: string;
   site_id: string;
@@ -37,4 +38,3 @@ export type agentwpUser = {
   image: string;
   role: string;
 };
-

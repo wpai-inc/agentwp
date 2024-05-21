@@ -5,68 +5,72 @@ import { useStream } from '@/Providers/StreamProvider';
 import { cn } from '@/lib/utils';
 import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
+import Commands from '../Commands/Commands';
 
 export default function MessageBox() {
   const { sendMessage, openChatOverlay } = useChat();
   const { streamClosed } = useStream();
-  const [message, setMessage] = useState('');
+  const [ message, setMessage ] = useState( '' );
+  const [ keyUpEvent, setKeyUpEvent ] = useState<
+    React.KeyboardEvent< HTMLTextAreaElement > | undefined
+  >();
 
   const send = useCallback(
-    (msg: string) => {
-      sendMessage(msg);
-      setMessage('');
+    ( msg: string ) => {
+      sendMessage( msg );
+      setMessage( '' );
     },
-    [sendMessage, message],
+    [ sendMessage, message ],
   );
 
-  function submit(e: React.FormEvent<HTMLFormElement>) {
+  function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
-    send(message);
+    send( message );
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-      send(message);
+  function handleKeyDown( e: React.KeyboardEvent< HTMLTextAreaElement > ) {
+    if ( e.key === 'Enter' && ( e.metaKey || e.ctrlKey ) ) {
+      send( message );
     }
   }
 
-  function onSettingsClick(e: React.FormEvent) {
+  function handleKeyUp( e: React.KeyboardEvent< HTMLTextAreaElement > ) {
+    setKeyUpEvent( e );
+  }
+
+  function onSettingsClick( e: React.FormEvent ) {
     e.preventDefault();
-    openChatOverlay('Settings');
+    openChatOverlay( 'Settings' );
   }
 
   return (
-    <form
-      className="p-2 m-2 bg-white"
-      onSubmit={submit}
-    >
-      <textarea
-        onChange={(e) => setMessage(e.target.value)}
-        value={message}
-        className="w-full h-24 p-2 resize-none text-base"
-        placeholder="Message..."
-        onKeyDown={handleKeyDown}
+    <form className="relative m-2 bg-white p-2" onSubmit={ submit }>
+      <Commands
+        onMessageBoxKeyDown={ keyUpEvent }
+        onSetMessage={ setMessage }
+        message={ message }
       />
-      <div className="flex justify-between items-center">
+      <textarea
+        onChange={ e => setMessage( e.target.value ) }
+        value={ message }
+        className="h-24 w-full resize-none p-2 text-base"
+        placeholder="Message..."
+        onKeyDown={ handleKeyDown }
+        onKeyUp={ handleKeyUp }
+      />
+      <div className="flex items-center justify-between">
         <Button
-          onClick={onSettingsClick}
+          onClick={ onSettingsClick }
           variant="ghost"
           size="icon"
-          className="text-brand-gray-50"
-        >
+          className="text-brand-gray-50">
           <TuneIcon />
         </Button>
         <Button
           type="submit"
-          className={cn(
-            'bg-brand-primary rounded px-2'
-          )}
-          disabled={!streamClosed}
-        >
-          {streamClosed ?
-            <UpArrowIcon /> :
-            'Pending...'
-          }
+          className={ cn( 'rounded bg-brand-primary px-2' ) }
+          disabled={ ! streamClosed }>
+          { streamClosed ? <UpArrowIcon /> : 'Pending...' }
         </Button>
       </div>
     </form>
