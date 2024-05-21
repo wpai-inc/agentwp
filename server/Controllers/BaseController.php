@@ -36,6 +36,9 @@ class BaseController
         if($this->permission === 'hasValidVerificationKey') {
             return call_user_func([$this->main->auth, 'hasValidVerificationKey']);
         }
+        if($this->permission === 'CanLogout') {
+            return call_user_func([$this->main->auth, 'CanLogout']);
+        }
 
         if (is_array($this->permission) && is_callable($this->permission)) {
             return call_user_func($this->permission);

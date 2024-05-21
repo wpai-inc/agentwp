@@ -58,7 +58,7 @@ class Main
 
     public function asset(?string $path = null): string
     {
-        return $this->url(self::BUILD_DIR.'/'.$path);
+        return $this->url(self::BUILD_DIR . '/' . $path);
     }
 
     public function pluginPath(): string
@@ -68,7 +68,7 @@ class Main
 
     public function path(?string $path = null): string
     {
-        return plugin_dir_path($this->file).ltrim($path, '/');
+        return plugin_dir_path($this->file) . ltrim($path, '/');
     }
 
     public function url(?string $path = null): string
@@ -116,6 +116,7 @@ class Main
             'agentwp_users_manager' => $this->auth->canManageUsers(),
             'agentwp_access' => $this->auth->hasAccess(),
             'access_token' => $this->auth->getAccessToken(),
+            'refresh_token' => $this->auth->getRefreshToken(),
             'site_id' => $this->siteId(),
             'client_id' => $this->clientId,
             'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
@@ -124,7 +125,7 @@ class Main
             'user' => $current_user,
             'onboarding_completed' => $this->settings->onboarding_completed,
         ];
-        ?>
+?>
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
@@ -132,8 +133,39 @@ class Main
             body.agent-wp-admin-settings {
                 background-color: #ffffff;
             }
+
+            .agentwp-components-snackbar-list {
+                position: fixed;
+                top: 38px;
+                right: 32px;
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: flex-end;
+            }
+
+            .agentwp-components-snackbar-list-left {
+                left: 32px;
+                right: unset;
+            }
+
+            .components-snackbar {
+                padding: 10px 40px;
+                color: #fff;
+            }
+
+            .agentwp-error-notification {
+                background: #ab0909;
+            }
+
+            .agentwp-info-notification {
+                background: #646464;
+            }
+
+            .agentwp-default-notification {
+                background: #0e876a;
+            }
         </style>
-        <?php
+<?php
     }
 
     private function runtimeApiHost()

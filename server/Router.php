@@ -10,10 +10,10 @@ use WpAi\AgentWp\Controllers\Logout;
 use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
 use WpAi\AgentWp\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Controllers\QueryActionController;
+use WpAi\AgentWp\Controllers\RefreshToken;
 use WpAi\AgentWp\Controllers\SaveConnection;
 use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
-use WpAi\AgentWp\Controllers\UsersManagement;
 use WpAi\AgentWp\Controllers\ValidateWebsite;
 
 class Router implements Registrable
@@ -32,6 +32,7 @@ class Router implements Registrable
         'logout'                      => [Logout::class, 'logout'],
         'disconnect_site'             => [DisconnectSite::class, 'disconnect_site'],
         'manual_activation'           => [ManuallyActivateAgent::class, 'activate'],
+        'refresh_token'               => [RefreshToken::class, 'refresh'],
     ];
 
     public function __construct(private Main $main)
@@ -47,7 +48,7 @@ class Router implements Registrable
     {
         foreach ($this->routes as $route => $callback) {
             $controller = new $callback[0]($this->main);
-            register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
+            register_rest_route(self::REST_ROUTE_ENDPOINT, '/' . $route, [
                 'methods'             => $controller->method(),
                 'callback'            => [$controller, $callback[1]],
                 'permission_callback' => [$controller, 'check_permission'],

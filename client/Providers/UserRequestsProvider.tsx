@@ -31,85 +31,80 @@ export type UserRequestType = {
 
 type UserRequestsContextType = {
   conversation: UserRequestType[];
-  setConversation: React.Dispatch<React.SetStateAction<UserRequestType[]>>;
+  setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
   currentUserRequestId: string | null;
-  setCurrentUserRequestId: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
-  setCurrentAction: (action: AgentAction | null) => void;
+  setCurrentAction: ( action: AgentAction | null ) => void;
 };
 
-const UserRequestsContext = createContext<UserRequestsContextType>({
+const UserRequestsContext = createContext< UserRequestsContextType >( {
   conversation: [],
   setConversation: () => {},
   currentUserRequestId: null,
   setCurrentUserRequestId: () => {},
   currentAction: null,
   setCurrentAction: () => {},
-});
+} );
 
 export function useUserRequests() {
-  const chat = useContext(UserRequestsContext);
-  if (!chat) {
-    throw new Error(
-      'useUserRequests must be used within a UserRequestsProvider',
-    );
+  const chat = useContext( UserRequestsContext );
+  if ( ! chat ) {
+    throw new Error( 'useUserRequests must be used within a UserRequestsProvider' );
   }
   return chat;
 }
 
-export default function UserRequestsProvider({
+export default function UserRequestsProvider( {
   messages = [],
   children,
 }: {
   messages?: UserRequestType[];
   children: React.ReactNode;
-}) {
-  const page = usePage();
+} ) {
+  const { page } = usePage();
   const siteId = page.site_id;
   const client = useClient();
-  const [conversation, setConversation] = useState<UserRequestType[]>(messages);
-  const [currentUserRequestId, setCurrentUserRequestId] = useState<
-    string | null
-  >(null);
-  const [currentAction, setCurrentAction] = useState<AgentAction | null>(null);
+  const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
+  const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
+  const [ currentAction, setCurrentAction ] = useState< AgentAction | null >( null );
 
-  useEffect(() => {
+  useEffect( () => {
     getConversation();
-  }, []);
+  }, [] );
 
-  useEffect(() => {
+  useEffect( () => {
     const currentRequest: UserRequestType | undefined = conversation.find(
-      (request) => request.id === currentUserRequestId,
+      request => request.id === currentUserRequestId,
     );
 
     const currentAction: AgentAction | null = currentRequest?.agent_actions
-      ? currentRequest?.agent_actions[currentRequest?.agent_actions.length - 1]
+      ? currentRequest?.agent_actions[ currentRequest?.agent_actions.length - 1 ]
       : null;
 
-    setCurrentAction(currentAction);
-  }, [currentUserRequestId, conversation]);
+    setCurrentAction( currentAction );
+  }, [ currentUserRequestId, conversation ] );
 
   async function getConversation() {
-    const response = await client.isAuthorized()?.getConversation(siteId);
+    const response = await client.isAuthorized()?.getConversation( siteId );
 
-    if (response && response.data.length > 0) {
-      setCurrentUserRequestId(response.data[response.data.length - 1]?.id);
-      setConversation(response.data);
+    if ( response && response.data.length > 0 ) {
+      setCurrentUserRequestId( response.data[ response.data.length - 1 ]?.id );
+      setConversation( response.data );
     }
   }
 
   return (
     <UserRequestsContext.Provider
-      value={{
+      value={ {
         conversation,
         setConversation,
         currentUserRequestId,
         setCurrentUserRequestId,
         currentAction,
         setCurrentAction,
-      }}
-    >
-      {children}
+      } }>
+      { children }
     </UserRequestsContext.Provider>
   );
 }
