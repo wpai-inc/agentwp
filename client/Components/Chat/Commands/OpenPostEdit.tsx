@@ -59,8 +59,10 @@ export default function OpenPostEdit( {
       }
     } else if ( onMessageBoxKeyDown.key === 'Enter' ) {
       console.log( 'Selected Post: ', foundPosts[ selectedPostIndex ] );
-      onSetMessage( `/edit ${ foundPosts[ selectedPostIndex ].title }` );
-      document.location.href = `${ page.admin_route }post.php?post=${ foundPosts[ selectedPostIndex ].id }&action=edit`;
+      if ( selectedPostIndex ) {
+        onSetMessage( `/edit ${ foundPosts[ selectedPostIndex ]?.title }` );
+        document.location.href = `${ page.admin_route }post.php?post=${ foundPosts[ selectedPostIndex ].id }&action=edit`;
+      }
     }
   }, [ onMessageBoxKeyDown ] );
 
