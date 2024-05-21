@@ -77,8 +77,8 @@ Animations for maximizing, expanding and minimizing
 
 @keyframes hide-chat {
     to {
-        right: -100px;
-        bottom: 16px;
+        right: -50%;
+        bottom: 4%;
     }
 }
 
@@ -102,7 +102,7 @@ Animations for maximizing, expanding and minimizing
 
 @keyframes show-chat {
     from {
-        right: -50px;
+        right: -50%;
         bottom: 16px;
     }
     to {

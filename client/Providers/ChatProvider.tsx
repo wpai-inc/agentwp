@@ -91,6 +91,8 @@ export default function ChatProvider({
       setSettings({
         chatOpen: newVal,
         chatMaximized: false,
+        x: 0,
+        y: 0,
       });
     }, 1400);
   }

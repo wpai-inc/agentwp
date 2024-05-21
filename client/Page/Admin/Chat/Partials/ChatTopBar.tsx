@@ -43,9 +43,17 @@ export default function ChatTopBar() {
 
   function startDrag(e) {
     e.preventDefault();
-    console.log({
-      current: shouldDisableDragRef.current,
-    });
+
+    const initialMousePositionX = e.clientX;
+    const initialMousePositionY = e.clientY;
+    const computedStyle = window.getComputedStyle(e.target.parentNode);
+    const matrix = new DOMMatrixReadOnly(computedStyle.transform);
+
+    const initialPositionX = matrix.m41;
+    const initialPositionY = matrix.m42;
+    let lastPositionX = matrix.m41;
+    let lastPositionY = matrix.m42;
+
     const bodyElement = document.getElementsByTagName('body')[0];
     const containerElement = document.getElementById('wpbody');
     const containerCoords = containerElement.getBoundingClientRect();
@@ -55,42 +63,41 @@ export default function ChatTopBar() {
 
     const disableDrag = (e) => {
       setSettings({
-        x: chatWindow.style.left,
-        y: chatWindow.style.top,
+        x: lastPositionX,
+        y: lastPositionY,
       });
       bodyElement.removeEventListener('mousemove', handleDrag);
       bodyElement.onmouseup = null;
     };
 
     const drag = (target, x, y) => {
-      const chatWindowCoords = target.getBoundingClientRect();
-
-      // get thew new bounding rect it will be moved to
-      const newPositionLeft = x - startPosX;
-      const newPositionRight = x - startPosX + chatWindowCoords.width;
-      const newPositionTop = y - startPosY;
-      const newPositionBottom = y - startPosY + chatWindowCoords.height;
+      const currentPositionMatrix = new DOMMatrixReadOnly(computedStyle.transform);
 
       // check if any of the new bounding rects are out of bounds
+      const newPositionLeft = x - startPosX;
+      const newPositionTop = y - startPosY;
       const leftOutOfBounds = newPositionLeft < containerCoords.left;
-      const rightOutOfBounds = newPositionRight > containerCoords.right;
       const topOutOfBounds = newPositionTop < containerCoords.top;
-      const bottomOutOfBounds = newPositionBottom > containerCoords.bottom;
 
-      // deny drag accordingly
-      if (!leftOutOfBounds && !rightOutOfBounds) {
-        target.style.left = newPositionLeft + 'px';
+      let newCoordsX = currentPositionMatrix.m41;
+      let newCoordsY = currentPositionMatrix.m42;
+
+      if (!leftOutOfBounds) {
+        newCoordsX = x - initialMousePositionX + initialPositionX;
       }
-      if (!topOutOfBounds && !bottomOutOfBounds) {
-        target.style.top = newPositionTop + 'px';
+
+      if (!topOutOfBounds) {
+        newCoordsY = y - initialMousePositionY + initialPositionY;
       }
+
+      target.style.transform = `translate(${newCoordsX}px, ${newCoordsY}px)`;
+      lastPositionX = newCoordsX;
+      lastPositionY = newCoordsY;
     };
 
     const handleDrag = (e) => {
-      drag(chatWindow, e.pageX, e.pageY);
+      drag(chatWindow, e.clientX, e.clientY);
     };
-
-    drag(chatWindow, e.pageX, e.pageY);
 
     bodyElement.addEventListener('mousemove', handleDrag);
     bodyElement.addEventListener('mouseup', disableDrag);
