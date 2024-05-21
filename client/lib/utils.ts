@@ -23,5 +23,13 @@ export const removeStorage = (key: string) => {
   }
 };
 
+
 export const nextId = () =>
   Date.now().toString(36) + '-' + Math.random().toString(36).substring(2);
+
+
+export const resetChatWindowPosition = (chatWindowElement) => {
+  if (chatWindowElement) {
+    chatWindowElement.style.transform = 'translate(0px, 0px)'
+  }
+}
