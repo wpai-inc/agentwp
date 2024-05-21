@@ -10,14 +10,8 @@ import ChatOverlay from '@/Components/Chat/ChatOverlay';
 
 export default function ChatContainer() {
   const windowRef = useRef<HTMLDivElement>(null);
-  const {
-    open,
-    minimizing,
-    expanding,
-    maximizing,
-    reducing,
-    isMaximized,
-  } = useChat();
+  const { open, minimizing, expanding, maximizing, reducing, isMaximized } =
+    useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, overlayChildren } = useChat();
 
@@ -48,7 +42,7 @@ export default function ChatContainer() {
       id="awp-chat"
       className={cn(
         'fixed bottom-4 right-10',
-        'h-[85vh] w-[500px] z-20 bg-brand-gray',
+        'h-[85vh] w-[500px] z-[999] bg-brand-gray',
         'shadow-xl flex flex-col border border-gray-200 rounded-xl opacity-100',
         {
           'w-0 h-0 overflow-hidden border-0': !open,
@@ -66,11 +60,7 @@ export default function ChatContainer() {
         <Dialog conversation={conversation} />
         <MessageBox />
         <WindowActions />
-        {overlayChildren && (
-          <ChatOverlay>
-            {overlayChildren}
-          </ChatOverlay>
-        )}
+        {overlayChildren && <ChatOverlay>{overlayChildren}</ChatOverlay>}
       </div>
     </div>
   );
