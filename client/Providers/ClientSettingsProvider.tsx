@@ -9,6 +9,7 @@ import { getStorage, setStorage } from '@/lib/utils';
 
 export type ClientSettings = {
   chatOpen?: boolean;
+  chatMaximized?: boolean;
   x?: number | null;
   y?: number | null;
   width?: number;
@@ -55,6 +56,7 @@ export const ClientSettingsProvider: FC<{ children: React.ReactNode }> = ({
 }) => {
   const [settings, setSettings] = useState<ClientSettings>({
     chatOpen: getLocalStorage('chatOpen'),
+    chatMaximized: getLocalStorage('chatMaximized'),
     x: getLocalStorage('x'),
     y: getLocalStorage('y'),
     width: getLocalStorage('width'),

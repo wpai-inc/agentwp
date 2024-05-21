@@ -12,8 +12,9 @@ import { useChat } from '@/Providers/ChatProvider';
 
 export default function ChatTopBar() {
   const { setSettings } = useClientSettings();
-  const { openChatOverlay } = useChat();
+  const { openChatOverlay, isMaximized, maximizing, minimizing, reducing } = useChat();
   const topBarRef = useRef(null);
+  const shouldDisableDragRef = useRef(isMaximized || maximizing || minimizing ||reducing);
 
   function onUpgradeClick(e: React.FormEvent) {
     e.preventDefault();
@@ -42,6 +43,9 @@ export default function ChatTopBar() {
 
   function startDrag(e) {
     e.preventDefault();
+    console.log({
+      current: shouldDisableDragRef.current,
+    });
     const bodyElement = document.getElementsByTagName('body')[0];
     const containerElement = document.getElementById('wpbody');
     const containerCoords = containerElement.getBoundingClientRect();

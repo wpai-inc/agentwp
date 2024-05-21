@@ -10,7 +10,14 @@ import ChatOverlay from '@/Components/Chat/ChatOverlay';
 
 export default function ChatContainer() {
   const windowRef = useRef<HTMLDivElement>(null);
-  const { open, minimizing, expanding } = useChat();
+  const {
+    open,
+    minimizing,
+    expanding,
+    maximizing,
+    reducing,
+    isMaximized,
+  } = useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, overlayChildren } = useChat();
 
@@ -49,6 +56,9 @@ export default function ChatContainer() {
           'w-0 h-0 overflow-hidden border-0': !open,
           minimize: minimizing,
           expand: expanding,
+          maximize: maximizing,
+          reduce: reducing,
+          maximized: isMaximized,
         },
       )}
     >
