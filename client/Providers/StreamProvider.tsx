@@ -78,6 +78,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   function closeStream() {
     setStreamClosed( true );
+    setCurrentUserRequestId( null );
     if ( streamCompleted && liveAction ) {
       setCurrentAction( liveAction );
     }
