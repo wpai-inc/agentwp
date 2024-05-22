@@ -23,7 +23,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const [ liveAction, setLiveAction ] = useState< AgentAction | null >( null );
   const [ streamClosed, setStreamClosed ] = useState( true );
   const [ streamCompleted, setStreamCompleted ] = useState( false );
-  const [ streamError, setStreamError ] = useState< Error | null >( null );
+  const [ streamError, setStreamError ] = useState< string | null >( null );
   const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
   const client = useClient();
   const ctrl = new AbortController();
@@ -41,7 +41,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         async onopen( response ) {
           if ( response.status > 300 ) {
             closeStream();
-            throw new Error( 'Error starting stream: ' + response.status );
+            setStreamError( 'Oops, something went wrong.' );
           }
         },
         onmessage( ev ) {
@@ -90,6 +90,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         startStreamFromRequest,
         liveAction,
         streamClosed,
+        streamError,
       } }>
       { children }
     </StreamContext.Provider>

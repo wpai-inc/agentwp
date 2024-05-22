@@ -44,7 +44,7 @@ export default function MessageBox() {
   }
 
   return (
-    <form className="relative m-2 bg-white p-2" onSubmit={ submit }>
+    <form className="relative bg-white p-2" onSubmit={ submit }>
       <Commands
         onMessageBoxKeyDown={ keyUpEvent }
         onSetMessage={ setMessage }
