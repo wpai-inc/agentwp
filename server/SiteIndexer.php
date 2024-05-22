@@ -46,7 +46,7 @@ class SiteIndexer implements Registrable
 
             update_option('agentwp_last_hash', $data_hash, true);
 
-            $awpClient->indexSite($siteId, json_encode($data));
+            $awpClient->indexSite($siteId, $data);
         }
     }
 
