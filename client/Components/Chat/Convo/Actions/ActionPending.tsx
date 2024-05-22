@@ -1,9 +1,9 @@
-import ActionContainer from './ActionContainer';
+import { LoaderIcon } from 'lucide-react';
 
 export default function ActionPending() {
   return (
-    <ActionContainer pending={true}>
-      <p>Thinking...</p>
-    </ActionContainer>
+    <div className="p-4 rounded-lg border border-gray-25 flex gap-2 items-center">
+      <LoaderIcon className="animate-spin" /> Thinking...
+    </div>
   );
 }

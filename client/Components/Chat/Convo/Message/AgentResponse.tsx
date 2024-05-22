@@ -1,7 +1,6 @@
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
 import ActionIncomplete from '../Actions/ActionIncomplete';
 import ActionPending from '../Actions/ActionPending';
-import { LoaderIcon } from 'lucide-react';
 import MessageHeader from './MessageHeader';
 import Avatar from '../../Avatar/Avatar';
 import Feedback from '@/Components/Chat/Feedback';
@@ -61,14 +60,9 @@ export default function AgentResponse( {
         </div>
       </MessageHeader>
 
-      { pending && (
-        <div className="p-4 rounded-lg border border-gray-25">
-          <LoaderIcon className="animate-spin" /> Thinking...
-        </div>
-      ) }
+      { ( pending || agentActions === undefined ) && <ActionPending /> }
 
       { isIncomplete && <p>Something went wrong attending to your request.</p> }
-      { agentActions === undefined && <ActionPending /> }
       { messageAction && <ActionComponent { ...messageAction } /> }
     </div>
   );
