@@ -3,12 +3,12 @@ import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Abilities } from '@wpai/schemas';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
-export const StreamContext = createContext<any | undefined>(undefined);
+export const StreamContext = createContext< any | undefined >( undefined );
 
 export function useStream() {
-  const stream = useContext(StreamContext);
-  if (stream === undefined) {
-    throw new Error('useStream must be used within a StreamProvider');
+  const stream = useContext( StreamContext );
+  if ( stream === undefined ) {
+    throw new Error( 'useStream must be used within a StreamProvider' );
   }
   return stream;
 }
@@ -19,80 +19,79 @@ type AgentAction = {
   action: any;
 };
 
-export default function StreamProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [liveAction, setLiveAction] = useState<AgentAction | null>(null);
-  const [streamClosed, setStreamClosed] = useState(true);
-  const [streamCompleted, setStreamCompleted] = useState(false);
-  const [streamError, setStreamError] = useState<Error | null>(null);
+export default function StreamProvider( { children }: { children: React.ReactNode } ) {
+  const [ liveAction, setLiveAction ] = useState< AgentAction | null >( null );
+  const [ streamClosed, setStreamClosed ] = useState( true );
+  const [ streamCompleted, setStreamCompleted ] = useState( false );
+  const [ streamError, setStreamError ] = useState< Error | null >( null );
   const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
   const client = useClient();
   const ctrl = new AbortController();
 
-  async function startStream(stream_url: string, user_request_id: string) {
-    setCurrentUserRequestId(user_request_id);
+  async function startStream( stream_url: string, user_request_id: string ) {
+    setCurrentUserRequestId( user_request_id );
     resetStream();
     try {
-      await fetchEventSource(stream_url, {
+      await fetchEventSource( stream_url, {
         credentials: 'include',
-        async onopen(response) {
-          if (response.status > 300) {
+        headers: {
+          'Authorization': 'Bearer ' + client.token,
+          'X-WP-AGENT-VERSION': client.agentWpVersion,
+        },
+        async onopen( response ) {
+          if ( response.status > 300 ) {
             closeStream();
-            throw new Error('Error starting stream: ' + response.status);
+            throw new Error( 'Error starting stream: ' + response.status );
           }
         },
-        onmessage(ev) {
-          if (ev.event === 'close') {
+        onmessage( ev ) {
+          if ( ev.event === 'close' ) {
             closeStream();
-            setStreamCompleted(true);
+            setStreamCompleted( true );
           } else {
-            setLiveAction(JSON.parse(ev.data) as AgentAction);
+            setLiveAction( JSON.parse( ev.data ) as AgentAction );
           }
         },
-        onerror(err) {
+        onerror( err ) {
           closeStream();
           throw err;
         },
         onclose: closeStream,
         signal: ctrl.signal,
         openWhenHidden: true,
-      });
-    } catch (e) {
-      console.error('Error starting stream', e);
+      } );
+    } catch ( e ) {
+      console.error( 'Error starting stream', e );
       closeStream();
     }
   }
 
-  async function startStreamFromRequest(user_request_id: string) {
-    const url = client.getStreamUrl(user_request_id);
-    await startStream(url, user_request_id);
+  async function startStreamFromRequest( user_request_id: string ) {
+    const url = client.getStreamUrl( user_request_id );
+    await startStream( url, user_request_id );
   }
 
   function resetStream() {
-    setStreamClosed(false);
-    setLiveAction(null);
+    setStreamClosed( false );
+    setLiveAction( null );
   }
 
   function closeStream() {
-    setStreamClosed(true);
-    if (streamCompleted && liveAction) {
-      setCurrentAction(liveAction);
+    setStreamClosed( true );
+    if ( streamCompleted && liveAction ) {
+      setCurrentAction( liveAction );
     }
   }
 
   return (
     <StreamContext.Provider
-      value={{
+      value={ {
         startStream,
         startStreamFromRequest,
         liveAction,
         streamClosed,
-      }}
-    >
-      {children}
+      } }>
+      { children }
     </StreamContext.Provider>
   );
 }

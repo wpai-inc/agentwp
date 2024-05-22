@@ -3,27 +3,23 @@ import Avatar from '../../Avatar/Avatar';
 import MessageHeader from './MessageHeader';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/Components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { WpUser } from '@/Types/types';
 
-export default function UserRequest({
+export default function UserRequest( {
   userRequest,
   user,
 }: {
   userRequest: UserRequestType;
   user: WpUser;
-}) {
+} ) {
   return (
     <div className="text-black/60">
       <MessageHeader>
         <Avatar
-          name={user.display_name}
-          image={user.avatar_url}
-          time={userRequest.human_created_at}
+          name={ user?.display_name }
+          image={ user?.avatar_url }
+          time={ userRequest.human_created_at }
         />
         <Popover>
           <PopoverTrigger>
