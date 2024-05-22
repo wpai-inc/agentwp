@@ -109,6 +109,9 @@ class Main
         $agentwp_settings = [
             'home_url' => home_url(),
             'plugin_url' => $this->pluginUrl,
+            'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
+            'rest_route' => rest_url(),
+            'admin_route' => admin_url(),
             'nonce' => wp_create_nonce(self::nonce()),
             'wp_rest_nonce' => wp_create_nonce('wp_rest'),
             'is_admin' => $this->auth->isAdmin(),
@@ -119,9 +122,7 @@ class Main
             'refresh_token' => $this->auth->getRefreshToken(),
             'site_id' => $this->siteId(),
             'client_id' => $this->clientId,
-            'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
             'api_host' => $this->apiClientHost(),
-            'rest_route' => rest_url(),
             'user' => $current_user,
             'onboarding_completed' => $this->settings->onboarding_completed,
         ];
