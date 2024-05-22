@@ -17,8 +17,8 @@ export default function UserRequest( {
     <div className="text-black/60">
       <MessageHeader>
         <Avatar
-          name={ user?.display_name }
-          image={ user?.avatar_url }
+          name={ user.display_name }
+          image={ user.avatar_url }
           time={ userRequest.human_created_at }
         />
         <Popover>
