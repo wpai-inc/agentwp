@@ -67,7 +67,7 @@ export default function AgentResponse( {
         </div>
       ) }
 
-      { isIncomplete && <p>Something went wrong, please try again.</p> }
+      { isIncomplete && <p>Something went wrong attending to your request.</p> }
       { agentActions === undefined && <ActionPending /> }
       { messageAction && <ActionComponent { ...messageAction } /> }
     </div>
