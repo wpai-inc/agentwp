@@ -4,7 +4,7 @@ import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { useNotifications } from '@/Providers/NotificationProvider';
 
 export default class AwpClient {
-  private baseUrl: string = 'https://api.agentwp.com';
+  private baseUrl: string = 'https://app.agentwp.com';
   private token?: string;
   private httpClient: AxiosInstance;
 
