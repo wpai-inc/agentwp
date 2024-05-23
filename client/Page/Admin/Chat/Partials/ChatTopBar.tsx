@@ -8,6 +8,7 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import Logo from '@/Components/Logo';
 import { useChat } from '@/Providers/ChatProvider';
+import { AgentTooltip } from "@/Components/ui/tooltip";
 
 export default function ChatTopBar() {
   const { openChatOverlay } = useChat();
@@ -56,42 +57,50 @@ export default function ChatTopBar() {
         </Button>
       </div>
       <div className="flex items-center gap-2">
-        <Button
-          asChild
-          onClick={onAddClick}
-          variant="ghost"
-          size="icon"
-          className="cursor-pointer"
-        >
-          <AddIcon className="h-6 w-6 text-gray-500 hover:text-black" />
-        </Button>
-        <Button
-          asChild
-          onClick={onHistoryClick}
-          variant="ghost"
-          size="icon"
-          className="cursor-pointer"
-        >
-          <HistoryIcon className="h-6 w-6 text-gray-500 hover:text-black" />
-        </Button>
-        <Button
-          asChild
-          onClick={onSettingsClick}
-          variant="ghost"
-          size="icon"
-          className="cursor-pointer"
-        >
-          <SettingsIcon className="h-6 w-6 text-gray-500 hover:text-black" />
-        </Button>
-        <Button
-          asChild
-          onClick={onProfileClick}
-          variant="ghost"
-          size="icon"
-          className="cursor-pointer"
-        >
-          <AccountIcon className="h-6 w-6 text-gray-500 hover:text-black" />
-        </Button>
+        <AgentTooltip content="New conversation">
+          <Button
+            asChild
+            onClick={onAddClick}
+            variant="ghost"
+            size="icon"
+            className="cursor-pointer"
+          >
+            <AddIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+          </Button>
+        </AgentTooltip>
+        <AgentTooltip content="Clear history">
+          <Button
+            asChild
+            onClick={onHistoryClick}
+            variant="ghost"
+            size="icon"
+            className="cursor-pointer"
+          >
+            <HistoryIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+          </Button>
+        </AgentTooltip>
+        <AgentTooltip content="Settings">
+          <Button
+            asChild
+            onClick={onSettingsClick}
+            variant="ghost"
+            size="icon"
+            className="cursor-pointer"
+          >
+            <SettingsIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+          </Button>
+        </AgentTooltip>
+        <AgentTooltip content="Your profile">
+          <Button
+            asChild
+            onClick={onProfileClick}
+            variant="ghost"
+            size="icon"
+            className="cursor-pointer"
+          >
+            <AccountIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+          </Button>
+        </AgentTooltip>
       </div>
     </div>
   );

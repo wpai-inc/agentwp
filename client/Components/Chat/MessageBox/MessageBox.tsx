@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import Commands from '../Commands/Commands';
+import { AgentTooltip } from "@/Components/ui/tooltip";
 
 export default function MessageBox() {
   const { sendMessage, openChatOverlay } = useChat();
@@ -59,13 +60,15 @@ export default function MessageBox() {
         onKeyUp={ handleKeyUp }
       />
       <div className="flex items-center justify-between">
-        <Button
-          onClick={ onSettingsClick }
-          variant="ghost"
-          size="icon"
-          className="text-brand-gray-50">
-          <TuneIcon />
-        </Button>
+        <AgentTooltip content="Conversation Settings">
+          <Button
+            onClick={ onSettingsClick }
+            variant="ghost"
+            size="icon"
+            className="text-brand-gray-50">
+            <TuneIcon />
+          </Button>
+        </AgentTooltip>
         <Button
           type="submit"
           className={ cn( 'rounded bg-brand-primary px-2' ) }
