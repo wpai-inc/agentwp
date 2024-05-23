@@ -28,8 +28,11 @@ export const nextId = () =>
   Date.now().toString(36) + '-' + Math.random().toString(36).substring(2);
 
 
-export const resetChatWindowPosition = (chatWindowElement) => {
-  if (chatWindowElement) {
-    chatWindowElement.style.transform = 'translate(0px, 0px)'
-  }
+export const resetChatWindowPosition = () => {
+  const chatWindow = getChatwindowElement();
+  chatWindow.style.transform = 'translate(0px, 0px)'
 }
+
+export const getChatwindowElement = () => {
+  return document.getElementById('awp-chat');
+};

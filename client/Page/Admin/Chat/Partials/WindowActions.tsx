@@ -4,9 +4,10 @@ import MinimizeIcon from '@material-design-icons/svg/outlined/minimize.svg?react
 import MaximizeIcon from '@material-design-icons/svg/outlined/open_in_full.svg?react';
 import DragIcon from '@material-design-icons/svg/outlined/drag_indicator.svg?react';
 import ReduceWindowIcon from '@material-design-icons/svg/outlined/close_fullscreen.svg?react';
-import { cn } from '@/lib/utils';
+import { cn, getChatwindowElement, resetChatWindowPosition } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
-import { useClientSettings } from "@/Providers/ClientSettingsProvider";
+import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { AgentTooltip } from '@/Components/ui/tooltip';
 
 export default function WindowActions() {
   const { setSettings } = useClientSettings();
@@ -18,13 +19,21 @@ export default function WindowActions() {
   } = useChat();
 
   function onMaximizeClick() {
-    const element = document.getElementById('awp-chat');
+    const element = getChatwindowElement();
     maximizeChatWindow(element);
+  }
+
+  function onDragDoubleClick(e) {
+    resetChatWindowPosition();
+    setSettings({
+      x: 0,
+      y: 0,
+    });
   }
 
   function startDrag(e) {
     e.preventDefault();
-    const chatWindow = document.getElementById('awp-chat');
+    const chatWindow = getChatwindowElement();
     if (chatWindow.classList.contains('maximized')) {
       return;
     }
@@ -92,12 +101,13 @@ export default function WindowActions() {
   }
 
   useEffect(() => {
-    // const element = dragElementRef.current;
     const element = document.getElementById('drag-icon');
     element.addEventListener('mousedown', startDrag);
+    element.addEventListener('dblclick', onDragDoubleClick);
 
     return () => {
       element.removeEventListener('mousedown', startDrag);
+      element.removeEventListener('dblclick', onDragDoubleClick);
     };
   }, []);
 
@@ -108,14 +118,19 @@ export default function WindowActions() {
       'rounded-bl-lg rounded-tl-lg'
     )}
     >
-      <DragIcon
-        id="drag-icon"
-        onClick={() => {
-        }}
-        className={cn(
-          'h-6 w-6 cursor-pointer hover:text-amber-500 cursor-move'
-        )}
-      />
+      <AgentTooltip
+        content="Drag or double-click to reset window position"
+        side="right"
+      >
+        <DragIcon
+          id="drag-icon"
+          onClick={() => {
+          }}
+          className={cn(
+            'h-6 w-6 cursor-pointer hover:text-amber-500 cursor-move'
+          )}
+        />
+      </AgentTooltip>
       {/*<MinimizeIcon*/}
       {/*  onClick={toggle}*/}
       {/*  className={cn(*/}
@@ -123,27 +138,39 @@ export default function WindowActions() {
       {/*  )}*/}
       {/*/>*/}
       {isMaximized ? (
-        <ReduceWindowIcon
-          onClick={reduceWindow}
-          className={cn(
-            'h-4 w-4 text-brand-gray-50 cursor-pointer hover:text-teal-500'
-          )}
-        />
+        <AgentTooltip
+          content="Return chat window to normal size"
+          side="right"
+        >
+          <ReduceWindowIcon
+            onClick={reduceWindow}
+            className={cn(
+              'h-4 w-4 cursor-pointer hover:text-teal-500'
+            )}
+          />
+        </AgentTooltip>
       ) : (
-        <MaximizeIcon
-          onClick={onMaximizeClick}
-          className={cn(
-            'h-4 w-4 cursor-pointer hover:text-teal-500'
-          )}
-        />
+        <AgentTooltip
+          content="Maximize the chat window to take all the available space"
+          side="right"
+        >
+          <MaximizeIcon
+            onClick={onMaximizeClick}
+            className={cn(
+              'h-4 w-4 cursor-pointer hover:text-teal-500'
+            )}
+          />
+        </AgentTooltip>
       )}
 
-      <CloseIcon
-        onClick={toggle}
-        className={cn(
-          'h-5 w-5 cursor-pointer hover:text-red-500'
-        )}
-      />
+      <AgentTooltip content="Close window" side="right">
+        <CloseIcon
+          onClick={toggle}
+          className={cn(
+            'h-5 w-5 cursor-pointer hover:text-red-500'
+          )}
+        />
+      </AgentTooltip>
     </div>
   );
 };
