@@ -9,7 +9,6 @@ export default function ActionIncomplete( {
   const { startStreamFromRequest } = useStream();
 
   function handleRetry() {
-    console.log( 'handling retry' );
     startStreamFromRequest( userRequestId );
   }
 

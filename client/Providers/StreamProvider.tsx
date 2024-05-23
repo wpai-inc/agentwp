@@ -48,6 +48,9 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           if ( ev.event === 'close' ) {
             closeStream();
             setStreamCompleted( true );
+          } else if ( ev.event === 'error' ) {
+            closeStream();
+            setStreamError( 'Oops, something went wrong.' );
           } else {
             setLiveAction( JSON.parse( ev.data ) as AgentAction );
           }
