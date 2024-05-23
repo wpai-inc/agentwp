@@ -37,6 +37,6 @@ jobs:
           switches: -avzr --delete
           path: dist/
           remote_path: /home/forge/wp.agentwp.com/wp-content/plugins/
-          remote_host: ${{ variables.IP }}
-          remote_user: ${{ variables.USER }}
+          remote_host: '165.22.180.128'
+          remote_user: 'forge'
           remote_key: ${{ secrets.KEY }}
