@@ -14,7 +14,7 @@
     "format:fix": "prettier --write .",
     "storybook": "STORYBOOK_ENV=1 storybook dev -p 6006",
     "build-storybook": "STORYBOOK_ENV=1 storybook build",
-    "build-plugin": "npm run clean && npm run build && npm run copy-files && npm run zip"
+    "build-plugin": "npm run clean && composer install && npm run build && npm run copy-files && npm run zip"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
