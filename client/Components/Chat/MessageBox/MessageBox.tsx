@@ -62,11 +62,12 @@ export default function MessageBox() {
       <div className="flex items-center justify-between">
         <AgentTooltip content="Conversation Settings">
           <Button
+            asChild
             onClick={ onSettingsClick }
             variant="ghost"
             size="icon"
-            className="text-brand-gray-50">
-            <TuneIcon />
+            className="text-brand-gray-50 hover:bg-inherit">
+            <TuneIcon className="w-6 h-6" />
           </Button>
         </AgentTooltip>
         <Button
