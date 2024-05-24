@@ -27,7 +27,7 @@ export default function connectToAwp() {
     setConnecting( true );
     // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
     // this will return the url that AWP can use to get the initial website data
-    adminRequest.get( '/agentwp/v1/get_unique_verification_key' ).then( ( response: any ) => {
+    adminRequest.get( 'get_unique_verification_key' ).then( ( response: any ) => {
       // prettier-ignore
       document.location = `${page.api_host}/connect_site?website=${encodeURIComponent(response.data.data.home_url)}&user_email=${page.user.user_email}&verification_key=${response.data.data.key}`;
     } );
@@ -39,7 +39,7 @@ export default function connectToAwp() {
     setDisconnecting( true );
     // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
     // this will return the url that AWP can use to get the initial website data
-    adminRequest.get( '/agentwp/v1/disconnect_site' ).then( () => {
+    adminRequest.get( 'disconnect_site' ).then( () => {
       setDisconnecting( false );
       setLoggedIn( false );
       window.location.reload();

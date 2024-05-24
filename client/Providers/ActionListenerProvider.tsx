@@ -13,7 +13,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   useEffect( () => {
     if ( currentAction && streamClosed && currentAction.action ) {
-      console.log( currentAction );
       if ( ! currentAction.hasExecuted ) {
         /**
          * Executes the current action
@@ -21,7 +20,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         switch ( currentAction.action.ability ) {
           case 'query':
             adminRequest
-              .get( '/run_action_query', {
+              .get( 'run_action_query', {
                 params: {
                   sql: currentAction.action.sql,
                   params: currentAction.action.params,
@@ -32,9 +31,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
                   status: 'success',
                   data: response.data.results,
                 } );
-                if ( ! currentAction.final ) {
-                  startStreamFromRequest( currentUserRequestId );
-                }
               } );
             break;
           case 'navigate':

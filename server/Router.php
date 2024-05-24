@@ -21,18 +21,18 @@ class Router implements Registrable
     const REST_ROUTE_ENDPOINT = 'agentwp/v1';
 
     protected array $routes = [
-        'test_route'                  => [TestResponse::class, 'test_response'],
-        'run_action_query'            => [QueryActionController::class, 'query'],
-        'agentwp_users'               => [GetUsers::class, 'get_users'],
-        'update_user'                 => [UpdateUserCapabilities::class, 'update_user_capabilities'],
-        'onboarding_completed'        => [MakeOnboardingAsCompleted::class, 'onboarding_completed'],
+        'test_route' => [TestResponse::class, 'test_response'],
+        'run_action_query' => [QueryActionController::class, 'query'],
+        'agentwp_users' => [GetUsers::class, 'get_users'],
+        'update_user' => [UpdateUserCapabilities::class, 'update_user_capabilities'],
+        'onboarding_completed' => [MakeOnboardingAsCompleted::class, 'onboarding_completed'],
         'get_unique_verification_key' => [GenerateUniqueVerificationKey::class, 'generate_unique_verification_key'],
-        'validate_website'            => [ValidateWebsite::class, 'validate_website'],
-        'save_connection'             => [SaveConnection::class, 'save_connection'],
-        'logout'                      => [Logout::class, 'logout'],
-        'disconnect_site'             => [DisconnectSite::class, 'disconnect_site'],
-        'manual_activation'           => [ManuallyActivateAgent::class, 'activate'],
-        'refresh_token'               => [RefreshToken::class, 'refresh'],
+        'validate_website' => [ValidateWebsite::class, 'validate_website'],
+        'save_connection' => [SaveConnection::class, 'save_connection'],
+        'logout' => [Logout::class, 'logout'],
+        'disconnect_site' => [DisconnectSite::class, 'disconnect_site'],
+        'manual_activation' => [ManuallyActivateAgent::class, 'activate'],
+        'refresh_token' => [RefreshToken::class, 'refresh'],
     ];
 
     public function __construct(private Main $main)
@@ -48,9 +48,9 @@ class Router implements Registrable
     {
         foreach ($this->routes as $route => $callback) {
             $controller = new $callback[0]($this->main);
-            register_rest_route(self::REST_ROUTE_ENDPOINT, '/' . $route, [
-                'methods'             => $controller->method(),
-                'callback'            => [$controller, $callback[1]],
+            register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
+                'methods' => $controller->method(),
+                'callback' => [$controller, $callback[1]],
                 'permission_callback' => [$controller, 'check_permission'],
             ]);
         }

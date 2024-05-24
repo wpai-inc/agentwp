@@ -16,7 +16,7 @@ export function AdminRouteProvider( { children }: { children: React.ReactNode } 
   const { page } = usePage();
 
   const adminRequest = axios.create( {
-    baseURL: page.rest_route,
+    baseURL: page.rest_route + page.rest_endpoint + '/',
     headers: {
       'X-WP-Nonce': page.wp_rest_nonce,
     },

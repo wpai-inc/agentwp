@@ -41,7 +41,7 @@ export default class AwpClient {
 
           // Logout user or redirect to login page
           addNotification( 'Your API token is invalid or expired. Please login again.', 'error' );
-          this.adminRequest.get( '/agentwp/v1/logout' );
+          this.adminRequest.get( 'logout' );
           throw new Error( 'Your API token is invalid or expired. Please login again.' );
         }
         return Promise.reject( error );
