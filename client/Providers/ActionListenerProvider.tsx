@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
-import { useUserRequests } from '@/Providers/UserRequestsProvider';
+import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { AxiosResponse } from 'axios';
@@ -48,16 +48,17 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
         currentAction.hasExecuted = true;
         setCurrentAction( currentAction );
-      } else {
-        /**
-         * Restarts stream if the current action is not final
-         */
-        if ( currentUserRequestId && ! currentAction.final ) {
-          startStreamFromRequest( currentUserRequestId );
-        }
       }
+
+      continueActionStream( currentUserRequestId, currentAction );
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
+
+  function continueActionStream( reqId: string | null, currentAction: AgentAction ) {
+    if ( reqId && ! currentAction.final ) {
+      startStreamFromRequest( reqId );
+    }
+  }
 
   return <>{ children }</>;
 };

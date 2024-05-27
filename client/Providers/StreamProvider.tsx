@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
-import { Abilities } from '@wpai/schemas';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
+import { AgentAction } from '@/Providers/UserRequestsProvider';
 export const StreamContext = createContext< any | undefined >( undefined );
 
 export function useStream() {
@@ -12,12 +12,6 @@ export function useStream() {
   }
   return stream;
 }
-
-type AgentAction = {
-  id: string;
-  ability: Abilities;
-  action: any;
-};
 
 export default function StreamProvider( { children }: { children: React.ReactNode } ) {
   const [ liveAction, setLiveAction ] = useState< AgentAction | null >( null );
@@ -81,7 +75,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   function closeStream() {
     setStreamClosed( true );
-    setCurrentUserRequestId( null );
     if ( streamCompleted && liveAction ) {
       setCurrentAction( liveAction );
     }
