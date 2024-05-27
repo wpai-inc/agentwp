@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import CloseIcon from '@material-design-icons/svg/outlined/close.svg?react';
 import MinimizeIcon from '@material-design-icons/svg/outlined/minimize.svg?react';
-import MaximizeIcon from '@material-design-icons/svg/outlined/open_in_full.svg?react';
+import MaximizeIcon from '@material-design-icons/svg/outlined/open_with.svg?react';
 import DragIcon from '@material-design-icons/svg/outlined/drag_indicator.svg?react';
 import ReduceWindowIcon from '@material-design-icons/svg/outlined/close_fullscreen.svg?react';
 import { cn, getChatwindowElement, resetChatWindowPosition } from '@/lib/utils';
@@ -157,7 +157,7 @@ export default function WindowActions() {
           <MaximizeIcon
             onClick={onMaximizeClick}
             className={cn(
-              'h-4 w-4 cursor-pointer hover:text-teal-500'
+              'h-4 w-4 cursor-pointer hover:text-teal-500 rotate-45'
             )}
           />
         </AgentTooltip>

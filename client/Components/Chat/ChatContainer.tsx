@@ -9,6 +9,7 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import { ChatError } from './Alerts/Error';
 import { useStream } from '@/Providers/StreamProvider';
+import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
 
 export default function ChatContainer() {
   const windowRef = useRef< HTMLDivElement >( null );
@@ -67,6 +68,7 @@ export default function ChatContainer() {
         <WindowActions />
         { overlayChildren && <ChatOverlay>{ overlayChildren }</ChatOverlay> }
       </div>
+      <DragHandles />
     </div>
   );
 }
