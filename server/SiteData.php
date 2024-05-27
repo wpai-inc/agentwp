@@ -44,16 +44,14 @@ class SiteData
 
         $post_types = get_post_types($args, 'objects');
 
-        $post_types = array_map(
+        return array_map(
             function ($post_type) {
-                unset($post_type->labels);
-
+                $post_type = get_object_vars($post_type);
+                unset($post_type['labels']);
                 return $post_type;
             },
             $post_types
         );
-
-        return $post_types;
     }
 
     /**
@@ -70,15 +68,13 @@ class SiteData
 
         $taxonomies = get_taxonomies($args, 'objects');
 
-        $taxonomies = array_map(
+        return array_map(
             function ($taxonomy) {
-                unset($taxonomy->labels);
-
+                $taxonomy = get_object_vars($taxonomy);
+                unset($taxonomy['labels']);
                 return $taxonomy;
             },
             $taxonomies
         );
-
-        return $taxonomies;
     }
 }
