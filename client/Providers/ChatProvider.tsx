@@ -94,18 +94,20 @@ export default function ChatProvider( {
     }, 1400 );
   }
 
-  function maximizeChatWindow( chatWindowElement ) {
-    setMaximizing( true );
-    setTimeout( () => {
-      setMaximizing( false );
-      setIsMaximized( true );
+  function maximizeChatWindow(chatWindowElement) {
+    setMaximizing(true);
+    setTimeout(() => {
+      setMaximizing(false);
+      setIsMaximized(true);
+      chatWindowElement.removeAttribute('style');
       chatWindowElement.style.transform = 'translate(0px, 0px)';
       setSettings( {
         chatMaximized: true,
         x: 0,
         y: 0,
-      } );
-    }, 1000 );
+      });
+
+    }, 1000);
   }
 
   function reduceWindow() {

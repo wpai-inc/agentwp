@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from 'react';
 import CloseIcon from '@material-design-icons/svg/outlined/close.svg?react';
 import MinimizeIcon from '@material-design-icons/svg/outlined/minimize.svg?react';
 import MaximizeIcon from '@material-design-icons/svg/outlined/open_with.svg?react';
@@ -100,17 +100,6 @@ export default function WindowActions() {
     bodyElement.addEventListener('mouseup', disableDrag);
   }
 
-  useEffect(() => {
-    const element = document.getElementById('drag-icon');
-    element.addEventListener('mousedown', startDrag);
-    element.addEventListener('dblclick', onDragDoubleClick);
-
-    return () => {
-      element.removeEventListener('mousedown', startDrag);
-      element.removeEventListener('dblclick', onDragDoubleClick);
-    };
-  }, []);
-
   return (
     <div className={cn(
       'absolute bg-brand-gray h-20 w-6 -left-6 top-4',
@@ -124,8 +113,8 @@ export default function WindowActions() {
       >
         <DragIcon
           id="drag-icon"
-          onClick={() => {
-          }}
+          onMouseDown={startDrag}
+          onDoubleClick={onDragDoubleClick}
           className={cn(
             'h-6 w-6 cursor-pointer hover:text-amber-500 cursor-move'
           )}
