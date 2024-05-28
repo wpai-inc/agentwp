@@ -33,8 +33,10 @@ export default function Handle({
     const initialHeight = chatWindowRect.height;
     const initialWindowX = matrix.m41;
     const initialWindowY = matrix.m42;
-    let lastWidth = chatWindowRect.width;
-    let lastHeight = chatWindowRect.height;
+    let lastWidth = chatWindowRect.width,
+      lastHeight = chatWindowRect.height,
+      lastTranslateX = initialWindowX,
+      lastTranslateY = initialWindowY;
 
     const resize = (target, x, y) => {
       const displacedDistanceX = startPosX - x;
@@ -71,6 +73,8 @@ export default function Handle({
         target.style.height = newHeight + 'px';
         lastHeight = newHeight;
       }
+      lastTranslateX = newTranslateX;
+      lastTranslateY = newTranslateY;
       target.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px)`;
     }
 
@@ -86,6 +90,8 @@ export default function Handle({
       setSettings({
         width: lastWidth,
         height: lastHeight,
+        x: lastTranslateX,
+        y: lastTranslateY,
       });
       bodyElement.removeEventListener('mousemove', handleResize);
       bodyElement.onmouseup = null;
