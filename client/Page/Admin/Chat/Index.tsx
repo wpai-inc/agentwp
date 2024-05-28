@@ -13,6 +13,7 @@ import type { PageData } from '@/Types/types';
 import { ClientProvider } from '@/Providers/ClientProvider';
 import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
+import { ErrorProvider } from '@/Providers/ErrorProvider';
 
 const rootElement = document.getElementById( 'agent-wp-admin-chat' );
 
@@ -25,23 +26,25 @@ if ( rootElement ) {
       <PageProvider page={ agentwp_settings }>
         <NotificationsProvider>
           <App>
-            <AdminRouteProvider>
-              <ClientProvider>
-                <ClientSettingsProvider>
-                  <ScreenProvider>
-                    <UserRequestsProvider>
-                      <StreamProvider>
-                        <ActionListenerProvider>
-                          <ChatProvider>
-                            <Chat />
-                          </ChatProvider>
-                        </ActionListenerProvider>
-                      </StreamProvider>
-                    </UserRequestsProvider>
-                  </ScreenProvider>
-                </ClientSettingsProvider>
-              </ClientProvider>
-            </AdminRouteProvider>
+            <ErrorProvider>
+              <AdminRouteProvider>
+                <ClientProvider>
+                  <ClientSettingsProvider>
+                    <ScreenProvider>
+                      <UserRequestsProvider>
+                        <StreamProvider>
+                          <ActionListenerProvider>
+                            <ChatProvider>
+                              <Chat />
+                            </ChatProvider>
+                          </ActionListenerProvider>
+                        </StreamProvider>
+                      </UserRequestsProvider>
+                    </ScreenProvider>
+                  </ClientSettingsProvider>
+                </ClientProvider>
+              </AdminRouteProvider>
+            </ErrorProvider>
           </App>
         </NotificationsProvider>
       </PageProvider>
