@@ -1,4 +1,4 @@
-import React, { createContext, FC, useState } from "react";
+import React, { createContext, FC, useContext, useState } from "react";
 
 interface ContextProps {
   errors: string[];
@@ -6,9 +6,17 @@ interface ContextProps {
   addErrors: (error: string[]) => void;
 }
 
-export const ErrorPoviderContext = createContext<ContextProps | undefined>(
+export const ErrorContext = createContext<ContextProps | undefined>(
   undefined,
 );
+
+export function useError() {
+  const errors = useContext(ErrorContext);
+  if (!errors) {
+    throw new Error('useError must be used within ErrorProvider');
+  }
+  return errors;
+}
 
 export const ErrorProvider: FC<{ children: React.ReactNode }> = ({
   children,
@@ -16,7 +24,18 @@ export const ErrorProvider: FC<{ children: React.ReactNode }> = ({
   const [errors, setErrors] = useState([]);
 
   const addErrors = (errors: string[]) => {
-    setErrors(errors);
+    setErrors((prev) => {
+      return [
+        ...prev,
+        ...errors.map((err: any) => ({
+          id: err.id ?? crypto.randomUUID(),
+          message: err.message ?? err,
+        }))
+      ];
+    });
+    setTimeout(() => {
+      clearErrors();
+    }, 5000);
   };
 
   const clearErrors = () => {
@@ -24,12 +43,12 @@ export const ErrorProvider: FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <ErrorPoviderContext.Provider value={{
+    <ErrorContext.Provider value={{
       errors,
       clearErrors,
       addErrors,
     }}>
       {children}
-    </ErrorPoviderContext.Provider>
+    </ErrorContext.Provider>
   )
 };

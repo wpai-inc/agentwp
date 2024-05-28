@@ -6,6 +6,7 @@ import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvi
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { usePage } from '@/Providers/PageProvider';
 import { useClient } from '@/Providers/ClientProvider';
+import { useError } from '@/Providers/ErrorProvider';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -60,6 +61,8 @@ export default function ChatProvider( {
   const [ overlayChildren, setOverlayChildren ] = useState( null );
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error } = useStream();
+  const { addErrors } = useError();
+
   useEffect( () => {
     if ( liveAction && currentUserRequestId ) {
       updateAgentMessage( currentUserRequestId, liveAction );
@@ -165,15 +168,15 @@ export default function ChatProvider( {
   }
 
   async function sendMessage( message: string ) {
-    const { stream_url, user_request_id } = await userRequest( message );
-    addUserRequest( {
-      id: user_request_id,
-      message: message,
-    } as UserRequestType );
-
     try {
+      const { stream_url, user_request_id } = await userRequest( message );
+      addUserRequest( {
+        id: user_request_id,
+        message: message,
+      } as UserRequestType );
       startStream( stream_url, user_request_id );
     } catch ( e ) {
+      addErrors([e.message]);
       console.error( e );
     }
   }
