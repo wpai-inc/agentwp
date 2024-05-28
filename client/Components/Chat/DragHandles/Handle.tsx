@@ -39,34 +39,35 @@ export default function Handle({
     const resize = (target, x, y) => {
       const displacedDistanceX = startPosX - x;
       const displacedDistanceY = startPosY - y;
-
+      const calculatedMatrix = new DOMMatrixReadOnly(computedStyle.transform);
       let newWidth;
       let newHeight;
-      let newTranslateX = initialWindowX;
-      let newTranslateY = initialWindowY;
+      let newTranslateX = calculatedMatrix.m41;
+      let newTranslateY = calculatedMatrix.m42;
+
       if (position === 'top-left') {
         newWidth = initialWidth + displacedDistanceX;
         newHeight = initialHeight + displacedDistanceY;
       } else if (position === 'top-right') {
         newWidth = initialWidth - displacedDistanceX;
         newHeight = initialHeight + displacedDistanceY;
-        newTranslateX = initialWindowX - (startPosX - x);
+        newTranslateX = isWithinBounds(newWidth, 500, maxWidth) ? initialWindowX - (startPosX - x) : newTranslateX;
       } else if (position === 'bottom-left') {
         newWidth = initialWidth + displacedDistanceX;
         newHeight = initialHeight - displacedDistanceY;
-        newTranslateY = initialWindowY - (startPosY - y);
+        newTranslateY = isWithinBounds(newHeight, 650, maxHeight) ? initialWindowY - (startPosY - y) : newTranslateY;
       } else if (position === 'bottom-right') {
         newWidth = initialWidth - displacedDistanceX;
         newHeight = initialHeight - displacedDistanceY;
-        newTranslateX = initialWindowX - (startPosX - x);
-        newTranslateY = initialWindowY - (startPosY - y);
+        newTranslateX = isWithinBounds(newWidth, 500, maxWidth) ? initialWindowX - (startPosX - x) : newTranslateX;
+        newTranslateY = isWithinBounds(newHeight, 650, maxHeight) ? initialWindowY - (startPosY - y) : newTranslateY;
       }
       // restrict based on upper and lower bounds
-      if (newWidth > 500 && newWidth < maxWidth) {
+      if (isWithinBounds(newWidth, 500, maxWidth)) {
         target.style.width = newWidth + 'px';
         lastWidth = newWidth;
       }
-      if (newHeight > 650 && newHeight < maxHeight) {
+      if (isWithinBounds(newHeight, 650, maxHeight)) {
         target.style.height = newHeight + 'px';
         lastHeight = newHeight;
       }
@@ -75,6 +76,10 @@ export default function Handle({
 
     const handleResize = (e) => {
       resize(chatWindow, e.clientX, e.clientY);
+    }
+
+    const isWithinBounds = (value, min, max): boolean => {
+      return value > min && value < max;
     }
 
     const disableResize = () => {
