@@ -61,9 +61,9 @@ export default function ChatContainer() {
         <div className="p-2">
           <MessageBox />
         </div>
-        <WindowActions />
         { overlayChildren && <ChatOverlay>{ overlayChildren }</ChatOverlay> }
       </div>
+      <WindowActions />
       { ! maximizing && ! isMaximized && <DragHandles /> }
     </div>
   );
