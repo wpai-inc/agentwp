@@ -28,6 +28,8 @@ export default function WindowActions() {
     setSettings({
       x: 0,
       y: 0,
+      width: 500,
+      height: 700
     });
   }
 

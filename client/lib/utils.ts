@@ -30,7 +30,9 @@ export const nextId = () =>
 
 export const resetChatWindowPosition = () => {
   const chatWindow = getChatwindowElement();
-  chatWindow.style.transform = 'translate(0px, 0px)'
+  chatWindow.style.transform = 'translate(0px, 0px)';
+  chatWindow.style.width = '500px';
+  chatWindow.style.height = '85vh';
 }
 
 export const getChatwindowElement = () => {
