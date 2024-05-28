@@ -3,6 +3,7 @@ import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
+import { useError } from '@/Providers/ErrorProvider';
 export const StreamContext = createContext< any | undefined >( undefined );
 
 export function useStream() {
@@ -17,8 +18,8 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const [ liveAction, setLiveAction ] = useState< AgentAction | null >( null );
   const [ streamClosed, setStreamClosed ] = useState( true );
   const [ streamCompleted, setStreamCompleted ] = useState( false );
-  const [ streamError, setStreamError ] = useState< string | null >( null );
   const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
+  const { addErrors } = useError();
   const client = useClient();
   const ctrl = new AbortController();
 
@@ -35,7 +36,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         async onopen( response ) {
           if ( response.status > 300 ) {
             closeStream();
-            setStreamError( 'Oops, something went wrong.' );
+            addErrors(['Oops, something went wrong.']);
           }
         },
         onmessage( ev ) {
@@ -44,7 +45,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             setStreamCompleted( true );
           } else if ( ev.event === 'error' ) {
             closeStream();
-            setStreamError( 'Oops, something went wrong.' );
+            addErrors(['Oops, something went wrong.']);
           } else {
             setLiveAction( JSON.parse( ev.data ) as AgentAction );
           }
@@ -87,7 +88,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         startStreamFromRequest,
         liveAction,
         streamClosed,
-        streamError,
       } }>
       { children }
     </StreamContext.Provider>

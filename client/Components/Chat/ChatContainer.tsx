@@ -7,8 +7,6 @@ import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
-import { ChatError } from './Alerts/Error';
-import { useStream } from '@/Providers/StreamProvider';
 import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
 
 export default function ChatContainer() {
@@ -16,12 +14,13 @@ export default function ChatContainer() {
   const { open, minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, overlayChildren } = useChat();
-  const { streamError } = useStream();
 
   useEffect( () => {
     const windowElement = windowRef.current;
     if ( windowElement ) {
       windowElement.style.transform = `translate(${ settings.x }px, ${ settings.y }px)`;
+      windowElement.style.width = settings.width + 'px';
+      windowElement.style.height = settings.height + 'px';
 
       const resetChatWindow = () => {
         windowElement.style.transform = `translate(0px, 0px)`;
@@ -62,12 +61,11 @@ export default function ChatContainer() {
       <div className="flex-1 flex flex-col relative overflow-auto">
         <Dialog conversation={ conversation } />
         <div className="p-2">
-          { streamError && <ChatError>{ streamError }</ChatError> }
           <MessageBox />
         </div>
-        <WindowActions />
         { overlayChildren && <ChatOverlay>{ overlayChildren }</ChatOverlay> }
       </div>
+      <WindowActions />
       { ! maximizing && ! isMaximized && <DragHandles /> }
     </div>
   );

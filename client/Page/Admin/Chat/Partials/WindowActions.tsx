@@ -28,6 +28,8 @@ export default function WindowActions() {
     setSettings({
       x: 0,
       y: 0,
+      width: 500,
+      height: 700
     });
   }
 
@@ -102,7 +104,7 @@ export default function WindowActions() {
 
   return (
     <div className={cn(
-      'absolute bg-brand-gray h-20 w-6 -left-6 top-4',
+      'absolute bg-brand-gray h-20 w-6 -left-6 top-11',
       'flex flex-col items-center justify-center gap-2',
       'rounded-bl-lg rounded-tl-lg'
     )}
