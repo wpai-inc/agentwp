@@ -10,12 +10,12 @@ import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
 
 export default function ChatContainer() {
-  const windowRef = useRef< HTMLDivElement >(null);
+  const windowRef = useRef< HTMLDivElement >( null );
   const { open, minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, overlayChildren } = useChat();
 
-  useEffect(() => {
+  useEffect( () => {
     const windowElement = windowRef.current;
     if ( windowElement ) {
       windowElement.style.transform = `translate(${ settings.x }px, ${ settings.y }px)`;
@@ -34,11 +34,11 @@ export default function ChatContainer() {
         window.removeEventListener( 'resize', resetChatWindow );
       };
     }
-  }, []);
+  }, [] );
 
   return (
     <div
-      ref={windowRef}
+      ref={ windowRef }
       id="awp-chat"
       className={ cn(
         'fixed bottom-4 right-10',
@@ -56,15 +56,15 @@ export default function ChatContainer() {
       ) }>
       <div className="minimize-overlay"></div>
       <ChatTopBar />
-      <div className="h-full flex flex-col relative">
-        <Dialog conversation={conversation} />
+      <div className="flex-1 flex flex-col relative overflow-auto">
+        <Dialog conversation={ conversation } />
         <div className="p-2">
           <MessageBox />
         </div>
         <WindowActions />
-        {overlayChildren && <ChatOverlay>{overlayChildren}</ChatOverlay>}
+        { overlayChildren && <ChatOverlay>{ overlayChildren }</ChatOverlay> }
       </div>
-      {(!maximizing && !isMaximized) && <DragHandles />}
+      { ! maximizing && ! isMaximized && <DragHandles /> }
     </div>
   );
 }

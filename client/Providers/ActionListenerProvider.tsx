@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
-import { useUserRequests } from '@/Providers/UserRequestsProvider';
+import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { AxiosResponse } from 'axios';
@@ -13,7 +13,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   useEffect( () => {
     if ( currentAction && streamClosed && currentAction.action ) {
-      console.log( currentAction );
       if ( ! currentAction.hasExecuted ) {
         /**
          * Executes the current action
@@ -21,7 +20,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         switch ( currentAction.action.ability ) {
           case 'query':
             adminRequest
-              .get( '/run_action_query', {
+              .get( 'run_action_query', {
                 params: {
                   sql: currentAction.action.sql,
                   params: currentAction.action.params,
@@ -32,9 +31,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
                   status: 'success',
                   data: response.data.results,
                 } );
-                if ( ! currentAction.final ) {
-                  startStreamFromRequest( currentUserRequestId );
-                }
               } );
             break;
           case 'navigate':
@@ -52,16 +48,17 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
         currentAction.hasExecuted = true;
         setCurrentAction( currentAction );
-      } else {
-        /**
-         * Restarts stream if the current action is not final
-         */
-        if ( currentUserRequestId && ! currentAction.final ) {
-          startStreamFromRequest( currentUserRequestId );
-        }
       }
+
+      continueActionStream( currentUserRequestId, currentAction );
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
+
+  function continueActionStream( reqId: string | null, currentAction: AgentAction ) {
+    if ( reqId && ! currentAction.final ) {
+      startStreamFromRequest( reqId );
+    }
+  }
 
   return <>{ children }</>;
 };
