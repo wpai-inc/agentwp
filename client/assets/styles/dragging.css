@@ -123,9 +123,6 @@ Animations for maximizing, expanding and minimizing
 }
 
 @keyframes maximize-width {
-    from {
-        width: 500px;
-    }
     to {
         transform: translate(0px, 0px);
         width: calc(100vw - 240px);
@@ -133,9 +130,6 @@ Animations for maximizing, expanding and minimizing
 }
 
 @keyframes maximize-height {
-    from {
-        height: 85vh;
-    }
     to {
         height: calc(100vh - 60px);
     }
@@ -199,9 +193,6 @@ Animations for maximizing, expanding and minimizing
     }
 
     @keyframes maximize-width {
-        from {
-            width: 500px;
-        }
         to {
             width: calc(100vw - 110px);
             transform: translate(0px, 0px);
@@ -226,9 +217,6 @@ Animations for maximizing, expanding and minimizing
     }
 
     @keyframes maximize-width {
-        from {
-            width: 500px;
-        }
         to {
             width: calc(100vw - 70px);
             transform: translate(0px, 0px);

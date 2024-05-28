@@ -12,8 +12,8 @@ export type ClientSettings = {
   chatMaximized?: boolean;
   x?: number | null;
   y?: number | null;
-  width?: number;
-  height?: number;
+  width?: number | null;
+  height?: number | null;
 };
 
 type ClientSettingValue = string | boolean | number | null;

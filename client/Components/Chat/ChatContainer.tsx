@@ -9,15 +9,16 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import { ChatError } from './Alerts/Error';
 import { useStream } from '@/Providers/StreamProvider';
+import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
 
 export default function ChatContainer() {
-  const windowRef = useRef< HTMLDivElement >( null );
+  const windowRef = useRef< HTMLDivElement >(null);
   const { open, minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, overlayChildren } = useChat();
   const { streamError } = useStream();
 
-  useEffect( () => {
+  useEffect(() => {
     const windowElement = windowRef.current;
     if ( windowElement ) {
       windowElement.style.transform = `translate(${ settings.x }px, ${ settings.y }px)`;
@@ -36,11 +37,11 @@ export default function ChatContainer() {
         window.removeEventListener( 'resize', resetChatWindow );
       };
     }
-  }, [] );
+  }, []);
 
   return (
     <div
-      ref={ windowRef }
+      ref={windowRef}
       id="awp-chat"
       className={ cn(
         'fixed bottom-4 right-10',
@@ -59,14 +60,15 @@ export default function ChatContainer() {
       <div className="minimize-overlay"></div>
       <ChatTopBar />
       <div className="h-full flex flex-col relative">
-        <Dialog conversation={ conversation } />
+        <Dialog conversation={conversation} />
         <div className="p-2">
-          { streamError && <ChatError>{ streamError }</ChatError> }
+          {streamError && <ChatError>{ streamError }</ChatError>}
           <MessageBox />
         </div>
         <WindowActions />
-        { overlayChildren && <ChatOverlay>{ overlayChildren }</ChatOverlay> }
+        {overlayChildren && <ChatOverlay>{overlayChildren}</ChatOverlay>}
       </div>
+      {(!maximizing && !isMaximized) && <DragHandles />}
     </div>
   );
 }
