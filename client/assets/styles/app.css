@@ -5,6 +5,23 @@ svg {
     fill: currentColor;
 }
 
+.animate-pulse-bounce {
+    animation: pulse-bounce 1s infinite;
+}
+
+@keyframes pulse-bounce {
+    0%, 100% {
+        opacity: 1;
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        opacity: .5;
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
 .animate-is-busy {
     animation: button__is_busy-animation 2500ms infinite linear;
     opacity: 0.5;
