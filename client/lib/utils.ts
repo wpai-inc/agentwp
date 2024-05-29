@@ -1,5 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { DEFAULT_CHAT_WINDOW_HEIGHT, DEFAULT_CHAT_WINDOW_WIDTH } from '@/Shared/App';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -31,8 +33,8 @@ export const nextId = () =>
 export const resetChatWindowPosition = () => {
   const chatWindow = getChatwindowElement();
   chatWindow.style.transform = 'translate(0px, 0px)';
-  chatWindow.style.width = '500px';
-  chatWindow.style.height = '85vh';
+  chatWindow.style.width = DEFAULT_CHAT_WINDOW_WIDTH;
+  chatWindow.style.height = DEFAULT_CHAT_WINDOW_HEIGHT;
 }
 
 export const getChatwindowElement = () => {

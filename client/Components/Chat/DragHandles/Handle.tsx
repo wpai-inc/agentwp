@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn, getChatwindowElement } from '@/lib/utils';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { getDefaultWindowWidth } from '@/Shared/App';
 
 type Props = {
   position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
@@ -53,19 +54,23 @@ export default function Handle({
       } else if (position === 'top-right') {
         newWidth = initialWidth - displacedDistanceX;
         newHeight = initialHeight + displacedDistanceY;
-        newTranslateX = isWithinBounds(newWidth, 500, maxWidth) ? initialWindowX - (startPosX - x) : newTranslateX;
+        newTranslateX = isWithinBounds(newWidth, getDefaultWindowWidth(), maxWidth)
+          ? initialWindowX - (startPosX - x) : newTranslateX;
       } else if (position === 'bottom-left') {
         newWidth = initialWidth + displacedDistanceX;
         newHeight = initialHeight - displacedDistanceY;
-        newTranslateY = isWithinBounds(newHeight, 650, maxHeight) ? initialWindowY - (startPosY - y) : newTranslateY;
+        newTranslateY = isWithinBounds(newHeight, 650, maxHeight)
+          ? initialWindowY - (startPosY - y) : newTranslateY;
       } else if (position === 'bottom-right') {
         newWidth = initialWidth - displacedDistanceX;
         newHeight = initialHeight - displacedDistanceY;
-        newTranslateX = isWithinBounds(newWidth, 500, maxWidth) ? initialWindowX - (startPosX - x) : newTranslateX;
-        newTranslateY = isWithinBounds(newHeight, 650, maxHeight) ? initialWindowY - (startPosY - y) : newTranslateY;
+        newTranslateX = isWithinBounds(newWidth, getDefaultWindowWidth(), maxWidth)
+          ? initialWindowX - (startPosX - x) : newTranslateX;
+        newTranslateY = isWithinBounds(newHeight, 650, maxHeight)
+          ? initialWindowY - (startPosY - y) : newTranslateY;
       }
       // restrict based on upper and lower bounds
-      if (isWithinBounds(newWidth, 500, maxWidth)) {
+      if (isWithinBounds(newWidth, getDefaultWindowWidth(), maxWidth)) {
         target.style.width = newWidth + 'px';
         lastWidth = newWidth;
       }

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, resetChatWindowPosition } from "@/lib/utils";
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
 import MessageBox from './MessageBox/MessageBox';
@@ -8,6 +8,7 @@ import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
+import { DEFAULT_CHAT_WINDOW_HEIGHT, DEFAULT_CHAT_WINDOW_WIDTH } from '@/Shared/App';
 
 export default function ChatContainer() {
   const windowRef = useRef< HTMLDivElement >( null );
@@ -23,7 +24,7 @@ export default function ChatContainer() {
       windowElement.style.height = settings.height + 'px';
 
       const resetChatWindow = () => {
-        windowElement.style.transform = `translate(0px, 0px)`;
+        resetChatWindowPosition();
         setSettings( {
           x: 0,
           y: 0,
@@ -44,7 +45,8 @@ export default function ChatContainer() {
       id="awp-chat"
       className={ cn(
         'fixed bottom-4 right-10',
-        'h-[85vh] w-[500px] z-[999] bg-brand-gray',
+        `h-[${DEFAULT_CHAT_WINDOW_HEIGHT}] w-[${DEFAULT_CHAT_WINDOW_WIDTH}]`,
+        'z-[999] bg-brand-gray',
         'shadow-xl transition-shadow duration-500 flex flex-col ',
         'border border-gray-200 rounded-xl opacity-100',
         {
