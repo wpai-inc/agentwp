@@ -104,7 +104,7 @@ export default function WindowActions() {
 
   return (
     <div className={cn(
-      'absolute bg-brand-gray h-20 w-6 -left-6 top-11',
+      'absolute bg-brand-gray h-20 w-6 -left-6 top-12',
       'flex flex-col items-center justify-center gap-2',
       'rounded-bl-lg rounded-tl-lg'
     )}

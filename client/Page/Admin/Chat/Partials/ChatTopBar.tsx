@@ -46,8 +46,8 @@ export default function ChatTopBar() {
       )}
     >
       <div className="flex items-center gap-2">
-        <Logo className="w-6 h-6" />
-        <Badge>Free</Badge>
+        <Logo className="w-7 h-7" />
+        <Badge className="h-7">Free</Badge>
         <Button
           onClick={onUpgradeClick}
           size="sm"
@@ -56,7 +56,7 @@ export default function ChatTopBar() {
           Upgrade
         </Button>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <AgentTooltip content="New conversation">
           <Button
             asChild
@@ -65,7 +65,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <AddIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+            <AddIcon className="h-5 w-5 text-gray-500 hover:text-black" />
           </Button>
         </AgentTooltip>
         <AgentTooltip content="Clear history">
@@ -76,7 +76,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <HistoryIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+            <HistoryIcon className="h-5 w-5 text-gray-500 hover:text-black" />
           </Button>
         </AgentTooltip>
         <AgentTooltip content="Settings">
@@ -87,7 +87,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <SettingsIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+            <SettingsIcon className="h-5 w-5 text-gray-500 hover:text-black" />
           </Button>
         </AgentTooltip>
         <AgentTooltip content="Your profile">
@@ -98,7 +98,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <AccountIcon className="h-6 w-6 text-gray-500 hover:text-black" />
+            <AccountIcon className="h-5 w-5 text-gray-500 hover:text-black" />
           </Button>
         </AgentTooltip>
       </div>

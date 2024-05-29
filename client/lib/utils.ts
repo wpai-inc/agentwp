@@ -40,3 +40,7 @@ export const resetChatWindowPosition = () => {
 export const getChatwindowElement = () => {
   return document.getElementById('awp-chat');
 };
+
+export const getChatWindowTopBarElement = () => {
+  return document.getElementById('awp-chat-top-bar');
+}

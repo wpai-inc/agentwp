@@ -48,7 +48,7 @@ export default function ChatContainer() {
         `h-[${DEFAULT_CHAT_WINDOW_HEIGHT}] w-[${DEFAULT_CHAT_WINDOW_WIDTH}]`,
         'z-[999] bg-brand-gray',
         'shadow-xl transition-shadow duration-500 flex flex-col ',
-        'border border-gray-200 rounded-xl opacity-100',
+        'border-gray-200 rounded-xl opacity-100',
         {
           'w-0 h-0 overflow-hidden border-0': ! open,
           'minimize': minimizing,
