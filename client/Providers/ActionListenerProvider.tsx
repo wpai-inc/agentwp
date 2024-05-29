@@ -23,7 +23,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
               .get( 'run_action_query', {
                 params: {
                   sql: currentAction.action.sql,
-                  params: currentAction.action.params,
+                  args: currentAction.action.args,
                 },
               } )
               .then( ( response: AxiosResponse ) => {

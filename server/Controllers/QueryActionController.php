@@ -9,9 +9,9 @@ class QueryActionController extends BaseController
         global $wpdb;
         // unescape slashes
         $sql = stripslashes($this->request->query->get('sql'));
-        $params = $this->request->query->get('params');
+        $args = $this->request->query->get('args');
 
-        $prepared_query = $wpdb->prepare($sql, $params);
+        $prepared_query = $wpdb->prepare($sql, $args);
 
         $results = $wpdb->get_results($prepared_query);
 
