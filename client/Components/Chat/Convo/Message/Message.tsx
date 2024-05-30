@@ -17,6 +17,7 @@ export default function Message( userRequest: UserRequestType ) {
         time={ userRequest.human_created_at }
         agentActions={ userRequest.agent_actions }
         pending={ pending }
+        feedback={ userRequest.feedback }
       />
     </div>
   );

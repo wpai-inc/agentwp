@@ -2,6 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 import { MessageAction, NavigateAction, QueryAction } from '@wpai/schemas';
 import { usePage } from './PageProvider';
+import { FeedbackType } from '@/Types/types';
 
 export type ActionType = NavigateAction | MessageAction | QueryAction;
 
@@ -27,6 +28,7 @@ export type UserRequestType = {
   human_created_at: string;
   wp_user_id?: number;
   agent_actions: AgentAction[];
+  feedback?: FeedbackType;
 };
 
 type UserRequestsContextType = {

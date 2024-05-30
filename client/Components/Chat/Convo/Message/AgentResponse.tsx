@@ -8,17 +8,20 @@ import ActionComponent from '../Actions/ActionComponent';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { logoUrl } from '@/Components/Logo';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
+import { FeedbackType } from '@/Types/types';
 
 export default function AgentResponse( {
   agentActions,
   userRequestId,
   time,
   pending = false,
+  feedback,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
   time: string;
   pending?: boolean;
+  feedback?: FeedbackType;
 } ) {
   const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
     | AgentAction
@@ -45,7 +48,7 @@ export default function AgentResponse( {
       <MessageHeader>
         <Avatar name="AgentWP" time={ time } image={ logoUrl } />
         <div className="flex items-center gap-4">
-          { ! isIncomplete && <Feedback /> }
+          { ! isIncomplete && <Feedback userRequestId={ userRequestId } feedback={ feedback } /> }
           <Popover>
             <PopoverTrigger>
               <IconMore className="text-brand-gray-15" />

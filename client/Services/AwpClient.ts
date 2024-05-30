@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { useNotifications } from '@/Providers/NotificationProvider';
+import { FeedbackType } from '@/Types/types';
 
 export default class AwpClient {
   private baseUrl: string = 'https://app.agentwp.com';
@@ -73,6 +74,15 @@ export default class AwpClient {
   }
   async refreshToken(): Promise< AxiosResponse > {
     return this.adminRequest( `/agentwp/v1/refresh_token` );
+  }
+
+  async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {
+    return this.request(
+      'POST',
+      `${ this.baseUrl }/api/request/${ userRequestId }/feedback`,
+      {},
+      data,
+    );
   }
 
   request(
