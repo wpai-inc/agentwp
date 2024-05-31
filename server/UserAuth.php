@@ -59,6 +59,10 @@ class UserAuth
     {
         return $this->user->ID;
     }
+    public function isAuthenticated(): int
+    {
+        return !empty($this->user->ID);
+    }
 
     public function canManageUsers(): bool
     {
