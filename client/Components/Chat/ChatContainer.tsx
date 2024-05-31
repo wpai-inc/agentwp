@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn, resetChatWindowPosition } from "@/lib/utils";
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
@@ -8,13 +8,21 @@ import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
-import { DEFAULT_CHAT_WINDOW_HEIGHT, DEFAULT_CHAT_WINDOW_WIDTH } from '@/Shared/App';
 
 export default function ChatContainer() {
   const windowRef = useRef< HTMLDivElement >( null );
   const { open, minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, overlayChildren } = useChat();
+  const [isHovering, setIsHovering] = useState(false);
+
+  function onMouseEnter() {
+    setIsHovering(true);
+  }
+
+  function onMouseLeave() {
+    setIsHovering(false);
+  }
 
   useEffect( () => {
     const windowElement = windowRef.current;
@@ -41,13 +49,15 @@ export default function ChatContainer() {
 
   return (
     <div
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       ref={ windowRef }
       id="awp-chat"
       className={ cn(
         'fixed bottom-4 right-10',
-        `h-[${DEFAULT_CHAT_WINDOW_HEIGHT}] w-[${DEFAULT_CHAT_WINDOW_WIDTH}]`,
+        'h-[90vh] w-[400px]',
         'z-[999] bg-brand-gray',
-        'shadow-xl transition-shadow duration-500 flex flex-col ',
+        'shadow-xl transition-shadow duration-500 flex flex-col',
         'border-gray-200 rounded-xl opacity-100',
         {
           'w-0 h-0 overflow-hidden border-0': ! open,
@@ -62,13 +72,13 @@ export default function ChatContainer() {
       <ChatTopBar />
       <div className="flex-1 flex flex-col relative overflow-auto">
         <Dialog conversation={ conversation } />
-        <div className="p-2">
+        <div className="p-1.5">
           <MessageBox />
         </div>
         { overlayChildren && <ChatOverlay>{ overlayChildren }</ChatOverlay> }
       </div>
-      <WindowActions />
-      { ! maximizing && ! isMaximized && <DragHandles /> }
+      <WindowActions isShowing={isHovering} />
+      { !maximizing && !isMaximized && <DragHandles isShowing={isHovering} /> }
     </div>
   );
 }

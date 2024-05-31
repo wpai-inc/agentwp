@@ -65,7 +65,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <AddIcon className="h-5 w-5 text-gray-500 hover:text-black" />
+            <AddIcon className="h-5 w-5 text-gray-900 hover:text-black" />
           </Button>
         </AgentTooltip>
         <AgentTooltip content="Clear history">
@@ -76,7 +76,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <HistoryIcon className="h-5 w-5 text-gray-500 hover:text-black" />
+            <HistoryIcon className="h-5 w-5 text-gray-900 hover:text-black" />
           </Button>
         </AgentTooltip>
         <AgentTooltip content="Settings">
@@ -87,7 +87,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <SettingsIcon className="h-5 w-5 text-gray-500 hover:text-black" />
+            <SettingsIcon className="h-5 w-5 text-gray-900 hover:text-black" />
           </Button>
         </AgentTooltip>
         <AgentTooltip content="Your profile">
@@ -98,7 +98,7 @@ export default function ChatTopBar() {
             size="icon"
             className="cursor-pointer"
           >
-            <AccountIcon className="h-5 w-5 text-gray-500 hover:text-black" />
+            <AccountIcon className="h-5 w-5 text-gray-900 hover:text-black" />
           </Button>
         </AgentTooltip>
       </div>

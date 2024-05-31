@@ -14,9 +14,9 @@ const ChatOption = ({
       onClick={onClick}
       className={cn(
         'flex items-center justify-center shadow-sm',
-        'p-4 bg-brand-gray-25 cursor-pointer h-full w-full',
+        'p-4 bg-brand-gray-20 cursor-pointer h-full w-full',
         'rounded-lg hover:bg-gray-50',
-        'text-center text-slate-500 transition duration-200'
+        'text-center text-gray-600 transition duration-200'
       )}
     >
       <p className=" ">

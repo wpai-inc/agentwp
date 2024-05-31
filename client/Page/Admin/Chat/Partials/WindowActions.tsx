@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CloseIcon from '@material-design-icons/svg/outlined/close.svg?react';
 import MinimizeIcon from '@material-design-icons/svg/outlined/minimize.svg?react';
 import MaximizeIcon from '@material-design-icons/svg/outlined/open_with.svg?react';
@@ -9,7 +9,30 @@ import { useChat } from '@/Providers/ChatProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 
-export default function WindowActions() {
+const Corners = () => {
+  return (
+    <>
+      <div
+        className={cn(
+          'absolute -top-3 left-3 border-brand-gray',
+          'min-h-4 w-4 rounded-br-full border-b-4 border-r-4',
+        )}
+      >
+      </div>
+      <div
+        className={cn(
+          'absolute -bottom-3 left-3 border-brand-gray',
+          'min-h-4 w-4 rounded-tr-full border-t-4 border-r-4',
+        )}
+      >
+      </div>
+    </>
+  );
+};
+
+export default function WindowActions({
+  isShowing = false,
+}) {
   const { setSettings } = useClientSettings();
   const {
     toggle,
@@ -17,6 +40,8 @@ export default function WindowActions() {
     maximizeChatWindow,
     reduceWindow,
   } = useChat();
+  const [isFirstLoad, setIsFirstLoad] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   function onMaximizeClick() {
     const element = getChatwindowElement();
@@ -35,6 +60,7 @@ export default function WindowActions() {
 
   function startDrag(e) {
     e.preventDefault();
+    setIsDragging(true);
     const chatWindow = getChatwindowElement();
     if (chatWindow.classList.contains('maximized')) {
       return;
@@ -60,6 +86,7 @@ export default function WindowActions() {
         x: lastPositionX,
         y: lastPositionY,
       });
+      setIsDragging(false);
       bodyElement.removeEventListener('mousemove', handleDrag);
       bodyElement.onmouseup = null;
     };
@@ -102,11 +129,26 @@ export default function WindowActions() {
     bodyElement.addEventListener('mouseup', disableDrag);
   }
 
+  useEffect(() => {
+    if (isFirstLoad && isShowing) {
+      setIsFirstLoad(false);
+    }
+  }, [isShowing]);
+
+  useEffect(() => {
+    setIsFirstLoad(true);
+  }, []);
+
   return (
     <div className={cn(
-      'absolute bg-brand-gray h-20 w-6 -left-6 top-12',
+      'absolute bg-brand-gray h-20 w-6 top-14',
       'flex flex-col items-center justify-center gap-2',
-      'rounded-bl-lg rounded-tl-lg'
+      'rounded-bl-lg rounded-tl-lg',
+      {
+        'opacity-0': isFirstLoad,
+        'animate-slide-in': (isShowing || isDragging),
+        'animate-slide-out': (!isShowing && !isFirstLoad && !isDragging)
+      },
     )}
     >
       <AgentTooltip
@@ -118,7 +160,8 @@ export default function WindowActions() {
           onMouseDown={startDrag}
           onDoubleClick={onDragDoubleClick}
           className={cn(
-            'h-6 w-6 cursor-pointer hover:text-amber-500 cursor-move'
+            'h-6 w-6 cursor-pointer hover:text-amber-500 cursor-move',
+            'text-gray-400'
           )}
         />
       </AgentTooltip>
@@ -136,7 +179,8 @@ export default function WindowActions() {
           <ReduceWindowIcon
             onClick={reduceWindow}
             className={cn(
-              'h-4 w-4 cursor-pointer hover:text-teal-500'
+              'h-4 w-4 cursor-pointer hover:text-teal-500',
+              'text-gray-400'
             )}
           />
         </AgentTooltip>
@@ -148,7 +192,8 @@ export default function WindowActions() {
           <MaximizeIcon
             onClick={onMaximizeClick}
             className={cn(
-              'h-4 w-4 cursor-pointer hover:text-teal-500 rotate-45'
+              'h-4 w-4 cursor-pointer hover:text-teal-500 rotate-45',
+              'text-gray-400'
             )}
           />
         </AgentTooltip>
@@ -158,10 +203,12 @@ export default function WindowActions() {
         <CloseIcon
           onClick={toggle}
           className={cn(
-            'h-5 w-5 cursor-pointer hover:text-red-500'
+            'h-5 w-5 cursor-pointer hover:text-red-500',
+            'text-gray-400'
           )}
         />
       </AgentTooltip>
+      <Corners />
     </div>
   );
 };

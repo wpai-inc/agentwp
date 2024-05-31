@@ -32,8 +32,8 @@ const ChatWelcome = () => {
       'h-full w-full flex flex-col items-center',
       'mt-5'
     )}>
-      <p className="text-3xl font-semibold">Hi {name},</p>
-      <p className="text-xl text-center">
+      <p className="text-3xl font-semibold text-black">Hi {name},</p>
+      <p className="text-xl text-center text-black">
         You're currently on the WooCommerce settings page.
         Here's what I can help you with.
       </p>
@@ -47,8 +47,8 @@ const ChatWelcome = () => {
           </div>
         ))}
         <div className={cn(
-          'bg-brand-gray-25 cursor-pointer mt-2 rounded-lg self-stretch',
-          'px-3 py-2 flex items-center justify-between text-slate-500',
+          'bg-brand-gray-20 cursor-pointer mt-2 rounded-lg self-stretch',
+          'px-3 py-2 flex items-center justify-between text-gray-600',
           'col-span-2 shadow-sm'
         )}>
           All Capabilities
