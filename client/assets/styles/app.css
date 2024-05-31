@@ -6,8 +6,8 @@ svg {
 }
 
 .chat-bottom-inner-shadow {
-    height: 2px;
-    box-shadow: 0 -10px 20px 0 #989898;
+    height: 0;
+    box-shadow: 0 -10px 30px 10px rgba(190, 190, 190, 0.7);
 }
 
 .animate-slide-in {

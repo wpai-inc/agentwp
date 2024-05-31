@@ -10,7 +10,7 @@ export default function Message( userRequest: UserRequestType ) {
   const pending = ! currentAction?.final && userRequest.id === currentUserRequestId;
 
   return (
-    <div id={ userRequest.id } className="border-b border-brand-gray-25 mb-4">
+    <div id={ userRequest.id } className="border-b border-brand-gray-25 mb-4 w-full">
       <UserRequest userRequest={ userRequest } user={ page.user } />
       <AgentResponse
         userRequestId={ userRequest.id }

@@ -110,6 +110,8 @@ export default function ChatProvider( {
         chatMaximized: true,
         x: 0,
         y: 0,
+        width: null,
+        height: null,
       });
 
     }, 1000);
@@ -120,7 +122,13 @@ export default function ChatProvider( {
     setTimeout( () => {
       setReducing( false );
       setIsMaximized( false );
-      setSettings( { chatMaximized: false } );
+      setSettings({
+        chatMaximized: false,
+        x: 0,
+        y: 0,
+        width: null,
+        height: null,
+      });
     }, 1000 );
   }
 

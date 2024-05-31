@@ -12,16 +12,19 @@ export default function Dialog({
 }) {
   const { errors } = useError();
   return (
-    <div className={cn(
-      'flex-1 flex flex-col-reverse overflow-y-auto p-4 relative'
-    )}>
-      {!conversation.length && (
-        <ChatWelcome />
-      )}
-      {conversation.map((msg) => (
-        <Message key={msg.id} {...msg} />
-      ))}
-      {!!errors.length && <ChatError errors={errors} />}
+    <div className="flex flex-1 justify-center overflow-y-auto">
+      <div className={cn(
+        'flex-1 flex flex-col-reverse overflow-y-auto p-4 relative',
+        'items-center max-w-[800px]'
+      )}>
+        {!conversation.length && (
+          <ChatWelcome />
+        )}
+        {conversation.map((msg) => (
+          <Message key={msg.id} {...msg} />
+        ))}
+        {!!errors.length && <ChatError errors={errors} />}
+      </div>
     </div>
   );
 }
