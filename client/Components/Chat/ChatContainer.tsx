@@ -72,6 +72,9 @@ export default function ChatContainer() {
       <ChatTopBar />
       <div className="flex-1 flex flex-col relative overflow-auto">
         <Dialog conversation={ conversation } />
+        <div className={cn(
+          'w-full bg-brand-gray chat-bottom-inner-shadow'
+        )}></div>
         <div className="p-1.5">
           <MessageBox />
         </div>

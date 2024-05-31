@@ -5,6 +5,11 @@ svg {
     fill: currentColor;
 }
 
+.chat-bottom-inner-shadow {
+    height: 2px;
+    box-shadow: 0 -10px 20px 0 #989898;
+}
+
 .animate-slide-in {
     animation: slide-in-left;
     animation-duration: 0.4s;
