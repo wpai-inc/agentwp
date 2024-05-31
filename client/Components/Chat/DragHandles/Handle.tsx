@@ -27,7 +27,7 @@ export default function Handle({
     const bodyElement = document.getElementsByTagName('body')[0];
     const containerElement = document.getElementById('wpbody');
     const maxWidth = containerElement.getBoundingClientRect().width - 60;
-    const maxHeight = containerElement.getBoundingClientRect().height - 100;
+    const maxHeight = containerElement.getBoundingClientRect().height;
 
     const computedStyle = window.getComputedStyle(chatWindow);
     const matrix = new DOMMatrixReadOnly(computedStyle.transform);
@@ -62,14 +62,14 @@ export default function Handle({
       } else if (position === 'bottom-left') {
         newWidth = initialWidth + displacedDistanceX;
         newHeight = initialHeight - displacedDistanceY;
-        newTranslateY = isWithinBounds(newHeight, 650, maxHeight)
+        newTranslateY = isWithinBounds(newHeight, 550, maxHeight)
           ? initialWindowY - (startPosY - y) : newTranslateY;
       } else if (position === 'bottom-right') {
         newWidth = initialWidth - displacedDistanceX;
         newHeight = initialHeight - displacedDistanceY;
         newTranslateX = isWithinBounds(newWidth, getDefaultWindowWidth(), maxWidth)
           ? initialWindowX - (startPosX - x) : newTranslateX;
-        newTranslateY = isWithinBounds(newHeight, 650, maxHeight)
+        newTranslateY = isWithinBounds(newHeight, 550, maxHeight)
           ? initialWindowY - (startPosY - y) : newTranslateY;
       }
       // restrict based on upper and lower bounds
@@ -77,7 +77,7 @@ export default function Handle({
         target.style.width = newWidth + 'px';
         lastWidth = newWidth;
       }
-      if (isWithinBounds(newHeight, 650, maxHeight)) {
+      if (isWithinBounds(newHeight, 550, maxHeight)) {
         target.style.height = newHeight + 'px';
         lastHeight = newHeight;
       }
