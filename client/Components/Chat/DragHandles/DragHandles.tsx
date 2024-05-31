@@ -1,13 +1,27 @@
 import React from 'react';
 import Handle from './Handle';
 
-export default function DragHandles() {
+export default function DragHandles({
+  isShowing = false,
+}) {
   return (
     <>
-      <Handle position={'top-left'} />
-      <Handle position={'top-right'} />
-      <Handle position={'bottom-left'} />
-      <Handle position={'bottom-right'} />
+      <Handle
+        isShowing={isShowing}
+        position={'top-left'}
+      />
+      <Handle
+        isShowing={isShowing}
+        position={'top-right'}
+      />
+      <Handle
+        isShowing={isShowing}
+        position={'bottom-left'}
+      />
+      <Handle
+        isShowing={isShowing}
+        position={'bottom-right'}
+      />
     </>
   );
 };
