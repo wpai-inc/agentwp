@@ -93,6 +93,8 @@ export default function ChatProvider( {
         chatMaximized: false,
         x: 0,
         y: 0,
+        width: null,
+        height: null,
       } );
     }, 1400 );
   }

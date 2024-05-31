@@ -27,7 +27,7 @@ export default function Handle({
     const bodyElement = document.getElementsByTagName('body')[0];
     const containerElement = document.getElementById('wpbody');
     const maxWidth = containerElement.getBoundingClientRect().width - 60;
-    const maxHeight = containerElement.getBoundingClientRect().height;
+    const maxHeight = window.innerHeight - 50;
 
     const computedStyle = window.getComputedStyle(chatWindow);
     const matrix = new DOMMatrixReadOnly(computedStyle.transform);

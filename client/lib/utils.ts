@@ -41,6 +41,11 @@ export const getChatwindowElement = () => {
   return document.getElementById('awp-chat');
 };
 
+export const isChatWindowMaximized = () => {
+  const chatWindow = getChatwindowElement();
+  return chatWindow.classList.contains('maximized');
+}
+
 export const getChatWindowTopBarElement = () => {
   return document.getElementById('awp-chat-top-bar');
 }

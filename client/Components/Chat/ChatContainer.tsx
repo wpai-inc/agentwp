@@ -33,10 +33,12 @@ export default function ChatContainer() {
 
       const resetChatWindow = () => {
         resetChatWindowPosition();
-        setSettings( {
+        setSettings({
           x: 0,
           y: 0,
-        } );
+          width: null,
+          height: null,
+        });
       };
 
       window.addEventListener( 'resize', resetChatWindow );
