@@ -3,60 +3,67 @@ import { useStream } from '@/Providers/StreamProvider';
 import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
-import { AxiosResponse } from 'axios';
 
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamClosed, startStreamFromRequest } = useStream();
-  const { currentAction, setCurrentAction, currentUserRequestId } = useUserRequests();
+  const { currentAction, currentUserRequestId } = useUserRequests();
   const adminRequest = useAdminRoute();
   const client = useClient();
 
   useEffect( () => {
     if ( currentAction && streamClosed && currentAction.action ) {
-      if ( ! currentAction.hasExecuted ) {
-        /**
-         * Executes the current action
-         */
-        switch ( currentAction.action.ability ) {
-          case 'query':
-            adminRequest
-              .get( 'run_action_query', {
-                params: {
-                  sql: currentAction.action.sql,
-                  args: currentAction.action.args,
-                },
-              } )
-              .then( ( response: AxiosResponse ) => {
-                client.storeAgentResult( currentAction.id, {
-                  status: 'success',
-                  data: response.data.results,
-                } );
-              } );
-            break;
-          case 'navigate':
-            client.storeAgentResult( currentAction.id, {
-              status: 'success',
-            } );
-            window.location.href = currentAction.action.url;
-            break;
-          case 'message':
-            client.storeAgentResult( currentAction.id, {
-              status: 'success',
-            } );
-            break;
-        }
-
-        currentAction.hasExecuted = true;
-        setCurrentAction( currentAction );
-      }
-
-      continueActionStream( currentUserRequestId, currentAction );
+      executeAndContinueAction( currentAction, currentUserRequestId );
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
 
-  function continueActionStream( reqId: string | null, currentAction: AgentAction ) {
-    if ( reqId && ! currentAction.final ) {
+  function continueActionStream( reqId: string | null, aa: AgentAction ) {
+    if ( reqId && ! aa.final && aa.hasExecuted ) {
+      console.log( 'startStreamFromRequest' );
       startStreamFromRequest( reqId );
+    }
+  }
+
+  async function executeAndContinueAction( aa: AgentAction, reqId: string | null ) {
+    if ( ! aa.hasExecuted ) {
+      await executeAction( aa );
+      aa.hasExecuted = true;
+    }
+
+    continueActionStream( reqId, aa );
+  }
+
+  async function executeAction( aa: AgentAction ) {
+    console.log( 'executeAction', aa.action );
+    switch ( aa.action.ability ) {
+      case 'query':
+        try {
+          const response = await adminRequest.get( 'run_action_query', {
+            params: {
+              sql: aa.action.sql,
+              args: aa.action.args,
+            },
+          } );
+          console.log( 'QUERY RESPONSE', response.data.data.results );
+          await client.storeAgentResult( aa.id, {
+            status: 'success',
+            data: response.data.data.results,
+          } );
+        } catch ( error ) {
+          console.error( 'Query execution error', error );
+          // Handle error if needed
+        }
+        break;
+      case 'navigate':
+        await client.storeAgentResult( aa.id, {
+          status: 'success',
+        } );
+        window.location.href = aa.action.url;
+        break;
+      case 'message':
+        await client.storeAgentResult( aa.id, {
+          status: 'success',
+        } );
+        break;
     }
   }
 

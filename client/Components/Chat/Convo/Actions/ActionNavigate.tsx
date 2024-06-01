@@ -1,11 +1,11 @@
 import ActionContainer from './ActionContainer';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
 
-export default function ActionNavigate(props: AgentAction) {
+export default function ActionNavigate( { hasExecuted, action }: AgentAction ) {
   return (
-    <ActionContainer pending={!props.result}>
+    <ActionContainer pending={ ! hasExecuted }>
       <p>
-        Navigated to <strong>{props.action.url}</strong>
+        Navigated to <strong>{ action.url as string }</strong>
       </p>
     </ActionContainer>
   );
