@@ -20,7 +20,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const [ streamCompleted, setStreamCompleted ] = useState( false );
   const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
   const { addErrors } = useError();
-  const client = useClient();
+  const { client } = useClient();
   const ctrl = new AbortController();
 
   async function startStream( stream_url: string, user_request_id: string ) {
@@ -36,7 +36,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         async onopen( response ) {
           if ( response.status > 300 ) {
             closeStream();
-            addErrors(['Oops, something went wrong.']);
+            addErrors( [ 'Oops, something went wrong.' ] );
           }
         },
         onmessage( ev ) {
@@ -45,7 +45,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             setStreamCompleted( true );
           } else if ( ev.event === 'error' ) {
             closeStream();
-            addErrors(['Oops, something went wrong.']);
+            addErrors( [ 'Oops, something went wrong.' ] );
           } else {
             setLiveAction( JSON.parse( ev.data ) as AgentAction );
           }

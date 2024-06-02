@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { cn, resetChatWindowPosition } from "@/lib/utils";
+import { cn, resetChatWindowPosition } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
 import MessageBox from './MessageBox/MessageBox';
@@ -13,15 +13,15 @@ export default function ChatContainer() {
   const windowRef = useRef< HTMLDivElement >( null );
   const { open, minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
   const { settings, setSettings } = useClientSettings();
-  const { conversation, overlayChildren } = useChat();
-  const [isHovering, setIsHovering] = useState(false);
+  const { conversation, chatSetting } = useChat();
+  const [ isHovering, setIsHovering ] = useState( false );
 
   function onMouseEnter() {
-    setIsHovering(true);
+    setIsHovering( true );
   }
 
   function onMouseLeave() {
-    setIsHovering(false);
+    setIsHovering( false );
   }
 
   useEffect( () => {
@@ -49,8 +49,8 @@ export default function ChatContainer() {
 
   return (
     <div
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={ onMouseEnter }
+      onMouseLeave={ onMouseLeave }
       ref={ windowRef }
       id="awp-chat"
       className={ cn(
@@ -72,16 +72,16 @@ export default function ChatContainer() {
       <ChatTopBar />
       <div className="flex-1 flex flex-col relative overflow-auto">
         <Dialog conversation={ conversation } />
-        <div className={cn(
-          'w-full bg-brand-gray chat-bottom-inner-shadow'
-        )}></div>
+        <div className={ cn( 'w-full bg-brand-gray chat-bottom-inner-shadow' ) }></div>
         <div className="p-1.5">
           <MessageBox />
         </div>
-        { overlayChildren && <ChatOverlay>{ overlayChildren }</ChatOverlay> }
+        { chatSetting && (
+          <ChatOverlay header={ chatSetting?.header }>{ chatSetting?.component }</ChatOverlay>
+        ) }
       </div>
-      <WindowActions isShowing={isHovering} />
-      { !maximizing && !isMaximized && <DragHandles isShowing={isHovering} /> }
+      <WindowActions isShowing={ isHovering } />
+      { ! maximizing && ! isMaximized && <DragHandles isShowing={ isHovering } /> }
     </div>
   );
 }

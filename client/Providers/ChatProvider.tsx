@@ -13,6 +13,8 @@ type CreateUserRequestResponse = {
   stream_url: string;
 };
 
+type ChatSettingProps = { component: React.ReactNode; header: string } | null;
+
 const ChatContext = createContext( {
   open: false,
   setOpen: ( _open: boolean ) => {},
@@ -26,9 +28,8 @@ const ChatContext = createContext( {
   reducing: false,
   conversation: [] as UserRequestType[],
   sendMessage: ( _message: string ) => {},
-  openChatOverlay: children => {},
-  closeChatOverlay: () => {},
-  overlayChildren: null,
+  setChatSetting: ( _setting: ChatSettingProps ) => {},
+  chatSetting: null as ChatSettingProps,
 } );
 
 export function useChat() {
@@ -49,7 +50,7 @@ export default function ChatProvider( {
   const { page } = usePage();
   const siteId = page.site_id;
   const wp_user_id = parseInt( page.user?.ID );
-  const client = useClient();
+  const { client } = useClient();
   const screen = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
@@ -58,7 +59,7 @@ export default function ChatProvider( {
   const [ maximizing, setMaximizing ] = useState( false );
   const [ reducing, setReducing ] = useState( false );
   const [ isMaximized, setIsMaximized ] = useState( settings.chatMaximized ?? false );
-  const [ overlayChildren, setOverlayChildren ] = useState( null );
+  const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error } = useStream();
   const { addErrors } = useError();
@@ -97,20 +98,19 @@ export default function ChatProvider( {
     }, 1400 );
   }
 
-  function maximizeChatWindow(chatWindowElement) {
-    setMaximizing(true);
-    setTimeout(() => {
-      setMaximizing(false);
-      setIsMaximized(true);
-      chatWindowElement.removeAttribute('style');
+  function maximizeChatWindow( chatWindowElement ) {
+    setMaximizing( true );
+    setTimeout( () => {
+      setMaximizing( false );
+      setIsMaximized( true );
+      chatWindowElement.removeAttribute( 'style' );
       chatWindowElement.style.transform = 'translate(0px, 0px)';
       setSettings( {
         chatMaximized: true,
         x: 0,
         y: 0,
-      });
-
-    }, 1000);
+      } );
+    }, 1000 );
   }
 
   function reduceWindow() {
@@ -120,14 +120,6 @@ export default function ChatProvider( {
       setIsMaximized( false );
       setSettings( { chatMaximized: false } );
     }, 1000 );
-  }
-
-  function openChatOverlay( children ) {
-    setOverlayChildren( children );
-  }
-
-  function closeChatOverlay() {
-    setOverlayChildren( null );
   }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
@@ -176,7 +168,7 @@ export default function ChatProvider( {
       } as UserRequestType );
       startStream( stream_url, user_request_id );
     } catch ( e ) {
-      addErrors([e.message]);
+      addErrors( [ e.message ] );
       console.error( e );
     }
   }
@@ -196,9 +188,8 @@ export default function ChatProvider( {
         expanding,
         conversation,
         sendMessage,
-        openChatOverlay,
-        closeChatOverlay,
-        overlayChildren,
+        setChatSetting,
+        chatSetting,
       } }>
       { children }
     </ChatContext.Provider>

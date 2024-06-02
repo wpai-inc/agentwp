@@ -65,6 +65,20 @@ export default class AwpClient {
     return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }` );
   }
 
+  async clearConversation( siteId: string, wpUserId: string ): Promise< AxiosResponse > {
+    return this.request(
+      'POST',
+      `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }/clear`,
+    );
+  }
+
+  async getHistory( siteId: string, wpUserId: string ): Promise< AxiosResponse > {
+    return this.request(
+      'GET',
+      `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }/history`,
+    );
+  }
+
   async storeAgentResult( actionId: string, data: object ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/result`, {}, data );
   }

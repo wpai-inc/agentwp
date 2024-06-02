@@ -1,7 +1,6 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 import { MessageAction, NavigateAction, QueryAction } from '@wpai/schemas';
-import { usePage } from './PageProvider';
 import { FeedbackType } from '@/Types/types';
 
 export type ActionType = NavigateAction | MessageAction | QueryAction;
@@ -38,6 +37,7 @@ type UserRequestsContextType = {
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
   setCurrentAction: ( action: AgentAction | null ) => void;
+  fetchConvo: () => Promise< void >;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >( {
@@ -47,6 +47,7 @@ const UserRequestsContext = createContext< UserRequestsContextType >( {
   setCurrentUserRequestId: () => {},
   currentAction: null,
   setCurrentAction: () => {},
+  fetchConvo: async () => {},
 } );
 
 export function useUserRequests() {
@@ -64,15 +65,13 @@ export default function UserRequestsProvider( {
   messages?: UserRequestType[];
   children: React.ReactNode;
 } ) {
-  const { page } = usePage();
-  const siteId = page.site_id;
-  const client = useClient();
+  const { getConversation } = useClient();
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ currentAction, setCurrentAction ] = useState< AgentAction | null >( null );
 
   useEffect( () => {
-    getConversation();
+    fetchConvo();
   }, [] );
 
   useEffect( () => {
@@ -87,12 +86,14 @@ export default function UserRequestsProvider( {
     setCurrentAction( currentAction );
   }, [ currentUserRequestId, conversation ] );
 
-  async function getConversation() {
-    const response = await client.isAuthorized()?.getConversation( siteId, page.user.ID );
-
-    if ( response && response.data.length > 0 ) {
-      setCurrentUserRequestId( response.data[ 0 ]?.id );
-      setConversation( response.data );
+  async function fetchConvo() {
+    const items = await getConversation();
+    if ( items && items.length > 0 ) {
+      setCurrentUserRequestId( items[ 0 ]?.id );
+      setConversation( items );
+    } else {
+      setCurrentUserRequestId( null );
+      setConversation( [] );
     }
   }
 
@@ -105,6 +106,7 @@ export default function UserRequestsProvider( {
         setCurrentUserRequestId,
         currentAction,
         setCurrentAction,
+        fetchConvo,
       } }>
       { children }
     </UserRequestsContext.Provider>

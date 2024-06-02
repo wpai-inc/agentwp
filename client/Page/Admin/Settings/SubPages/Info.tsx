@@ -2,7 +2,7 @@ import { Button } from '@/Components/ui/button';
 import { useClient } from '@/Providers/ClientProvider';
 
 export default function Info() {
-  const client = useClient();
+  const { client } = useClient();
   function refreshToken() {
     client.refreshToken();
   }

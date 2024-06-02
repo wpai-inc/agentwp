@@ -12,7 +12,7 @@ export default function Feedback( {
   userRequestId: string;
   feedback?: FeedbackType;
 } ) {
-  const client = useClient();
+  const { client } = useClient();
   const [ approved, setApproved ] = useState< boolean | undefined >( feedback?.approved );
 
   function handleApproval( approved: boolean ) {

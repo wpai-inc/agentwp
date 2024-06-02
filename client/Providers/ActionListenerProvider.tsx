@@ -8,7 +8,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { streamClosed, startStreamFromRequest } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
   const adminRequest = useAdminRoute();
-  const client = useClient();
+  const { client } = useClient();
 
   useEffect( () => {
     if ( currentAction && streamClosed && currentAction.action ) {
