@@ -9,6 +9,7 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
+import LoadingScreen from '@/Components/Chat/LoadingScreen';
 
 export default function ChatContainer() {
   const windowRef = useRef< HTMLDivElement >( null );
@@ -73,13 +74,19 @@ export default function ChatContainer() {
       <div className="minimize-overlay"></div>
       <ChatTopBar />
       <div className="flex-1 flex flex-col relative overflow-auto">
-        <Dialog conversation={ conversation } pending={ loadingConversation } />
-        <div className={ cn( 'w-full bg-brand-gray chat-bottom-inner-shadow' ) }></div>
-        <div className="p-1.5">
-          <MessageBox />
-        </div>
-        { chatSetting && (
-          <ChatOverlay header={ chatSetting?.header }>{ chatSetting?.component }</ChatOverlay>
+        { loadingConversation ? (
+          <LoadingScreen />
+        ) : (
+          <>
+            <Dialog conversation={ conversation } />
+            <div className={ cn( 'w-full bg-brand-gray chat-bottom-inner-shadow' ) }></div>
+            <div className="p-1.5">
+              <MessageBox />
+            </div>
+            { chatSetting && (
+              <ChatOverlay header={ chatSetting?.header }>{ chatSetting?.component }</ChatOverlay>
+            ) }
+          </>
         ) }
       </div>
       <WindowActions isShowing={ isHovering } />

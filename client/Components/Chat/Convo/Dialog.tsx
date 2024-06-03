@@ -4,32 +4,19 @@ import ChatWelcome from '@/Components/ChatWelcome';
 import { useError } from '@/Providers/ErrorProvider';
 import { ChatError } from '@/Components/Chat/Alerts/Error';
 import { cn } from '@/lib/utils';
-import LoadingScreen from '@/Components/Chat/LoadingScreen';
 
-export default function Dialog( {
-  conversation,
-  pending,
-}: {
-  conversation: UserRequestType[];
-  pending: boolean;
-} ) {
+export default function Dialog( { conversation }: { conversation: UserRequestType[] } ) {
   const { errors } = useError();
   return (
     <div
       className={ cn(
-        'flex-1 flex flex-col-reverse overflow-y-auto p-4 relative max-w-screen-md mx-auto',
+        'flex-1 flex flex-col-reverse overflow-y-auto p-4 relative max-w-screen-md mx-auto w-full',
       ) }>
-      { pending ? (
-        <LoadingScreen />
+      { ! conversation.length ? (
+        <ChatWelcome />
       ) : (
-        <>
-          { ! conversation.length && <ChatWelcome /> }
-          { conversation.map( msg => (
-            <Message key={ msg.id } { ...msg } />
-          ) ) }
-        </>
+        conversation.map( msg => <Message key={ msg.id } { ...msg } /> )
       ) }
-
       { !! errors.length && <ChatError errors={ errors } /> }
     </div>
   );

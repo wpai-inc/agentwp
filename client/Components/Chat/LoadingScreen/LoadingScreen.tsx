@@ -1,18 +1,12 @@
-import React from 'react';
-import Logo from "@/Components/Logo";
-import { cn } from "@/lib/utils";
+import { Spinner } from '@/Components/Spinner';
 
 export default function LoadingScreen() {
   return (
-    <div className={cn(
-      'w-full h-full flex flex-col justify-center items-center'
-    )}>
-      <Logo className="animate-pulse-bounce" />
-      <h1 className={cn(
-        'font-bold mt-3'
-      )}>
-        Getting things ready for you...
-      </h1>
+    <div className="h-full flex-col flex justify-center items-center">
+      <div className="items-center flex">
+        <Spinner show={ true } />
+        <h1 className="font-bold text-gray-400 text-sm">Loading...</h1>
+      </div>
     </div>
-  )
-};
+  );
+}
