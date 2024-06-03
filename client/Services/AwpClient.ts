@@ -61,8 +61,14 @@ export default class AwpClient {
     return `${ this.baseUrl }/api/request/${ userRequestId }/stream`;
   }
 
-  async getConversation( siteId: string, wpUserId: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }` );
+  async getConversation(
+    siteId: string,
+    wpUserId: string,
+    since?: string,
+  ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }`, {
+      since,
+    } );
   }
 
   async clearConversation( siteId: string, wpUserId: string ): Promise< AxiosResponse > {
@@ -72,10 +78,11 @@ export default class AwpClient {
     );
   }
 
-  async getHistory( siteId: string, wpUserId: string ): Promise< AxiosResponse > {
+  async getHistory( siteId: string, wpUserId: string, since?: string ): Promise< AxiosResponse > {
     return this.request(
       'GET',
       `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }/history`,
+      { since },
     );
   }
 

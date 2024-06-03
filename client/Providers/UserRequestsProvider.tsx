@@ -37,8 +37,10 @@ type UserRequestsContextType = {
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
   setCurrentAction: ( action: AgentAction | null ) => void;
-  fetchConvo: () => Promise< void >;
+  fetchConvo: ( since?: string ) => Promise< void >;
   loadingConversation: boolean;
+  since: string | null;
+  setSince: React.Dispatch< React.SetStateAction< string | null > >;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >( {
@@ -50,6 +52,8 @@ const UserRequestsContext = createContext< UserRequestsContextType >( {
   setCurrentAction: () => {},
   fetchConvo: async () => {},
   loadingConversation: false,
+  since: null,
+  setSince: () => {},
 } );
 
 export function useUserRequests() {
@@ -68,14 +72,15 @@ export default function UserRequestsProvider( {
   children: React.ReactNode;
 } ) {
   const { getConversation } = useClient();
+  const [ since, setSince ] = useState< string | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( false );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ currentAction, setCurrentAction ] = useState< AgentAction | null >( null );
 
   useEffect( () => {
-    fetchConvo();
-  }, [] );
+    fetchConvo( since );
+  }, [ since ] );
 
   useEffect( () => {
     const currentRequest: UserRequestType | undefined = conversation.find(
@@ -89,10 +94,10 @@ export default function UserRequestsProvider( {
     setCurrentAction( currentAction );
   }, [ currentUserRequestId, conversation ] );
 
-  async function fetchConvo() {
+  async function fetchConvo( since: string | null ) {
     setLoadingConversation( true );
 
-    const items = await getConversation();
+    const items = await getConversation( since );
     if ( items && items.length > 0 ) {
       setCurrentUserRequestId( items[ 0 ]?.id );
       setConversation( items );
@@ -115,6 +120,8 @@ export default function UserRequestsProvider( {
         setCurrentAction,
         fetchConvo,
         loadingConversation,
+        since,
+        setSince,
       } }>
       { children }
     </UserRequestsContext.Provider>

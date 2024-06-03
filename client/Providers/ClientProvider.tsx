@@ -14,8 +14,18 @@ export function useClient() {
 }
 
 export type HistoryType = {
-  created_at: string;
-  human_created_at: string;
+  items: HistoryItem[];
+  lastRequest?: {
+    id: string;
+    createdAt: string;
+    humanCreatedAt: string;
+    message: string;
+  };
+};
+
+export type HistoryItem = {
+  createdAt: string;
+  humanCreatedAt: string;
 };
 
 export function ClientProvider( { children }: { children: React.ReactNode } ) {
@@ -23,17 +33,17 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
 
   const userProfileUrl = page.api_host + '/dashboard';
 
-  async function getHistory(): Promise< HistoryType[] > {
-    const response = await client.getHistory( page.site_id, page.user.ID );
-    return response.data.data as HistoryType[];
+  async function getHistory( since?: string ): Promise< HistoryType[] > {
+    const response = await client.getHistory( page.site_id, page.user.ID, since );
+    return response.data as HistoryType[];
   }
 
   async function clearConversation() {
     await client.clearConversation( page.site_id, page.user.ID );
   }
 
-  async function getConversation() {
-    const res = await client.isAuthorized()?.getConversation( page.site_id, page.user.ID );
+  async function getConversation( since?: string ) {
+    const res = await client.isAuthorized()?.getConversation( page.site_id, page.user.ID, since );
     return res?.data?.data;
   }
 
