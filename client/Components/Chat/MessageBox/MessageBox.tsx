@@ -6,10 +6,10 @@ import { cn } from '@/lib/utils';
 import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import Commands from '../Commands/Commands';
-import { AgentTooltip } from "@/Components/ui/tooltip";
+import { AgentTooltip } from '@/Components/ui/tooltip';
 
 export default function MessageBox() {
-  const { sendMessage, openChatOverlay } = useChat();
+  const { sendMessage, setChatSetting } = useChat();
   const { streamClosed } = useStream();
   const [ message, setMessage ] = useState( '' );
   const [ keyUpEvent, setKeyUpEvent ] = useState<
@@ -41,7 +41,7 @@ export default function MessageBox() {
 
   function onSettingsClick( e: React.FormEvent ) {
     e.preventDefault();
-    openChatOverlay( 'Settings' );
+    setChatSetting( { component: <p>Settings</p>, header: 'Settings' } );
   }
 
   return (
