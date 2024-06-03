@@ -2,215 +2,239 @@
 @import './dragging.css';
 
 svg {
-    fill: currentColor;
+  fill: currentColor;
 }
 
 .chat-bottom-inner-shadow {
-    height: 2px;
-    box-shadow: 0 -10px 20px 0 #989898;
+  height: 2px;
+  box-shadow: 0 -10px 20px 0 #989898;
 }
 
 .animate-slide-in {
-    animation: slide-in-left;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-in-left;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-out {
-    animation: fade-out, slide-out-right;
-    animation-duration: 0.2s, 0.4s;
-    animation-fill-mode: forwards;
+  animation: fade-out, slide-out-right;
+  animation-duration: 0.2s, 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-in-top-left {
-    animation: slide-in-top-left;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-in-top-left;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-out-top-left {
-    animation: slide-out-top-left;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-out-top-left;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-in-top-right {
-    animation: slide-in-top-right;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-in-top-right;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-out-top-right {
-    animation: slide-out-top-right;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-out-top-right;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-in-bottom-left {
-    animation: slide-in-bottom-left;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-in-bottom-left;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-out-bottom-left {
-    animation: slide-out-bottom-left;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-out-bottom-left;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-in-bottom-right {
-    animation: slide-in-bottom-right;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-in-bottom-right;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .animate-slide-out-bottom-right {
-    animation: slide-out-bottom-right;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  animation: slide-out-bottom-right;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 @keyframes slide-in-left {
-    from {
-        left: 0;
-        opacity: 0;
-    }
-    to {
-        left: -1.5rem;
-        opacity: 1;
-    }
+  from {
+    left: 0;
+    opacity: 0;
+  }
+  to {
+    left: -1.5rem;
+    opacity: 1;
+  }
 }
 
 @keyframes fade-out {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes slide-out-right {
-    from {
-        left: -1.5rem;
-    }
-    to {
-        left: 0;
-    }
+  from {
+    left: -1.5rem;
+  }
+  to {
+    left: 0;
+  }
 }
 
 @keyframes slide-in-top-left {
-    from {
-        opacity: 0;
-        left: 0;
-        top: 0;
-    }
-    to {
-        opacity: 1;
-        left: -0.25rem;
-        top: -0.25rem;
-    }
+  from {
+    opacity: 0;
+    left: 0;
+    top: 0;
+  }
+  to {
+    opacity: 1;
+    left: -0.25rem;
+    top: -0.25rem;
+  }
 }
 
 @keyframes slide-out-top-left {
-    from {
-        opacity: 1;
-        left: -0.25rem;
-        top: -0.25rem;
-    }
-    to {
-        opacity: 0;
-        left: 0;
-        top: 0;
-    }
+  from {
+    opacity: 1;
+    left: -0.25rem;
+    top: -0.25rem;
+  }
+  to {
+    opacity: 0;
+    left: 0;
+    top: 0;
+  }
 }
 
 @keyframes slide-in-top-right {
-    from {
-        opacity: 0;
-        right: 0;
-        top: 0;
-    }
-    to {
-        opacity: 1;
-        right: -0.25rem;
-        top: -0.25rem;
-    }
+  from {
+    opacity: 0;
+    right: 0;
+    top: 0;
+  }
+  to {
+    opacity: 1;
+    right: -0.25rem;
+    top: -0.25rem;
+  }
 }
 
 @keyframes slide-out-top-right {
-    from {
-        opacity: 1;
-        right: -0.25rem;
-        top: -0.25rem;
-    }
-    to {
-        opacity: 0;
-        right: 0;
-        top: 0;
-    }
+  from {
+    opacity: 1;
+    right: -0.25rem;
+    top: -0.25rem;
+  }
+  to {
+    opacity: 0;
+    right: 0;
+    top: 0;
+  }
 }
 
 @keyframes slide-in-bottom-left {
-    from {
-        opacity: 0;
-        left: 0;
-        bottom: 0;
-    }
-    to {
-        opacity: 1;
-        left: -0.25rem;
-        bottom: -0.25rem;
-    }
+  from {
+    opacity: 0;
+    left: 0;
+    bottom: 0;
+  }
+  to {
+    opacity: 1;
+    left: -0.25rem;
+    bottom: -0.25rem;
+  }
 }
 
 @keyframes slide-out-bottom-left {
-    from {
-        opacity: 1;
-        left: -0.25rem;
-        bottom: -0.25rem;
-    }
-    to {
-        opacity: 0;
-        left: 0;
-        bottom: 0;
-    }
+  from {
+    opacity: 1;
+    left: -0.25rem;
+    bottom: -0.25rem;
+  }
+  to {
+    opacity: 0;
+    left: 0;
+    bottom: 0;
+  }
 }
 
 @keyframes slide-in-bottom-right {
-    from {
-        opacity: 0;
-        right: 0;
-        bottom: 0;
-    }
-    to {
-        opacity: 1;
-        right: -0.25rem;
-        bottom: -0.25rem;
-    }
+  from {
+    opacity: 0;
+    right: 0;
+    bottom: 0;
+  }
+  to {
+    opacity: 1;
+    right: -0.25rem;
+    bottom: -0.25rem;
+  }
 }
 
 @keyframes slide-out-bottom-right {
-    from {
-        opacity: 1;
-        right: -0.25rem;
-        bottom: -0.25rem;
-    }
-    to {
-        opacity: 0;
-        right: 0;
-        bottom: 0;
-    }
+  from {
+    opacity: 1;
+    right: -0.25rem;
+    bottom: -0.25rem;
+  }
+  to {
+    opacity: 0;
+    right: 0;
+    bottom: 0;
+  }
 }
 
 .animate-is-busy {
-    animation: button__is_busy-animation 2500ms infinite linear;
-    opacity: 0.5;
-    background-size: 100px 100%;
-    background-image: linear-gradient(-45deg, #fafafa61 33%, #e0e0e061 33%, #e0e0e061 70%, #fafafa61 70%);
+  animation: button__is_busy-animation 2500ms infinite linear;
+  opacity: 0.5;
+  background-size: 100px 100%;
+  background-image: linear-gradient(
+    -45deg,
+    #fafafa61 33%,
+    #e0e0e061 33%,
+    #e0e0e061 70%,
+    #fafafa61 70%
+  );
 }
 @keyframes button__is_busy-animation {
-    0% {
-        background-position: 200px 0;
+  0% {
+    background-position: 200px 0;
+  }
+}
+
+.animate-pulse-bounce {
+  animation: pulse-bounce 1s infinite;
+}
+
+@keyframes pulse-bounce {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateY( -25% );
+    animation-timing-function: cubic-bezier( 0.8, 0, 1, 1 );
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY( 0 );
+    animation-timing-function: cubic-bezier( 0, 0, 0.2, 1 );
   }
 }
