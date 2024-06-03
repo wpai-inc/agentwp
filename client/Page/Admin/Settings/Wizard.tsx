@@ -32,7 +32,7 @@ export default function Wizard() {
   }
 
   function goToAboutPage() {
-    adminRequest.post( `/agentwp/v1/onboarding_completed` ).then( () => {
+    adminRequest.post( `onboarding_completed` ).then( () => {
       document.location.reload();
     } );
   }
