@@ -1,6 +1,5 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import HistoryIcon from '@material-design-icons/svg/outlined/history.svg?react';
 import SettingsIcon from '@material-design-icons/svg/outlined/settings.svg?react';
 import AccountIcon from '@material-design-icons/svg/outlined/account_circle.svg?react';
@@ -11,6 +10,7 @@ import { useChat } from '@/Providers/ChatProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import History from '../Settings/History';
 import { useClient } from '@/Providers/ClientProvider';
+import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversationButton';
 
 export default function ChatTopBar() {
   const { setChatSetting } = useChat();
@@ -23,14 +23,7 @@ export default function ChatTopBar() {
     } );
   }
 
-  function onAddClick( e: React.FormEvent ) {
-    setChatSetting( {
-      component: <p>Adding</p>,
-      header: 'Adding',
-    } );
-  }
-
-  function onHistoryClick( e: React.FormEvent ) {
+  function handleHistorySettings( e: React.FormEvent ) {
     setChatSetting( {
       component: <History />,
       header: 'History',
@@ -58,19 +51,12 @@ export default function ChatTopBar() {
       </div>
       <div className="flex items-center gap-1">
         <AgentTooltip content="New conversation">
-          <Button
-            asChild
-            onClick={ onAddClick }
-            variant="ghost"
-            size="icon"
-            className="cursor-pointer">
-            <AddIcon className="h-5 w-5 text-gray-900 hover:text-black" />
-          </Button>
+          <ClearConversationButton />
         </AgentTooltip>
-        <AgentTooltip content="View and Clear history">
+        <AgentTooltip content="View history">
           <Button
             asChild
-            onClick={ onHistoryClick }
+            onClick={ handleHistorySettings }
             variant="ghost"
             size="icon"
             className="cursor-pointer">

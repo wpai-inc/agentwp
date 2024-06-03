@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
-import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import { Button } from '@/Components/ui/button';
 import type { HistoryType } from '@/Providers/ClientProvider';
 
 export default function History() {
   const [ history, setHistory ] = useState< HistoryType[] >( [] );
-  const { getHistory, clearConversation } = useClient();
-  const { fetchConvo } = useUserRequests();
+  const { getHistory } = useClient();
 
   useEffect( () => {
     fetchHistory();
@@ -16,12 +13,6 @@ export default function History() {
   async function fetchHistory() {
     const history = await getHistory();
     setHistory( history );
-  }
-
-  async function handleClearHistory() {
-    await clearConversation();
-    fetchConvo();
-    fetchHistory();
   }
 
   return (
@@ -33,7 +24,6 @@ export default function History() {
               { item.human_created_at }
             </p>
           ) ) }
-      <Button onClick={ handleClearHistory }>Clear History</Button>
     </div>
   );
 }
