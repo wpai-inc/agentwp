@@ -87,7 +87,7 @@ export default class AwpClient {
     return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }`, {}, data );
   }
   async refreshToken(): Promise< AxiosResponse > {
-    return this.adminRequest( `/agentwp/v1/refresh_token` );
+    return this.adminRequest( `refresh_token` );
   }
 
   async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {
