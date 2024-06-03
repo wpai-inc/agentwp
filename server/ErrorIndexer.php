@@ -17,8 +17,11 @@ class ErrorIndexer implements Registrable
 
     public function register()
     {
-        set_error_handler([$this, 'handle']);
-        register_shutdown_function([$this, 'catchFatalErrors']);
+        //TODO: error logger should work for unauthenticated users alo
+        if ($this->main->auth()->isAuthenticated()) {
+            set_error_handler([$this, 'handle']);
+            register_shutdown_function([$this, 'catchFatalErrors']);
+        }
     }
 
     public function catchFatalErrors()
@@ -37,7 +40,7 @@ class ErrorIndexer implements Registrable
         array $error_context = []
     ): bool {
         $siteId = $this->main->siteId();
-        if (! $siteId) {
+        if (!$siteId) {
             return false;
         }
 
@@ -49,6 +52,7 @@ class ErrorIndexer implements Registrable
             'context' => $error_context, // Be cautious with sensitive information
         ];
 
+        //TODO: We should be able to pas the API token here
         $awpClient = AwpClientFactory::create($this->main);
         $response = $awpClient->indexError($siteId, json_encode($error_data));
 
