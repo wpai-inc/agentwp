@@ -38,6 +38,7 @@ type UserRequestsContextType = {
   currentAction: AgentAction | null;
   setCurrentAction: ( action: AgentAction | null ) => void;
   fetchConvo: () => Promise< void >;
+  loadingConversation: boolean;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >( {
@@ -48,6 +49,7 @@ const UserRequestsContext = createContext< UserRequestsContextType >( {
   currentAction: null,
   setCurrentAction: () => {},
   fetchConvo: async () => {},
+  loadingConversation: false,
 } );
 
 export function useUserRequests() {
@@ -67,6 +69,7 @@ export default function UserRequestsProvider( {
 } ) {
   const { getConversation } = useClient();
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
+  const [ loadingConversation, setLoadingConversation ] = useState< boolean >( false );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ currentAction, setCurrentAction ] = useState< AgentAction | null >( null );
 
@@ -87,6 +90,8 @@ export default function UserRequestsProvider( {
   }, [ currentUserRequestId, conversation ] );
 
   async function fetchConvo() {
+    setLoadingConversation( true );
+
     const items = await getConversation();
     if ( items && items.length > 0 ) {
       setCurrentUserRequestId( items[ 0 ]?.id );
@@ -95,6 +100,8 @@ export default function UserRequestsProvider( {
       setCurrentUserRequestId( null );
       setConversation( [] );
     }
+
+    setLoadingConversation( false );
   }
 
   return (
@@ -107,6 +114,7 @@ export default function UserRequestsProvider( {
         currentAction,
         setCurrentAction,
         fetchConvo,
+        loadingConversation,
       } }>
       { children }
     </UserRequestsContext.Provider>

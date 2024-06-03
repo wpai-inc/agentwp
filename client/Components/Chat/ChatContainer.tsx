@@ -8,6 +8,7 @@ import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
+import { useUserRequests } from '@/Providers/UserRequestsProvider';
 
 export default function ChatContainer() {
   const windowRef = useRef< HTMLDivElement >( null );
@@ -15,6 +16,7 @@ export default function ChatContainer() {
   const { settings, setSettings } = useClientSettings();
   const { conversation, chatSetting } = useChat();
   const [ isHovering, setIsHovering ] = useState( false );
+  const { loadingConversation } = useUserRequests();
 
   function onMouseEnter() {
     setIsHovering( true );
@@ -71,7 +73,7 @@ export default function ChatContainer() {
       <div className="minimize-overlay"></div>
       <ChatTopBar />
       <div className="flex-1 flex flex-col relative overflow-auto">
-        <Dialog conversation={ conversation } />
+        <Dialog conversation={ conversation } pending={ loadingConversation } />
         <div className={ cn( 'w-full bg-brand-gray chat-bottom-inner-shadow' ) }></div>
         <div className="p-1.5">
           <MessageBox />
