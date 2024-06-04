@@ -24,8 +24,8 @@ if ( rootElement ) {
   root.render(
     <React.StrictMode>
       <PageProvider page={ agentwp_settings }>
-        <NotificationsProvider>
-          <App>
+        <App>
+          <NotificationsProvider>
             <ErrorProvider>
               <AdminRouteProvider>
                 <ClientProvider>
@@ -45,8 +45,8 @@ if ( rootElement ) {
                 </ClientProvider>
               </AdminRouteProvider>
             </ErrorProvider>
-          </App>
-        </NotificationsProvider>
+          </NotificationsProvider>
+        </App>
       </PageProvider>
     </React.StrictMode>,
   );

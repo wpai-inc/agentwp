@@ -12,6 +12,8 @@ import { PageProvider } from '../client/Providers/PageProvider';
 import type { PageData } from '../client/Types/types';
 import { ClientProvider } from '../client/Providers/ClientProvider';
 import { AdminRouteProvider } from '../client/Providers/AdminRouteProvider';
+import { NotificationsProvider } from '../client/Providers/NotificationProvider';
+import { ErrorProvider } from '../client/Providers/ErrorProvider';
 
 const page = {
   home_url: 'http://localhost:8080',
@@ -29,7 +31,7 @@ const page = {
     user_login: 'greg',
     user_nicename: 'greg',
     display_name: 'greg',
-    roles: ['administrator'],
+    roles: [ 'administrator' ],
   },
   is_admin: true,
   agentwp_manager: true,
@@ -68,28 +70,32 @@ const preview: Preview = {
     },
   },
   decorators: [
-    function (Story, { parameters }) {
+    function ( Story, { parameters } ) {
       return (
-        <PageProvider page={page}>
-          <App>
-            <AdminRouteProvider>
-              <ClientProvider>
-                <ClientSettingsProvider>
-                  <ScreenProvider>
-                    <UserRequestsProvider messages={parameters.messages}>
-                      <StreamProvider>
-                        <ActionListenerProvider>
-                          <ChatProvider defaultOpen={parameters.open}>
-                            <Story />
-                          </ChatProvider>
-                        </ActionListenerProvider>
-                      </StreamProvider>
-                    </UserRequestsProvider>
-                  </ScreenProvider>
-                </ClientSettingsProvider>
-              </ClientProvider>
-            </AdminRouteProvider>
-          </App>
+        <PageProvider page={ page }>
+          <NotificationsProvider>
+            <App>
+              <ErrorProvider>
+                <AdminRouteProvider>
+                  <ClientProvider>
+                    <ClientSettingsProvider>
+                      <ScreenProvider>
+                        <UserRequestsProvider messages={ parameters.messages }>
+                          <StreamProvider>
+                            <ActionListenerProvider>
+                              <ChatProvider defaultOpen={ parameters.open }>
+                                <Story />
+                              </ChatProvider>
+                            </ActionListenerProvider>
+                          </StreamProvider>
+                        </UserRequestsProvider>
+                      </ScreenProvider>
+                    </ClientSettingsProvider>
+                  </ClientProvider>
+                </AdminRouteProvider>
+              </ErrorProvider>
+            </App>
+          </NotificationsProvider>
         </PageProvider>
       );
     },
