@@ -2,66 +2,67 @@
 Classes for enabling animations for maximizing, expanding and minimizing
  */
 .minimize {
-    overflow: hidden;
-    animation-name: minimize-height, minimize-width, hide-chat;
-    animation-delay: 0s, 0.6s, 1.1s;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
+  overflow: hidden;
+  animation-name: minimize-height, minimize-width, hide-chat;
+  animation-delay: 0s, 0.6s, 1.1s;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
 }
 
 .expand {
-    width: 30px;
-    height: 30px;
-    overflow: hidden;
-    animation-name: show-chat, expand-width, expand-height;
-    animation-delay: 0s, 0.3s, 0.9s;
-    animation-duration: 0.3s, 0.4s, 0.4s;
-    animation-fill-mode: forwards;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  animation-name: show-chat, expand-width, expand-height;
+  animation-delay: 0s, 0.3s, 0.9s;
+  animation-duration: 0.3s, 0.4s, 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .maximize {
-    animation-name: maximize-width, maximize-height;
-    animation-delay: 0s, 0.4s;
-    animation-duration: 0.4s, 0.4s;
-    animation-fill-mode: forwards;
+  animation-name: maximize-width, maximize-height;
+  animation-delay: 0s, 0.4s;
+  animation-duration: 0.4s, 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .reduce {
-    animation-name: reduce-height, reduce-width;
-    animation-delay: 0s, 0.4s;
-    animation-duration: 0.4s, 0.4s;
-    animation-fill-mode: forwards;
+  animation-name: reduce-height, reduce-width;
+  animation-delay: 0s, 0.4s;
+  animation-duration: 0.4s, 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .maximized {
-    transform: translate(0px, 0px);
-    width: calc(100vw - 240px);
-    height: calc(100vh - 60px);
+  transform: translate( 0px, 0px );
+  width: calc( 100vw - 240px );
+  height: calc( 100vh - 60px );
 }
 
-.expand .minimize-overlay, .minimize .minimize-overlay {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background-color: #FFF;
+.expand .minimize-overlay,
+.minimize .minimize-overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: #fff;
 }
 
 .animate-open-chat-overlay {
-    animation-name: open-chat-overlay;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
+  animation-name: open-chat-overlay;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX( -50% );
 }
 
 .animate-close-chat-overlay {
-    animation-name: close-chat-overlay;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
+  animation-name: close-chat-overlay;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX( -50% );
 }
 
 /**
@@ -69,167 +70,165 @@ Animations for maximizing, expanding and minimizing
  */
 
 @keyframes hide-chat {
-    to {
-        right: -50%;
-        bottom: 4%;
-    }
+  to {
+    right: -50%;
+    bottom: 4%;
+  }
 }
 
 @keyframes minimize-width {
-    25% {
-        width: 550px;
-    }
-    100% {
-        width: 30px;
-    }
+  25% {
+    width: 550px;
+  }
+  100% {
+    width: 30px;
+  }
 }
 
 @keyframes minimize-height {
-    25% {
-        height: 90vh;
-    }
-    100% {
-        height: 30px;
-    }
+  25% {
+    height: 90vh;
+  }
+  100% {
+    height: 30px;
+  }
 }
 
 @keyframes show-chat {
-    from {
-        right: -50%;
-        bottom: 16px;
-    }
-    to {
-        right: 40px;
-        bottom: 16px;
-    }
+  from {
+    right: -50%;
+    bottom: 16px;
+  }
+  to {
+    right: 40px;
+    bottom: 16px;
+  }
 }
 
 @keyframes expand-height {
-    75% {
-        height: 90vh;
-    }
-    100% {
-        height: 85vh;
-    }
+  75% {
+    height: 90vh;
+  }
+  100% {
+    height: 85vh;
+  }
 }
 
 @keyframes expand-width {
-    75% {
-        width: 550px;
-    }
-    100% {
-        width: 400px;
-    }
+  75% {
+    width: 550px;
+  }
+  100% {
+    width: 400px;
+  }
 }
 
 @keyframes maximize-width {
-    to {
-        transform: translate(0px, 0px);
-        width: calc(100vw - 240px);
-    }
+  to {
+    transform: translate( 0px, 0px );
+    width: calc( 100vw - 240px );
+  }
 }
 
 @keyframes maximize-height {
-    to {
-        height: calc(100vh - 60px);
-    }
+  to {
+    height: calc( 100vh - 60px );
+  }
 }
 
 @keyframes reduce-width {
-    from {
-        width: calc(100vw - 240px);
-    }
-    to {
-        width: 400px;
-    }
+  from {
+    width: calc( 100vw - 240px );
+  }
+  to {
+    width: 400px;
+  }
 }
 
 @keyframes reduce-height {
-    from {
-        height: calc(100vh - 60px);
-    }
-    to {
-        height: 85vh;
-    }
+  from {
+    height: calc( 100vh - 60px );
+  }
+  to {
+    height: 90vh;
+  }
 }
 
 @keyframes minimize-overlay {
-    from {
-        background-color: transparent;
-    }
-    to {
-        background-color: #FFF;
-    }
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: #fff;
+  }
 }
 
 @keyframes open-chat-overlay {
-    from {
-        width: 50%;
-        height: 30px;
-    }
-    to {
-        width: 95%;
-        height: 98%;
-    }
+  from {
+    width: 50%;
+    height: 30px;
+  }
+  to {
+    width: 95%;
+    height: 98%;
+  }
 }
 
 @keyframes close-chat-overlay {
+  from {
+    width: 95%;
+    height: 98%;
+    opacity: 1;
+  }
+  to {
+    width: 50%;
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@media screen and ( max-width: 960px ) {
+  .maximized {
+    transform: translate( 0px, 0px );
+    width: calc( 100vw - 110px );
+  }
+
+  @keyframes maximize-width {
+    to {
+      width: calc( 100vw - 110px );
+      transform: translate( 0px, 0px );
+    }
+  }
+
+  @keyframes reduce-width {
     from {
-        width: 95%;
-        height: 98%;
-        opacity: 1;
+      width: calc( 100vw - 110px );
     }
     to {
-        width: 50%;
-        height: 0;
-        opacity: 0;
+      width: 400px;
     }
+  }
 }
 
-@media screen and (max-width: 960px) {
-    .maximized {
-        transform: translate(0px, 0px);
-        width: calc(100vw - 110px);
+@media screen and ( max-width: 782px ) {
+  .maximized {
+    transform: translate( 0px, 0px );
+    width: calc( 100vw - 70px );
+  }
+
+  @keyframes maximize-width {
+    to {
+      width: calc( 100vw - 70px );
+      transform: translate( 0px, 0px );
     }
+  }
 
-    @keyframes maximize-width {
-        to {
-            width: calc(100vw - 110px);
-            transform: translate(0px, 0px);
-        }
+  @keyframes reduce-width {
+    from {
+      width: calc( 100vw - 70px );
     }
-
-    @keyframes reduce-width {
-        from {
-            width: calc(100vw - 110px);
-        }
-        to {
-            width: 400px;
-        }
+    to {
+      width: 400px;
     }
-
-}
-
-@media screen and (max-width: 782px) {
-    .maximized {
-        transform: translate(0px, 0px);
-        width: calc(100vw - 70px);
-    }
-
-    @keyframes maximize-width {
-        to {
-            width: calc(100vw - 70px);
-            transform: translate(0px, 0px);
-        }
-    }
-
-    @keyframes reduce-width {
-        from {
-            width: calc(100vw - 70px);
-        }
-        to {
-            width: 400px;
-        }
-    }
-
+  }
 }

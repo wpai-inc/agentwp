@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { cn, resetChatWindowPosition } from '@/lib/utils';
+import { cn, isChatWindowMaximized, resetChatWindowPosition } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
 import MessageBox from './MessageBox/MessageBox';
@@ -35,10 +35,15 @@ export default function ChatContainer() {
       windowElement.style.height = settings.height + 'px';
 
       const resetChatWindow = () => {
+        if ( isChatWindowMaximized() ) {
+          return;
+        }
         resetChatWindowPosition();
         setSettings( {
           x: 0,
           y: 0,
+          width: null,
+          height: null,
         } );
       };
 

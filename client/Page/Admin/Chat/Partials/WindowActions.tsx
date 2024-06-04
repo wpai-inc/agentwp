@@ -3,7 +3,12 @@ import CloseIcon from '@material-design-icons/svg/outlined/close.svg?react';
 import MaximizeIcon from '@material-design-icons/svg/outlined/open_with.svg?react';
 import DragIcon from '@material-design-icons/svg/outlined/drag_indicator.svg?react';
 import ReduceWindowIcon from '@material-design-icons/svg/outlined/close_fullscreen.svg?react';
-import { cn, getChatwindowElement, resetChatWindowPosition } from '@/lib/utils';
+import {
+  cn,
+  getChatwindowElement,
+  isChatWindowMaximized,
+  resetChatWindowPosition,
+} from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
@@ -37,6 +42,9 @@ export default function WindowActions( { isShowing = false } ) {
   }
 
   function onDragDoubleClick( e ) {
+    if ( isChatWindowMaximized() ) {
+      return;
+    }
     resetChatWindowPosition();
     setSettings( {
       x: 0,
@@ -50,7 +58,7 @@ export default function WindowActions( { isShowing = false } ) {
     e.preventDefault();
     setIsDragging( true );
     const chatWindow = getChatwindowElement();
-    if ( chatWindow.classList.contains( 'maximized' ) ) {
+    if ( isChatWindowMaximized() ) {
       return;
     }
     const bodyElement = document.getElementsByTagName( 'body' )[ 0 ];
@@ -91,7 +99,7 @@ export default function WindowActions( { isShowing = false } ) {
       const leftOutOfBounds = newPositionLeft < containerCoords.left;
       const rightOutOfBounds = newPositionRight > containerCoords.right;
       const topOutOfBounds = newPositionTop < containerCoords.top;
-      const bottomOutOfBounds = newPositionBottom > containerCoords.bottom;
+      const bottomOutOfBounds = newPositionBottom > window.innerHeight;
 
       let newCoordsX = currentPositionMatrix.m41;
       let newCoordsY = currentPositionMatrix.m42;
