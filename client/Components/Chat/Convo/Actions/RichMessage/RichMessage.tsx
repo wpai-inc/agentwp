@@ -11,66 +11,51 @@ type GraphDataPoint = {
   value: string;
 };
 
-export default function RichMessage(props: AgentAction) {
-  if (props.action.ability === 'message') {
-    const isGraph = !!props.action.graph;
-    const areButtons = !!props.action.buttons;
+export default function RichMessage( props: AgentAction ) {
+  if ( props.action.ability === 'message' ) {
+    const isGraph = !! props.action.graph;
+    const areButtons = !! props.action.buttons;
 
     const action = props.action as MessageAction;
-    if (isGraph) {
+    if ( isGraph ) {
       const graphType = action.graph?.graphType;
       const data = action.graph?.data;
-      if (graphType === 'bar') {
+      if ( graphType === 'bar' ) {
         return (
           <GraphContainer>
-            <ActionSimpleMessage {...props} />
-            <Bar
-              data={data ?? []}
-              valueDataKey="value"
-              xDataKey="label"
-              width={'100%'}
-            />
+            <ActionSimpleMessage { ...props } />
+            <Bar data={ data ?? [] } valueDataKey="value" xDataKey="label" width={ '100%' } />
           </GraphContainer>
         );
-      } else if (graphType === 'line') {
+      } else if ( graphType === 'line' ) {
         return (
           <GraphContainer>
-            <ActionSimpleMessage {...props} />
-            <Line
-              data={data ?? []}
-              valueDataKey="value"
-              xDataKey="label"
-              width={'100%'}
-            />
+            <ActionSimpleMessage { ...props } />
+            <Line data={ data ?? [] } width={ '100%' } />
           </GraphContainer>
         );
-      } else if (graphType === 'pie') {
+      } else if ( graphType === 'pie' ) {
         return (
           <GraphContainer>
-            <ActionSimpleMessage {...props} />
-            <Pie
-              data={data ?? []}
-              valueDataKey="value"
-              dataKey="label"
-              width={'100%'}
-            />
+            <ActionSimpleMessage { ...props } />
+            <Pie data={ data ?? [] } valueDataKey="value" dataKey="label" width={ '100%' } />
           </GraphContainer>
         );
       }
-    } else if (areButtons) {
+    } else if ( areButtons ) {
       const buttons = action.buttons as any[];
       return (
         <>
-          <ActionSimpleMessage {...props} />
-          {buttons.length > 0
-            ? buttons.map((b) => (
-                <NavigatableButton text={b.label} link={b.url} className={''} />
-              ))
-            : null}
+          <ActionSimpleMessage { ...props } />
+          { buttons.length > 0
+            ? buttons.map( b => (
+                <NavigatableButton text={ b.label } link={ b.url } className={ '' } />
+              ) )
+            : null }
         </>
       );
     } else {
-      return <ActionSimpleMessage {...props} />;
+      return <ActionSimpleMessage { ...props } />;
     }
   }
 
@@ -81,6 +66,6 @@ export default function RichMessage(props: AgentAction) {
   );
 }
 
-function GraphContainer({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col pt-4 gap-4">{children}</div>;
+function GraphContainer( { children }: { children: React.ReactNode } ) {
+  return <div className="flex flex-col pt-4 gap-4">{ children }</div>;
 }

@@ -1,22 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import Pie from './Pie';
+import { PieProps } from 'recharts';
 
 export default {
   title: 'Wpai/Charts/Pie',
-  component: Pie,
-}
+  component: Pie as React.ComponentType< PieProps >,
+};
 
 export const Simple = {
   args: {
-    dataKey: 'label',
-    valueDataKey: 'value',
     outerRadius: 80,
     data: [
-      { label: 'Agriculture', value: 150 },
-      { label: 'Energy', value: 170 },
-      { label: 'Finance', value: 200 },
-      { label: 'Manufacturing', value: 300 },
-    ]
+      { label: 'Agriculture', gdp: 150 },
+      { label: 'Energy', gdp: 170 },
+      { label: 'Finance', gdp: 200 },
+      { label: 'Manufacturing', gdp: 300 },
+    ],
   },
 };

@@ -1,12 +1,7 @@
 /**
  * Docs for this component at https://recharts.org/en-US/api/PieChart
  */
-import {
-  Pie as RootPie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-} from 'recharts';
+import { Pie as RootPie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface PieProps {
   width?: number | string;
@@ -18,27 +13,28 @@ interface PieProps {
   valueDataKey: string;
 }
 
-const Pie = ({
+const Pie = ( {
   width = 730,
   height = 250,
   outerRadius = 50,
-  valueDataKey,
-  dataKey,
   fillColor = '#4991f7',
   data,
-}: PieProps) => {
+}: PieProps ) => {
+  const dataKey = data[ 0 ] ? Object.keys( data[ 0 ] )[ 0 ] : 'label';
+  const valueDataKey = data[ 0 ] ? Object.keys( data[ 0 ] )[ 1 ] : 'value';
+
   return (
-    <ResponsiveContainer width={width} height={height}>
+    <ResponsiveContainer width={ width } height={ height }>
       <PieChart>
         <Tooltip />
         <RootPie
-          data={data}
-          dataKey={valueDataKey}
-          nameKey={dataKey}
+          data={ data }
+          dataKey={ valueDataKey }
+          nameKey={ dataKey }
           cx="50%"
           cy="50%"
-          outerRadius={outerRadius}
-          fill={fillColor}
+          outerRadius={ outerRadius }
+          fill={ fillColor }
           label
         />
       </PieChart>

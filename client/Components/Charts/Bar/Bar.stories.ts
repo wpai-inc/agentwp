@@ -1,21 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import Bar from './Bar';
+import { BarProps } from 'recharts';
 
 export default {
   title: 'Wpai/Charts/Bar',
-  component: Bar,
+  component: Bar as React.ComponentType< BarProps >,
 };
 
 export const Simple = {
   args: {
-    xDataKey: 'label',
-    valueDataKey: 'value',
     data: [
-      { label: 'Honduras', value: 40 },
-      { label: 'Romania', value: 80 },
-      { label: 'Brasil', value: 20 },
-      { label: 'United States', value: 40 },
-    ]
+      { label: 'Honduras', developers: 40 },
+      { label: 'Romania', developers: 80 },
+      { label: 'Brasil', developers: 20 },
+      { label: 'United States', developers: 40 },
+    ],
   },
 };
