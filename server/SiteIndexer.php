@@ -16,6 +16,7 @@ class SiteIndexer implements Registrable
         add_action('admin_init', [$this, 'indexSite']);
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
+        add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
     }
 
     /**
@@ -63,7 +64,7 @@ class SiteIndexer implements Registrable
                 if ($plugin_slug === '.') {
                     $plugin_slug = basename($plugin, '.php');
                 }
-                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR.'/'.$plugin);
             }
 
             foreach ($info['wp-plugins-active']['fields'] as $plugin_name => $plugin_info) {
@@ -80,13 +81,21 @@ class SiteIndexer implements Registrable
         return $info;
     }
 
+    public function add_woocommerce_settings_to_debug_info($info)
+    {
+        $custom_orders_table_enabled = get_option('woocommerce_custom_orders_table_enabled', false);
+        $info['woocommerce']['custom_orders_table_enabled'] = $custom_orders_table_enabled;
+
+        return $info;
+    }
+
     public function add_db_schema_to_debug_info($info)
     {
         global $wpdb;
         $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
         $tables = array_map('current', $tables);
         foreach ($tables as $table) {
-            $rows = $wpdb->get_results('DESCRIBE ' . $table, ARRAY_A);
+            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
             $info['db-schema']['fields'][$table] = array_map(function ($row) {
