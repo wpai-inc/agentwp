@@ -1,9 +1,11 @@
 import { cn } from '@/lib/utils';
 import ChatOption from '@/Components/Chat/Convo/Actions/ChatOption/ChatOption';
 import OpenNewIcon from '@material-design-icons/svg/outlined/open_in_new.svg?react';
+import { WpUser } from '@/Types/types';
 
-const ChatWelcome = () => {
-  const name = 'James';
+export default function ChatWelcome( { user }: { user: WpUser } ) {
+  console.log( user );
+  const name = user.display_name;
   const options = [
     {
       id: 1,
@@ -51,6 +53,4 @@ const ChatWelcome = () => {
       </div>
     </div>
   );
-};
-
-export default ChatWelcome;
+}
