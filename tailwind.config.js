@@ -46,6 +46,7 @@ module.exports = {
                 brand: {
                     primary: '#4991F7',
                     secondary: '#FF70A6',
+                    dark: '#1E1E1E',
                     gray: {
                         DEFAULT: '#F6F7F7',
                         15: '#D9D9D9',

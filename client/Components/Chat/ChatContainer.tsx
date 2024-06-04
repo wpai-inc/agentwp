@@ -59,7 +59,7 @@ export default function ChatContainer() {
       className={ cn(
         'fixed bottom-4 right-10',
         'h-[90vh] w-[400px]',
-        'z-[999] bg-brand-gray',
+        'z-[100000] bg-brand-gray',
         'shadow-xl transition-shadow duration-500 flex flex-col',
         'border-gray-200 rounded-xl opacity-100',
         {
@@ -79,9 +79,14 @@ export default function ChatContainer() {
         ) : (
           <>
             <Dialog conversation={ conversation } />
-            <div className={ cn( 'w-full bg-brand-gray chat-bottom-inner-shadow' ) }></div>
-            <div className="p-1.5">
-              <MessageBox />
+            <div className="relative">
+              <div
+                className={ cn(
+                  'absolute -top-12 right-0 left-0 z-10 h-12 from-brand-gray to-transparent bg-gradient-to-t',
+                ) }></div>
+              <div className="p-1.5">
+                <MessageBox />
+              </div>
             </div>
             { chatSetting && (
               <ChatOverlay header={ chatSetting?.header }>{ chatSetting?.component }</ChatOverlay>
