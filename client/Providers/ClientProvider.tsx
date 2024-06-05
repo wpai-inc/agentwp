@@ -14,7 +14,9 @@ export function useClient() {
 }
 
 export type HistoryType = {
-  items: HistoryItem[];
+  items: {
+    data: HistoryItem[];
+  };
   lastRequest?: {
     id: string;
     createdAt: string;
@@ -42,6 +44,10 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     await client.clearConversation( page.site_id, page.user.ID );
   }
 
+  async function unclearConversation( since: string ) {
+    await client.unclearConversation( page.site_id, page.user.ID, since );
+  }
+
   async function getConversation( since?: string ) {
     const res = await client.isAuthorized()?.getConversation( page.site_id, page.user.ID, since );
     return res?.data?.data;
@@ -55,6 +61,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         getHistory,
         getConversation,
         clearConversation,
+        unclearConversation,
         userProfileUrl,
       } }>
       { children }

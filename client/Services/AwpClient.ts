@@ -78,6 +78,19 @@ export default class AwpClient {
     );
   }
 
+  async unclearConversation(
+    siteId: string,
+    wpUserId: string,
+    since: string,
+  ): Promise< AxiosResponse > {
+    return this.request(
+      'DELETE',
+      `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }/unclear`,
+      {},
+      { since },
+    );
+  }
+
   async getHistory( siteId: string, wpUserId: string, since?: string ): Promise< AxiosResponse > {
     return this.request(
       'GET',

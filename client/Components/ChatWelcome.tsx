@@ -4,7 +4,6 @@ import OpenNewIcon from '@material-design-icons/svg/outlined/open_in_new.svg?rea
 import { WpUser } from '@/Types/types';
 
 export default function ChatWelcome( { user }: { user: WpUser } ) {
-  console.log( user );
   const name = user.display_name;
   const options = [
     {

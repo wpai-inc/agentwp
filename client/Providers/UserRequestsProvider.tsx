@@ -37,7 +37,8 @@ type UserRequestsContextType = {
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
   setCurrentAction: ( action: AgentAction | null ) => void;
-  fetchConvo: ( since?: string ) => Promise< void >;
+  fetchConvo: ( since: string | null ) => Promise< void >;
+  refreshConvo: () => void;
   loadingConversation: boolean;
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
@@ -51,6 +52,7 @@ const UserRequestsContext = createContext< UserRequestsContextType >( {
   currentAction: null,
   setCurrentAction: () => {},
   fetchConvo: async () => {},
+  refreshConvo: () => {},
   loadingConversation: false,
   since: null,
   setSince: () => {},
@@ -77,10 +79,15 @@ export default function UserRequestsProvider( {
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( false );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ currentAction, setCurrentAction ] = useState< AgentAction | null >( null );
+  const [ refresh, setRefresh ] = useState< boolean >( false );
+
+  const refreshConvo = () => {
+    setRefresh( prev => ! prev );
+  };
 
   useEffect( () => {
     fetchConvo( since );
-  }, [ since ] );
+  }, [ since, refresh ] );
 
   useEffect( () => {
     const currentRequest: UserRequestType | undefined = conversation.find(
@@ -118,6 +125,7 @@ export default function UserRequestsProvider( {
         currentAction,
         setCurrentAction,
         fetchConvo,
+        refreshConvo,
         loadingConversation,
         since,
         setSince,

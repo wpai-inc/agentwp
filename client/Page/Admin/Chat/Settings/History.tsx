@@ -6,8 +6,8 @@ import { useUserRequests } from '@/Providers/UserRequestsProvider';
 
 export default function History() {
   const [ history, setHistory ] = useState< HistoryType >();
-  const { getHistory } = useClient();
-  const { since, setSince } = useUserRequests();
+  const { getHistory, unclearConversation } = useClient();
+  const { since, setSince, refreshConvo } = useUserRequests();
 
   useEffect( () => {
     fetchHistory( since );
@@ -18,12 +18,18 @@ export default function History() {
     setHistory( history );
   }
 
+  async function handleUnclear( since: string | null ) {
+    await unclearConversation( since );
+    fetchHistory( null );
+    refreshConvo();
+  }
+
   return (
     <div className="space-y-4">
       { ! history ? (
         <LoadingScreen />
       ) : (
-        <div>
+        <div className="space-y-3">
           { history.lastRequest && (
             <HistoryItem>
               <button
@@ -36,17 +42,24 @@ export default function History() {
               </button>
             </HistoryItem>
           ) }
-          { history?.items.length && <HistoryList items={ history.items } /> }
+          { history?.items.data.length && <HistoryList items={ history.items.data } /> }
         </div>
       ) }
     </div>
   );
-}
 
-function HistoryList( { items }: { items: HistoryItem[] } ) {
-  return items.map( item => (
-    <HistoryItem key={ item.createdAt }>{ item.humanCreatedAt }</HistoryItem>
-  ) );
+  function HistoryList( { items }: { items: HistoryItem[] } ) {
+    return items.map( item => (
+      <HistoryItem key={ item.createdAt }>
+        <div className="flex gap-4 justify-between">
+          <strong>Cleared { item.humanCreatedAt }</strong>
+          <button className="underline" onClick={ () => handleUnclear( item.createdAt ) }>
+            Unclear
+          </button>
+        </div>
+      </HistoryItem>
+    ) );
+  }
 }
 
 function HistoryItem( { children }: { children: React.ReactNode } ) {
