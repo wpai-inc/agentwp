@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import OpenPostEdit from './OpenPostEdit';
+import EditGutenbergContent from '@/Components/Chat/Commands/EditGutenbergContent';
 
 type SlashCommand = {
   command: string;
@@ -18,6 +19,7 @@ export default function Commands( {
   message: string;
 } ) {
   const slashCommands = [
+    { command: 'gb', info: 'Edit gutenberg content' },
     { command: 'goto', info: 'Go to a specific page' },
     { command: 'explain', info: 'Explain a specific topic' },
     { command: 'help', info: 'Get help' },
@@ -159,6 +161,13 @@ export default function Commands( {
 
       { selectedCommand?.command && selectedCommand?.command === 'edit' && (
         <OpenPostEdit
+          message={ message }
+          onMessageBoxKeyDown={ onMessageBoxKeyDown }
+          onSetMessage={ onSetMessage }
+        />
+      ) }
+      { selectedCommand?.command && selectedCommand?.command === 'gb' && (
+        <EditGutenbergContent
           message={ message }
           onMessageBoxKeyDown={ onMessageBoxKeyDown }
           onSetMessage={ onSetMessage }
