@@ -31,12 +31,22 @@ jobs:
       - name: Build plugin
         run: npm run build-plugin
 
-      - name: rsync deployments
+      - name: rsync plugin sandbox
         uses: burnett01/rsync-deployments@7.0.1
         with:
           switches: -avzr --delete
           path: dist/
           remote_path: /home/forge/wp.agentwp.com/wp-content/plugins/
+          remote_host: '165.22.180.128'
+          remote_user: 'forge'
+          remote_key: ${{ secrets.KEY }}
+
+      - name: rsync plugin sandbox stage
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          path: dist/
+          remote_path: /home/forge/stage.wp.agentwp.com/wp-content/plugins/
           remote_host: '165.22.180.128'
           remote_user: 'forge'
           remote_key: ${{ secrets.KEY }}
