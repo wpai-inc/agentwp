@@ -104,6 +104,7 @@ export default function UserRequestsProvider( {
   async function fetchConvo( since: string | null ) {
     setLoadingConversation( true );
     const items = await getConversation( since );
+    console.log( 'fetchConvo', items );
     if ( items && items.length > 0 ) {
       setCurrentUserRequestId( items[ 0 ]?.id );
       setConversation( items );

@@ -13,6 +13,11 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   useEffect( () => {
     if ( currentAction && streamClosed && currentAction.action ) {
+      console.log( 'ActionListenerProvider', [
+        currentAction,
+        streamClosed,
+        currentUserRequestId,
+      ] );
       executeAndContinueAction( currentAction, currentUserRequestId );
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
