@@ -124,7 +124,6 @@ export default function Commands( {
   }
 
   useEffect( () => {
-    console.log( 'onMessageBoxKeyUp', onMessageBoxKeyUp );
     handleMessageBoxKeyDown( onMessageBoxKeyUp ); // Cast the event type to KeyboardEvent
   }, [ onMessageBoxKeyUp ] );
 

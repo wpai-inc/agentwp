@@ -12,25 +12,28 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { client } = useClient();
 
   useEffect( () => {
+    console.log( { currentAction, streamClosed } );
+    // The problem is on streamClosed
     if ( currentAction && streamClosed && currentAction.action ) {
       executeAndContinueAction( currentAction, currentUserRequestId );
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
 
-  function continueActionStream( reqId: string | null, aa: AgentAction ) {
-    if ( reqId && ! aa.final && aa.hasExecuted ) {
-      console.log( 'startStreamFromRequest' );
-      startStreamFromRequest( reqId );
-    }
-  }
-
   async function executeAndContinueAction( aa: AgentAction, reqId: string | null ) {
+    console.log( 'executeAndContinueAction' );
     if ( ! aa.hasExecuted ) {
       await executeAction( aa );
       aa.hasExecuted = true;
     }
 
     continueActionStream( reqId, aa );
+  }
+
+  function continueActionStream( reqId: string | null, aa: AgentAction ) {
+    if ( reqId && ! aa.final && aa.hasExecuted ) {
+      console.log( 'startStreamFromRequest' );
+      startStreamFromRequest( reqId );
+    }
   }
 
   async function executeAction( aa: AgentAction ) {
@@ -66,10 +69,10 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         } );
         break;
       case 'write_to_editor':
+        WriteToEditor( aa.action.text );
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );
-        WriteToEditor( aa.action.text );
         break;
     }
   }
