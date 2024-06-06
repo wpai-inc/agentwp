@@ -3,6 +3,7 @@ import { useStream } from '@/Providers/StreamProvider';
 import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
+import { WriteToEditor } from '@/Services/WriteToEditor';
 
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamClosed, startStreamFromRequest } = useStream();
@@ -63,6 +64,13 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );
+        break;
+      case 'write_to_editor':
+        console.log( 'WRITE TO EDITOR', aa.action.text );
+        await client.storeAgentResult( aa.id, {
+          status: 'success',
+        } );
+        WriteToEditor( aa.action.text );
         break;
     }
   }
