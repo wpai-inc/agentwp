@@ -13,11 +13,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   useEffect( () => {
     if ( currentAction && streamClosed && currentAction.action ) {
-      console.log( 'ActionListenerProvider', [
-        currentAction,
-        streamClosed,
-        currentUserRequestId,
-      ] );
       executeAndContinueAction( currentAction, currentUserRequestId );
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
@@ -71,7 +66,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         } );
         break;
       case 'write_to_editor':
-        console.log( 'WRITE TO EDITOR', aa.action.text );
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );

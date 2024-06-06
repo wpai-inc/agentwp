@@ -30,7 +30,6 @@ export default function EditGutenbergContent( {
       if ( newContent === postContent ) return;
       setPostContent( newContent );
       setScreen( { ...screen, post_content: newContent } );
-      console.log( 'New Content: ', newContent === postContent, newContent );
     } );
 
     // Clean up the subscription

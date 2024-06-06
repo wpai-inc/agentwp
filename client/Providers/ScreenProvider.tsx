@@ -15,12 +15,15 @@ type ScreenContextType = {
 };
 
 const ScreenContext = createContext< ScreenContextType >( {
-  url: '',
-  title: '',
-  links: [],
-  post_content: '',
-  //   buttons: [],
-  //   forms: [],
+  screen: {
+    url: '',
+    title: '',
+    links: [],
+    post_content: '',
+    // buttons: [],
+    // forms: [],
+  },
+  setScreen: () => {},
 } );
 
 export function useScreen() {
@@ -42,10 +45,13 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
   } );
 
   useEffect( () => {
+    const url = window.location.href;
+    const title = document.title;
+    const links = Array.from( document.links ).map( link => link.href );
     setScreen( {
-      url: window.location.href,
-      title: document.title,
-      links: Array.from( document.links ).map( link => link.href ),
+      url,
+      title,
+      links,
       post_content: '',
     } );
 
