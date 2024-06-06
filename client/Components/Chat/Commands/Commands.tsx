@@ -63,8 +63,6 @@ export default function Commands( {
   }
 
   function maybeIsASlashCommand( e: React.KeyboardEvent< HTMLTextAreaElement > ) {
-    // Hack to get the right value of the textarea. If i try to get the value right away it will return the previous value
-    // because the value is not updated yet
     if (
       e.target instanceof HTMLTextAreaElement &&
       ( e.target as HTMLTextAreaElement ).value[ 0 ] === '/' &&
