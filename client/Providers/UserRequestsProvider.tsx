@@ -94,6 +94,10 @@ export default function UserRequestsProvider( {
       request => request.id === currentUserRequestId,
     );
 
+    if ( ! currentRequest ) {
+      return;
+    }
+
     const currentAction: AgentAction | null = currentRequest?.agent_actions
       ? currentRequest?.agent_actions[ currentRequest?.agent_actions.length - 1 ]
       : null;
