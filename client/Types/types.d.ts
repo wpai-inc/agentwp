@@ -20,11 +20,6 @@ export type PageData = {
   onboarding_completed: boolean;
 };
 
-export type FeedbackType = {
-  approved?: boolean;
-  message?: string;
-};
-
 export type WpUser = {
   ID: string;
   display_name: string;

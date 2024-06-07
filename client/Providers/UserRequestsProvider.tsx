@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 import { MessageAction, NavigateAction, QueryAction, WriteToEditorAction } from '@wpai/schemas';
-import { FeedbackType } from '@/Types/types';
+import { FeedbackType } from '@/Providers/FeedbackProvider';
 
 export type ActionType = NavigateAction | MessageAction | QueryAction | WriteToEditorAction;
 

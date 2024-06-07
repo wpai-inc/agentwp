@@ -3,11 +3,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Message from './Message';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
 
-const meta: Meta<typeof Message> = {
+const meta: Meta< typeof Message > = {
   component: Message,
 };
 
-const userRequest: UserRequestType = {
+export const sampleUserRequest: UserRequestType = {
   id: '1',
   wp_user_id: 1,
   created_at: '2021-10-01T00:00:00',
@@ -16,6 +16,9 @@ const userRequest: UserRequestType = {
   user: {
     name: 'James Lepage',
     email: 'james@codewp.ai',
+  },
+  feedback: {
+    approved: false,
   },
   agent_actions: [
     {
@@ -29,7 +32,7 @@ const userRequest: UserRequestType = {
       },
       result: {
         status: 'success',
-        data: [{ month: '2024-04', post_count: '1' }],
+        data: [ { month: '2024-04', post_count: '1' } ],
       },
       recipe_idx: 0,
       final: false,
@@ -44,7 +47,7 @@ const userRequest: UserRequestType = {
         graph: {
           graphType: 'bar',
           title: 'Number of Posts Per Month',
-          data: [{ name: '2024-04', post_count: 1 }],
+          data: [ { name: '2024-04', post_count: 1 } ],
         },
         text: '### Number of Posts Per Month\n\nHere is the number of posts created per month on your WordPress website:\n\n```plaintext\nApril 2024: 1 post\n```\n\n#### Visualization\n\n**Bar Graph**: Number of Posts per Month\n\nWould you like any additional details or further analysis?',
       },
@@ -57,13 +60,13 @@ const userRequest: UserRequestType = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Message>;
+type Story = StoryObj< typeof Message >;
 
 export const MessageStory: Story = {
   parameters: {
     backgrounds: { default: 'chatContainer' },
   },
   args: {
-    ...userRequest,
+    ...sampleUserRequest,
   },
 };
