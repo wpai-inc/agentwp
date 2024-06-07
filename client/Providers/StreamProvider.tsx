@@ -72,7 +72,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   }
 
   async function handleStreamError( e: any ) {
-    console.error( 'Error starting stream', e );
+    console.error( 'Stream error', e );
     addErrors( [ 'Oops, something went wrong.' ] );
   }
 
