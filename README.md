@@ -69,3 +69,5 @@ This creates a menu item for your page.
 The components and styling use [Tailwind](https://tailwindcss.com) with [shad/cn components](https://ui.shadcn.com). To avoid conflicts, all Tailwind classes have been scoped under any ID starting with `#agent-wp`, which corresponds to how we create the root IDs in the React entrypoints. This should allow us to avoid collisions.
 
 To add a shad/cn component, use `npx shadcn-ui@latest add [component]`
+
+---
