@@ -6,7 +6,7 @@ export default function ClearConversationButton( { children }: { children?: Reac
 
   async function handleClearHistory() {
     await clearConversation();
-    fetchConvo();
+    fetchConvo( null );
   }
 
   return <button onClick={ handleClearHistory }>{ children }</button>;

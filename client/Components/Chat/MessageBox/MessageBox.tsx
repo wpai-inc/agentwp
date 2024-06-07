@@ -45,12 +45,8 @@ export default function MessageBox() {
   }
 
   return (
-    <form className="relative bg-white p-2 rounded-lg" onSubmit={ submit }>
-      <Commands
-        onMessageBoxKeyDown={ keyUpEvent }
-        onSetMessage={ setMessage }
-        message={ message }
-      />
+    <form className="relative rounded-lg bg-white p-2" onSubmit={ submit }>
+      <Commands onMessageBoxKeyUp={ keyUpEvent } onSetMessage={ setMessage } message={ message } />
       <textarea
         onChange={ e => setMessage( e.target.value ) }
         value={ message }
@@ -67,7 +63,7 @@ export default function MessageBox() {
             variant="ghost"
             size="icon"
             className="text-brand-gray-50 hover:bg-inherit">
-            <TuneIcon className="w-6 h-6" />
+            <TuneIcon className="h-6 w-6" />
           </Button>
         </AgentTooltip>
         <Button

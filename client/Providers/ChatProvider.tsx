@@ -51,7 +51,7 @@ export default function ChatProvider( {
   const siteId = page.site_id;
   const wp_user_id = parseInt( page.user?.ID );
   const { client } = useClient();
-  const screen = useScreen();
+  const { screen } = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ minimizing, setMinimizing ] = useState( false );

@@ -33,16 +33,16 @@ export default function History() {
           { history.lastRequest && (
             <HistoryItem>
               <button
-                className="flex gap-4 w-full"
+                className="flex w-full gap-4"
                 onClick={ () => setSince( history.lastRequest.createdAt ) }>
-                <time className="font-bold block text-nowrap">
+                <time className="block text-nowrap font-bold">
                   Resume { history.lastRequest.humanCreatedAt }
                 </time>
                 <span className="truncate">"{ history.lastRequest.message }"</span>
               </button>
             </HistoryItem>
           ) }
-          { history?.items.data.length && <HistoryList items={ history.items.data } /> }
+          { history?.items?.data.length && <HistoryList items={ history.items.data } /> }
         </div>
       ) }
     </div>
@@ -51,7 +51,7 @@ export default function History() {
   function HistoryList( { items }: { items: HistoryItem[] } ) {
     return items.map( item => (
       <HistoryItem key={ item.createdAt }>
-        <div className="flex gap-4 justify-between">
+        <div className="flex justify-between gap-4">
           <strong>Cleared { item.humanCreatedAt }</strong>
           <button className="underline" onClick={ () => handleUnclear( item.createdAt ) }>
             Unclear
@@ -63,5 +63,5 @@ export default function History() {
 }
 
 function HistoryItem( { children }: { children: React.ReactNode } ) {
-  return <div className="bg-slate-100 rounded px-4 py-2">{ children }</div>;
+  return <div className="rounded bg-slate-100 px-4 py-2">{ children }</div>;
 }
