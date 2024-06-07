@@ -9,6 +9,7 @@ import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { logoUrl } from '@/Components/Logo';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { FeedbackType } from '@/Types/types';
+import { useStream } from '@/Providers/StreamProvider';
 
 export default function AgentResponse( {
   agentActions,
@@ -23,22 +24,25 @@ export default function AgentResponse( {
   pending?: boolean;
   feedback?: FeedbackType;
 } ) {
+  const { streamClosed } = useStream();
+
   const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
     | AgentAction
     | undefined;
 
   const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
 
-  const isIncomplete = agentActions?.some( aa => ! aa.action );
+  const isPending = ! streamClosed || pending;
+
+  const isIncomplete =
+    ( streamClosed && ! pending ) || ( streamClosed && agentActions?.some( aa => ! aa.action ) );
 
   return (
     <div className="text-black/60 py-4 border-t border-gray-25">
       { otherActions.length > 0 ? (
         <div className="flex-1">
           { otherActions.map( aa => {
-            if ( ! aa.action ) {
-              return <ActionIncomplete key={ aa.id } { ...aa } userRequestId={ userRequestId } />;
-            } else {
+            if ( aa.action ) {
               return <ActionComponent key={ aa.id } { ...aa } />;
             }
           } ) }
@@ -63,10 +67,15 @@ export default function AgentResponse( {
         </div>
       </MessageHeader>
 
-      { ( pending || agentActions === undefined ) && <ActionPending /> }
-
-      { isIncomplete && <p>Something went wrong attending to your request.</p> }
       { messageAction && <ActionComponent { ...messageAction } /> }
+
+      { ! messageAction && (
+        <>
+          { isPending && <ActionPending /> }
+
+          { isIncomplete && <ActionIncomplete userRequestId={ userRequestId } /> }
+        </>
+      ) }
     </div>
   );
 }
