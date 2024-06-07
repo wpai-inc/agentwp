@@ -12,15 +12,14 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { client } = useClient();
 
   useEffect( () => {
-    console.log( { currentAction, streamClosed } );
-    // The problem is on streamClosed
     if ( currentAction && streamClosed && currentAction.action ) {
-      executeAndContinueAction( currentAction, currentUserRequestId );
+      executeAndContinueAction( currentAction, currentUserRequestId ).then( r =>
+        console.log( 'executeAndContinueAction', currentAction.action.ability ),
+      );
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
 
   async function executeAndContinueAction( aa: AgentAction, reqId: string | null ) {
-    console.log( 'executeAndContinueAction' );
     if ( ! aa.hasExecuted ) {
       await executeAction( aa );
       aa.hasExecuted = true;
@@ -31,15 +30,15 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   function continueActionStream( reqId: string | null, aa: AgentAction ) {
     if ( reqId && ! aa.final && aa.hasExecuted ) {
-      console.log( 'startStreamFromRequest' );
       startStreamFromRequest( reqId );
     }
   }
 
   async function executeAction( aa: AgentAction ) {
-    console.log( 'executeAction', aa.action );
     switch ( aa.action.ability ) {
       case 'query':
+        // TODO: BUG the stream is not waiting for this to finish
+        // Probably because this component is rerendered from outside
         try {
           const response = await adminRequest.get( 'run_action_query', {
             params: {
@@ -47,14 +46,17 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
               args: aa.action.args,
             },
           } );
-          console.log( 'QUERY RESPONSE', response.data.data.results );
           await client.storeAgentResult( aa.id, {
             status: 'success',
             data: response.data.data.results,
           } );
         } catch ( error ) {
-          console.error( 'Query execution error', error );
+          console.error( 'Query execution error', ( error as any ).response.data.data );
           // Handle error if needed
+          await client.storeAgentResult( aa.id, {
+            status: 'error',
+            error: ( error as any ).response.data.data,
+          } );
         }
         break;
       case 'navigate':
