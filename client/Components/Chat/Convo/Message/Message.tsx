@@ -7,7 +7,9 @@ import { useUserRequests } from '@/Providers/UserRequestsProvider';
 export default function Message( userRequest: UserRequestType ) {
   const { page } = usePage();
   const { currentAction, currentUserRequestId } = useUserRequests();
-  const pending = ! currentAction?.final && userRequest.id === currentUserRequestId;
+  const sameUserRequest = userRequest.id === currentUserRequestId;
+
+  const pending = sameUserRequest && ! currentAction?.final && currentAction?.hasExecuted;
 
   return (
     <div id={ userRequest.id } className="border-b border-brand-gray-25 mb-4">

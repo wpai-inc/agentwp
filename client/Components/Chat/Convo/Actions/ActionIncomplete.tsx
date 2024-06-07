@@ -11,7 +11,7 @@ export default function ActionIncomplete( { userRequestId }: { userRequestId: st
 
   return (
     <ActionContainer pending={ false }>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <p>Try again</p>
         <button onClick={ handleRetry }>
           <IconRenew />
