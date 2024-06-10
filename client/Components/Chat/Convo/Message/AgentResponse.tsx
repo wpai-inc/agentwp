@@ -8,7 +8,6 @@ import ActionComponent from '../Actions/ActionComponent';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { logoUrl } from '@/Components/Logo';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
-import { FeedbackType } from '@/Types/types';
 import { useStream } from '@/Providers/StreamProvider';
 import { useFeedback } from '@/Providers/FeedbackProvider';
 import Reason from '@/Components/Chat/Feedback/Reason';
@@ -70,10 +69,6 @@ export default function AgentResponse( {
       </MessageHeader>
 
       { opened && <Reason /> }
-
-      { ( pending || agentActions === undefined ) && <ActionPending /> }
-
-      { isIncomplete && <p>Something went wrong attending to your request.</p> }
 
       { messageAction && <ActionComponent { ...messageAction } /> }
 
