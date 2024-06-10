@@ -3,26 +3,26 @@ import ActionIncomplete from '../Actions/ActionIncomplete';
 import ActionPending from '../Actions/ActionPending';
 import MessageHeader from './MessageHeader';
 import Avatar from '../../Avatar/Avatar';
-import Feedback from '@/Components/Chat/Feedback';
+import Rate from '@/Components/Chat/Feedback/Rate';
 import ActionComponent from '../Actions/ActionComponent';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { logoUrl } from '@/Components/Logo';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { FeedbackType } from '@/Types/types';
 import { useStream } from '@/Providers/StreamProvider';
+import { useFeedback } from '@/Providers/FeedbackProvider';
+import Reason from '@/Components/Chat/Feedback/Reason';
 
 export default function AgentResponse( {
   agentActions,
   userRequestId,
   time,
   pending = false,
-  feedback,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
   time: string;
   pending?: boolean;
-  feedback?: FeedbackType;
 } ) {
   const { streamClosed } = useStream();
 
@@ -52,7 +52,7 @@ export default function AgentResponse( {
       <MessageHeader>
         <Avatar name="AgentWP" time={ time } image={ logoUrl } />
         <div className="flex items-center gap-4">
-          { ! isIncomplete && <Feedback userRequestId={ userRequestId } feedback={ feedback } /> }
+          { ! isIncomplete && <Rate /> }
           <Popover>
             <PopoverTrigger>
               <IconMore className="text-brand-gray-15" />
@@ -66,6 +66,12 @@ export default function AgentResponse( {
           </Popover>
         </div>
       </MessageHeader>
+
+      { opened && <Reason /> }
+
+      { ( pending || agentActions === undefined ) && <ActionPending /> }
+
+      { isIncomplete && <p>Something went wrong attending to your request.</p> }
 
       { messageAction && <ActionComponent { ...messageAction } /> }
 

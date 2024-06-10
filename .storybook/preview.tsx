@@ -32,6 +32,7 @@ const page = {
     user_nicename: 'greg',
     display_name: 'greg',
     roles: [ 'administrator' ],
+    avatar_url: 'https://secure.gravatar.com/avatar/7b3f7b3f7b3f7b3f7b3f7b3f7b3f7b3f?s=96&d=mm&r=g',
   },
   is_admin: true,
   agentwp_manager: true,

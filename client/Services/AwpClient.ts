@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { useNotifications } from '@/Providers/NotificationProvider';
-import { FeedbackType } from '@/Types/types';
+import { FeedbackType } from '@/Providers/FeedbackProvider';
 
 export default class AwpClient {
   private baseUrl: string = 'https://app.agentwp.com';
