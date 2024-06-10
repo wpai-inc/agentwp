@@ -37,6 +37,8 @@ export default function AgentResponse( {
   const isIncomplete =
     ( streamClosed && ! pending ) || ( streamClosed && agentActions?.some( aa => ! aa.action ) );
 
+  const { opened } = useFeedback();
+
   return (
     <div className="text-black/60 py-4 border-t border-gray-25">
       { otherActions.length > 0 ? (
