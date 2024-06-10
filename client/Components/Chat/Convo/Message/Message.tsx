@@ -8,7 +8,9 @@ import { FeedbackProvider } from '@/Providers/FeedbackProvider';
 export default function Message( userRequest: UserRequestType ) {
   const { page } = usePage();
   const { currentAction, currentUserRequestId } = useUserRequests();
-  const pending = ! currentAction?.final && userRequest.id === currentUserRequestId;
+  const sameUserRequest = userRequest.id === currentUserRequestId;
+
+  const pending = sameUserRequest && ! currentAction?.final && currentAction?.hasExecuted;
 
   return (
     <FeedbackProvider userRequestId={ userRequest.id } feedback={ userRequest.feedback }>

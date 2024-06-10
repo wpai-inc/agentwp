@@ -25,7 +25,9 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   async function startStream( stream_url: string, user_request_id: string ) {
     setCurrentUserRequestId( user_request_id );
+
     resetStream();
+
     try {
       await fetchEventSource( stream_url, {
         credentials: 'include',
@@ -33,33 +35,33 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           'Authorization': 'Bearer ' + client.token,
           'X-WP-AGENT-VERSION': client.agentWpVersion,
         },
+        signal: ctrl.signal,
+        openWhenHidden: true,
+        onclose: closeStream,
         async onopen( response ) {
           if ( response.status > 300 ) {
-            closeStream();
-            addErrors( [ 'Oops, something went wrong.' ] );
+            throw new Error( `Server responded with: ${ response.status }` );
           }
         },
         onmessage( ev ) {
-          if ( ev.event === 'close' ) {
-            closeStream();
-            setStreamCompleted( true );
-          } else if ( ev.event === 'error' ) {
-            closeStream();
-            addErrors( [ 'Oops, something went wrong.' ] );
-          } else {
-            setLiveAction( JSON.parse( ev.data ) as AgentAction );
+          if ( ev.event === 'error' ) {
+            let aar = JSON.parse( ev.data );
+            throw new Error( `Error when processing message: ${ aar }` );
           }
+          if ( ev.event === 'close' ) {
+            setStreamCompleted( true );
+            return;
+          }
+
+          let aa = JSON.parse( ev.data ) as AgentAction;
+          setLiveAction( aa );
         },
         onerror( err ) {
-          closeStream();
           throw err;
         },
-        onclose: closeStream,
-        signal: ctrl.signal,
-        openWhenHidden: true,
       } );
     } catch ( e ) {
-      console.error( 'Error starting stream', e );
+      await handleStreamError( e );
       closeStream();
     }
   }
@@ -67,6 +69,11 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   async function startStreamFromRequest( user_request_id: string ) {
     const url = client.getStreamUrl( user_request_id );
     await startStream( url, user_request_id );
+  }
+
+  async function handleStreamError( e: any ) {
+    console.error( 'Stream error', e );
+    addErrors( [ 'Oops, something went wrong.' ] );
   }
 
   function resetStream() {

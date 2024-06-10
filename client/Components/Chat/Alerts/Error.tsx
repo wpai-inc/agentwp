@@ -7,12 +7,12 @@ type Props = {
 
 export function ChatError( { errors }: Props ) {
   return (
-    <Alert
-      variant="destructive"
-      className={ cn( 'absolute w-[95%] py-2 bg-red-100 text-red-700', 'bottom-0 rounded-md' ) }>
-      { errors.map( ( err: any ) => (
-        <AlertDescription key={ err.id }>{ err.message }</AlertDescription>
-      ) ) }
-    </Alert>
+    <div className="absolute bottom-0 right-0 left-0 z-20 px-2">
+      <Alert variant="destructive" className={ cn( 'w-full bg-red-100 text-red-700 py-2' ) }>
+        { errors.map( ( err: any ) => (
+          <AlertDescription key={ err.id }>{ err.message }</AlertDescription>
+        ) ) }
+      </Alert>
+    </div>
   );
 }
