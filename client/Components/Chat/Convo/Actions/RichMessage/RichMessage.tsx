@@ -47,11 +47,13 @@ export default function RichMessage( props: AgentAction ) {
       return (
         <>
           <ActionSimpleMessage { ...props } />
-          { buttons.length > 0
-            ? buttons.map( b => (
-                <NavigatableButton text={ b.label } link={ b.url } className={ '' } />
-              ) )
-            : null }
+          { buttons.length > 0 ? (
+            <div className="flex gap-2 items-center mt-2">
+              { buttons.map( b => (
+                <NavigatableButton text={ b.label } link={ b.url } styleType={ b.level } />
+              ) ) }
+            </div>
+          ) : null }
         </>
       );
     } else {
