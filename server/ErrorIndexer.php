@@ -52,9 +52,13 @@ class ErrorIndexer implements Registrable
             'context' => $error_context, // Be cautious with sensitive information
         ];
 
-        //TODO: We should be able to pas the API token here
         $awpClient = AwpClientFactory::create($this->main);
-        $response = $awpClient->indexError($siteId, json_encode($error_data));
+        $token = $this->main->settings->getAccessToken();
+        if($token) {
+            $awpClient->setToken($this->main->settings->getAccessToken());
+            // only make the request if a token is available
+            $awpClient->indexError($siteId, json_encode($error_data));
+        }
 
         return false; // Let PHP handle the error as well
     }
