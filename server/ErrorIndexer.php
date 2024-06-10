@@ -53,8 +53,11 @@ class ErrorIndexer implements Registrable
         ];
 
         $awpClient = AwpClientFactory::create($this->main);
-        $awpClient->setToken($this->main->settings->getAccessToken());
-        $response = $awpClient->indexError($siteId, json_encode($error_data));
+        $token = $this->main->settings->getAccessToken();
+        if($token) {
+            $awpClient->setToken($this->main->settings->getAccessToken());
+        }
+        $awpClient->indexError($siteId, json_encode($error_data));
 
         return false; // Let PHP handle the error as well
     }
