@@ -3,10 +3,10 @@ import ChatTrigger from '@/Components/Chat/ChatTrigger';
 import { useChat } from '@/Providers/ChatProvider';
 
 export default function Chat() {
-  const { open, expanding } = useChat();
+  const { open } = useChat();
   return (
     <>
-      { ( open || expanding ) && <ChatContainer /> }
+      { open && <ChatContainer /> }
       <ChatTrigger open={ open } />
     </>
   );
