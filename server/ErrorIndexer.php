@@ -56,8 +56,9 @@ class ErrorIndexer implements Registrable
         $token = $this->main->settings->getAccessToken();
         if($token) {
             $awpClient->setToken($this->main->settings->getAccessToken());
+            // only make the request if a token is available
+            $awpClient->indexError($siteId, json_encode($error_data));
         }
-        $awpClient->indexError($siteId, json_encode($error_data));
 
         return false; // Let PHP handle the error as well
     }
