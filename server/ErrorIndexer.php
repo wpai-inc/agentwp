@@ -17,11 +17,8 @@ class ErrorIndexer implements Registrable
 
     public function register()
     {
-        //TODO: error logger should work for unauthenticated users alo
-        if ($this->main->auth()->isAuthenticated()) {
             set_error_handler([$this, 'handle']);
             register_shutdown_function([$this, 'catchFatalErrors']);
-        }
     }
 
     public function catchFatalErrors()
