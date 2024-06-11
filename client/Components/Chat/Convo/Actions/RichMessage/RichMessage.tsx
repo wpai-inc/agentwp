@@ -4,19 +4,15 @@ import Pie from '@/Components/Charts/Pie';
 import NavigatableButton from '@/Components/NavigatableButton';
 import ActionSimpleMessage from '@/Components/Chat/Convo/Actions/ActionSimpleMessage';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
-import { MessageAction } from '@wpai/schemas';
-
-type GraphDataPoint = {
-  label: string;
-  value: string;
-};
+import CodeableEscalation from '@/Components/Chat/Convo/Actions/Escalations/CodeableEscalation';
 
 export default function RichMessage( props: AgentAction ) {
   if ( props.action.ability === 'message' ) {
     const isGraph = !! props.action.graph;
+    const isEscalation = !! props.action.escalation;
     const areButtons = !! props.action.buttons;
 
-    const action = props.action as MessageAction;
+    const action = props.action;
     if ( isGraph ) {
       const graphType = action.graph?.graphType;
       const data = action.graph?.data;
@@ -42,6 +38,15 @@ export default function RichMessage( props: AgentAction ) {
           </GraphContainer>
         );
       }
+    } else if ( isEscalation ) {
+      const escalation = action.escalation!;
+      const service = escalation.service;
+      return (
+        <>
+          <ActionSimpleMessage { ...props } />
+          { service === 'codeable' && <CodeableEscalation escalation={ escalation } /> }
+        </>
+      );
     } else if ( areButtons ) {
       const buttons = action.buttons as any[];
       return (
