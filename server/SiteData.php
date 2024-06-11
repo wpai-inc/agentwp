@@ -21,13 +21,30 @@ class SiteData
         if (! function_exists('\got_url_rewrite')) {
             require_once ABSPATH.'wp-admin/includes/misc.php';
         }
+        if (! function_exists('\get_option')) {
+            require_once ABSPATH.'wp-includes/option.php';
+        }
 
         $debug_data = \WP_Debug_Data::debug_data();
 
         $debug_data['cpts'] = self::getCpts();
         $debug_data['taxonomies'] = self::getTaxonomies();
+        $debug_data['general_settings'] = self::getGeneralSettings();
 
         return $debug_data;
+    }
+
+    /**
+     * return an array containing the general settings
+     *
+     * @return array
+     */
+    public static function getGeneralSettings()
+    {
+        return [
+            'blogname' => get_option('blogname'),
+            'blogdescription' => get_option('blogdescription')
+        ];
     }
 
     /**
