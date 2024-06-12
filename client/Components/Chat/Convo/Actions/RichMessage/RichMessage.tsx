@@ -4,6 +4,7 @@ import Pie from '@/Components/Charts/Pie';
 import NavigatableButton from '@/Components/NavigatableButton';
 import ActionSimpleMessage from '@/Components/Chat/Convo/Actions/ActionSimpleMessage';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
+import { EscalationProvider } from '@/Providers/EscalationProvider';
 import CodeableEscalation from '@/Components/Chat/Convo/Actions/Escalations/CodeableEscalation';
 
 export default function RichMessage( props: AgentAction ) {
@@ -42,10 +43,10 @@ export default function RichMessage( props: AgentAction ) {
       const escalation = action.escalation!;
       const service = escalation.service;
       return (
-        <>
+        <EscalationProvider escalation={ escalation }>
           <ActionSimpleMessage { ...props } />
           { service === 'codeable' && <CodeableEscalation escalation={ escalation } /> }
-        </>
+        </EscalationProvider>
       );
     } else if ( areButtons ) {
       const buttons = action.buttons as any[];

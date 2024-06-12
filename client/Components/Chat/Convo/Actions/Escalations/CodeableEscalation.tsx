@@ -1,11 +1,19 @@
 import { MessageActionEscalation } from '@wpai/schemas';
+import { useEscalation } from '@/Providers/EscalationProvider';
 import CodeableLogo from '@/assets/services/codeable.png';
+import { LoaderIcon } from 'lucide-react';
 
 type Props = {
   escalation: MessageActionEscalation;
 };
 
 const CodeableEscalation = ( { escalation }: Props ) => {
+  const { createEscalation, loading } = useEscalation();
+
+  function handleContinue() {
+    createEscalation();
+  }
+
   return (
     <div className="space-y-2">
       <div className="rounded-lg overflow-hidden p-3 bg-[#E8E8E9] mt-3">
@@ -20,18 +28,23 @@ const CodeableEscalation = ( { escalation }: Props ) => {
         <div className="font-semibold text-sm mb-2 text-gray-800">{ escalation.headline }</div>
         <p className="text-gray-700 text-sm">
           { escalation.description }{ ' ' }
-          <a href="#" className="text-blue-500 hover:underline">
+          <button
+            onClick={ handleContinue }
+            disabled={ loading }
+            className="text-blue-500 hover:underline">
             View Full Scope.
-          </a>
+          </button>
         </p>
       </div>
-      <a
-        href="#"
+      <button
+        onClick={ handleContinue }
+        disabled={ loading }
+        type="submit"
         className={
-          'p-2 rounded-lg text-sm justify-center items-center text-white flex bg-[#457580] hover:opacity-80'
+          'p-2 rounded-lg w-full text-sm justify-center items-center text-white flex bg-[#457580] hover:opacity-80 min-h-[35px]'
         }>
-        Continue In Codeable
-      </a>
+        { loading ? <LoaderIcon className="animate-spin h-4 w-4" /> : 'Continue In Codeable' }
+      </button>
     </div>
   );
 };

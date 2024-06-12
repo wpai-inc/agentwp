@@ -1,12 +1,23 @@
 import CodeableEscalation from './CodeableEscalation';
 import { MessageAction } from '@wpai/schemas';
+import { EscalationProvider } from '@/Providers/EscalationProvider';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+const meta: Meta< typeof CodeableEscalation > = {
   title: 'Wpai/Escalations/CodeableEscalation',
   component: CodeableEscalation,
+  decorators: [
+    ( Story, context ) => (
+      <EscalationProvider escalation={ context.args.escalation }>
+        <Story />
+      </EscalationProvider>
+    ),
+  ],
 };
 
-export const CodeableEscalationStory = {
+export default meta;
+
+export const CodeableEscalationStory: StoryObj< typeof CodeableEscalation > = {
   args: {
     escalation: {
       service: 'codeable',
