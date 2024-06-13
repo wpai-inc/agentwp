@@ -49,7 +49,13 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
   }
 
   async function updateSetting( name: string, value: any ) {
-    await client.updateSetting( page.site_id, name, value );
+    const response = await client.updateSetting( page.site_id, name, value );
+    return response.data;
+  }
+
+  async function getSettings() {
+    const res = await client.getSettings( page.site_id );
+    return res?.data?.data;
   }
 
   async function getConversation( since?: string ) {
@@ -67,6 +73,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         clearConversation,
         unclearConversation,
         userProfileUrl,
+        getSettings,
         updateSetting,
       } }>
       { children }
