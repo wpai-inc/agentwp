@@ -12,6 +12,8 @@ export const SampleUserRequest = {
   args: {
     id: '1',
     wp_user_id: 1,
+    wp_username: 'jameslepage',
+    wp_role: 'administrator',
     created_at: '2021-10-01T00:00:00',
     human_created_at: '2 hours ago',
     message: 'Can you please change my Store Address to 123 main street?',
@@ -69,6 +71,8 @@ export const ActionWithEscalation = {
   args: {
     id: '1',
     wp_user_id: 1,
+    wp_username: 'jameslepage',
+    wp_role: 'administrator',
     created_at: '2021-10-01T00:00:00',
     human_created_at: '2 hours ago',
     message: 'I need an extreme help for someone to code something for me.',
