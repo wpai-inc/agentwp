@@ -103,6 +103,15 @@ export default class AwpClient {
     return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/result`, {}, data );
   }
 
+  async updateSetting( siteId: string, name: string, value: any ): Promise< AxiosResponse > {
+    return this.request(
+      'PUT',
+      `${ this.baseUrl }/api/site/${ siteId }/settings/${ name }`,
+      {},
+      value,
+    );
+  }
+
   async storeConversation( siteId: string, data: object ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }`, {}, data );
   }

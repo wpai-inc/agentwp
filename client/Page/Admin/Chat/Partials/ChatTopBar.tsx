@@ -11,6 +11,7 @@ import History from '../Settings/History';
 import { useClient } from '@/Providers/ClientProvider';
 import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversationButton';
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
+import ChatSettings from '../Settings/ChatSettings';
 
 export default function ChatTopBar() {
   const { setChatSetting } = useChat();
@@ -30,9 +31,9 @@ export default function ChatTopBar() {
     } );
   }
 
-  function onSettingsClick( e: React.FormEvent ) {
+  function onSettingsClick() {
     setChatSetting( {
-      component: <p>Settings</p>,
+      component: <ChatSettings />,
       header: 'Settings',
     } );
   }
