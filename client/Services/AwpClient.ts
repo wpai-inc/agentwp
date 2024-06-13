@@ -106,8 +106,13 @@ export default class AwpClient {
   async storeConversation( siteId: string, data: object ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }`, {}, data );
   }
+
   async refreshToken(): Promise< AxiosResponse > {
     return this.adminRequest( `refresh_token` );
+  }
+
+  async postEscalation( escalationId: string ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/escalation/${ escalationId }` );
   }
 
   async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {
