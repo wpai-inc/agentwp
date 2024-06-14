@@ -36,16 +36,16 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const userProfileUrl = page.api_host + '/dashboard';
 
   async function getHistory( since?: string ): Promise< HistoryType[] > {
-    const response = await client.getHistory( page.site_id, page.user.ID, since );
+    const response = await client.getHistory( page.site_id, since );
     return response.data as HistoryType[];
   }
 
   async function clearConversation() {
-    await client.clearConversation( page.site_id, page.user.ID );
+    await client.clearConversation( page.site_id );
   }
 
   async function unclearConversation( since: string ) {
-    await client.unclearConversation( page.site_id, page.user.ID, since );
+    await client.unclearConversation( page.site_id, since );
   }
 
   async function updateSetting( name: string, value: any ) {
@@ -59,7 +59,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
   }
 
   async function getConversation( since?: string ) {
-    const res = await client.isAuthorized()?.getConversation( page.site_id, page.user.ID, since );
+    const res = await client.isAuthorized()?.getConversation( page.site_id, since );
     return res?.data?.data;
   }
 

@@ -48,10 +48,6 @@ export default function ChatProvider( {
   children: React.ReactNode;
 } ) {
   const { page } = usePage();
-  const siteId = page.site_id;
-  const wp_user_id = parseInt( page.user?.ID );
-  const wp_username = page.user?.user_nicename;
-  const wp_role = page.user?.roles.join( ', ' );
   const { client } = useClient();
   const { screen } = useScreen();
   const { settings, setSettings } = useClientSettings();
@@ -65,6 +61,8 @@ export default function ChatProvider( {
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error } = useStream();
   const { addErrors } = useError();
+
+  const siteId = page.site_id;
 
   useEffect( () => {
     if ( liveAction && currentUserRequestId ) {
@@ -138,9 +136,6 @@ export default function ChatProvider( {
     const response = await client.storeConversation( siteId, {
       message,
       screen,
-      wp_user_id,
-      wp_username,
-      wp_role,
     } );
 
     return response.data;
