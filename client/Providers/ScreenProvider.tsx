@@ -4,7 +4,8 @@ type ScreenType = {
   url: string;
   title: string;
   links: string[];
-  post_content: string;
+  post_content?: string;
+  post_title?: string;
   //   buttons: string[];
   //   forms: { action: string; method: string }[];
 };
@@ -19,7 +20,6 @@ const ScreenContext = createContext< ScreenContextType >( {
     url: '',
     title: '',
     links: [],
-    post_content: '',
     // buttons: [],
     // forms: [],
   },
@@ -39,7 +39,6 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
     url: '',
     title: '',
     links: [],
-    post_content: '',
     // buttons: [],
     // forms: [],
   } );
@@ -52,7 +51,6 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
       url,
       title,
       links,
-      post_content: '',
     } );
 
     // screen.buttons = Array.from(document.querySelectorAll('button')).map(
