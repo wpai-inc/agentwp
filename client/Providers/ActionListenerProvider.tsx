@@ -3,7 +3,6 @@ import { useStream } from '@/Providers/StreamProvider';
 import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
-import { WriteToEditor } from '@/Services/WriteToEditor';
 
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamClosed, startStreamFromRequest } = useStream();
@@ -13,7 +12,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   useEffect( () => {
     if ( currentAction && streamClosed && currentAction.action ) {
-      executeAndContinueAction( currentAction, currentUserRequestId ).then( r =>
+      executeAndContinueAction( currentAction, currentUserRequestId ).then( () =>
         console.log( 'executeAndContinueAction', currentAction.action.ability ),
       );
     }
@@ -37,8 +36,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   async function executeAction( aa: AgentAction ) {
     switch ( aa.action.ability ) {
       case 'query':
-        // TODO: BUG the stream is not waiting for this to finish
-        // Probably because this component is rerendered from outside
         try {
           const response = await adminRequest.get( 'run_action_query', {
             params: {
@@ -60,17 +57,13 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         }
         break;
       case 'navigate':
-        await client.storeAgentResult( aa.id, {
-          status: 'success',
-        } );
         window.location.href = aa.action.url;
-        break;
-      case 'message':
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );
         break;
       case 'write_to_editor':
+      case 'message':
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );
