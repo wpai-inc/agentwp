@@ -71,7 +71,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         } );
         break;
       case 'write_to_editor':
-        WriteToEditor( aa.action.text );
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );

@@ -40,3 +40,13 @@ export type AgentWpUser = {
   image: string;
   role: string;
 };
+
+export type BlockType = {
+  blockName: string;
+  attrs: any;
+  content: string;
+  innerBlocks?: BlockType[];
+  status?: string;
+  valid?: boolean;
+  clientId?: string;
+};

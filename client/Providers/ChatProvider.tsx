@@ -7,6 +7,8 @@ import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { usePage } from '@/Providers/PageProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
+import { WriteToEditor } from '@/Services/WriteToEditor';
+import { type BlockType } from '../Types/types';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -63,10 +65,17 @@ export default function ChatProvider( {
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error } = useStream();
   const { addErrors } = useError();
+  const [ editorContent, setEditorContent ] = useState< BlockType[] >( [] );
 
   useEffect( () => {
     if ( liveAction && currentUserRequestId ) {
-      updateAgentMessage( currentUserRequestId, liveAction );
+      if ( liveAction.action.ability === 'write_to_editor' && liveAction.action.text ) {
+        const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
+
+        setEditorContent( WriteToEditor( text, editorContent ) || [] );
+      } else if ( liveAction.action.ability === 'message' ) {
+        updateAgentMessage( currentUserRequestId, liveAction );
+      }
     }
   }, [ liveAction, currentUserRequestId ] );
 
