@@ -71,8 +71,11 @@ export default function ChatProvider( {
     if ( liveAction && currentUserRequestId ) {
       if ( liveAction.action.ability === 'write_to_editor' && liveAction.action.text ) {
         const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
-
-        setEditorContent( WriteToEditor( text, editorContent ) || [] );
+        const newEditorContent = WriteToEditor( text, editorContent );
+        if ( newEditorContent ) {
+          console.log( 'newEditorContent', newEditorContent );
+          setEditorContent( newEditorContent );
+        }
       } else if ( liveAction.action.ability === 'message' ) {
         updateAgentMessage( currentUserRequestId, liveAction );
       }

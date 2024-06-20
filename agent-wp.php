@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Agent WP
  * Plugin URI: https://codewp.ai
@@ -15,7 +16,7 @@
  */
 defined('ABSPATH') || exit;
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
@@ -36,3 +37,12 @@ add_action('plugins_loaded', function () {
         \WpAi\AgentWp\Router::class,
     ]);
 });
+
+
+//TODO: to be removed
+// add_action('admin_enqueue_scripts', function () {
+//     global $pagenow;
+//     if ($pagenow === 'post.php') {
+//         wp_enqueue_script('test-innerblocks', plugin_dir_url(__FILE__) . 'test-innerblocks.js', array('jquery'), '1.0', true);
+//     }
+// });
