@@ -159,7 +159,6 @@ export default function ChatProvider( {
   function updateAgentMessage( urId: string, updatedAa: AgentAction ) {
     setConversation( ( prev: UserRequestType[] ) => {
       return prev.map( function ( msg ) {
-        console.log( 'msg.id', msg.id, urId );
         if ( msg.id === urId ) {
           return {
             ...msg,

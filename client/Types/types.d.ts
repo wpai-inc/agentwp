@@ -45,7 +45,8 @@ export type BlockType = {
   blockName: string;
   attrs: any;
   content: string;
+  innerBlocks?: BlockType[];
   status?: string;
-  InnerBlocks?: BlockType[];
+  valid?: boolean;
   clientId?: string;
 };
