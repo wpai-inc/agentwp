@@ -9,44 +9,43 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
       const updatedBlocks = parse( content ) as BlockType[];
       const blocksCount = updatedBlocks.length;
       const key = blocksCount - 1;
-      const block = updatedBlocks[ key ];
-
-      // updatedBlocks.forEach( ( block: BlockType, key: number ) => {
-      //   if ( key !== blocksCount - 1 ) {
-      //     return;
-      //   }
+      const block = updatedBlocks[ key ] || {};
 
       block.status = previousContent[ key ]?.status || 'initial';
       block.clientId = previousContent[ key ]?.clientId || '';
       block.valid = previousContent[ key ]?.valid || undefined;
 
-      // Skip if block is already done
-      if ( block.status === 'done' ) {
-        return;
-      }
-
       // validate name, if the name is not valid, skip
       if ( ! block.name || ! wp.blocks.getBlockType( block.name ) ) {
+        console.info( 'Skipping... the block name is not valid...', block.name );
         return;
       }
       updatedBlocks[ key ].valid = true;
 
       // Insert the block and the status ready
       if ( ! block.clientId ) {
-        updatedBlocks[ key ].clientId = insertBlock( block );
-        updatedBlocks[ key ].status = 'ready';
-        console.log( 'Block Inserted', key, updatedBlocks[ key ] );
+        insertBlock( block ).then( clientId => {
+          updatedBlocks[ key ].clientId = clientId;
+          updatedBlocks[ key ].status = 'ready';
+          // console.log( 'Block Inserted', key, updatedBlocks[ key ] );
+        } );
       } else if (
         block.attributes?.content &&
         block.attributes?.content !== previousContent[ key ]?.attributes?.content
       ) {
         updatedBlocks[ key ].status = 'updating_content';
         if ( ! block.clientId ) {
-          updatedBlocks[ key ].clientId = insertBlock( block );
+          insertBlock( block ).then( clientId => {
+            updatedBlocks[ key ].clientId = clientId;
+          } );
         } else {
-          updateBlockContent( block );
+          updateBlockContent( block ).then( clientId => {
+            if ( clientId ) {
+              updatedBlocks[ key ].clientId = clientId;
+            }
+          } );
         }
-        console.log( 'Block Content Updated', key, updatedBlocks[ key ] );
+        // console.log( 'Block Content Updated', key, updatedBlocks[ key ] );
       } else if (
         block.innerBlocks &&
         block.innerBlocks?.length > 0 &&
@@ -55,11 +54,17 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
       ) {
         updatedBlocks[ key ].status = 'updating_inner_blocks';
         if ( ! block.clientId ) {
-          updatedBlocks[ key ].clientId = insertBlock( block );
+          insertBlock( block ).then( clientId => {
+            updatedBlocks[ key ].clientId = clientId;
+          } );
         } else {
-          updateBlockInnerBlocks( block );
+          updateBlockInnerBlocks( block ).then( clientId => {
+            if ( clientId ) {
+              updatedBlocks[ key ].clientId = clientId;
+            }
+          } );
         }
-        console.log( 'Block Inner Blocks Updated', key, updatedBlocks[ key ] );
+        // console.log( 'Block Inner Blocks Updated', key, updatedBlocks[ key ] );
       }
       // } );
       return updatedBlocks;
@@ -69,7 +74,7 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
   }
 }
 
-function insertBlock( block: BlockType ) {
+async function insertBlock( block: BlockType ) {
   if ( block.clientId ) {
     return;
   }
@@ -81,36 +86,37 @@ function insertBlock( block: BlockType ) {
   const newBlock = wp.blocks.createBlock( name, attributes );
 
   // Insert block into editor
-  dispatch( 'core/block-editor' ).insertBlocks( newBlock );
+  await dispatch( 'core/block-editor' ).insertBlocks( newBlock );
 
   return newBlock.clientId;
 }
 
-function updateBlockContent( block: BlockType ) {
+async function updateBlockContent( block: BlockType ) {
   if ( ! block.clientId ) {
     return;
   }
   const { dispatch } = wp.data;
-  dispatch( 'core/block-editor' ).updateBlockAttributes( block.clientId, block.attributes );
+  await dispatch( 'core/block-editor' ).updateBlockAttributes( block.clientId, block.attributes );
+  return block.clientId;
 }
 
-function updateBlockInnerBlocks( block: BlockType ) {
+async function updateBlockInnerBlocks( block: BlockType ) {
   if ( ! block.clientId ) {
     return '';
   }
   const { dispatch } = wp.data;
-  // Update block content
   try {
+    // Create inner blocks
     const theInnerBlocks = wp.blocks.createBlocksFromInnerBlocksTemplate( block.innerBlocks );
     if ( theInnerBlocks ) {
-      const newBlock = wp.blocks.createBlock( block.name, block?.attributes || {}, theInnerBlocks );
-      // TODO: the block is replaced but the ID is modified and I cannot retrieve the new ID
-      // THE BLOCK CAN BE REMOVED AND AN NEW ONE CAN BE INSERTED BUT THEIS WILL ADD SOME FLICKERING TO THE SCREEN
-      // IDEA: ADD A LOADING SPIN UNTIL THE BLOCK STREAM IS COMPLETED THEN ADD THE FINAL VERSION OF THE BLOCK
-      const theNewBlock = dispatch( 'core/block-editor' ).replaceBlocks( block.clientId, newBlock );
-      console.log( 'theNewBlock', theNewBlock.clientId );
+      // Create new block with inner blocks
+      const newBlock = wp.blocks.createBlock( block.name, block.attributes || {}, theInnerBlocks );
+      // Replace the block with the new block
+      await dispatch( 'core/block-editor' ).replaceBlocks( block.clientId, newBlock );
+      // Return the new block clientId
+      return newBlock.clientId;
     }
   } catch ( error ) {
-    console.info( 'Skipping not completed...' );
+    console.info( 'Skipping... the block is incomplete...', error.message );
   }
 }
