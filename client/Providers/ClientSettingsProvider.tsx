@@ -55,6 +55,7 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
     height: getLocalStorage( 'height', ( 2 * window.innerHeight ) / 3 + 'px' ),
   } );
 
+  console.log( settings );
   useEffect( () => {
     for ( const [ key, value ] of Object.entries( settings ) ) {
       setLocalStorage( key as keyof ClientSettings, value );

@@ -48,7 +48,7 @@ export default function WindowActions( { show = false } ) {
       <AgentTooltip content="Drag or double-click to reset window position" side="right">
         <DragIcon
           id="dragHandle"
-          className={ cn( 'draggable h-6 w-6 hover:text-amber-500 cursor-move', 'text-gray-400' ) }
+          className={ cn( 'handle h-6 w-6 hover:text-amber-500 cursor-move', 'text-gray-400' ) }
         />
       </AgentTooltip>
       { isMaximized ? (

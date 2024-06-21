@@ -40,7 +40,7 @@ export default function ChatTopBar() {
   return (
     <div
       className={ cn(
-        'draggable py-2 px-2 cursor-move border-b border-b-brand-gray-25',
+        'handle py-2 px-2 cursor-move border-b border-b-brand-gray-25',
         'flex justify-between',
       ) }>
       <div className="flex h-8 items-center gap-2">
