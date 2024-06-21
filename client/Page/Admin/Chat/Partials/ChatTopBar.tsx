@@ -12,7 +12,7 @@ import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversation
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import ChatSettings from '../Settings/ChatSettings';
 
-export default function ChatTopBar() {
+export default function ChatTopBar( { dragHandler } ) {
   const { setChatSetting } = useChat();
   const { userProfileUrl } = useClient();
 
@@ -39,8 +39,9 @@ export default function ChatTopBar() {
 
   return (
     <div
+      onMouseDown={ dragHandler }
       className={ cn(
-        'handle py-2 px-2 cursor-move border-b border-b-brand-gray-25',
+        'py-2 px-2 cursor-move border-b border-b-brand-gray-25',
         'flex justify-between',
       ) }>
       <div className="flex h-8 items-center gap-2">
