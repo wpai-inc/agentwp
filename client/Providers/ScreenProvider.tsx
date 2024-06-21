@@ -1,47 +1,57 @@
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 type ScreenType = {
   url: string;
   title: string;
   links: string[];
+  post_content?: string;
+  post_title?: string;
   //   buttons: string[];
   //   forms: { action: string; method: string }[];
 };
 
-const ScreenContext = createContext<ScreenType>({
-  url: '',
-  title: '',
-  links: [],
-  //   buttons: [],
-  //   forms: [],
-});
+type ScreenContextType = {
+  screen: ScreenType;
+  setScreen: ( screen: ScreenType ) => void;
+};
 
-export function useScreen() {
-  const context = useContext(ScreenContext);
-  if (!context) {
-    throw new Error('useScreen must be used within a ScreenProvider');
-  }
-  return context;
-}
-
-export default function ScreenProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  let screen: ScreenType = {
+const ScreenContext = createContext< ScreenContextType >( {
+  screen: {
     url: '',
     title: '',
     links: [],
     // buttons: [],
     // forms: [],
-  };
+  },
+  setScreen: () => {},
+} );
 
-  useEffect(() => {
-    screen.url = window.location.href;
-    screen.title = document.title;
+export function useScreen() {
+  const context = useContext( ScreenContext );
+  if ( ! context ) {
+    throw new Error( 'useScreen must be used within a ScreenProvider' );
+  }
+  return context;
+}
 
-    screen.links = Array.from(document.links).map((link) => link.href);
+export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
+  const [ screen, setScreen ] = useState< ScreenType >( {
+    url: '',
+    title: '',
+    links: [],
+    // buttons: [],
+    // forms: [],
+  } );
+
+  useEffect( () => {
+    const url = window.location.href;
+    const title = document.title;
+    const links = Array.from( document.links ).map( link => link.href );
+    setScreen( {
+      url,
+      title,
+      links,
+    } );
 
     // screen.buttons = Array.from(document.querySelectorAll('button')).map(
     //   (button) => button.innerText,
@@ -51,9 +61,9 @@ export default function ScreenProvider({
     //   action: form.action,
     //   method: form.method,
     // }));
-  }, []);
+  }, [] );
 
   return (
-    <ScreenContext.Provider value={screen}>{children}</ScreenContext.Provider>
+    <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>
   );
 }

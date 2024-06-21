@@ -1,3 +1,3 @@
-import Feedback from './Feedback';
+import Rate from './Rate';
 
-export default Feedback;
+export default Rate;

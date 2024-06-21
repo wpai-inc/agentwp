@@ -98,7 +98,7 @@ class SiteIndexer implements Registrable
             $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
-            $info['db-schema']['fields'][$table] = array_map(function ($row) {
+            $info['db-schema']['tables'][$table] = array_map(function ($row) {
                 return implode(',', $row);
             }, $rows);
         }

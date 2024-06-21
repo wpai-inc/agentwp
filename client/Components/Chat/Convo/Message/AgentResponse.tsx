@@ -3,42 +3,47 @@ import ActionIncomplete from '../Actions/ActionIncomplete';
 import ActionPending from '../Actions/ActionPending';
 import MessageHeader from './MessageHeader';
 import Avatar from '../../Avatar/Avatar';
-import Feedback from '@/Components/Chat/Feedback';
+import Rate from '@/Components/Chat/Feedback/Rate';
 import ActionComponent from '../Actions/ActionComponent';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { logoUrl } from '@/Components/Logo';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
-import { FeedbackType } from '@/Types/types';
+import { useStream } from '@/Providers/StreamProvider';
+import { useFeedback } from '@/Providers/FeedbackProvider';
+import Reason from '@/Components/Chat/Feedback/Reason';
 
 export default function AgentResponse( {
   agentActions,
   userRequestId,
   time,
   pending = false,
-  feedback,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
   time: string;
   pending?: boolean;
-  feedback?: FeedbackType;
 } ) {
+  const { streamClosed } = useStream();
+
   const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
     | AgentAction
     | undefined;
 
   const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
 
-  const isIncomplete = agentActions?.some( aa => ! aa.action );
+  const isPending = ! streamClosed || pending;
+
+  const isIncomplete =
+    ( streamClosed && ! pending ) || ( streamClosed && agentActions?.some( aa => ! aa.action ) );
+
+  const { opened } = useFeedback();
 
   return (
     <div className="text-black/60 py-4 border-t border-gray-25">
       { otherActions.length > 0 ? (
         <div className="flex-1">
           { otherActions.map( aa => {
-            if ( ! aa.action ) {
-              return <ActionIncomplete key={ aa.id } { ...aa } userRequestId={ userRequestId } />;
-            } else {
+            if ( aa.action ) {
               return <ActionComponent key={ aa.id } { ...aa } />;
             }
           } ) }
@@ -48,7 +53,7 @@ export default function AgentResponse( {
       <MessageHeader>
         <Avatar name="AgentWP" time={ time } image={ logoUrl } />
         <div className="flex items-center gap-4">
-          { ! isIncomplete && <Feedback userRequestId={ userRequestId } feedback={ feedback } /> }
+          { ! isIncomplete && <Rate /> }
           <Popover>
             <PopoverTrigger>
               <IconMore className="text-brand-gray-15" />
@@ -63,10 +68,17 @@ export default function AgentResponse( {
         </div>
       </MessageHeader>
 
-      { ( pending || agentActions === undefined ) && <ActionPending /> }
+      { opened && <Reason /> }
 
-      { isIncomplete && <p>Something went wrong attending to your request.</p> }
       { messageAction && <ActionComponent { ...messageAction } /> }
+
+      { ! messageAction && (
+        <>
+          { isPending && <ActionPending /> }
+
+          { isIncomplete && <ActionIncomplete userRequestId={ userRequestId } /> }
+        </>
+      ) }
     </div>
   );
 }

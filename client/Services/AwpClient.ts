@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { useNotifications } from '@/Providers/NotificationProvider';
-import { FeedbackType } from '@/Types/types';
+import { FeedbackType } from '@/Providers/FeedbackProvider';
 
 export default class AwpClient {
   private baseUrl: string = 'https://app.agentwp.com';
@@ -103,11 +103,29 @@ export default class AwpClient {
     return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/result`, {}, data );
   }
 
+  async getSettings( siteId: string ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/site/${ siteId }/settings` );
+  }
+
+  async updateSetting( siteId: string, name: string, value: any ): Promise< AxiosResponse > {
+    return this.request(
+      'PUT',
+      `${ this.baseUrl }/api/sites/${ siteId }/setting/${ name }`,
+      {},
+      { value },
+    );
+  }
+
   async storeConversation( siteId: string, data: object ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }`, {}, data );
   }
+
   async refreshToken(): Promise< AxiosResponse > {
     return this.adminRequest( `refresh_token` );
+  }
+
+  async postEscalation( escalationId: string ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/escalation/${ escalationId }` );
   }
 
   async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {

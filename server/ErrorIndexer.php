@@ -17,11 +17,8 @@ class ErrorIndexer implements Registrable
 
     public function register()
     {
-        //TODO: error logger should work for unauthenticated users alo
-        if ($this->main->auth()->isAuthenticated()) {
-            set_error_handler([$this, 'handle']);
-            register_shutdown_function([$this, 'catchFatalErrors']);
-        }
+        set_error_handler([$this, 'handle']);
+        register_shutdown_function([$this, 'catchFatalErrors']);
     }
 
     public function catchFatalErrors()
@@ -40,22 +37,48 @@ class ErrorIndexer implements Registrable
         array $error_context = []
     ): bool {
         $siteId = $this->main->siteId();
-        if (!$siteId) {
+        $token  = $this->main->settings->getAccessToken();
+        if ( ! $siteId || ! $token) {
+            return false;
+        }
+
+        if ($error_level === E_NOTICE || $error_level === E_DEPRECATED || $error_level === E_USER_DEPRECATED || $error_level === E_USER_NOTICE || $error_level === E_STRICT) {
             return false;
         }
 
         $error_data = [
-            'level' => $error_level,
+            'level'   => $error_level,
             'message' => $error_message,
-            'file' => $error_file,
-            'line' => $error_line,
+            'file'    => $error_file,
+            'line'    => $error_line,
             'context' => $error_context, // Be cautious with sensitive information
         ];
+        $hash       = md5(json_encode($error_data));
 
-        //TODO: We should be able to pas the API token here
-        $awpClient = AwpClientFactory::create($this->main);
-        $response = $awpClient->indexError($siteId, json_encode($error_data));
+        $logged_errors = get_transient('agentwp_errors');
+        if ($logged_errors && isset($logged_errors[$hash])) {
+            return false;
+        }
+
+        if ( ! $logged_errors) {
+            $logged_errors = [];
+        }
+
+        $logged_errors = [$hash => $error_data] + $logged_errors;
+
+        $logged_errors = array_slice($logged_errors, 0, 10, true);
+
+        set_transient('agentwp_errors', $logged_errors, 60); // 1 minute (for debugging purposes)
+        $this->sendTheErrors($siteId, $token, $error_data);
 
         return false; // Let PHP handle the error as well
+    }
+
+    private function sendTheErrors($siteId, $token, $error_data): void
+    {
+        $awpClient = AwpClientFactory::create($this->main);
+        $awpClient->setToken($token);
+        // only make the request if a token is available
+        $awpClient->indexError($siteId, json_encode($error_data));
     }
 }

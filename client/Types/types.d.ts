@@ -20,11 +20,6 @@ export type PageData = {
   onboarding_completed: boolean;
 };
 
-export type FeedbackType = {
-  approved?: boolean;
-  message?: string;
-};
-
 export type WpUser = {
   ID: string;
   display_name: string;
@@ -44,4 +39,14 @@ export type AgentWpUser = {
   is_current_user: boolean;
   image: string;
   role: string;
+};
+
+export type BlockType = {
+  blockName: string;
+  attrs: any;
+  content: string;
+  innerBlocks?: BlockType[];
+  status?: string;
+  valid?: boolean;
+  clientId?: string;
 };

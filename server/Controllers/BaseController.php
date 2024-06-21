@@ -30,13 +30,13 @@ class BaseController
             return true;
         }
 
-        if($this->permission === 'canGenerateVerificationKey') {
+        if ($this->permission === 'canGenerateVerificationKey') {
             return call_user_func([$this->main->auth, 'canGenerateVerificationKey']);
         }
-        if($this->permission === 'hasValidVerificationKey') {
+        if ($this->permission === 'hasValidVerificationKey') {
             return call_user_func([$this->main->auth, 'hasValidVerificationKey']);
         }
-        if($this->permission === 'CanLogout') {
+        if ($this->permission === 'CanLogout') {
             return call_user_func([$this->main->auth, 'CanLogout']);
         }
 
@@ -52,14 +52,19 @@ class BaseController
         wp_send_json_success($response);
     }
 
-    protected function error(mixed $response, $status_code=null): void
+    protected function error(mixed $response, $status_code = null): void
     {
         $this->respond($response, $status_code);
     }
 
+    protected function respondWithError(string $message, int $status_code): void
+    {
+        wp_send_json_error($message, $status_code);
+    }
+
     protected function verifyNonce(): void
     {
-        if ( ! wp_verify_nonce($_GET['nonce'], $this->main::SLUG)) {
+        if (!wp_verify_nonce($_GET['nonce'], $this->main::SLUG)) {
             $this->error('Invalid nonce', 403);
         }
     }

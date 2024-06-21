@@ -48,6 +48,16 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     await client.unclearConversation( page.site_id, page.user.ID, since );
   }
 
+  async function updateSetting( name: string, value: any ) {
+    const response = await client.updateSetting( page.site_id, name, value );
+    return response.data;
+  }
+
+  async function getSettings() {
+    const res = await client.getSettings( page.site_id );
+    return res?.data?.data;
+  }
+
   async function getConversation( since?: string ) {
     const res = await client.isAuthorized()?.getConversation( page.site_id, page.user.ID, since );
     return res?.data?.data;
@@ -63,6 +73,8 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         clearConversation,
         unclearConversation,
         userProfileUrl,
+        getSettings,
+        updateSetting,
       } }>
       { children }
     </ClientContext.Provider>

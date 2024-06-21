@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import OpenPostEdit from './OpenPostEdit';
+import EditGutenbergContent from '@/Components/Chat/Commands/EditGutenbergContent';
 
 type SlashCommand = {
   command: string;
@@ -9,15 +10,16 @@ type SlashCommand = {
 };
 
 export default function Commands( {
-  onMessageBoxKeyDown,
+  onMessageBoxKeyUp,
   onSetMessage,
   message,
 }: {
-  onMessageBoxKeyDown: React.KeyboardEvent< HTMLTextAreaElement > | undefined;
+  onMessageBoxKeyUp: React.KeyboardEvent< HTMLTextAreaElement > | undefined;
   onSetMessage: ( message: string ) => void;
   message: string;
 } ) {
   const slashCommands = [
+    { command: 'gb', info: 'Edit gutenberg content' },
     { command: 'goto', info: 'Go to a specific page' },
     { command: 'explain', info: 'Explain a specific topic' },
     { command: 'help', info: 'Get help' },
@@ -61,11 +63,13 @@ export default function Commands( {
   }
 
   function maybeIsASlashCommand( e: React.KeyboardEvent< HTMLTextAreaElement > ) {
-    // Hack to get the right value of the textarea. If i try to get the value right away it will return the previous value
-    // because the value is not updated yet
-    if ( e.target.value[ 0 ] === '/' && ! selectedCommand ) {
+    if (
+      e.target instanceof HTMLTextAreaElement &&
+      ( e.target as HTMLTextAreaElement ).value[ 0 ] === '/' &&
+      ! selectedCommand
+    ) {
       setFirstSlashDetected( true );
-      const value = e.target.value.slice( 1 );
+      const value = ( e.target as HTMLTextAreaElement ).value.slice( 1 );
       setFilteredCommands( filterSlashCommands( value ) );
       // key arrow up and down
       if ( e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Enter' ) {
@@ -120,8 +124,8 @@ export default function Commands( {
   }
 
   useEffect( () => {
-    handleMessageBoxKeyDown( onMessageBoxKeyDown ); // Cast the event type to KeyboardEvent
-  }, [ onMessageBoxKeyDown ] );
+    handleMessageBoxKeyDown( onMessageBoxKeyUp ); // Cast the event type to KeyboardEvent
+  }, [ onMessageBoxKeyUp ] );
 
   useEffect( () => {
     getActiveCommand();
@@ -160,7 +164,14 @@ export default function Commands( {
       { selectedCommand?.command && selectedCommand?.command === 'edit' && (
         <OpenPostEdit
           message={ message }
-          onMessageBoxKeyDown={ onMessageBoxKeyDown }
+          onMessageBoxKeyUp={ onMessageBoxKeyUp }
+          onSetMessage={ onSetMessage }
+        />
+      ) }
+      { selectedCommand?.command && selectedCommand?.command === 'gb' && (
+        <EditGutenbergContent
+          message={ message }
+          onMessageBoxKeyUp={ onMessageBoxKeyUp }
           onSetMessage={ onSetMessage }
         />
       ) }
