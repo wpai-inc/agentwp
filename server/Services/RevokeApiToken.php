@@ -16,7 +16,7 @@ class RevokeApiToken
     {
         try {
             $awp_client = AwpClientFactory::create($this->main);
-            $awp_client->request('POST', $this->main->apiHost() . '/api/site/disconnect');
+            $awp_client->request('POST', $this->main->apiHost() . '/api/sites/disconnect');
         } catch (\Exception $e) {
             // Do nothing
             error_log($e->getMessage());

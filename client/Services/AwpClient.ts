@@ -22,9 +22,10 @@ export default class AwpClient {
     this.httpClient = axios.create( {
       timeout: 15000,
       headers: {
-        'Authorization': `Bearer ${ this.token }`,
         'Accept': 'application/json',
-        'X-WP-AGENT-VERSION': this.agentWpVersion,
+        'Authorization': `Bearer ${ this.token }`,
+        'X-Wp-Agent-Version': this.agentWpVersion,
+        'X-Wp-User-Id': page.user.ID,
       },
     } );
 
@@ -61,42 +62,29 @@ export default class AwpClient {
     return `${ this.baseUrl }/api/request/${ userRequestId }/stream`;
   }
 
-  async getConversation(
-    siteId: string,
-    wpUserId: string,
-    since?: string,
-  ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }`, {
+  async getConversation( siteId: string, since?: string ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/convo`, {
       since,
     } );
   }
 
-  async clearConversation( siteId: string, wpUserId: string ): Promise< AxiosResponse > {
-    return this.request(
-      'POST',
-      `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }/clear`,
-    );
+  async clearConversation( siteId: string ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }/convo/clear` );
   }
 
-  async unclearConversation(
-    siteId: string,
-    wpUserId: string,
-    since: string,
-  ): Promise< AxiosResponse > {
+  async unclearConversation( siteId: string, since: string ): Promise< AxiosResponse > {
     return this.request(
-      'DELETE',
-      `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }/unclear`,
+      'POST',
+      `${ this.baseUrl }/api/sites/${ siteId }/convo/unclear`,
       {},
       { since },
     );
   }
 
-  async getHistory( siteId: string, wpUserId: string, since?: string ): Promise< AxiosResponse > {
-    return this.request(
-      'GET',
-      `${ this.baseUrl }/api/sites/${ siteId }/wpuser/${ wpUserId }/history`,
-      { since },
-    );
+  async getHistory( siteId: string, since?: string ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/convo/history`, {
+      since,
+    } );
   }
 
   async storeAgentResult( actionId: string, data: object ): Promise< AxiosResponse > {
@@ -117,7 +105,7 @@ export default class AwpClient {
   }
 
   async storeConversation( siteId: string, data: object ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }`, {}, data );
+    return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }/convo`, {}, data );
   }
 
   async refreshToken(): Promise< AxiosResponse > {

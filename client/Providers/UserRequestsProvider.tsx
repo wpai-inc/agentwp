@@ -25,7 +25,6 @@ export type UserRequestType = {
   };
   created_at: string;
   human_created_at: string;
-  wp_user_id?: number;
   agent_actions: AgentAction[];
   feedback?: FeedbackType;
 };
