@@ -5,21 +5,34 @@ import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import Conversation from './Convo/Conversation';
-import Draggable from 'react-draggable';
+import { Rnd } from 'react-rnd';
 
 export default function ChatContainer() {
   const { open } = useChat();
   const { settings, setSettings } = useClientSettings();
   const [ isHovering, setIsHovering ] = useState( false );
 
-  const eventHandler = ( e, data ) => {
-    console.log( 'Event Type', e.type );
-    console.log( { e, data } );
-  };
-
+  const [ state, setState ] = useState( {
+    width: 200,
+    height: 200,
+    x: 10,
+    y: 10,
+  } );
   console.log( 'settings', settings );
   return (
-    <Draggable onDrag={ eventHandler } handle=".handle" bounds="html">
+    <Rnd
+      size={ { width: state.width, height: state.height } }
+      position={ { x: state.x, y: state.y } }
+      onDragStop={ ( e, d ) => {
+        setState( { x: d.x, y: d.y } );
+      } }
+      onResizeStop={ ( e, direction, ref, delta, position ) => {
+        setState( {
+          width: ref.style.width,
+          height: ref.style.height,
+          ...position,
+        } );
+      } }>
       <div
         onMouseEnter={ () => setIsHovering( true ) }
         onMouseLeave={ () => setIsHovering( false ) }
@@ -36,6 +49,6 @@ export default function ChatContainer() {
         <WindowActions show={ isHovering } />
         { /* <DragHandles /> */ }
       </div>
-    </Draggable>
+    </Rnd>
   );
 }
