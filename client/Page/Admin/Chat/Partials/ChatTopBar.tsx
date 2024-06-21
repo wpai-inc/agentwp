@@ -1,4 +1,3 @@
-import React from 'react';
 import { cn } from '@/lib/utils';
 import HistoryIcon from '@material-design-icons/svg/outlined/history.svg?react';
 import SettingsIcon from '@material-design-icons/svg/outlined/settings.svg?react';
@@ -39,7 +38,11 @@ export default function ChatTopBar() {
   }
 
   return (
-    <div className={ cn( 'py-2 px-2 border-b border-b-brand-gray-25', 'flex justify-between' ) }>
+    <div
+      className={ cn(
+        'draggable py-2 px-2 cursor-move border-b border-b-brand-gray-25',
+        'flex justify-between',
+      ) }>
       <div className="flex h-8 items-center gap-2">
         <Logo className="h-full" />
         <Badge variant="primary">Free</Badge>

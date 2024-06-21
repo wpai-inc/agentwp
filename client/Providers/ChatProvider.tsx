@@ -86,27 +86,7 @@ export default function ChatProvider( {
   }, [ error ] );
 
   function toggle() {
-    const newVal = ! open;
-    if ( newVal ) {
-      setExpanding( true );
-    } else {
-      setMinimizing( true );
-    }
-
-    setTimeout( () => {
-      setOpen( newVal );
-      setExpanding( false );
-      setMinimizing( false );
-      setIsMaximized( false );
-      setSettings( {
-        chatOpen: newVal,
-        chatMaximized: false,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
-      } );
-    }, 1400 );
+    setOpen( prev => ! prev );
   }
 
   function maximizeChatWindow( chatWindowElement ) {
