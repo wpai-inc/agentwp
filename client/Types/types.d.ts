@@ -42,11 +42,12 @@ export type AgentWpUser = {
 };
 
 export type BlockType = {
-  blockName: string;
-  attrs: any;
-  content: string;
+  name: string;
+  clientId: string;
+  attributes: {
+    content?: string;
+  };
   innerBlocks?: BlockType[];
   status?: string;
   valid?: boolean;
-  clientId?: string;
 };

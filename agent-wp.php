@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Agent WP
  * Plugin URI: https://codewp.ai
@@ -16,6 +17,8 @@
 defined('ABSPATH') || exit;
 
 require_once __DIR__.'/vendor/autoload.php';
+
+use Kucrut\Vite;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
@@ -36,3 +39,23 @@ add_action('plugins_loaded', function () {
         \WpAi\AgentWp\Router::class,
     ]);
 });
+
+
+// TODO: to be removed
+//if (defined('TEST_BLOCKS_STREAMING')) {
+//    add_action('admin_enqueue_scripts', function () {
+//        global $pagenow;
+//        if ($pagenow === 'post.php') {
+//            Vite\enqueue_asset(
+//                __DIR__.'/build',
+//                'Tests/test-blocks-streaming.ts',
+//                [
+//                    'in-footer' => true,
+//                ]
+//            );
+//        }
+//    });
+//}
+
+
+
