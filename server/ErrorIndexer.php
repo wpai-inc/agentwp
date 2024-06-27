@@ -69,15 +69,14 @@ class ErrorIndexer implements Registrable
         $logged_errors = array_slice($logged_errors, 0, 10, true);
 
         set_transient('agentwp_errors', $logged_errors, 60); // 1 minute (for debugging purposes)
-        $this->sendTheErrors($token, $error_data);
+        $this->sendTheErrors($error_data);
 
         return false; // Let PHP handle the error as well
     }
 
-    private function sendTheErrors($token, $error_data): void
+    private function sendTheErrors($error_data): void
     {
-        $awpClient = new AwpClient($this->main);
-        $awpClient->setToken($token);
+        $awpClient = new AwpClient($this->main, false);
         // only make the request if a token is available
         $awpClient->indexError(json_encode($error_data));
     }
