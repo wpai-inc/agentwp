@@ -14,7 +14,8 @@ class WpUser implements Registrable
 
     public function register(): void
     {
-        add_action('wp_update_user', [$this, 'updateUser'], 10, 2);
+        add_action('wp_update_user', [$this, 'updateUser']);
+        add_action('wp_login', [$this, 'updateUser']);
     }
     public function updateUser(): void
     {
