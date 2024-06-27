@@ -36,30 +36,30 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const userProfileUrl = page.api_host + '/dashboard';
 
   async function getHistory( since?: string ): Promise< HistoryType[] > {
-    const response = await client.getHistory( page.site_id, since );
+    const response = await client.getHistory( since );
     return response.data as HistoryType[];
   }
 
   async function clearConversation() {
-    await client.clearConversation( page.site_id );
+    await client.clearConversation();
   }
 
   async function unclearConversation( since: string ) {
-    await client.unclearConversation( page.site_id, since );
+    await client.unclearConversation( since );
   }
 
   async function updateSetting( name: string, value: any ) {
-    const response = await client.updateSetting( page.site_id, name, value );
+    const response = await client.updateSetting( name, value );
     return response.data;
   }
 
   async function getSettings() {
-    const res = await client.getSettings( page.site_id );
+    const res = await client.getSettings();
     return res?.data?.data;
   }
 
   async function getConversation( since?: string ) {
-    const res = await client.isAuthorized()?.getConversation( page.site_id, since );
+    const res = await client.isAuthorized()?.getConversation( since );
     return res?.data?.data;
   }
 

@@ -2,7 +2,6 @@
 
 namespace WpAi\AgentWp\Services;
 
-use WpAi\AgentWp\Factory\AwpClientFactory;
 use WpAi\AgentWp\Main;
 
 class RefreshApiToken
@@ -21,7 +20,7 @@ class RefreshApiToken
             if (!$refresh_token || !$client_id || !$client_secret) {
                 return null;
             }
-            $awp_client = AwpClientFactory::create($this->main);
+            $awp_client = new AwpClient($this->main);
             $response = $awp_client->request('POST', $this->main->apiHost() . '/oauth/token', [], json_encode([
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $refresh_token,

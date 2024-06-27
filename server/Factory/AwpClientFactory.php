@@ -9,7 +9,7 @@ class AwpClientFactory
 {
     public static function create(Main $main): AwpClient
     {
-        $client = new AwpClient($main->apiHost());
+        $client = new AwpClient($main);
         if ($t = $main->auth()->getAccessToken()) {
             $client->setToken($t);
         }

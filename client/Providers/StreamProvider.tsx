@@ -4,6 +4,8 @@ import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
+import { usePage } from '@/Providers/PageProvider';
+
 export const StreamContext = createContext< any | undefined >( undefined );
 
 export function useStream() {
@@ -21,6 +23,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
   const { addErrors } = useError();
   const { client } = useClient();
+  const { page } = usePage();
   const ctrl = new AbortController();
 
   async function startStream( stream_url: string, user_request_id: string ) {
@@ -34,6 +37,9 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         headers: {
           'Authorization': 'Bearer ' + client.token,
           'X-WP-AGENT-VERSION': client.agentWpVersion,
+          'X-Wp-Agent-Version': client.agentWpVersion,
+          'X-Wp-User-Id': page.user.ID,
+          'X-Wp-Site-Id': page.site_id,
         },
         signal: ctrl.signal,
         openWhenHidden: true,

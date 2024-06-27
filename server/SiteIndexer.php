@@ -3,7 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Factory\AwpClientFactory;
+use WpAi\AgentWp\Services\AwpClient;
 
 class SiteIndexer implements Registrable
 {
@@ -35,7 +35,7 @@ class SiteIndexer implements Registrable
             }
 
             $debug_data = SiteData::getDebugData();
-            $awpClient = AwpClientFactory::create($this->main);
+            $awpClient = new AwpClient($this->main);
 
             $data = json_encode($debug_data);
             $data_hash = md5($data);
@@ -47,7 +47,7 @@ class SiteIndexer implements Registrable
 
             update_option('agentwp_last_hash', $data_hash, true);
 
-            $awpClient->indexSite($siteId, $data);
+            $awpClient->indexSite($data);
         }
     }
 

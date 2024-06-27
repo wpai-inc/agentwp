@@ -2,7 +2,6 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
-use WpAi\AgentWp\Factory\AwpClientFactory;
 use WpAi\AgentWp\ReactClient;
 use WpAi\AgentWp\Services\AwpClient;
 use WpAi\AgentWp\Traits\HasMenu;
@@ -14,7 +13,6 @@ class Settings extends ReactClient
     use HasMenu, HasPage;
 
     public array $pageData = [];
-    private AwpClient $awpClient;
     private \WpAi\AgentWp\Settings $settings;
     private UserAuth $user;
 
@@ -24,10 +22,8 @@ class Settings extends ReactClient
 
         $this->settings  = new \WpAi\AgentWp\Settings();
         $this->user      = new UserAuth();
-        $this->awpClient = AwpClientFactory::create($this->main);
 
         add_action('current_screen', [$this, 'maybe_get_token']);
-
     }
 
     public function registrations(): void
@@ -41,7 +37,7 @@ class Settings extends ReactClient
         $screen = get_current_screen();
         if ($screen->id === 'settings_page_agent-wp-admin-settings' && isset($_GET['code'])) {
             $code         = sanitize_text_field($_GET['code']);
-            $response_raw = wp_remote_post($this->main->apiHost().'/oauth/token', [
+            $response_raw = wp_remote_post($this->main->apiHost() . '/oauth/token', [
                 'body' => [
                     'grant_type'    => 'authorization_code',
                     'client_id'     => $this->settings->client_id,
@@ -63,6 +59,4 @@ class Settings extends ReactClient
             wp_redirect(admin_url('options-general.php?page=agent-wp-admin-settings'));
         }
     }
-
-
 }

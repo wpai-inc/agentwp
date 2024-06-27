@@ -23,8 +23,8 @@ if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
   root.render(
     <React.StrictMode>
-      <PageProvider page={ agentwp_settings }>
-        <NotificationsProvider>
+      <NotificationsProvider>
+        <PageProvider page={ agentwp_settings }>
           <App>
             <ErrorProvider>
               <AdminRouteProvider>
@@ -46,8 +46,8 @@ if ( rootElement ) {
               </AdminRouteProvider>
             </ErrorProvider>
           </App>
-        </NotificationsProvider>
-      </PageProvider>
+        </PageProvider>
+      </NotificationsProvider>
     </React.StrictMode>,
   );
 } else {

@@ -8,7 +8,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { WriteToEditor } from '@/Services/WriteToEditor';
-import { type BlockType } from '../Types/types';
+import { type BlockType } from '@/Types/types';
 
 type CreateUserRequestResponse = {
   user_request_id: string;
@@ -49,7 +49,6 @@ export default function ChatProvider( {
   defaultOpen?: boolean;
   children: React.ReactNode;
 } ) {
-  const { page } = usePage();
   const { client } = useClient();
   const { screen } = useScreen();
   const { settings, setSettings } = useClientSettings();
@@ -64,8 +63,6 @@ export default function ChatProvider( {
   const { startStream, liveAction, error } = useStream();
   const { addErrors } = useError();
   const [ editorContent, setEditorContent ] = useState< BlockType[] >( [] );
-
-  const siteId = page.site_id;
 
   useEffect( () => {
     if ( liveAction && currentUserRequestId ) {
@@ -145,7 +142,7 @@ export default function ChatProvider( {
   }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
-    const response = await client.storeConversation( siteId, {
+    const response = await client.storeConversation( {
       message,
       screen,
     } );
@@ -155,8 +152,9 @@ export default function ChatProvider( {
 
   /**
    * Adds or updates a msg in the conversation
-   * @param msg
    * @returns void
+   * @param urId
+   * @param updatedAa
    */
   function updateAgentMessage( urId: string, updatedAa: AgentAction ) {
     setConversation( ( prev: UserRequestType[] ) => {
