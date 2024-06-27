@@ -19,7 +19,7 @@ class AwpClient
 
     public function __construct(private Main $main, private $checkUserAccessRights = true)
     {
-        if (!$checkUserAccessRights || $access_token = $main->auth()->getAccessToken()) {
+        if (!$checkUserAccessRights && $access_token = $this->main->auth()->getAccessToken()) {
             $this->setToken($access_token);
         }
     }

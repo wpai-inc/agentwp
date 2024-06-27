@@ -64,21 +64,21 @@ export default class AwpClient {
   }
 
   async getConversation( since?: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/sites/convo`, {
+    return this.request( 'GET', `${ this.baseUrl }/api/convo`, {
       since,
     } );
   }
 
   async clearConversation(): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/sites/convo/clear` );
+    return this.request( 'POST', `${ this.baseUrl }/api/convo/clear` );
   }
 
   async unclearConversation( since: string ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/sites/convo/unclear`, {}, { since } );
+    return this.request( 'POST', `${ this.baseUrl }/api/convo/unclear`, {}, { since } );
   }
 
   async getHistory( since?: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/sites/convo/history`, {
+    return this.request( 'GET', `${ this.baseUrl }/api/convo/history`, {
       since,
     } );
   }
@@ -96,7 +96,7 @@ export default class AwpClient {
   }
 
   async storeConversation( data: object ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/sites/convo`, {}, data );
+    return this.request( 'POST', `${ this.baseUrl }/api/convo`, {}, data );
   }
 
   async refreshToken(): Promise< AxiosResponse > {
