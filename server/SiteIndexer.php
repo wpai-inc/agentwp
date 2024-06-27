@@ -35,7 +35,7 @@ class SiteIndexer implements Registrable
             }
 
             $debug_data = SiteData::getDebugData();
-            $awpClient = new AwpClient($this->main);
+            $awpClient = new AwpClient($this->main, false);
 
             $data = json_encode($debug_data);
             $data_hash = md5($data);

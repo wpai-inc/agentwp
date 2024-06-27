@@ -17,8 +17,11 @@ class AwpClient
 
     private string $agentWpVersion = '0.1-alpha1';
 
-    public function __construct(private Main $main)
+    public function __construct(private Main $main, private $checkUserAccessRights = true)
     {
+        if (!$checkUserAccessRights || $access_token = $main->auth()->getAccessToken()) {
+            $this->setToken($access_token);
+        }
     }
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
     {
