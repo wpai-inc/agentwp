@@ -23,10 +23,8 @@ class WpUser implements Registrable
         $user = wp_get_current_user();
         $awpClient = new AwpClient($this->main);
         $awpClient->updateUser( [
-            'site_id' => $this->main->siteId(),
-            'wp_user_id' => $user->ID,
             'display_name' => $user->display_name,
-            'nice_name' => $user->user_nicename,
+            'nicename' => $user->user_nicename,
             'role' => $user->roles[0]
         ]);
 
