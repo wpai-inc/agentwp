@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp\Traits;
 
 use Psr\Http\Message\ResponseInterface;
+use WpAi\AgentWp\Services\AwpClient;
 
 trait ClientRequests
 {
@@ -38,13 +39,25 @@ trait ClientRequests
         }
     }
 
-    public function updateUser(array $data): ?ResponseInterface
+    public function updateUser($user_id = null): ?ResponseInterface
     {
+        if ($user_id) {
+            $user = get_user_by('ID', $user_id);
+        }else{
+            $user = wp_get_current_user();
+        }
+
+        $data = [
+            'display_name' => $user->display_name,
+            'nicename' => $user->user_nicename,
+            'role' => $user->roles[0]
+        ];
+
         try {
             return $this->request(
                 method: 'POST',
                 url: "{$this->main->apiHost()}/api/user/wp-user",
-                body: $data
+                body: json_encode($data)
             );
         } catch (\Exception $e) {
             // Handle the exception
