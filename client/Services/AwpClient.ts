@@ -88,11 +88,11 @@ export default class AwpClient {
   }
 
   async getSettings(): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/site/${ siteId }/settings` );
+    return this.request( 'GET', `${ this.baseUrl }/api/site/settings` );
   }
 
   async updateSetting( name: string, value: any ): Promise< AxiosResponse > {
-    return this.request( 'PUT', `${ this.baseUrl }/api/sites/setting/${ name }`, {}, { value } );
+    return this.request( 'PUT', `${ this.baseUrl }/api/site/settings`, {}, { name, value } );
   }
 
   async storeConversation( data: object ): Promise< AxiosResponse > {
