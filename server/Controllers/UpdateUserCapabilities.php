@@ -3,7 +3,9 @@
 namespace WpAi\AgentWp\Controllers;
 
 use WpAi\AgentWp\Enums\RouteMethods;
+use WpAi\AgentWp\Services\AwpClient;
 use WpAi\AgentWp\UserAuth;
+use WpAi\AgentWp\WpUser;
 
 class UpdateUserCapabilities extends BaseController
 {
@@ -33,6 +35,9 @@ class UpdateUserCapabilities extends BaseController
                 $user->remove_cap(UserAuth::CAP_MANAGE_AGENTWP_USERS);
             }
         }
+
+        (new AwpClient($this->main))->setWpUser($user)->updateUser($user->ID);
+
         $this->respond();
     }
 

@@ -5,68 +5,50 @@ namespace WpAi\AgentWp\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
+use WpAi\AgentWp\Main;
+use WpAi\AgentWp\Traits\ClientRequests;
 
 class AwpClient
 {
+    use ClientRequests;
+
     private ?string $token = null;
 
     private int $timeout = 15;
 
     private string $agentWpVersion = '0.1-alpha1';
+    private ?\WP_User $wp_user;
 
-    public function __construct(private string $baseUrl)
+    public function __construct(private Main $main, private $checkUserAccessRights = true)
     {
-    }
-
-    public function indexSite($siteId, $data)
-    {
-        try {
-            return $this->request(
-                method: 'POST',
-                url: "$this->baseUrl/api/sites/$siteId/index/health",
-                body: $data
-            );
-        } catch (\Exception $e) {
-            // Handle the exception
-            error_log($e->getMessage());
-
-            return null;
+        if ( ! $checkUserAccessRights && $access_token = $this->main->settings->getAccessToken()) {
+            $this->setToken($access_token);
+        } elseif ($access_token = $this->main->auth()->getAccessToken()) {
+            $this->setToken($access_token);
         }
-    }
 
-    public function indexError($siteId, $data)
-    {
-        try {
-            return $this->request(
-                method: 'POST',
-                url: "$this->baseUrl/api/sites/$siteId/index/errors",
-                body: $data
-            );
-        } catch (\Exception $e) {
-            // Handle the exception
-            error_log($e->getMessage());
-
-            return null;
-        }
+        $this->wp_user = wp_get_current_user();
     }
 
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
     {
-        $client = $this->buildClient();
+        $client         = $this->buildClient();
         $defaultHeaders = [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'X-WP-AGENT-VERSION' => $this->agentWpVersion,
+            'Accept'             => 'application/json',
+            'Content-Type'       => 'application/json',
+            'X-Wp-Agent-Version' => $this->agentWpVersion,
+            'X-Wp-User-Id'       => $this->wp_user->ID,
+            'X-Wp-Site-Id'       => $this->main->siteId(),
         ];
-        $authHeader = $this->token ? [
+        $authHeader     = $this->token ? [
             'Authorization' => "Bearer $this->token",
         ] : [];
-        $headers = array_merge(
+        $headers        = array_merge(
             $defaultHeaders,
             $authHeader,
             $additionalHeaders,
         );
-        $request = new Request($method, $url, $headers, $body);
+        $request        = new Request($method, $url, $headers, $body);
 
         return $client->send($request);
     }
@@ -91,4 +73,12 @@ class AwpClient
             'timeout' => $this->timeout,
         ]);
     }
+
+    public function setWpUser($wp_user): self
+    {
+        $this->wp_user = $wp_user;
+
+        return $this;
+    }
+
 }

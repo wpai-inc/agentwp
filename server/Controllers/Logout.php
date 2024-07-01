@@ -2,7 +2,6 @@
 
 namespace WpAi\AgentWp\Controllers;
 
-use WpAi\AgentWp\Factory\AwpClientFactory;
 use WpAi\AgentWp\Services\RevokeApiToken;
 use WpAi\AgentWp\UserAuth;
 
@@ -15,7 +14,7 @@ class Logout extends BaseController
     {
         $this->verifyNonce();
 
-        // (new RevokeApiToken($this->main))->revoke();
+         (new RevokeApiToken($this->main))->revoke();
         $this->main->settings->delete(['client_secret', 'token', 'verification_key']);
         $this->respond();
     }

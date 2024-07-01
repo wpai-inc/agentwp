@@ -26,6 +26,7 @@ export default class AwpClient {
         'Authorization': `Bearer ${ this.token }`,
         'X-Wp-Agent-Version': this.agentWpVersion,
         'X-Wp-User-Id': page.user.ID,
+        'X-Wp-Site-Id': page.site_id,
       },
     } );
 
@@ -62,27 +63,22 @@ export default class AwpClient {
     return `${ this.baseUrl }/api/request/${ userRequestId }/stream`;
   }
 
-  async getConversation( siteId: string, since?: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/convo`, {
+  async getConversation( since?: string ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/convo`, {
       since,
     } );
   }
 
-  async clearConversation( siteId: string ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }/convo/clear` );
+  async clearConversation(): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/convo/clear` );
   }
 
-  async unclearConversation( siteId: string, since: string ): Promise< AxiosResponse > {
-    return this.request(
-      'POST',
-      `${ this.baseUrl }/api/sites/${ siteId }/convo/unclear`,
-      {},
-      { since },
-    );
+  async unclearConversation( since: string ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/convo/unclear`, {}, { since } );
   }
 
-  async getHistory( siteId: string, since?: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/sites/${ siteId }/convo/history`, {
+  async getHistory( since?: string ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/convo/history`, {
       since,
     } );
   }
@@ -91,21 +87,16 @@ export default class AwpClient {
     return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/result`, {}, data );
   }
 
-  async getSettings( siteId: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/site/${ siteId }/settings` );
+  async getSettings(): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/site/settings` );
   }
 
-  async updateSetting( siteId: string, name: string, value: any ): Promise< AxiosResponse > {
-    return this.request(
-      'PUT',
-      `${ this.baseUrl }/api/sites/${ siteId }/setting/${ name }`,
-      {},
-      { value },
-    );
+  async updateSetting( name: string, value: any ): Promise< AxiosResponse > {
+    return this.request( 'PUT', `${ this.baseUrl }/api/site/settings`, {}, { name, value } );
   }
 
-  async storeConversation( siteId: string, data: object ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/sites/${ siteId }/convo`, {}, data );
+  async storeConversation( data: object ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/convo`, {}, data );
   }
 
   async refreshToken(): Promise< AxiosResponse > {

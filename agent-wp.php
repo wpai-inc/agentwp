@@ -37,6 +37,7 @@ add_action('plugins_loaded', function () {
         \WpAi\AgentWp\SiteIndexer::class,
         \WpAi\AgentWp\ErrorIndexer::class,
         \WpAi\AgentWp\Router::class,
+        \WpAi\AgentWp\WpUser::class,
     ]);
 });
 
