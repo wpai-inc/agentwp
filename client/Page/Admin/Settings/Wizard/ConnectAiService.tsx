@@ -5,8 +5,8 @@ import Logo from '@/Components/Logo';
 export default function ConnectAiService() {
   return (
     <div className="max-w-[380px] mx-auto text-base mt-12">
-      <Logo className="mx-auto" />
-      <div className="text-4xl font-bold text-center leading-8">
+      <Logo className="mx-auto w-14 h-14" />
+      <div className="text-4xl font-bold text-center leading-10">
         Connect Example Site to AgentWP Services
       </div>
       <div className="text-lg mt-4">
