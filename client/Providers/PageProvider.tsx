@@ -12,8 +12,14 @@ export function usePage() {
 export function PageProvider( { page, children }: { page: any; children: React.ReactNode } ) {
   const [ pageData, setPageData ] = useState( page );
 
+  const canAccessAgent = pageData.onboarding_completed && pageData.agentwp_access;
+  const isPage = ( pageContains: string ) => {
+    const currentPage = window.location.href;
+    return currentPage.indexOf( pageContains ) === -1;
+  };
+
   return (
-    <PageContext.Provider value={ { page: pageData, setPageData } }>
+    <PageContext.Provider value={ { page: pageData, setPageData, canAccessAgent, isPage } }>
       { children }
     </PageContext.Provider>
   );

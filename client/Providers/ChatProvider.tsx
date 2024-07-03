@@ -4,7 +4,6 @@ import { useScreen } from '@/Providers/ScreenProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import { usePage } from '@/Providers/PageProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { WriteToEditor } from '@/Services/WriteToEditor';
@@ -109,7 +108,7 @@ export default function ChatProvider( {
     }, 1400 );
   }
 
-  function maximizeChatWindow( chatWindowElement ) {
+  function maximizeChatWindow( chatWindowElement: HTMLElement ) {
     setMaximizing( true );
     setTimeout( () => {
       setMaximizing( false );
@@ -186,7 +185,7 @@ export default function ChatProvider( {
         message: message,
       } as UserRequestType );
       startStream( stream_url, user_request_id );
-    } catch ( e ) {
+    } catch ( e: any ) {
       addErrors( [ e.message ] );
       console.error( e );
     }

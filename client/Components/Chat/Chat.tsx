@@ -5,11 +5,11 @@ import { usePage } from '@/Providers/PageProvider';
 
 export default function Chat() {
   const { open, expanding } = useChat();
-  const { page } = usePage();
+  const { canAccessAgent } = usePage();
 
   return (
     <>
-      { page.onboarding_completed && page.agentwp_access && (
+      { canAccessAgent && (
         <>
           { ( open || expanding ) && <ChatContainer /> }
           <ChatTrigger open={ open } />

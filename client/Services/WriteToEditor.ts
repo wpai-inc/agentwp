@@ -116,7 +116,7 @@ async function updateBlockInnerBlocks( block: BlockType ) {
       // Return the new block clientId
       return newBlock.clientId;
     }
-  } catch ( error ) {
+  } catch ( error: any ) {
     console.info( 'Skipping... the block is incomplete...', error.message );
   }
 }
