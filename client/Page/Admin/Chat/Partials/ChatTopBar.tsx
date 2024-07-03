@@ -12,10 +12,12 @@ import { useClient } from '@/Providers/ClientProvider';
 import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversationButton';
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import ChatSettings from '../Settings/ChatSettings';
+import { usePage } from '@/Providers/PageProvider';
 
 export default function ChatTopBar() {
   const { setChatSetting } = useChat();
   const { userProfileUrl } = useClient();
+  const { page } = usePage();
 
   function onUpgradeClick( e: React.FormEvent ) {
     setChatSetting( {
@@ -25,27 +27,31 @@ export default function ChatTopBar() {
   }
 
   function handleHistorySettings( e: React.FormEvent ) {
-    setChatSetting( {
-      component: <History />,
-      header: 'History',
-    } );
+    if ( page.onboarding_completed && page.agentwp_access ) {
+      setChatSetting( {
+        component: <History />,
+        header: 'History',
+      } );
+    }
   }
 
   function onSettingsClick() {
-    setChatSetting( {
-      component: <ChatSettings />,
-      header: 'Settings',
-    } );
+    if ( page.onboarding_completed && page.agentwp_access ) {
+      setChatSetting( {
+        component: <ChatSettings />,
+        header: 'Settings',
+      } );
+    }
   }
 
   return (
     <div className={ cn( 'py-2 px-2 border-b border-b-brand-gray-25', 'flex justify-between' ) }>
       <div className="flex h-8 items-center gap-2">
         <Logo className="h-full" />
-        <Badge variant="primary">Free</Badge>
-        <Badge onClick={ onUpgradeClick } className="cursor-pointer">
-          Upgrade
-        </Badge>
+        { /*<Badge variant="primary">Free</Badge>*/ }
+        { /*<Badge onClick={ onUpgradeClick } className="cursor-pointer">*/ }
+        { /*  Upgrade*/ }
+        { /*</Badge>*/ }
       </div>
       <div className="flex items-center gap-1 text-gray-900 hover:text-black">
         <AgentTooltip content="New conversation">
@@ -63,11 +69,12 @@ export default function ChatTopBar() {
             <SettingsIcon className="h-5 w-5" />
           </button>
         </AgentTooltip>
-        <AgentTooltip content="Your profile">
+        {(!page.onboarding_completed || (page.onboarding_completed && page.agentwp_manager)) && <AgentTooltip content="Your profile">
           <a href={ userProfileUrl } className="block" target="_blank">
             <AccountIcon className="h-5 w-5" />
           </a>
-        </AgentTooltip>
+        </AgentTooltip>}
+
       </div>
     </div>
   );

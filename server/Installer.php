@@ -18,17 +18,30 @@ class Installer implements Registrable
 
     public function register()
     {
-        register_activation_hook($this->main->pluginPath(), [$this, 'activate']);
-        register_activation_hook($this->main->pluginPath(), [$this, 'deactivate']);
+        $plugin_file = plugin_basename($this->main->pluginPath());
+        if (doing_action('activate_' . $plugin_file)) {
+            $this->activate();
+        }
+        if (doing_action('deactivate_' . $plugin_file)) {
+            $this->deactivate();
+        }
     }
 
     public function activate()
     {
-        //
+        set_transient('agentwp_installing', 'yes', MINUTE_IN_SECONDS * 10);
+        if (!defined('WP_CLI') || !WP_CLI) {
+            add_action('shutdown', [$this, 'redirect']);
+        }
     }
 
-    public function deactivate()
+    public function deactivate(): void
     {
-        //
+        $this->main->settings->disconnectSite($this->main);
+    }
+
+    public function redirect(): void
+    {
+        \wp_safe_redirect(\admin_url('options-general.php?page=agent-wp-admin-settings'), 302, 'AgentWP');
     }
 }

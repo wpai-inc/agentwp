@@ -20,6 +20,7 @@ class Settings extends ReactClient
     {
         parent::__construct($main);
 
+
         $this->settings  = new \WpAi\AgentWp\Settings();
         $this->user      = new UserAuth();
 

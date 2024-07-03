@@ -7,11 +7,13 @@ import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?re
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import Commands from '../Commands/Commands';
 import { AgentTooltip } from '@/Components/ui/tooltip';
+import { usePage } from '@/Providers/PageProvider';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting } = useChat();
   const { streamClosed } = useStream();
   const [ message, setMessage ] = useState( '' );
+  const { page } = usePage();
   const [ keyUpEvent, setKeyUpEvent ] = useState<
     React.KeyboardEvent< HTMLTextAreaElement > | undefined
   >();
@@ -41,7 +43,9 @@ export default function MessageBox() {
 
   function onSettingsClick( e: React.FormEvent ) {
     e.preventDefault();
-    setChatSetting( { component: <p>Settings</p>, header: 'Settings' } );
+    if ( page.onboarding_completed && page.agentwp_access ) {
+      setChatSetting( { component: <p>Settings</p>, header: 'Settings' } );
+    }
   }
 
   return (
@@ -54,6 +58,7 @@ export default function MessageBox() {
         placeholder="Message..."
         onKeyDown={ handleKeyDown }
         onKeyUp={ handleKeyUp }
+        disabled={ ! page.onboarding_completed && ! page.agentwp_access }
       />
       <div className="flex items-center justify-between">
         <AgentTooltip content="Conversation Settings">
@@ -62,6 +67,7 @@ export default function MessageBox() {
             onClick={ onSettingsClick }
             variant="ghost"
             size="icon"
+            disabled={ ! page.onboarding_completed && ! page.agentwp_access }
             className="text-brand-gray-50 hover:bg-inherit">
             <TuneIcon className="h-6 w-6" />
           </Button>
@@ -69,7 +75,7 @@ export default function MessageBox() {
         <Button
           type="submit"
           className={ cn( 'rounded bg-brand-primary px-2' ) }
-          disabled={ ! streamClosed }>
+          disabled={ ! streamClosed || ! page.onboarding_completed || ! page.agentwp_access }>
           { streamClosed ? <UpArrowIcon /> : 'Pending...' }
         </Button>
       </div>
