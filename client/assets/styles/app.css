@@ -5,6 +5,7 @@ svg {
   fill: currentColor;
 }
 
+
 .animate-slide-in {
   animation: slide-in-left;
   animation-duration: 0.4s;

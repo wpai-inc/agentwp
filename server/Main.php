@@ -31,6 +31,7 @@ class Main
     private ?string $clientId;
 
     public string $pluginUrl;
+    public string $settingsPage;
 
     public function __construct(private string $file)
     {
@@ -39,6 +40,7 @@ class Main
         $this->clientId = $this->settings->client_id;
         add_action('admin_head', [$this, 'pageData']);
         $this->pluginUrl = plugin_dir_url($this->file);
+        $this->settingsPage = admin_url('options-general.php?page=agent-wp-admin-settings');
     }
 
     public function buildPath(): string
@@ -58,7 +60,7 @@ class Main
 
     public function asset(?string $path = null): string
     {
-        return $this->url(self::BUILD_DIR.'/'.$path);
+        return $this->url(self::BUILD_DIR . '/' . $path);
     }
 
     public function pluginPath(): string
@@ -68,7 +70,7 @@ class Main
 
     public function path(?string $path = null): string
     {
-        return plugin_dir_path($this->file).ltrim($path, '/');
+        return plugin_dir_path($this->file) . ltrim($path, '/');
     }
 
     public function url(?string $path = null): string
@@ -109,6 +111,7 @@ class Main
         $agentwp_settings = [
             'home_url' => home_url(),
             'plugin_url' => $this->pluginUrl,
+            'settings_page' => $this->settingsPage,
             'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
             'rest_route' => rest_url(),
             'admin_route' => admin_url(),
@@ -126,7 +129,7 @@ class Main
             'user' => $current_user,
             'onboarding_completed' => $this->settings->onboarding_completed,
         ];
-        ?>
+    ?>
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
