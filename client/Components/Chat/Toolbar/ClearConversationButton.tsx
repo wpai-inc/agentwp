@@ -2,7 +2,7 @@ import { useClient } from '@/Providers/ClientProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { usePage } from '@/Providers/PageProvider';
 
-export default function ClearConversationButton( { children }: { children?: React.ReactNode } ) {
+export default function ClearConversationButton( { children }: { children: React.ReactNode } ) {
   const { clearConversation } = useClient();
   const { fetchConvo } = useUserRequests();
   const { page } = usePage();
