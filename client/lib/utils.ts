@@ -30,14 +30,16 @@ export const nextId = () =>
 
 export const isChatWindowMaximized = () => {
   const chatWindow = getChatwindowElement();
-  return chatWindow.classList.contains( 'maximized' );
+  return chatWindow?.classList.contains( 'maximized' );
 };
 
 export const resetChatWindowPosition = () => {
   const chatWindow = getChatwindowElement();
-  chatWindow.style.transform = 'translate(0px, 0px)';
-  chatWindow.style.width = DEFAULT_CHAT_WINDOW_WIDTH;
-  chatWindow.style.height = DEFAULT_CHAT_WINDOW_HEIGHT;
+  if ( chatWindow ) {
+    chatWindow.style.transform = 'translate(0px, 0px)';
+    chatWindow.style.width = DEFAULT_CHAT_WINDOW_WIDTH;
+    chatWindow.style.height = DEFAULT_CHAT_WINDOW_HEIGHT;
+  }
 };
 
 export const getChatwindowElement = () => {

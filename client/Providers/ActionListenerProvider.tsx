@@ -3,7 +3,13 @@ import { useStream } from '@/Providers/StreamProvider';
 import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
-import { WriteToEditor } from '@/Services/WriteToEditor';
+
+export type StoreAgentResponse = {
+  status: string;
+  data: {
+    results: any[];
+  };
+};
 
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamClosed, startStreamFromRequest } = useStream();
@@ -12,6 +18,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { client } = useClient();
 
   useEffect( () => {
+    console.log( 'currentAction', currentAction );
     if ( currentAction && streamClosed ) {
       if ( currentAction.action ) {
         executeAndContinueAction( currentAction, currentUserRequestId );

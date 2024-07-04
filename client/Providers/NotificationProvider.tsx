@@ -8,7 +8,7 @@ type Notification = {
   className: string;
 };
 
-type Notifications = Notification[] | null;
+type Notifications = Notification[];
 
 type NotificationContext = {
   notifications: Notifications;
@@ -32,6 +32,8 @@ export const NotificationsProvider = ( { children }: { children: ReactNode } ) =
   const addNotification = ( notification: string, type: string = 'default' ) => {
     const className = `agentwp-${ type }-notification`;
 
+    if ( notifications ) {
+    }
     setNotifications( [
       ...notifications,
       {
