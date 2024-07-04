@@ -3,6 +3,7 @@
 export type PageData = {
   home_url: string;
   plugin_url: string;
+  settings_page: string;
   admin_route: string;
   nonce: string;
   wp_rest_nonce: string;

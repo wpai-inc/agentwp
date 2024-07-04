@@ -10,6 +10,7 @@ import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
+import { usePage } from '@/Providers/PageProvider';
 
 export default function ChatContainer() {
   const windowRef = useRef< HTMLDivElement >( null );
@@ -18,6 +19,7 @@ export default function ChatContainer() {
   const { conversation, chatSetting } = useChat();
   const [ isHovering, setIsHovering ] = useState( false );
   const { loadingConversation } = useUserRequests();
+  const { page } = usePage();
 
   function onMouseEnter() {
     setIsHovering( true );
@@ -65,7 +67,7 @@ export default function ChatContainer() {
         'fixed bottom-4 right-10',
         'h-[90vh] w-[400px]',
         'z-[100000] bg-brand-gray',
-        'shadow-xl transition-shadow duration-500 flex flex-col',
+        'shadow-xl transition-shadow duration-100 flex flex-col',
         'border-gray-200 rounded-xl opacity-100',
         {
           'w-0 h-0 overflow-hidden border-0': ! open,
@@ -90,7 +92,7 @@ export default function ChatContainer() {
                   'absolute -top-12 right-0 left-0 z-10 h-12 from-brand-gray to-transparent bg-gradient-to-t',
                 ) }></div>
               <div className="p-1.5">
-                <MessageBox />
+                { page.onboarding_completed && page.agentwp_access && <MessageBox /> }
               </div>
             </div>
             { chatSetting && (

@@ -23,11 +23,16 @@ use Kucrut\Vite;
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
+register_activation_hook(__FILE__, 'agentwp_bootstrap');
+register_deactivation_hook(__FILE__, 'agentwp_bootstrap');
+add_action('plugins_loaded', 'agentwp_bootstrap');
+
 /**
- * Registers all of the service providers
+ * Registers all the service providers
  * with a Main dependency.
  */
-add_action('plugins_loaded', function () {
+function agentwp_bootstrap(): void
+{
     (new \WpAi\AgentWp\ProviderRegistry(
         new \WpAi\AgentWp\Main(__FILE__)
     ))->register([
@@ -39,24 +44,4 @@ add_action('plugins_loaded', function () {
         \WpAi\AgentWp\Router::class,
         \WpAi\AgentWp\WpUser::class,
     ]);
-});
-
-
-// TODO: to be removed
-//if (defined('TEST_BLOCKS_STREAMING')) {
-//    add_action('admin_enqueue_scripts', function () {
-//        global $pagenow;
-//        if ($pagenow === 'post.php') {
-//            Vite\enqueue_asset(
-//                __DIR__.'/build',
-//                'Tests/test-blocks-streaming.ts',
-//                [
-//                    'in-footer' => true,
-//                ]
-//            );
-//        }
-//    });
-//}
-
-
-
+}

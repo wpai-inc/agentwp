@@ -49,10 +49,11 @@ export function ManualAwpActivation() {
   }
 
   return (
-    <>
-      <Button onClick={ showFields } className="w-full" variant="brand">
+    <div className="pt-4">
+      If you are on a localhost or behind a basic auth you can{ ' ' }
+      <span onClick={ showFields } className="underline cursor-pointer">
         Manually Connect AI services
-      </Button>
+      </span>
       { fieldsVisible && (
         <Form.Root
           onSubmit={ event => saveManualToken( event ) }
@@ -84,6 +85,6 @@ export function ManualAwpActivation() {
           </Form.Submit>
         </Form.Root>
       ) }
-    </>
+    </div>
   );
 }

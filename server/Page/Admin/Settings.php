@@ -20,6 +20,7 @@ class Settings extends ReactClient
     {
         parent::__construct($main);
 
+
         $this->settings  = new \WpAi\AgentWp\Settings();
         $this->user      = new UserAuth();
 
@@ -42,7 +43,7 @@ class Settings extends ReactClient
                     'grant_type'    => 'authorization_code',
                     'client_id'     => $this->settings->client_id,
                     'client_secret' => $this->settings->client_secret,
-                    'redirect_uri'  => admin_url('options-general.php?page=agent-wp-admin-settings'),
+                    'redirect_uri'  => $this->main->settingsPage,
                     'code'          => $code,
                 ],
             ]);
