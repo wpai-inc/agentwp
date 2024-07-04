@@ -20,7 +20,7 @@ const ChatContext = createContext( {
   open: false,
   setOpen: ( _open: boolean ) => {},
   toggle: () => {},
-  maximizeChatWindow: (_element: HTMLElement) => {},
+  maximizeChatWindow: ( _element: HTMLElement ) => {},
   reduceWindow: () => {},
   isMaximized: false,
   minimizing: false,
@@ -73,6 +73,7 @@ export default function ChatProvider( {
           setEditorContent( newEditorContent );
         }
       } else if ( liveAction.action.ability === 'message' ) {
+        console.log( 'liveAction', liveAction );
         updateAgentMessage( currentUserRequestId, liveAction );
       }
     }

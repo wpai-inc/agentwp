@@ -41,6 +41,7 @@ type UserRequestsContextType = {
   loadingConversation: boolean;
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
+  addActionToCurrentRequest: ( action: AgentAction ) => void;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >( {
@@ -55,6 +56,7 @@ const UserRequestsContext = createContext< UserRequestsContextType >( {
   loadingConversation: false,
   since: null,
   setSince: () => {},
+  addActionToCurrentRequest: () => {},
 } );
 
 export function useUserRequests() {
@@ -100,6 +102,22 @@ export default function UserRequestsProvider( {
     setCurrentAction( currentAction );
   }, [ currentUserRequestId, conversation ] );
 
+  function addActionToCurrentRequest( action: AgentAction ) {
+    if ( currentUserRequestId ) {
+      const newConversation = conversation.map( request => {
+        if ( request.id === currentUserRequestId ) {
+          return {
+            ...request,
+            agent_actions: [ ...request.agent_actions, action ],
+          };
+        }
+        return request;
+      } );
+      setConversation( newConversation );
+      setCurrentAction( action );
+    }
+  }
+
   async function fetchConvo( since: string | null ) {
     setLoadingConversation( true );
     const items = await getConversation( since );
@@ -128,6 +146,7 @@ export default function UserRequestsProvider( {
         loadingConversation,
         since,
         setSince,
+        addActionToCurrentRequest,
       } }>
       { children }
     </UserRequestsContext.Provider>
