@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import { useStream } from '@/Providers/StreamProvider';
@@ -8,6 +8,7 @@ import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import Commands from '../Commands/Commands';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
+import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting } = useChat();
@@ -23,7 +24,7 @@ export default function MessageBox() {
       sendMessage( msg );
       setMessage( '' );
     },
-    [ sendMessage, message ],
+    [ sendMessage ],
   );
 
   function submit( e: React.FormEvent< HTMLFormElement > ) {
@@ -44,7 +45,7 @@ export default function MessageBox() {
   function onSettingsClick( e: React.FormEvent ) {
     e.preventDefault();
     if ( page.onboarding_completed && page.agentwp_access ) {
-      setChatSetting( { component: <p>Settings</p>, header: 'Settings' } );
+      setChatSetting( { component: <ChatSettings />, header: 'Settings' } );
     }
   }
 

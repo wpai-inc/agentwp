@@ -28,7 +28,7 @@ class ConnectNotice implements Registrable
         ?>
         <div class="notice notice-info is-dismissible agentwp-notice">
             <p><?php _e('To use AgentWP, please complete the onboarding and configuration!', 'agentwp'); ?></p>
-            <a href="<?php echo admin_url('options-general.php?page=agent-wp-admin-settings'); ?>" class="button button-primary button-large"><?php _e('Set Up AgentWP', 'agentwp'); ?></a>
+            <a href="<?php echo $this->main->settingsPage; ?>" class="button button-primary button-large"><?php _e('Set Up AgentWP', 'agentwp'); ?></a>
         </div>
         <style>
             .agentwp-notice {

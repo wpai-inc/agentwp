@@ -42,6 +42,6 @@ class Installer implements Registrable
 
     public function redirect(): void
     {
-        \wp_safe_redirect(\admin_url('options-general.php?page=agent-wp-admin-settings'), 302, 'AgentWP');
+        \wp_safe_redirect($this->main->settingsPage, 302, 'AgentWP');
     }
 }

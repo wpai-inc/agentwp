@@ -37,6 +37,9 @@ export default function ChatTopBar() {
 
   function onSettingsClick() {
     if ( page.onboarding_completed && page.agentwp_access ) {
+      if ( page.onboarding_completed && page.agentwp_access ) {
+        document.location.href = page.settings_page;
+      }
       setChatSetting( {
         component: <ChatSettings />,
         header: 'Settings',
@@ -69,12 +72,14 @@ export default function ChatTopBar() {
             <SettingsIcon className="h-5 w-5" />
           </button>
         </AgentTooltip>
-        {(!page.onboarding_completed || (page.onboarding_completed && page.agentwp_manager)) && <AgentTooltip content="Your profile">
-          <a href={ userProfileUrl } className="block" target="_blank">
-            <AccountIcon className="h-5 w-5" />
-          </a>
-        </AgentTooltip>}
-
+        { ( ! page.onboarding_completed ||
+          ( page.onboarding_completed && page.agentwp_manager ) ) && (
+          <AgentTooltip content="Your profile">
+            <a href={ userProfileUrl } className="block" target="_blank">
+              <AccountIcon className="h-5 w-5" />
+            </a>
+          </AgentTooltip>
+        ) }
       </div>
     </div>
   );
