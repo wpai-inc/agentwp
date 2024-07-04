@@ -1,12 +1,13 @@
-// ActionListenerProvider.test.tsx
 import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ActionListenerProvider from './ActionListenerProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
+import ChatProvider from '@/Providers/ChatProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { expect, jest, describe, beforeEach, it } from '@jest/globals';
+import Chat from '@/Components/Chat/Chat';
 
 // Mock the custom hooks
 jest.mock( '@/Providers/StreamProvider' );
@@ -56,7 +57,9 @@ describe( 'ActionListenerProvider', () => {
 
     render(
       <ActionListenerProvider>
-        <div>Child Component</div>
+        <ChatProvider>
+          <Chat />
+        </ChatProvider>
       </ActionListenerProvider>,
     );
 
@@ -92,7 +95,9 @@ describe( 'ActionListenerProvider', () => {
 
     render(
       <ActionListenerProvider>
-        <div>Child Component</div>
+        <ChatProvider>
+          <Chat />
+        </ChatProvider>
       </ActionListenerProvider>,
     );
 
