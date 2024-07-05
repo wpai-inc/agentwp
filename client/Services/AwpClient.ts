@@ -84,7 +84,12 @@ export default class AwpClient {
   }
 
   async storeAgentResult( actionId: string, data: object ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/result`, {}, data );
+    return this.request(
+      'POST',
+      `${ this.baseUrl }/api/action/${ actionId }/result`,
+      {},
+      { result: data },
+    );
   }
 
   async getSettings(): Promise< AxiosResponse > {

@@ -37,12 +37,12 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
       aa.hasExecuted = true;
     }
 
-    continueActionStream( reqId, aa );
+    await continueActionStream( reqId, aa );
   }
 
-  function continueActionStream( reqId: string | null, aa: AgentAction ) {
+  async function continueActionStream( reqId: string | null, aa: AgentAction ) {
     if ( reqId && ! aa.final && aa.hasExecuted ) {
-      startStreamFromRequest( reqId );
+      await startStreamFromRequest( reqId );
     }
   }
 
@@ -76,6 +76,9 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
           status: 'success',
         } );
         window.location.href = aa.action.url;
+        return new Promise( () => {
+          /* never resolve to stop further execution */
+        } );
         break;
       case 'message':
         await client.storeAgentResult( aa.id, {
