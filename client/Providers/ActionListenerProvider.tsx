@@ -18,6 +18,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { client } = useClient();
 
   useEffect( () => {
+    console.log( currentAction );
     if ( currentAction && streamClosed ) {
       if ( currentAction.action ) {
         executeAndContinueAction( currentAction, currentUserRequestId );

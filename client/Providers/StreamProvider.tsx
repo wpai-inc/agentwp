@@ -68,7 +68,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           }
 
           let aa = JSON.parse( ev.data ) as AgentAction;
-
+          console.log( aa );
           liveAction.current = aa;
           forceUpdate();
         },
