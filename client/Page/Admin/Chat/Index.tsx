@@ -14,6 +14,7 @@ import { ClientProvider } from '@/Providers/ClientProvider';
 import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
+import { InputSelectProvider } from '@/Providers/InputSelectProvider';
 
 const rootElement = document.getElementById( 'agent-wp-admin-chat' );
 
@@ -35,7 +36,9 @@ if ( rootElement ) {
                         <StreamProvider>
                           <ActionListenerProvider>
                             <ChatProvider>
-                              <Chat />
+                              <InputSelectProvider>
+                                <Chat />
+                              </InputSelectProvider>
                             </ChatProvider>
                           </ActionListenerProvider>
                         </StreamProvider>

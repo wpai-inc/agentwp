@@ -9,6 +9,7 @@ import Commands from '../Commands/Commands';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
+import ContentContext from '@/Components/Chat/ContentContext/ContentContext';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting } = useChat();
@@ -52,6 +53,7 @@ export default function MessageBox() {
   return (
     <form className="relative rounded-lg bg-white p-2" onSubmit={ submit }>
       <Commands onMessageBoxKeyUp={ keyUpEvent } onSetMessage={ setMessage } message={ message } />
+      <ContentContext />
       <textarea
         onChange={ e => setMessage( e.target.value ) }
         value={ message }
