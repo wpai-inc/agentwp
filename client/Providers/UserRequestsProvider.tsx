@@ -103,6 +103,7 @@ export default function UserRequestsProvider( {
   }, [ currentUserRequestId, conversation ] );
 
   function addActionToCurrentRequest( action: AgentAction ) {
+    console.log( 'addActionToCurrentRequest', action );
     if ( currentUserRequestId ) {
       const newConversation = conversation.map( request => {
         if ( request.id === currentUserRequestId ) {

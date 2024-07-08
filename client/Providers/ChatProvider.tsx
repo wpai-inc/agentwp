@@ -1,6 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
-import { useScreen } from '@/Providers/ScreenProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -49,7 +48,6 @@ export default function ChatProvider( {
   children: React.ReactNode;
 } ) {
   const { client } = useClient();
-  const { screen } = useScreen();
   const { settings, setSettings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ minimizing, setMinimizing ] = useState( false );
@@ -142,10 +140,7 @@ export default function ChatProvider( {
   }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
-    const response = await client.storeConversation( {
-      message,
-      screen,
-    } );
+    const response = await client.storeConversation( { message } );
 
     return response.data;
   }

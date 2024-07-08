@@ -5,6 +5,7 @@ import { useClient } from '@/Providers/ClientProvider';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { usePage } from '@/Providers/PageProvider';
+import { useScreen } from '@/Providers/ScreenProvider';
 
 export const StreamContext = createContext< any | undefined >( undefined );
 
@@ -25,6 +26,7 @@ const useForceUpdate = () => {
 };
 
 export default function StreamProvider( { children }: { children: React.ReactNode } ) {
+  const { screen } = useScreen();
   const forceUpdate = useForceUpdate();
   const liveAction = useRef< AgentAction | null >( null );
   const [ streamClosed, setStreamClosed ] = useState( true );
@@ -40,13 +42,15 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
     try {
       await fetchEventSource( stream_url, {
-        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify( { screen } ),
         headers: {
           'Authorization': 'Bearer ' + client.token,
           'X-WP-AGENT-VERSION': client.agentWpVersion,
           'X-Wp-Agent-Version': client.agentWpVersion,
           'X-Wp-User-Id': page.user.ID,
           'X-Wp-Site-Id': page.site_id,
+          'Content-Type': 'application/json',
         },
         signal: ctrl.signal,
         openWhenHidden: true,
@@ -63,6 +67,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           }
           if ( ev.event === 'close' && liveAction.current ) {
             addActionToCurrentRequest( liveAction.current );
+            console.log( liveAction.current );
             setStreamClosed( true );
             return;
           }
