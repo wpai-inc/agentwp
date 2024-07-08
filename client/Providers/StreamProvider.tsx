@@ -66,14 +66,12 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             throw new Error( `Error when processing message: ${ aar }` );
           }
           if ( ev.event === 'close' && liveAction.current ) {
-            addActionToCurrentRequest( liveAction.current );
-            console.log( liveAction.current );
+            addActionToCurrentRequest( user_request_id, liveAction.current );
             setStreamClosed( true );
             return;
           }
 
           let aa = JSON.parse( ev.data ) as AgentAction;
-          console.log( aa );
           liveAction.current = aa;
           forceUpdate();
         },

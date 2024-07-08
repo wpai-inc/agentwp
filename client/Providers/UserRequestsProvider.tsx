@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, { useState, createContext, useContext, useEffect, useMemo, useCallback } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 import { MessageAction, NavigateAction, QueryAction, WriteToEditorAction } from '@wpai/schemas';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
@@ -33,24 +33,24 @@ type UserRequestsContextType = {
   conversation: UserRequestType[];
   setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
   currentUserRequestId: string | null;
+  currentUserRequest?: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
-  setCurrentAction: ( action: AgentAction | null ) => void;
   fetchConvo: ( since: string | null ) => Promise< void >;
   refreshConvo: () => void;
   loadingConversation: boolean;
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
-  addActionToCurrentRequest: ( action: AgentAction ) => void;
+  addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >( {
   conversation: [],
   setConversation: () => {},
   currentUserRequestId: null,
+  currentUserRequest: undefined,
   setCurrentUserRequestId: () => {},
   currentAction: null,
-  setCurrentAction: () => {},
   fetchConvo: async () => {},
   refreshConvo: () => {},
   loadingConversation: false,
@@ -79,7 +79,6 @@ export default function UserRequestsProvider( {
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( false );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
-  const [ currentAction, setCurrentAction ] = useState< AgentAction | null >( null );
   const [ refresh, setRefresh ] = useState< boolean >( false );
 
   const refreshConvo = () => {
@@ -90,34 +89,37 @@ export default function UserRequestsProvider( {
     fetchConvo( since );
   }, [ since, refresh ] );
 
-  useEffect( () => {
-    const currentRequest: UserRequestType | undefined = conversation.find(
-      request => request.id === currentUserRequestId,
-    );
+  const currentUserRequest = useMemo(
+    () => conversation.find( request => request.id === currentUserRequestId ),
+    [ conversation, currentUserRequestId ],
+  );
 
-    const currentAction: AgentAction | null = currentRequest?.agent_actions
-      ? currentRequest?.agent_actions[ currentRequest?.agent_actions.length - 1 ]
-      : null;
+  const currentAction = useMemo(
+    () =>
+      currentUserRequest?.agent_actions
+        ? currentUserRequest?.agent_actions[ currentUserRequest?.agent_actions.length - 1 ]
+        : null,
+    [ currentUserRequest ],
+  );
 
-    setCurrentAction( currentAction );
-  }, [ currentUserRequestId, conversation ] );
-
-  function addActionToCurrentRequest( action: AgentAction ) {
-    console.log( 'addActionToCurrentRequest', action );
-    if ( currentUserRequestId ) {
-      const newConversation = conversation.map( request => {
-        if ( request.id === currentUserRequestId ) {
-          return {
-            ...request,
-            agent_actions: [ ...request.agent_actions, action ],
-          };
-        }
-        return request;
-      } );
-      setConversation( newConversation );
-      setCurrentAction( action );
-    }
-  }
+  const addActionToCurrentRequest = useCallback(
+    function ( userRequestId: string, action: AgentAction ) {
+      if ( userRequestId ) {
+        setConversation( conversation => {
+          return conversation.map( request => {
+            if ( request.id === userRequestId ) {
+              return {
+                ...request,
+                agent_actions: [ ...request.agent_actions, action ],
+              };
+            }
+            return request;
+          } );
+        } );
+      }
+    },
+    [ conversation, currentUserRequestId ],
+  );
 
   async function fetchConvo( since: string | null ) {
     setLoadingConversation( true );
@@ -139,9 +141,9 @@ export default function UserRequestsProvider( {
         conversation,
         setConversation,
         currentUserRequestId,
+        currentUserRequest,
         setCurrentUserRequestId,
         currentAction,
-        setCurrentAction,
         fetchConvo,
         refreshConvo,
         loadingConversation,

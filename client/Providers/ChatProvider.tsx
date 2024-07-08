@@ -9,8 +9,8 @@ import { WriteToEditor } from '@/Services/WriteToEditor';
 import { type BlockType } from '@/Types/types';
 
 type CreateUserRequestResponse = {
-  user_request_id: string;
   stream_url: string;
+  user_request: UserRequestType;
 };
 
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
@@ -175,12 +175,9 @@ export default function ChatProvider( {
 
   async function sendMessage( message: string ) {
     try {
-      const { stream_url, user_request_id } = await userRequest( message );
-      addUserRequest( {
-        id: user_request_id,
-        message: message,
-      } as UserRequestType );
-      startStream( stream_url, user_request_id );
+      const { stream_url, user_request } = await userRequest( message );
+      addUserRequest( user_request );
+      startStream( stream_url, user_request.id );
     } catch ( e: any ) {
       addErrors( [ e.message ] );
       console.error( e );
