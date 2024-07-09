@@ -95,10 +95,7 @@ export default function UserRequestsProvider( {
   );
 
   const currentAction = useMemo(
-    () =>
-      currentUserRequest?.agent_actions
-        ? currentUserRequest?.agent_actions[ currentUserRequest?.agent_actions.length - 1 ]
-        : null,
+    () => ( currentUserRequest?.agent_actions ? currentUserRequest?.agent_actions[ 0 ] : null ),
     [ currentUserRequest ],
   );
 
