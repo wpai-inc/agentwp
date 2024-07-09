@@ -89,13 +89,27 @@ export default function UserRequestsProvider( {
     fetchConvo( since );
   }, [ since, refresh ] );
 
+  useEffect( () => {
+    const handleRouteChange = () => {
+      fetchConvo( since );
+    };
+
+    window.addEventListener( 'popstate', handleRouteChange );
+    return () => {
+      window.removeEventListener( 'popstate', handleRouteChange );
+    };
+  }, [] );
+
   const currentUserRequest = useMemo(
     () => conversation.find( request => request.id === currentUserRequestId ),
     [ conversation, currentUserRequestId ],
   );
 
   const currentAction = useMemo(
-    () => ( currentUserRequest?.agent_actions ? currentUserRequest?.agent_actions[ 0 ] : null ),
+    () =>
+      currentUserRequest?.agent_actions
+        ? currentUserRequest?.agent_actions[ currentUserRequest?.agent_actions.length - 1 ]
+        : null,
     [ currentUserRequest ],
   );
 
