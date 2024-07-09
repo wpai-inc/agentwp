@@ -8,7 +8,6 @@ import ActionComponent from '../Actions/ActionComponent';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { logoUrl } from '@/Components/Logo';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
-import { useStream } from '@/Providers/StreamProvider';
 import { useFeedback } from '@/Providers/FeedbackProvider';
 import Reason from '@/Components/Chat/Feedback/Reason';
 
@@ -17,24 +16,19 @@ export default function AgentResponse( {
   userRequestId,
   time,
   pending = false,
+  incomplete = false,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
   time: string;
   pending?: boolean;
+  incomplete?: boolean;
 } ) {
-  const { streamClosed } = useStream();
-
   const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
     | AgentAction
     | undefined;
 
   const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
-
-  const isPending = ! streamClosed || pending;
-
-  const isIncomplete =
-    ( streamClosed && ! pending ) || ( streamClosed && agentActions?.some( aa => ! aa.action ) );
 
   const { opened } = useFeedback();
 
@@ -53,7 +47,7 @@ export default function AgentResponse( {
       <MessageHeader>
         <Avatar name="AgentWP" time={ time } image={ logoUrl } />
         <div className="flex items-center gap-4">
-          { ! isIncomplete && <Rate /> }
+          { ! incomplete && <Rate /> }
           <Popover>
             <PopoverTrigger>
               <IconMore className="text-brand-gray-15" />
@@ -70,13 +64,13 @@ export default function AgentResponse( {
 
       { opened && <Reason /> }
 
-      { messageAction && <ActionComponent { ...messageAction } /> }
-
-      { ! messageAction && (
+      { messageAction ? (
+        <ActionComponent { ...messageAction } />
+      ) : (
         <>
-          { isPending && <ActionPending /> }
+          { pending && <ActionPending /> }
 
-          { isIncomplete && <ActionIncomplete userRequestId={ userRequestId } /> }
+          { incomplete && <ActionIncomplete userRequestId={ userRequestId } /> }
         </>
       ) }
     </div>
