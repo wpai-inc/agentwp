@@ -33,7 +33,6 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
   ];
 
   function doOnClick( option: Option ) {
-    console.log( option );
     if ( option.onClick ) {
       option.onClick();
     } else {

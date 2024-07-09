@@ -21,10 +21,8 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
     if ( currentAction && streamClosed ) {
       if ( currentAction.action ) {
         executeAndContinueAction( currentAction, currentUserRequestId );
-
         return;
       }
-
       if ( currentAction.final && ! currentAction.hasExecuted ) {
         startStreamFromRequest( currentUserRequestId );
       }
