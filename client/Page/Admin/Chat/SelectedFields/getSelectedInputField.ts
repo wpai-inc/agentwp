@@ -15,7 +15,6 @@ export default function getSelectedInputField(
 
   document.addEventListener('mousedown', event => {
     clickedElement = event.target;
-    // todo unselectBlock( clickedElement, awpChat );
   });
 
   const inputElements = document.querySelectorAll('input[type="text"], textarea');
