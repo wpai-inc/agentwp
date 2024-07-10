@@ -8,7 +8,6 @@ export default function getSelectedGutenbergBlock(
 ) {
   isEditorReady(() => {
     const blocksContainer = document.querySelector('.block-editor-writing-flow .is-root-container');
-    console.log('blocksContainer', blocksContainer);
     if (blocksContainer) {
       blocksContainer.addEventListener('click', () => {
         const hasSelectedBlock = wp.data.select('core/block-editor').hasSelectedBlock();
