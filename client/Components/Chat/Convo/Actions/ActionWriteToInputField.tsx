@@ -2,10 +2,10 @@ import ActionContainer from './ActionContainer';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
 import IconEdit from '@material-design-icons/svg/outlined/edit.svg?react';
 
-export default function ActionWriteToEditor( { hasExecuted, action }: AgentAction ) {
+export default function ActionWriteToInputField( { hasExecuted, action }: AgentAction ) {
   return (
     <ActionContainer pending={ ! hasExecuted } icon={ <IconEdit /> }>
-      Content updated
+      Input field updated
     </ActionContainer>
   );
 }

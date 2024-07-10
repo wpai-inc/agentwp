@@ -52,3 +52,8 @@ export type BlockType = {
   status?: string;
   valid?: boolean;
 };
+
+export type GutenbergStreamType = {
+  content: BlockType[];
+  summary: string;
+};

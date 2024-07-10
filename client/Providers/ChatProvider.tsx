@@ -5,8 +5,10 @@ import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvi
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
-import { WriteToEditor } from '@/Services/WriteToEditor';
+import { CleanGutenbergContent, WriteToEditor } from '@/Services/WriteToEditor';
 import { type BlockType } from '@/Types/types';
+import { useInputSelect } from './InputSelectProvider';
+import { WriteToInputField } from '@/Services/WriteToInputField';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -60,20 +62,82 @@ export default function ChatProvider( {
   const { startStream, liveAction, error } = useStream();
   const { addErrors } = useError();
   const [ editorContent, setEditorContent ] = useState< BlockType[] >( [] );
+  const [ startingStreaming, setStartingStreaming ] = useState( {
+    userRequestId: '',
+    liveAction: null as AgentAction | null,
+  } );
+
+  const { selectedInput } = useInputSelect();
 
   useEffect( () => {
+    // console.log( 'liveAction && currentUserRequestId', liveAction, currentUserRequestId );
     if ( liveAction && currentUserRequestId ) {
+      if ( startingStreaming.userRequestId !== currentUserRequestId ) {
+        setStartingStreaming( {
+          userRequestId: currentUserRequestId,
+          liveAction,
+        } );
+      }
       if ( liveAction.action.ability === 'write_to_editor' && liveAction.action.text ) {
         const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
         const newEditorContent = WriteToEditor( text, editorContent );
-        if ( newEditorContent ) {
-          setEditorContent( newEditorContent );
+        if ( newEditorContent?.content ) {
+          console.log( 'newEditorContent', newEditorContent );
+          setEditorContent( newEditorContent.content );
+        }
+
+        if ( newEditorContent?.summary ) {
+          liveAction.action.ability = 'message';
+          liveAction.action.text = newEditorContent.summary;
+          updateAgentMessage( currentUserRequestId, liveAction );
+        }
+      } else if ( liveAction.action.ability === 'write_to_input' && liveAction.action.text ) {
+        const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
+        const newInputFieldContent = WriteToInputField( text, selectedInput );
+        if ( newInputFieldContent?.content ) {
+          console.log( 'newInputFieldContent', newInputFieldContent );
+          // setInputFieldContent(newInputFieldContent.content);
+        }
+
+        if ( newInputFieldContent?.summary ) {
+          liveAction.action.ability = 'message';
+          liveAction.action.text = newInputFieldContent.summary;
+          updateAgentMessage( currentUserRequestId, liveAction );
         }
       } else if ( liveAction.action.ability === 'message' ) {
+        // console.log( 'liveAction', liveAction );
         updateAgentMessage( currentUserRequestId, liveAction );
       }
     }
   }, [ liveAction, currentUserRequestId ] );
+
+  function CleanInputFieldContent() {
+    try {
+      console.info( 'Cleaning input field content', selectedInput );
+      // clear the input field content
+      const inputPath = selectedInput?.data?.inputPath || '';
+      const inputElement = document.querySelector( inputPath );
+      if ( inputElement ) {
+        inputElement.setAttribute( 'value', '' );
+        inputElement.innerText = '';
+      }
+    } catch ( error ) {
+      console.info( 'Error cleaning content', error );
+    }
+  }
+
+  useEffect( () => {
+    console.info( 'Starting a new stream' );
+    if ( startingStreaming.liveAction?.action.ability === 'write_to_editor' ) {
+      console.log( 'Starting a new stream', startingStreaming.liveAction );
+      // clear the editor content
+      CleanGutenbergContent();
+    } else if ( startingStreaming.liveAction?.action.ability === 'write_to_input' ) {
+      console.log( 'Starting a new stream', startingStreaming.liveAction );
+      // clear the editor content
+      CleanInputFieldContent();
+    }
+  }, [ startingStreaming ] );
 
   useEffect( () => {
     if ( error ) {
@@ -138,7 +202,7 @@ export default function ChatProvider( {
   }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
-    const response = await client.storeConversation( { message } );
+    const response = await client.storeConversation( { message, selected_input: selectedInput } );
 
     return response.data;
   }
