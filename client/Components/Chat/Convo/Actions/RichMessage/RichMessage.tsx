@@ -69,7 +69,7 @@ export default function RichMessage( props: AgentAction ) {
 
   return (
     <div>
-      <p>There was an error rendering this component</p>
+      <ActionSimpleMessage { ...props } />
     </div>
   );
 }
