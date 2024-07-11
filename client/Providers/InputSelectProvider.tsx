@@ -5,6 +5,7 @@ import {
   getSelectedPostTitle,
 } from '@/Services/SelectedFields';
 import type { streamableFieldType } from '@/Types/types';
+import { useScreen } from '@/Providers/ScreenProvider';
 
 declare const wp: any;
 
@@ -24,12 +25,30 @@ export const useInputSelect = () => {
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
   const [ selectedInput, setSelectedInput ] = useState< streamableFieldType | null >( null );
+  const { screen, setScreen } = useScreen();
 
   useEffect( () => {
     getSelectedInputField( setSelectedInput );
     getSelectedGutenbergBlock( setSelectedInput );
     getSelectedPostTitle( setSelectedInput );
   }, [] );
+
+  useEffect( () => {
+    console.log( 'selectedInput', selectedInput );
+    if ( selectedInput ) {
+      const theScreen = { ...screen, selectedInput };
+      if (
+        selectedInput.data?.inputLabel === 'Post Content' ||
+        selectedInput.data?.inputLabel === 'Post Title'
+      ) {
+        const postContent = wp.data.select( 'core/editor' ).getEditedPostContent();
+        const postTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
+        setScreen( { ...theScreen, post_content: postContent, post_title: postTitle } );
+      } else {
+        setScreen( theScreen );
+      }
+    }
+  }, [ selectedInput ] );
 
   return (
     <InputSelectContext.Provider

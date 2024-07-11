@@ -15,7 +15,7 @@ export default function getSelectedPostTitle(
             inputLabel: 'Post Title',
             inputName: null,
             inputId: null,
-            inputValue: postTitleContainer.textContent,
+            inputValue: '', // will be part of the screen state,
           },
         } );
       } );

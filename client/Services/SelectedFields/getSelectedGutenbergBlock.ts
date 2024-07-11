@@ -17,7 +17,6 @@ export default function getSelectedGutenbergBlock(
           const theSelectedBlock = wp.data.select( 'core/block-editor' ).getSelectedBlock();
           const blockClientId = theSelectedBlock.clientId;
           if ( blockClientId ) {
-            const blocksContent = wp.data.select( 'core/editor' ).getEditedPostContent();
             setSelectedInput( {
               type: 'post_content',
               data: {
@@ -25,7 +24,7 @@ export default function getSelectedGutenbergBlock(
                 inputLabel: 'Post Content',
                 inputName: null,
                 inputId: null,
-                inputValue: blocksContent,
+                inputValue: '', // will be part of the screen state
               },
             } );
           }
