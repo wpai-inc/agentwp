@@ -1,15 +1,20 @@
 declare const wp: any;
 import { parse } from 'partial-json';
 
-import { type BlockType } from '@/Types/types';
+import { type BlockType, GutenbergStreamType } from '@/Types/types';
 
 export function WriteToEditor( content: string, previousContent: BlockType[] ) {
   try {
     if ( content ) {
-      const updatedBlocks = parse( content ) as BlockType[];
-      const blocksCount = updatedBlocks.length;
+      console.log( 'Writing to content' );
+      const updatedBlocks = parse( content ) as GutenbergStreamType;
+      if ( ! updatedBlocks.content ) {
+        console.info( 'No content to write...' );
+        return;
+      }
+      const blocksCount = updatedBlocks.content.length;
       const key = blocksCount - 1;
-      const block = updatedBlocks[ key ] || {};
+      const block = updatedBlocks.content[ key ] || {};
 
       block.status = previousContent[ key ]?.status || 'initial';
       block.clientId = previousContent[ key ]?.clientId || '';
@@ -20,28 +25,28 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
         console.info( 'Skipping... the block name is not valid...', block.name );
         return;
       }
-      updatedBlocks[ key ].valid = true;
+      updatedBlocks.content[ key ].valid = true;
 
       // Insert the block and the status ready
       if ( ! block.clientId ) {
         insertBlock( block ).then( clientId => {
-          updatedBlocks[ key ].clientId = clientId;
-          updatedBlocks[ key ].status = 'ready';
+          updatedBlocks.content[ key ].clientId = clientId;
+          updatedBlocks.content[ key ].status = 'ready';
           // console.log( 'Block Inserted', key, updatedBlocks[ key ] );
         } );
       } else if (
         block.attributes?.content &&
         block.attributes?.content !== previousContent[ key ]?.attributes?.content
       ) {
-        updatedBlocks[ key ].status = 'updating_content';
+        updatedBlocks.content[ key ].status = 'updating_content';
         if ( ! block.clientId ) {
           insertBlock( block ).then( clientId => {
-            updatedBlocks[ key ].clientId = clientId;
+            updatedBlocks.content[ key ].clientId = clientId;
           } );
         } else {
           updateBlockContent( block ).then( clientId => {
             if ( clientId ) {
-              updatedBlocks[ key ].clientId = clientId;
+              updatedBlocks.content[ key ].clientId = clientId;
             }
           } );
         }
@@ -52,15 +57,15 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
         JSON.stringify( block.innerBlocks ) !==
           JSON.stringify( previousContent[ key ]?.innerBlocks )
       ) {
-        updatedBlocks[ key ].status = 'updating_inner_blocks';
+        updatedBlocks.content[ key ].status = 'updating_inner_blocks';
         if ( ! block.clientId ) {
           insertBlock( block ).then( clientId => {
-            updatedBlocks[ key ].clientId = clientId;
+            updatedBlocks.content[ key ].clientId = clientId;
           } );
         } else {
           updateBlockInnerBlocks( block ).then( clientId => {
             if ( clientId ) {
-              updatedBlocks[ key ].clientId = clientId;
+              updatedBlocks.content[ key ].clientId = clientId;
             }
           } );
         }
@@ -70,7 +75,20 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
       return updatedBlocks;
     }
   } catch ( error ) {
-    console.error( 'Error writing to editor', error );
+    console.info( 'Error writing to editor', error );
+  }
+}
+
+export async function CleanGutenbergContent() {
+  try {
+    const blocks = wp.data.select( 'core/block-editor' ).getBlocks();
+    if ( blocks && blocks.length > 0 ) {
+      await wp.data
+        .dispatch( 'core/block-editor' )
+        .removeBlocks( blocks.map( block => block.clientId ) );
+    }
+  } catch ( error ) {
+    console.info( 'Error cleaning content', error );
   }
 }
 

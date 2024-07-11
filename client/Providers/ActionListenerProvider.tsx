@@ -88,6 +88,11 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
           status: 'success',
         } );
         break;
+      case 'write_to_input':
+        await client.storeAgentResult( aa.id, {
+          status: 'success',
+        } );
+        break;
     }
   }
 
