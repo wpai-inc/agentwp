@@ -57,3 +57,16 @@ export type GutenbergStreamType = {
   content: BlockType[];
   summary: string;
 };
+
+type selectedInputType = {
+  inputPath: string;
+  inputLabel: string;
+  inputName: string | null;
+  inputId: string | null;
+  inputValue: string | null;
+};
+
+type streamableFieldType = {
+  type: string;
+  data: selectedInputType | null;
+};
