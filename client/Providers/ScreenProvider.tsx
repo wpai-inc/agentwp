@@ -1,13 +1,17 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toJpeg } from 'html-to-image';
 
+type postContentType = {
+  post_content: string;
+  post_title: string;
+};
+
 type ScreenType = {
   url: string;
   title: string;
   links: string[];
-  post_content?: string;
-  post_title?: string;
   screenshot?: string;
+  post?: postContentType;
   //   buttons: string[];
   //   forms: { action: string; method: string }[];
 };

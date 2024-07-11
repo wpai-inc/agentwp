@@ -16,16 +16,16 @@ import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { InputSelectProvider } from '@/Providers/InputSelectProvider';
 
-const rootElement = document.getElementById( 'agent-wp-admin-chat' );
+const rootElement = document.getElementById('agent-wp-admin-chat');
 
 declare const agentwp_settings: PageData;
 
-if ( rootElement ) {
-  const root = ReactDOM.createRoot( rootElement );
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
       <NotificationsProvider>
-        <PageProvider page={ agentwp_settings }>
+        <PageProvider page={agentwp_settings}>
           <App>
             <ErrorProvider>
               <AdminRouteProvider>
@@ -35,11 +35,11 @@ if ( rootElement ) {
                       <UserRequestsProvider>
                         <StreamProvider>
                           <ActionListenerProvider>
-                            <ChatProvider>
-                              <InputSelectProvider>
+                            <InputSelectProvider>
+                              <ChatProvider>
                                 <Chat />
-                              </InputSelectProvider>
-                            </ChatProvider>
+                              </ChatProvider>
+                            </InputSelectProvider>
                           </ActionListenerProvider>
                         </StreamProvider>
                       </UserRequestsProvider>
@@ -55,5 +55,5 @@ if ( rootElement ) {
   );
 } else {
   // Handle the case where the root element is not found
-  console.error( 'Root element not found' );
+  console.error('Root element not found');
 }
