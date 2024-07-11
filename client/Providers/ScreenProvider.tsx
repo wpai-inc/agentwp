@@ -1,11 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
+type postContentType = {
+  post_content: string;
+  post_title: string;
+};
+
 type ScreenType = {
   url: string;
   title: string;
   links: string[];
-  post_content?: string;
-  post_title?: string;
+  post?: postContentType;
   //   buttons: string[];
   //   forms: { action: string; method: string }[];
 };

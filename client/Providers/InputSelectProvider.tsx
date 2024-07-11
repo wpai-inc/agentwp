@@ -37,13 +37,10 @@ export const InputSelectProvider = ( { children }: { children: ReactNode } ) => 
     console.log( 'selectedInput', selectedInput );
     if ( selectedInput ) {
       const theScreen = { ...screen, selectedInput };
-      if (
-        selectedInput.data?.inputLabel === 'Post Content' ||
-        selectedInput.data?.inputLabel === 'Post Title'
-      ) {
+      if ( selectedInput.type === 'post_content' || selectedInput.type === 'post_title' ) {
         const postContent = wp.data.select( 'core/editor' ).getEditedPostContent();
         const postTitle = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' );
-        setScreen( { ...theScreen, post_content: postContent, post_title: postTitle } );
+        setScreen( { ...theScreen, post: { post_content: postContent, post_title: postTitle } } );
       } else {
         setScreen( theScreen );
       }

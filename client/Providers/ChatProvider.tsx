@@ -8,7 +8,7 @@ import { useError } from '@/Providers/ErrorProvider';
 import { CleanGutenbergContent, WriteToEditor } from '@/Services/WriteToEditor';
 import { type BlockType } from '@/Types/types';
 import { useInputSelect } from './InputSelectProvider';
-import { WriteToInputField } from '@/Services/WriteToInputField';
+import { CleanInputFieldContent, WriteToInputField } from '@/Services/WriteToInputField';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -66,6 +66,7 @@ export default function ChatProvider({
     userRequestId: '',
     liveAction: null as AgentAction | null,
   });
+  //todo: use ref's ...
 
   const { selectedInput } = useInputSelect();
 
@@ -110,20 +111,6 @@ export default function ChatProvider({
     }
   }, [liveAction, currentUserRequestId]);
 
-  function CleanInputFieldContent() {
-    try {
-      // clear the input field content
-      const inputPath = selectedInput?.data?.inputPath || '';
-      const inputElement = document.querySelector(inputPath);
-      if (inputElement) {
-        inputElement.setAttribute('value', '');
-        inputElement.innerText = '';
-      }
-    } catch (error) {
-      console.info('Error cleaning content', error);
-    }
-  }
-
   useEffect(() => {
     console.info('Starting a new stream');
     if (startingStreaming.liveAction?.action.ability === 'write_to_editor') {
@@ -131,7 +118,7 @@ export default function ChatProvider({
       CleanGutenbergContent();
     } else if (startingStreaming.liveAction?.action.ability === 'write_to_input') {
       // clear the editor content
-      CleanInputFieldContent();
+      CleanInputFieldContent(selectedInput);
     }
   }, [startingStreaming]);
 
