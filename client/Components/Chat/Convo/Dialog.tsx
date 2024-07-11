@@ -5,6 +5,7 @@ import { useError } from '@/Providers/ErrorProvider';
 import { ChatError } from '@/Components/Chat/Alerts/Error';
 import { cn } from '@/lib/utils';
 import { usePage } from '@/Providers/PageProvider';
+import { ChatNotice } from '../Alerts/Notice';
 
 export default function Dialog( { conversation }: { conversation: UserRequestType[] } ) {
   const { errors } = useError();
@@ -23,6 +24,7 @@ export default function Dialog( { conversation }: { conversation: UserRequestTyp
         conversation.map( msg => <Message key={ msg.id } { ...msg } /> )
       ) }
       { !! errors.length && <ChatError errors={ errors } /> }
+      <ChatNotice message="sample notice" />
     </div>
   );
 }
