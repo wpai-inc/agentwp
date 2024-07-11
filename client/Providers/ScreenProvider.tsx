@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { toJpeg } from 'html-to-image';
 
 type ScreenType = {
   url: string;
@@ -6,6 +7,7 @@ type ScreenType = {
   links: string[];
   post_content?: string;
   post_title?: string;
+  screenshot?: string;
   //   buttons: string[];
   //   forms: { action: string; method: string }[];
 };
@@ -34,6 +36,17 @@ export function useScreen() {
   return context;
 }
 
+async function getScreenshot(): Promise< string > {
+  const node = document.body;
+  //depending on the request, we can either do a full screen or viewport-specific screenshot
+  if ( node ) {
+    return await toJpeg( node, { quality: 0.5 } );
+  } else {
+    console.error( 'Problemo.' );
+    return '';
+  }
+}
+
 export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
   const [ screen, setScreen ] = useState< ScreenType >( {
     url: '',
@@ -44,23 +57,28 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
   } );
 
   useEffect( () => {
-    const url = window.location.href;
-    const title = document.title;
-    const links = Array.from( document.links ).map( link => link.href );
-    setScreen( {
-      url,
-      title,
-      links,
-    } );
+    const fetchData = async () => {
+      const url = window.location.href;
+      const title = document.title;
+      const links = Array.from( document.links ).map( link => link.href );
+      const screenshot = await getScreenshot();
+      // screen.buttons = Array.from(document.querySelectorAll('button')).map(
+      //   (button) => button.innerText,
+      // );
 
-    // screen.buttons = Array.from(document.querySelectorAll('button')).map(
-    //   (button) => button.innerText,
-    // );
+      // screen.forms = Array.from(document.forms).map((form) => ({
+      //   action: form.action,
+      //   method: form.method,
+      // }));
 
-    // screen.forms = Array.from(document.forms).map((form) => ({
-    //   action: form.action,
-    //   method: form.method,
-    // }));
+      setScreen( {
+        url,
+        title,
+        links,
+        screenshot,
+      } );
+    };
+    fetchData();
   }, [] );
 
   return (
