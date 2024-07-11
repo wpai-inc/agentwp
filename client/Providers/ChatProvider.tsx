@@ -1,5 +1,10 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import {
+  getSettingDefaultValues,
+  getSettingDefaultXPosition,
+  getSettingDefaultYPosition,
+  useClientSettings,
+} from '@/Providers/ClientSettingsProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -88,7 +93,7 @@ export default function ChatProvider( {
     } else {
       setMinimizing( true );
     }
-
+    const settingsDefaultValues = getSettingDefaultValues();
     setTimeout( () => {
       setOpen( newVal );
       setExpanding( false );
@@ -97,15 +102,16 @@ export default function ChatProvider( {
       setSettings( {
         chatOpen: newVal,
         chatMaximized: false,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
+        x: settingsDefaultValues.x,
+        y: settingsDefaultValues.y,
+        width: settingsDefaultValues.width,
+        height: settingsDefaultValues.height,
       } );
     }, 1400 );
   }
 
   function maximizeChatWindow( chatWindowElement: HTMLElement ) {
+    const settingsDefaultValues = getSettingDefaultValues();
     setMaximizing( true );
     setTimeout( () => {
       setMaximizing( false );
@@ -114,25 +120,26 @@ export default function ChatProvider( {
       chatWindowElement.style.transform = 'translate(0px, 0px)';
       setSettings( {
         chatMaximized: true,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
+        x: settingsDefaultValues.x,
+        y: settingsDefaultValues.y,
+        width: settingsDefaultValues.width,
+        height: settingsDefaultValues.height,
       } );
     }, 1000 );
   }
 
   function reduceWindow() {
+    const settingsDefaultValues = getSettingDefaultValues();
     setReducing( true );
     setTimeout( () => {
       setReducing( false );
       setIsMaximized( false );
       setSettings( {
         chatMaximized: false,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
+        x: settingsDefaultValues.x,
+        y: settingsDefaultValues.y,
+        width: settingsDefaultValues.width,
+        height: settingsDefaultValues.height,
       } );
     }, 1000 );
   }
