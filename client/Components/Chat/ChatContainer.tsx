@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
@@ -22,14 +22,28 @@ export default function ChatContainer() {
   const { loadingConversation } = useUserRequests();
   const { page } = usePage();
 
-  function onMouseEnter() {
+  const onMouseEnter = () => {
     setIsHovering( true );
-  }
+  };
 
-  function onMouseLeave() {
+  const onMouseLeave = () => {
     setIsHovering( false );
-  }
+  };
 
+  const handleScroll = () => {
+    const windowElement = windowRef.current;
+    if ( windowElement ) {
+      windowElement.style.transform = `translate(0px, ${ window.scrollY }px)`;
+    }
+  };
+
+  useEffect( () => {
+    window.addEventListener( 'scroll', handleScroll );
+
+    return () => {
+      window.removeEventListener( 'scroll', handleScroll );
+    };
+  }, [ settings.x, settings.y ] );
   return (
     <Rnd
       default={ {
@@ -49,7 +63,8 @@ export default function ChatContainer() {
       } }
       onMouseEnter={ onMouseEnter }
       onMouseLeave={ onMouseLeave }
-      dragHandleClassName="handle">
+      dragHandleClassName="handle"
+      bounds="#wpbody">
       <div
         ref={ windowRef }
         id="awp-chat"
