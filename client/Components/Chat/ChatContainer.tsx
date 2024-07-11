@@ -48,7 +48,8 @@ export default function ChatContainer() {
         } );
       } }
       onMouseEnter={ onMouseEnter }
-      onMouseLeave={ onMouseLeave }>
+      onMouseLeave={ onMouseLeave }
+      dragHandleClassName="handle">
       <div
         ref={ windowRef }
         id="awp-chat"

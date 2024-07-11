@@ -91,7 +91,7 @@ export default function WindowActions( { isShowing = false } ) {
           id="drag-icon"
           onMouseDown={ startDrag }
           onDoubleClick={ onDragDoubleClick }
-          className={ cn( 'h-6 w-6 hover:text-amber-500 cursor-move', 'text-gray-400' ) }
+          className={ cn( 'handle h-6 w-6 hover:text-amber-500 cursor-move', 'text-gray-400' ) }
         />
       </AgentTooltip>
       { isMaximized ? (
