@@ -36,21 +36,21 @@ export default function WindowActions( { isShowing = false } ) {
   const [ isFirstLoad, setIsFirstLoad ] = useState( false );
   const [ isDragging, setIsDragging ] = useState( false );
 
-  function onMaximizeClick() {
+  const onMaximizeClick = () => {
     const element = getChatwindowElement();
     maximizeChatWindow( element );
-  }
+  };
 
-  function startDrag( e ) {
+  const startDrag = ( e: React.MouseEvent< SVGSVGElement, MouseEvent > ) => {
     setIsDragging( true );
     if ( isChatWindowMaximized() ) {
       e.preventDefault();
       e.stopPropagation();
       return;
     }
-  }
+  };
 
-  function onDragDoubleClick( e ) {
+  function onDragDoubleClick() {
     if ( isChatWindowMaximized() ) {
       return;
     }

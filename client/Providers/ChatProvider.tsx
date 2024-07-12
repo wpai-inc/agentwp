@@ -1,10 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import {
-  getSettingDefaultValues,
-  getSettingDefaultXPosition,
-  getSettingDefaultYPosition,
-  useClientSettings,
-} from '@/Providers/ClientSettingsProvider';
+import { getSettingDefaultValues, useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -24,7 +19,7 @@ const ChatContext = createContext( {
   open: false,
   setOpen: ( _open: boolean ) => {},
   toggle: () => {},
-  maximizeChatWindow: ( _element: HTMLElement ) => {},
+  maximizeChatWindow: ( _element: HTMLElement | null ) => {},
   reduceWindow: () => {},
   isMaximized: false,
   minimizing: false,
@@ -110,20 +105,23 @@ export default function ChatProvider( {
     }, 1400 );
   }
 
-  function maximizeChatWindow( chatWindowElement: HTMLElement ) {
+  function maximizeChatWindow( chatWindowElement: HTMLElement | null ) {
     const settingsDefaultValues = getSettingDefaultValues();
     setMaximizing( true );
     setTimeout( () => {
       setMaximizing( false );
       setIsMaximized( true );
-      chatWindowElement.removeAttribute( 'style' );
-      chatWindowElement.style.transform = 'translate(0px, 0px)';
+      console.log( 'maximizeChatWindow ===> ', chatWindowElement );
+      if ( chatWindowElement ) {
+        chatWindowElement.removeAttribute( 'style' );
+        chatWindowElement.style.transform = 'translate(0px, 0px)';
+      }
       setSettings( {
         chatMaximized: true,
-        x: settingsDefaultValues.x,
-        y: settingsDefaultValues.y,
-        width: settingsDefaultValues.width,
-        height: settingsDefaultValues.height,
+        x: 0,
+        y: -settingsDefaultValues.x,
+        width: screen.width,
+        height: screen.height,
       } );
     }, 1000 );
   }
@@ -134,13 +132,14 @@ export default function ChatProvider( {
     setTimeout( () => {
       setReducing( false );
       setIsMaximized( false );
-      setSettings( {
+      const newSettings = {
         chatMaximized: false,
         x: settingsDefaultValues.x,
         y: settingsDefaultValues.y,
         width: settingsDefaultValues.width,
         height: settingsDefaultValues.height,
-      } );
+      };
+      setSettings( newSettings );
     }, 1000 );
   }
 

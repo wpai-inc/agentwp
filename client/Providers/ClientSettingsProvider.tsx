@@ -40,8 +40,8 @@ export const useClientSettings = () => {
 export const getSettingDefaultValues = () => ( {
   x: screen.width - 440,
   y: -screen.height,
-  width: getLocalStorage( 'width', 400 ),
-  height: getLocalStorage( 'height', 972 ),
+  width: 400,
+  height: 972,
 } );
 
 export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { children } ) => {

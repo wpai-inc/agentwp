@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
@@ -11,9 +11,17 @@ import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { usePage } from '@/Providers/PageProvider';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
-import { Rnd } from 'react-rnd';
+import { DraggableData, Rnd, RndDragCallback } from 'react-rnd';
 
 export default function ChatContainer() {
+  const chatRef = useRef< React.LegacyRef< Rnd > | undefined >( null );
+  const [ chatPosition, setChatPosition ] = useState<
+    | {
+        x: number;
+        y: number;
+      }
+    | undefined
+  >();
   const windowRef = useRef< HTMLDivElement >( null );
   const { minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
   const { settings, setSettings } = useClientSettings();
@@ -37,6 +45,38 @@ export default function ChatContainer() {
     }
   };
 
+  const onDrag = ( event: MouseEvent, data: DraggableData ) => {
+    const contentEl = document.getElementById( 'wpbody' );
+    if ( ! contentEl ) return;
+
+    const chatEl = document.getElementById( 'awp-chat' );
+    if ( ! chatEl ) return;
+
+    const contentRect = contentEl.getBoundingClientRect();
+    const chatRect = chatEl.getBoundingClientRect();
+
+    const isOver =
+      chatRect.left >= contentRect.left + 20 &&
+      chatRect.right <= contentRect.right &&
+      chatRect.top >= contentRect.top + 10 &&
+      chatRect.bottom <= contentRect.bottom;
+
+    if ( isOver ) {
+      setChatPosition( { x: data.x, y: data.y } );
+    } else {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  const onDragStop = () => {
+    setSettings( {
+      ...settings,
+      x: chatPosition?.x as number,
+      y: chatPosition?.y as number,
+    } );
+  };
+
   useEffect( () => {
     window.addEventListener( 'scroll', handleScroll );
 
@@ -44,8 +84,12 @@ export default function ChatContainer() {
       window.removeEventListener( 'scroll', handleScroll );
     };
   }, [ settings.x, settings.y ] );
+  // console.log(`RENDER ===> isMouseInsideContentArea=${ isMouseInsideContentArea } X=${ settings.x }, Y=${ settings.y }, W=${ settings.width }, H=${ settings.height }`,{ minimizing, expanding, maximizing, reducing, isMaximized });
+
   return (
     <Rnd
+      ref={ chatRef }
+      position={ chatPosition }
       default={ {
         y: settings.y,
         x: settings.x,
@@ -54,17 +98,18 @@ export default function ChatContainer() {
       } }
       minHeight={ 500 }
       minWidth={ 400 }
-      onDragStop={ ( _e, d: any ) => {
-        setSettings( {
-          ...settings,
-          x: Number( d.x ),
-          y: Number( d.y ),
-        } );
-      } }
+      onDragStop={ onDragStop }
+      onDrag={ onDrag as RndDragCallback }
       onMouseEnter={ onMouseEnter }
       onMouseLeave={ onMouseLeave }
-      dragHandleClassName="handle"
-      bounds="#wpbody">
+      onResizeStop={ ( _e, _direction, ref ) => {
+        setSettings( {
+          ...settings,
+          width: parseInt( ref.style.width, 10 ),
+          height: parseInt( ref.style.height, 10 ),
+        } );
+      } }
+      dragHandleClassName="handle">
       <div
         ref={ windowRef }
         id="awp-chat"
