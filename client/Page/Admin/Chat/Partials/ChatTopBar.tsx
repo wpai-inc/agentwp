@@ -40,10 +40,6 @@ export default function ChatTopBar() {
       if ( page.onboarding_completed && page.agentwp_access ) {
         document.location.href = page.settings_page;
       }
-      setChatSetting( {
-        component: <ChatSettings />,
-        header: 'Settings',
-      } );
     }
   }
 
