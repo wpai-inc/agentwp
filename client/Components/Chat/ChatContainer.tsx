@@ -18,7 +18,7 @@ const unecessaryResizeHandlerStyles: React.CSSProperties = {
   display: 'none',
 };
 export default function ChatContainer() {
-  const [ position, setPosition ] = useState< { x: number; y: number } | undefined >();
+  const [ position, setPosition ] = useState< { x?: number; y?: number } | undefined >();
   const chatRef: React.LegacyRef< Rnd > = useRef( null );
   const windowRef = useRef< HTMLDivElement >( null );
   const { minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
@@ -43,9 +43,8 @@ export default function ChatContainer() {
     }
   };
 
-  const onDrag = ( event: MouseEvent, data: DraggableData ) => {
+  const onDrag = ( event: MouseEvent, data: { x?: number; y?: number } ) => {
     event.preventDefault();
-    if ( ! position?.x && ! position?.y ) return;
     const contentEl = document.getElementById( 'wpbody-content' );
     if ( ! contentEl ) return;
 
@@ -65,9 +64,10 @@ export default function ChatContainer() {
     const rightIsInside = chatRect.right < rightLimit;
     const bottomIsInside = chatRect.bottom < bottomLimit;
 
-    if ( ! leftIsInside || ! rightIsInside ) data.x = position.x;
+    if ( ! leftIsInside || ! rightIsInside ) data.x = position?.x;
 
-    if ( ! bottomIsInside || ! topIsInside ) data.y = position.y;
+    if ( ! bottomIsInside || ! topIsInside ) data.y = position?.y;
+
     setPosition( { x: data.x, y: data.y } );
   };
 
@@ -97,7 +97,7 @@ export default function ChatContainer() {
         width: settings.width,
         height: settings.height,
       } }
-      position={ position }
+      position={ position as { x: number; y: number } }
       minHeight={ 500 }
       minWidth={ 400 }
       onDragStop={ onDragStop }
@@ -105,7 +105,6 @@ export default function ChatContainer() {
       onMouseEnter={ onMouseEnter }
       onMouseLeave={ onMouseLeave }
       dragHandleClassName="handle"
-      // bounds={ contentEl }
       resizeHandleStyles={ {
         top: unecessaryResizeHandlerStyles,
         bottom: unecessaryResizeHandlerStyles,
