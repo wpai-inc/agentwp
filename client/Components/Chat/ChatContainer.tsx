@@ -44,8 +44,8 @@ export default function ChatContainer() {
   };
 
   const onDrag = ( event: MouseEvent, data: DraggableData ) => {
-    // console.log( 'ON-DRAG ===> ', { event, data } );
     event.preventDefault();
+    if ( ! position?.x && ! position?.y ) return;
     const contentEl = document.getElementById( 'wpbody-content' );
     if ( ! contentEl ) return;
 
@@ -55,36 +55,19 @@ export default function ChatContainer() {
     const contentRect = contentEl.getBoundingClientRect();
     const chatRect = chatEl.getBoundingClientRect();
 
-    const leftLimit = contentRect.left + 60;
-    const topLimit = contentRect.top + 1005;
-    const rightLimit = contentRect.right - 5;
+    const leftLimit = contentRect.left + 30;
+    const topLimit = contentRect.top + 5;
+    const rightLimit = contentRect.right;
     const bottomLimit = contentRect.bottom - 5;
 
     const leftIsInside = chatRect.left > leftLimit;
-    const topIsInside = chatRect?.top > topLimit;
-    const rightIsInside = chatRect.right > rightLimit;
-    const bottomIsInside = chatRect.bottom > bottomLimit;
+    const topIsInside = chatRect.top > topLimit;
+    const rightIsInside = chatRect.right < rightLimit;
+    const bottomIsInside = chatRect.bottom < bottomLimit;
 
-    if ( ! leftIsInside ) data.x = leftLimit;
+    if ( ! leftIsInside || ! rightIsInside ) data.x = position.x;
 
-    // if ( ! topIsInside ) data.y = topLimit;
-
-    // if ( ! rightIsInside ) data.x = rightLimit;
-
-    // if ( ! bottomIsInside ) data.y = bottomLimit;
-
-    console.log(
-      `ON-DRAG ==> 
-      next-y=${ data.y }, 
-      chat-top=${ chatRect?.top }, 
-      limit-top=${ topLimit }, 
-      x=${ position?.x }, 
-      y=${ position?.y }, 
-      isInside-top=${ topIsInside },
-      `,
-      { event, data, position, contentRect, chatRect },
-    );
-
+    if ( ! bottomIsInside || ! topIsInside ) data.y = position.y;
     setPosition( { x: data.x, y: data.y } );
   };
 
