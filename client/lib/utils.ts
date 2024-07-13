@@ -8,13 +8,23 @@ export function cn( ...inputs: ClassValue[] ) {
 
 export const setStorage = ( key: string, value: any ) => {
   if ( typeof window !== 'undefined' ) {
+    if(value==='undefined' )
+      value = undefined
+    else if(value==='null')
+        value = null
+      
     window.localStorage.setItem( key, value );
   }
 };
 
 export const getStorage = ( key: string, defaultValue?: any ) => {
   if ( typeof window !== 'undefined' ) {
-    const value = window.localStorage.getItem( key );
+    let value: string | null | undefined = window.localStorage.getItem( key );
+    if(value==='undefined')
+      value = undefined
+    else if(value === 'null')
+      value = null
+
     return !! value ? value : defaultValue;
   }
 };

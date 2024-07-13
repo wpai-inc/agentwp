@@ -62,7 +62,7 @@ export default function Handle( { position, className, isShowing = false }: Prop
   return (
     <div
       className={ cn(
-        'absolute w-4 h-4 border-brand-primary hover:border-brand-primary',
+        'resize-handler absolute w-4 h-4 border-brand-primary hover:border-brand-primary',
         'transition-all',
         postionClasses[ position ],
         {

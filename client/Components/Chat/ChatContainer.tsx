@@ -12,16 +12,14 @@ import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { usePage } from '@/Providers/PageProvider';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { DraggableData, Rnd, RndDragCallback } from 'react-rnd';
+import { DraggableEvent } from 'react-draggable';
 
+const unecessaryResizeHandlerStyles: React.CSSProperties = {
+  display: 'none',
+};
 export default function ChatContainer() {
-  const chatRef = useRef< React.LegacyRef< Rnd > | undefined >( null );
-  const [ chatPosition, setChatPosition ] = useState<
-    | {
-        x: number;
-        y: number;
-      }
-    | undefined
-  >();
+  const [ position, setPosition ] = useState< { x: number; y: number } | undefined >();
+  const chatRef: React.LegacyRef< Rnd > = useRef( null );
   const windowRef = useRef< HTMLDivElement >( null );
   const { minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
   const { settings, setSettings } = useClientSettings();
@@ -46,7 +44,9 @@ export default function ChatContainer() {
   };
 
   const onDrag = ( event: MouseEvent, data: DraggableData ) => {
-    const contentEl = document.getElementById( 'wpbody' );
+    // console.log( 'ON-DRAG ===> ', { event, data } );
+    event.preventDefault();
+    const contentEl = document.getElementById( 'wpbody-content' );
     if ( ! contentEl ) return;
 
     const chatEl = document.getElementById( 'awp-chat' );
@@ -55,25 +55,44 @@ export default function ChatContainer() {
     const contentRect = contentEl.getBoundingClientRect();
     const chatRect = chatEl.getBoundingClientRect();
 
-    const isOver =
-      chatRect.left >= contentRect.left + 20 &&
-      chatRect.right <= contentRect.right &&
-      chatRect.top >= contentRect.top + 10 &&
-      chatRect.bottom <= contentRect.bottom;
+    const leftLimit = contentRect.left + 60;
+    const topLimit = contentRect.top + 1005;
+    const rightLimit = contentRect.right - 5;
+    const bottomLimit = contentRect.bottom - 5;
 
-    if ( isOver ) {
-      setChatPosition( { x: data.x, y: data.y } );
-    } else {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+    const leftIsInside = chatRect.left > leftLimit;
+    const topIsInside = chatRect?.top > topLimit;
+    const rightIsInside = chatRect.right > rightLimit;
+    const bottomIsInside = chatRect.bottom > bottomLimit;
+
+    if ( ! leftIsInside ) data.x = leftLimit;
+
+    // if ( ! topIsInside ) data.y = topLimit;
+
+    // if ( ! rightIsInside ) data.x = rightLimit;
+
+    // if ( ! bottomIsInside ) data.y = bottomLimit;
+
+    console.log(
+      `ON-DRAG ==> 
+      next-y=${ data.y }, 
+      chat-top=${ chatRect?.top }, 
+      limit-top=${ topLimit }, 
+      x=${ position?.x }, 
+      y=${ position?.y }, 
+      isInside-top=${ topIsInside },
+      `,
+      { event, data, position, contentRect, chatRect },
+    );
+
+    setPosition( { x: data.x, y: data.y } );
   };
 
-  const onDragStop = () => {
+  const onDragStop = ( _e: DraggableEvent, { x, y }: DraggableData ) => {
     setSettings( {
       ...settings,
-      x: chatPosition?.x as number,
-      y: chatPosition?.y as number,
+      x,
+      y,
     } );
   };
 
@@ -84,32 +103,38 @@ export default function ChatContainer() {
       window.removeEventListener( 'scroll', handleScroll );
     };
   }, [ settings.x, settings.y ] );
-  // console.log(`RENDER ===> isMouseInsideContentArea=${ isMouseInsideContentArea } X=${ settings.x }, Y=${ settings.y }, W=${ settings.width }, H=${ settings.height }`,{ minimizing, expanding, maximizing, reducing, isMaximized });
 
+  // console.log( `RENDER ===> x=${ position?.x }, y=${ position?.y }`, {current: chatRef.current,} );
   return (
     <Rnd
       ref={ chatRef }
-      position={ chatPosition }
       default={ {
         y: settings.y,
         x: settings.x,
         width: settings.width,
         height: settings.height,
       } }
+      position={ position }
       minHeight={ 500 }
       minWidth={ 400 }
       onDragStop={ onDragStop }
       onDrag={ onDrag as RndDragCallback }
       onMouseEnter={ onMouseEnter }
       onMouseLeave={ onMouseLeave }
-      onResizeStop={ ( _e, _direction, ref ) => {
-        setSettings( {
-          ...settings,
-          width: parseInt( ref.style.width, 10 ),
-          height: parseInt( ref.style.height, 10 ),
-        } );
+      dragHandleClassName="handle"
+      // bounds={ contentEl }
+      resizeHandleStyles={ {
+        top: unecessaryResizeHandlerStyles,
+        bottom: unecessaryResizeHandlerStyles,
+        right: unecessaryResizeHandlerStyles,
+        left: unecessaryResizeHandlerStyles,
       } }
-      dragHandleClassName="handle">
+      resizeHandleClasses={ {
+        bottomLeft: 'resize-handler',
+        bottomRight: 'resize-handler',
+        topLeft: 'resize-handler',
+        topRight: 'resize-handler',
+      } }>
       <div
         ref={ windowRef }
         id="awp-chat"
