@@ -59,3 +59,10 @@ export const getChatwindowElement = () => {
 export const getChatWindowTopBarElement = () => {
   return document.getElementById( 'awp-chat-top-bar' );
 };
+
+
+export const  getScreenBottomEdge=()=> {
+  const viewportHeight = window.innerHeight;
+  const scrollPosition = window.scrollY;
+  return viewportHeight + scrollPosition;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, getScreenBottomEdge } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
 import MessageBox from './MessageBox/MessageBox';
@@ -17,6 +17,7 @@ import { DraggableEvent } from 'react-draggable';
 const unecessaryResizeHandlerStyles: React.CSSProperties = {
   display: 'none',
 };
+
 export default function ChatContainer() {
   const [ position, setPosition ] = useState< { x?: number; y?: number } | undefined >();
   const chatRef: React.LegacyRef< Rnd > = useRef( null );
@@ -56,18 +57,34 @@ export default function ChatContainer() {
 
     const leftLimit = contentRect.left + 30;
     const topLimit = contentRect.top + 5;
-    const rightLimit = contentRect.right;
-    const bottomLimit = contentRect.bottom - 5;
+    const rightLimit = contentRect.right - 15;
+    const bottomLimit = getScreenBottomEdge() - 5;
 
     const leftIsInside = chatRect.left > leftLimit;
     const topIsInside = chatRect.top > topLimit;
     const rightIsInside = chatRect.right < rightLimit;
     const bottomIsInside = chatRect.bottom < bottomLimit;
 
-    if ( ! leftIsInside || ! rightIsInside ) data.x = position?.x;
+    let outOfBound = false;
 
-    if ( ! bottomIsInside || ! topIsInside ) data.y = position?.y;
-
+    if ( ! leftIsInside ) {
+      data.x = ( data.x ?? 0 ) + 5;
+      outOfBound = true;
+    }
+    if ( ! rightIsInside ) {
+      data.x = ( data.x ?? 0 ) - 5;
+      outOfBound = true;
+    }
+    if ( ! bottomIsInside ) {
+      data.y = ( data.y ?? 0 ) - 5;
+      outOfBound = true;
+    }
+    if ( ! topIsInside ) {
+      data.y = ( data.y ?? 0 ) + 5;
+      outOfBound = true;
+    }
+    if ( outOfBound )
+      chatRef?.current?.draggable.setState( state => ({...state, dragged: false}))
     setPosition( { x: data.x, y: data.y } );
   };
 
