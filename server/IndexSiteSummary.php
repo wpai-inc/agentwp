@@ -3,10 +3,10 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Services\AwpClient;
-use WpAi\AgentWp\Services\Cache;
 
-class SiteSummarizer implements Registrable
+class IndexSiteSummary implements Registrable
 {
     public function __construct(private Main $main)
     {
@@ -24,9 +24,10 @@ class SiteSummarizer implements Registrable
                 return;
             }
 
-            $cache = new Cache('summary', $this->getDataForSummarization());
-            if ($cache->miss()) {
-                (new AwpClient($this->main, false))->summarizeSite(json_encode($cache->getData()));
+            $summarizer = new SiteSummarizer();
+
+            if ($summarizer->hasUpdated()) {
+                (new AwpClient($this->main, false))->summarizeSite(json_encode($summarizer->data()));
             }
         }
     }

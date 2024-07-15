@@ -38,7 +38,7 @@ function agentwp_bootstrap(): void
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
         \WpAi\AgentWp\SiteIndexer::class,
-        \WpAi\AgentWp\SiteSummarizer::class,
+        \WpAi\AgentWp\IndexSiteSummary::class,
         \WpAi\AgentWp\ErrorIndexer::class,
         \WpAi\AgentWp\Router::class,
         \WpAi\AgentWp\WpUser::class,
