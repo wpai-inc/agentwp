@@ -1,14 +1,14 @@
 import { createContext, useContext } from 'react';
-export const ClientContext = createContext< any | undefined >( undefined );
+export const ClientContext = createContext<any | undefined>(undefined);
 import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
 
 // Todo:
 
 export function useClient() {
-  const client = useContext( ClientContext );
-  if ( client === undefined ) {
-    throw new Error( 'useClient must be used within a ClientProvider' );
+  const client = useContext(ClientContext);
+  if (client === undefined) {
+    throw new Error('useClient must be used within a ClientProvider');
   }
   return client;
 }
@@ -30,13 +30,13 @@ export type HistoryItem = {
   humanCreatedAt: string;
 };
 
-export function ClientProvider( { children }: { children: React.ReactNode } ) {
+export function ClientProvider({ children }: { children: React.ReactNode }) {
   const { page } = usePage();
 
   const userProfileUrl = page.api_host + '/dashboard';
 
-  async function getHistory( since?: string ): Promise< HistoryType[] > {
-    const response = await client.getHistory( since );
+  async function getHistory(since?: string): Promise<HistoryType[]> {
+    const response = await client.getHistory(since);
     return response.data as HistoryType[];
   }
 
@@ -44,29 +44,29 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     await client.clearConversation();
   }
 
-  async function unclearConversation( since: string ) {
-    await client.unclearConversation( since );
+  async function unclearConversation(since: string) {
+    await client.unclearConversation(since);
   }
 
-  async function updateSetting( name: string, value: any ) {
-    const response = await client.updateSetting( name, value );
+  async function updateSetting(name: string, value: any) {
+    const response = await client.updateSetting(name, value);
     return response.data;
   }
 
-  async function getSettings() {
-    const res = await client.getSettings();
+  async function getSettings(): Promise<any[]> {
+    const response = await client.getSettings();
+    return response.data;
+  }
+
+  async function getConversation(since?: string) {
+    const res = await client.isAuthorized()?.getConversation(since);
     return res?.data?.data;
   }
 
-  async function getConversation( since?: string ) {
-    const res = await client.isAuthorized()?.getConversation( since );
-    return res?.data?.data;
-  }
-
-  const client = new AwpClient( page.access_token ).setBaseUrl( page.api_host );
+  const client = new AwpClient(page.access_token).setBaseUrl(page.api_host);
   return (
     <ClientContext.Provider
-      value={ {
+      value={{
         client,
         getHistory,
         getConversation,
@@ -75,8 +75,8 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         userProfileUrl,
         getSettings,
         updateSetting,
-      } }>
-      { children }
+      }}>
+      {children}
     </ClientContext.Provider>
   );
 }
