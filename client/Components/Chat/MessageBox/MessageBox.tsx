@@ -9,9 +9,11 @@ import Commands from '../Commands/Commands';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
+import { useInputSelect } from '@/Providers/InputSelectProvider';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting } = useChat();
+  const { setSelectedInput } = useInputSelect();
   const { streamClosed } = useStream();
   const [ message, setMessage ] = useState( '' );
   const { page } = usePage();
@@ -54,6 +56,7 @@ export default function MessageBox() {
       <Commands onMessageBoxKeyUp={ keyUpEvent } onSetMessage={ setMessage } message={ message } />
       <textarea
         onChange={ e => setMessage( e.target.value ) }
+        onFocus={ () => setSelectedInput( null ) }
         value={ message }
         className="h-24 w-full resize-none p-2 text-base"
         placeholder="Message..."
