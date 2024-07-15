@@ -23,7 +23,8 @@ class Core implements SourceInterface
             $this->getHomePageData(),
             $this->getParentPageTitles(),
             $this->getExcerpts(),
-            $this->getAdminUserBios()
+            $this->getAdminUserBios(),
+            $this->getThemeJson(),
         );
     }
 
@@ -69,21 +70,9 @@ class Core implements SourceInterface
     private function sanitize($content): string
     {
         return $this->escape(
-            $this->removeScripts(
+            \wp_strip_all_tags(
                 $content
             )
-        );
-    }
-
-    /**
-     * Strip out JSON from homepage content if it's a page builder page
-     */
-    private function removeScripts(string $content): string
-    {
-        return preg_replace(
-            "/<script\b[^>]*>(.*?)<\/script>/is",
-            '',
-            $content
         );
     }
 
@@ -181,5 +170,20 @@ class Core implements SourceInterface
             ENT_QUOTES,
             'UTF-8'
         );
+    }
+
+    private function getThemeJson(): array
+    {
+        $theme = wp_get_theme();
+        $theme_json = $theme->get('ThemeURI');
+        $theme_json = $theme_json ? $theme_json : $theme->get('TextDomain');
+
+        return [
+            'theme' => [
+                'name' => $theme->get('Name'),
+                'version' => $theme->get('Version'),
+                'uri' => $theme_json,
+            ],
+        ];
     }
 }
