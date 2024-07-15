@@ -25,9 +25,11 @@ export default function UserRequest( {
           <PopoverTrigger>
             <IconMore className="text-brand-gray-15" />
           </PopoverTrigger>
-          <PopoverContent className="text-sm" side="left">
-            <p className="font-bold">Message ID</p>
-            <span>{ userRequest?.id }</span>
+          <PopoverContent>
+            <dl className="grid grid-cols-2 gap-4">
+              <dt className="text-right font-bold">Message ID</dt>
+              <dd>{ userRequest.id }</dd>
+            </dl>
           </PopoverContent>
         </Popover>
       </MessageHeader>
