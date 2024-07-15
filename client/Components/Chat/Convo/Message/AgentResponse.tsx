@@ -52,11 +52,9 @@ export default function AgentResponse( {
             <PopoverTrigger>
               <IconMore className="text-brand-gray-15" />
             </PopoverTrigger>
-            <PopoverContent>
-              <dl className="grid grid-cols-2 gap-4 text-sm">
-                <dt className="text-right font-bold">Responding Actions</dt>
-                <dd>{ agentActions?.length }</dd>
-              </dl>
+            <PopoverContent className="text-sm" side="left">
+              <p className="font-bold">Responding actions</p>
+              <span>{ agentActions?.length }</span>
             </PopoverContent>
           </Popover>
         </div>
