@@ -115,8 +115,19 @@ export default function ChatContainer() {
   ) => {
     setSettings( {
       ...settings,
-      width: ref.style.width,
-      height: ref.style.height,
+      width: _elementRef.style.width,
+      height: _elementRef.style.height,
+    } );
+  };
+
+  const onResize = (
+    _e: MouseEvent | TouchEvent,
+    _dir: ResizeDirection,
+    _elementRef: HTMLElement,
+  ) => {
+    setSize( {
+      width: _elementRef.style.width,
+      height: _elementRef.style.height,
     } );
   };
 
@@ -146,6 +157,7 @@ export default function ChatContainer() {
           height: string | number;
         }
       }
+      onResize={ onResize }
       onResizeStop={ onResizeStop }
       minHeight={ 500 }
       minWidth={ 400 }
