@@ -38,7 +38,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   async function startStream( stream_url: string, user_request_id: string ) {
     setCurrentUserRequestId( user_request_id );
-    // resetStream();
+    resetStream();
 
     try {
       await fetchEventSource( stream_url, {
