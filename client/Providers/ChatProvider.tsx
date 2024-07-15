@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, { useState, createContext, useContext, useEffect, useRef } from 'react';
 import { getSettingDefaultValues, useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
@@ -7,19 +7,27 @@ import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { WriteToEditor } from '@/Services/WriteToEditor';
 import { type BlockType } from '@/Types/types';
+import { getChatwindowElement, resetChatWindowPosition } from '@/lib/utils';
+import { Rnd } from 'react-rnd';
 
 type CreateUserRequestResponse = {
   stream_url: string;
   user_request: UserRequestType;
 };
-
+type PositionType = { x?: number; y?: number } | undefined;
+export type SizeType =
+  | {
+      width?: string | number;
+      height?: string | number;
+    }
+  | undefined;
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 const ChatContext = createContext( {
   open: false,
   setOpen: ( _open: boolean ) => {},
   toggle: () => {},
-  maximizeChatWindow: ( _element: HTMLElement | null ) => {},
+  maximizeChatWindow: () => {},
   reduceWindow: () => {},
   isMaximized: false,
   minimizing: false,
@@ -30,6 +38,11 @@ const ChatContext = createContext( {
   sendMessage: ( _message: string ) => {},
   setChatSetting: ( _setting: ChatSettingProps ) => {},
   chatSetting: null as ChatSettingProps,
+  position: undefined as PositionType,
+  setPosition: ( _position: PositionType ) => {},
+  chatRef: null as React.LegacyRef< Rnd >,
+  size: undefined as SizeType,
+  setSize: ( _size: SizeType ) => {},
 } );
 
 export function useChat() {
@@ -47,7 +60,10 @@ export default function ChatProvider( {
   defaultOpen?: boolean;
   children: React.ReactNode;
 } ) {
+  const chatRef: React.LegacyRef< Rnd > = useRef( null );
   const { client } = useClient();
+  const [ position, setPosition ] = useState< PositionType >();
+  const [ size, setSize ] = useState< SizeType >();
   const { settings, setSettings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ minimizing, setMinimizing ] = useState( false );
@@ -60,6 +76,13 @@ export default function ChatProvider( {
   const { startStream, liveAction, error } = useStream();
   const { addErrors } = useError();
   const [ editorContent, setEditorContent ] = useState< BlockType[] >( [] );
+
+  const setPositionHandler = ( position: PositionType ) => {
+    setPosition( position );
+  };
+  const setSizeHandler = ( size: SizeType ) => {
+    setSize( size );
+  };
 
   useEffect( () => {
     if ( liveAction && currentUserRequestId ) {
@@ -89,6 +112,7 @@ export default function ChatProvider( {
       setMinimizing( true );
     }
     const settingsDefaultValues = getSettingDefaultValues();
+    resetChatWindowPosition();
     setTimeout( () => {
       setOpen( newVal );
       setExpanding( false );
@@ -102,29 +126,42 @@ export default function ChatProvider( {
         width: settingsDefaultValues.width,
         height: settingsDefaultValues.height,
       } );
+      setSizeHandler( {
+        width: settingsDefaultValues.width,
+        height: settingsDefaultValues.height,
+      } );
     }, 1400 );
   }
 
-  function maximizeChatWindow( chatWindowElement: HTMLElement | null ) {
-    const settingsDefaultValues = getSettingDefaultValues();
+  const maximizeChatWindow = () => {
+    const newPositionX = screen.width * 0.14;
+    const newPositionY = -screen.height * 1.12;
+    setPositionHandler( { x: newPositionX, y: newPositionY } );
+    const newWidth = screen.width * 0.85;
+    const newHeight = screen.height * 0.8;
+    setSizeHandler( {
+      width: newWidth,
+      height: newHeight,
+    } );
+
+    const chatWindowElement = getChatwindowElement();
     setMaximizing( true );
     setTimeout( () => {
       setMaximizing( false );
       setIsMaximized( true );
-      console.log( 'maximizeChatWindow ===> ', chatWindowElement );
       if ( chatWindowElement ) {
         chatWindowElement.removeAttribute( 'style' );
         chatWindowElement.style.transform = 'translate(0px, 0px)';
       }
       setSettings( {
         chatMaximized: true,
-        x: 0,
-        y: -settingsDefaultValues.x,
-        width: screen.width,
-        height: screen.height,
+        x: newPositionX,
+        y: newPositionY,
+        width: newWidth,
+        height: newHeight,
       } );
     }, 1000 );
-  }
+  };
 
   function reduceWindow() {
     const settingsDefaultValues = getSettingDefaultValues();
@@ -132,14 +169,21 @@ export default function ChatProvider( {
     setTimeout( () => {
       setReducing( false );
       setIsMaximized( false );
-      const newSettings = {
-        chatMaximized: false,
+      setSettings( {
+        ...settings,
         x: settingsDefaultValues.x,
         y: settingsDefaultValues.y,
         width: settingsDefaultValues.width,
         height: settingsDefaultValues.height,
-      };
-      setSettings( newSettings );
+      } );
+      setSizeHandler( {
+        width: settingsDefaultValues.width,
+        height: settingsDefaultValues.height,
+      } );
+      setPositionHandler( {
+        x: settingsDefaultValues.x,
+        y: settingsDefaultValues.y,
+      } );
     }, 1000 );
   }
 
@@ -205,6 +249,11 @@ export default function ChatProvider( {
         sendMessage,
         setChatSetting,
         chatSetting,
+        position,
+        setPosition: setPositionHandler,
+        chatRef,
+        size,
+        setSize: setSizeHandler,
       } }>
       { children }
     </ChatContext.Provider>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn, getScreenBottomEdge } from '@/lib/utils';
-import { useChat } from '@/Providers/ChatProvider';
+import { SizeType, useChat } from '@/Providers/ChatProvider';
 import Dialog from '@/Components/Chat/Convo/Dialog';
 import MessageBox from './MessageBox/MessageBox';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
@@ -13,16 +13,26 @@ import { usePage } from '@/Providers/PageProvider';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import { DraggableData, Rnd, RndDragCallback } from 'react-rnd';
 import { DraggableEvent } from 'react-draggable';
+import { ResizeDirection } from 're-resizable';
 
 const unecessaryResizeHandlerStyles: React.CSSProperties = {
   display: 'none',
 };
 
 export default function ChatContainer() {
-  const [ position, setPosition ] = useState< { x?: number; y?: number } | undefined >();
-  const chatRef: React.LegacyRef< Rnd > = useRef( null );
   const windowRef = useRef< HTMLDivElement >( null );
-  const { minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
+  const {
+    minimizing,
+    expanding,
+    maximizing,
+    reducing,
+    isMaximized,
+    position,
+    setPosition,
+    chatRef,
+    size,
+    setSize,
+  } = useChat();
   const { settings, setSettings } = useClientSettings();
   const { conversation, chatSetting } = useChat();
   const [ isHovering, setIsHovering ] = useState( false );
@@ -46,6 +56,8 @@ export default function ChatContainer() {
 
   const onDrag = ( event: MouseEvent, data: { x?: number; y?: number } ) => {
     event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     const contentEl = document.getElementById( 'wpbody-content' );
     if ( ! contentEl ) return;
 
@@ -55,7 +67,7 @@ export default function ChatContainer() {
     const contentRect = contentEl.getBoundingClientRect();
     const chatRect = chatEl.getBoundingClientRect();
 
-    const leftLimit = contentRect.left + 30;
+    const leftLimit = contentRect.left + 5;
     const topLimit = contentRect.top + 5;
     const rightLimit = contentRect.right - 15;
     const bottomLimit = getScreenBottomEdge() - 5;
@@ -84,7 +96,7 @@ export default function ChatContainer() {
       outOfBound = true;
     }
     if ( outOfBound )
-      chatRef?.current?.draggable.setState( state => ({...state, dragged: false}))
+      chatRef?.current?.draggable.setState( ( state: any ) => ( { ...state, dragged: false } ) );
     setPosition( { x: data.x, y: data.y } );
   };
 
@@ -96,6 +108,18 @@ export default function ChatContainer() {
     } );
   };
 
+  const onResizeStop = (
+    _e: MouseEvent | TouchEvent,
+    _dir: ResizeDirection,
+    _elementRef: HTMLElement,
+  ) => {
+    setSettings( {
+      ...settings,
+      width: ref.style.width,
+      height: ref.style.height,
+    } );
+  };
+
   useEffect( () => {
     window.addEventListener( 'scroll', handleScroll );
 
@@ -104,9 +128,10 @@ export default function ChatContainer() {
     };
   }, [ settings.x, settings.y ] );
 
-  // console.log( `RENDER ===> x=${ position?.x }, y=${ position?.y }`, {current: chatRef.current,} );
+  console.log( 'RENDER ', { position, chatRef } );
   return (
     <Rnd
+      id="awp-chat-rnd"
       ref={ chatRef }
       default={ {
         y: settings.y,
@@ -115,6 +140,13 @@ export default function ChatContainer() {
         height: settings.height,
       } }
       position={ position as { x: number; y: number } }
+      size={
+        size as {
+          width: string | number;
+          height: string | number;
+        }
+      }
+      onResizeStop={ onResizeStop }
       minHeight={ 500 }
       minWidth={ 400 }
       onDragStop={ onDragStop }
@@ -138,6 +170,7 @@ export default function ChatContainer() {
         ref={ windowRef }
         id="awp-chat"
         className={ cn(
+          'h-full',
           'z-[100000] bg-brand-gray',
           'shadow-xl transition-shadow duration-100 flex flex-col',
           'border-gray-200 rounded-xl opacity-100',
@@ -173,7 +206,7 @@ export default function ChatContainer() {
             </>
           ) }
         </div>
-        <WindowActions isShowing={ isHovering } />
+        <WindowActions isShowing={ isHovering } chatRef={ chatRef } />
         { ! maximizing && ! isMaximized && <DragHandles isShowing={ isHovering } /> }
       </div>
     </Rnd>

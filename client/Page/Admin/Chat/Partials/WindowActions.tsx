@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, LegacyRef } from 'react';
 import CloseIcon from '@material-design-icons/svg/outlined/close.svg?react';
 import MaximizeIcon from '@material-design-icons/svg/outlined/open_with.svg?react';
 import DragIcon from '@material-design-icons/svg/outlined/drag_indicator.svg?react';
@@ -12,6 +12,7 @@ import {
 import { useChat } from '@/Providers/ChatProvider';
 import { getSettingDefaultValues, useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
+import { Rnd } from 'react-rnd';
 
 const Corners = () => {
   return (
@@ -30,24 +31,19 @@ const Corners = () => {
   );
 };
 
-export default function WindowActions( { isShowing = false } ) {
-  const { setSettings } = useClientSettings();
+export default function WindowActions( {
+  isShowing = false,
+  chatRef,
+}: {
+  isShowing: boolean;
+  chatRef: LegacyRef< Rnd >;
+} ) {
+  const { setSettings, settings } = useClientSettings();
   const { toggle, isMaximized, maximizeChatWindow, reduceWindow } = useChat();
   const [ isFirstLoad, setIsFirstLoad ] = useState( false );
-  const [ isDragging, setIsDragging ] = useState( false );
-
+  const isDragging = chatRef?.current?.draggable?.state?.dragging ?? false;
   const onMaximizeClick = () => {
-    const element = getChatwindowElement();
-    maximizeChatWindow( element );
-  };
-
-  const startDrag = ( e: React.MouseEvent< SVGSVGElement, MouseEvent > ) => {
-    setIsDragging( true );
-    if ( isChatWindowMaximized() ) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
+    maximizeChatWindow();
   };
 
   function onDragDoubleClick() {
@@ -57,6 +53,7 @@ export default function WindowActions( { isShowing = false } ) {
     resetChatWindowPosition();
     const settingsDefaultValues = getSettingDefaultValues();
     setSettings( {
+      ...settings,
       x: settingsDefaultValues.x,
       y: settingsDefaultValues.y,
       width: settingsDefaultValues.width,
@@ -89,7 +86,6 @@ export default function WindowActions( { isShowing = false } ) {
       <AgentTooltip content="Drag or double-click to reset window position" side="right">
         <DragIcon
           id="drag-icon"
-          onMouseDown={ startDrag }
           onDoubleClick={ onDragDoubleClick }
           className={ cn( 'handle h-6 w-6 hover:text-amber-500 cursor-move', 'text-gray-400' ) }
         />

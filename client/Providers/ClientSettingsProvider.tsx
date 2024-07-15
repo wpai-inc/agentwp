@@ -1,13 +1,14 @@
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
 import { getStorage, setStorage } from '@/lib/utils';
+import { DEFAULT_CHAT_WINDOW_HEIGHT, DEFAULT_CHAT_WINDOW_WIDTH } from '@/Shared/App';
 
 export type ClientSettings = {
   chatOpen?: boolean;
   chatMaximized?: boolean;
   x: number;
   y: number;
-  width: number;
-  height: number;
+  width: number | string;
+  height: number | string;
 };
 
 type ClientSettingValue = string | boolean | number | null;
@@ -23,8 +24,15 @@ function setLocalStorage( key: keyof ClientSettings, value: ClientSettingValue )
 }
 
 function getLocalStorage( key: keyof ClientSettings, defaultValue: ClientSettingValue = null ) {
-  const value = getStorage( namespace + key, defaultValue );
-  return value ? JSON.parse( value ) : defaultValue;
+  let value;
+  try {
+    value = getStorage( namespace + key, defaultValue );
+    value = value ? JSON.parse( value ) : defaultValue;
+  } catch ( _e ) {
+    // console.log( { _e, key, defaultValue, value } );
+  } finally {
+    return value;
+  }
 }
 
 export const ClientSettingsContext = createContext< ContextProps | undefined >( undefined );
@@ -38,10 +46,10 @@ export const useClientSettings = () => {
 };
 
 export const getSettingDefaultValues = () => ( {
-  x: screen.width - 440,
-  y: -screen.height,
-  width: 400,
-  height: 972,
+  x: screen.width * 0.71,
+  y: -screen.height * 1.13,
+  width: DEFAULT_CHAT_WINDOW_WIDTH,
+  height: DEFAULT_CHAT_WINDOW_HEIGHT,
 } );
 
 export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
