@@ -18,6 +18,14 @@ defined('ABSPATH') || exit;
 
 require_once __DIR__.'/vendor/autoload.php';
 
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$MyUpdateChecker = PucFactory::buildUpdateChecker(
+    'https://plugin.agentwp.com/?action=get_metadata&slug=agent-wp',
+    __FILE__,
+    'agent-wp'
+);
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
