@@ -11,6 +11,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     protected string $pageName;
 
     protected bool $active = true;
+
     private Settings $settings;
 
     public function __construct(protected Main $main)
@@ -95,7 +96,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             <?php
                 echo esc_html__(
                     'Warning: Agent WP will not work properly without JavaScript, please enable it.',
-                    'agent-wp'
+                    'agentwp'
                 );
         ?>
             </div>

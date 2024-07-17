@@ -4,7 +4,7 @@ export default {
   plugins: {
     tailwindcss: {},
     'postcss-prefix-selector': {
-      prefix: 'div[id^="agent-wp"]',
+      prefix: 'div[id^="agentwp"]',
       transform: function (prefix, selector, prefixedSelector, filePath, rule) {
         if (process.env['STORYBOOK_ENV'] === '1') {
           return selector;

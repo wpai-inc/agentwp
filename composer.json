@@ -1,5 +1,5 @@
 {
-    "name": "wpai/agent-wp",
+    "name": "wpai/agentwp",
     "description": "Adds a AI Agent to your WordPress installation.",
     "license": "GPL2",
     "autoload": {

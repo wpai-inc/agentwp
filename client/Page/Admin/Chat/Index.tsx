@@ -16,7 +16,7 @@ import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { InputSelectProvider } from '@/Providers/InputSelectProvider';
 
-const rootElement = document.getElementById('agent-wp-admin-chat');
+const rootElement = document.getElementById('agentwp-admin-chat');
 
 declare const agentwp_settings: PageData;
 

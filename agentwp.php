@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Agent WP
+ * Plugin Name: AgentWP
  * Plugin URI: https://codewp.ai
  * Description: Adds a AI Agent to your WordPress installation.
  * Version: 0.1.0
@@ -9,7 +9,7 @@
  * Author URI: https://codewp.ai
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: agent-wp
+ * Text Domain: agentwp
  * Domain Path: /languages
  * Requires at least: 6.4
  * Requires PHP: 7.0
@@ -21,9 +21,9 @@ require_once __DIR__.'/vendor/autoload.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $MyUpdateChecker = PucFactory::buildUpdateChecker(
-    'https://plugin.agentwp.com/?action=get_metadata&slug=agent-wp',
+    'https://plugin.agentwp.com/?action=get_metadata&slug=agentwp',
     __FILE__,
-    'agent-wp'
+    'agentwp'
 );
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
