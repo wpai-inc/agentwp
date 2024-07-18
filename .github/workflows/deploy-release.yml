@@ -37,6 +37,6 @@ jobs:
           switches: -avzr
           path: agentwp.zip
           remote_path: /home/forge/plugin.agentwp.com/packages/
-          remote_host: '165.22.180.128'
+          remote_host: '159.89.86.196'
           remote_user: 'forge'
-          remote_key: ${{ secrets.KEY }}
+          remote_key: ${{ secrets.GH_RSA_SECRET }}
