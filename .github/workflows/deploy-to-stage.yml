@@ -1,0 +1,40 @@
+name: 🐥 Deploy Plugin to WordPress Stage Sandbox
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build plugin
+        run: npm run build-plugin
+
+      - name: rsync plugin sandbox stage
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete --exclude='plugins' --include='plugins/agentwp'
+          path: dist/
+          remote_path: /home/forge/stage.wp.agentwp.com/wp-content/plugins/agentwp/
+          remote_host: '165.22.180.128'
+          remote_user: 'forge'
+          remote_key: ${{ secrets.KEY }}

@@ -1,8 +1,9 @@
-name: 🐥 Deploy Plugin to WordPress Sandbox
+name: 🐥 Release the Plugin to Private Repo
 
 on:
   push:
-    branches: ['main']
+    tags:
+      - 'v*.*.*'
 
 jobs:
   deploy:
@@ -18,6 +19,7 @@ jobs:
           php-version: '8.3'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -29,22 +31,12 @@ jobs:
       - name: Build plugin
         run: npm run build-plugin
 
-      - name: rsync plugin sandbox
+      - name: rsync plugin to production
         uses: burnett01/rsync-deployments@7.0.1
         with:
-          switches: -avzr --delete --exclude='plugins' --include='plugins/agentwp'
-          path: dist/
-          remote_path: /home/forge/wp.agentwp.com/wp-content/plugins/agentwp/
-          remote_host: '165.22.180.128'
-          remote_user: 'forge'
-          remote_key: ${{ secrets.KEY }}
-
-      - name: rsync plugin sandbox stage
-        uses: burnett01/rsync-deployments@7.0.1
-        with:
-          switches: -avzr --delete --exclude='plugins' --include='plugins/agentwp'
-          path: dist/
-          remote_path: /home/forge/stage.wp.agentwp.com/wp-content/plugins/agentwp/
+          switches: -avzr
+          path: agentwp.zip
+          remote_path: /home/forge/plugin.agentwp.com/packages/
           remote_host: '165.22.180.128'
           remote_user: 'forge'
           remote_key: ${{ secrets.KEY }}
