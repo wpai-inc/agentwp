@@ -67,13 +67,13 @@ export const usePosition = ( { ref, calculateFor = 'topLeft' } ) => {
     [ calculateFor ],
   );
 
-  const handleMouseUp = evt => {
+  const handleMouseUp = ( evt: React.MouseEvent< HTMLDivElement > ) => {
     evt.preventDefault();
 
     setIsDragging( false );
   };
 
-  const handleMouseDown = evt => {
+  const handleMouseDown = ( evt: React.MouseEvent< HTMLDivElement > ) => {
     evt.preventDefault();
 
     const { clientX, clientY } = evt;
@@ -145,5 +145,6 @@ export const usePosition = ( { ref, calculateFor = 'topLeft' } ) => {
     handleMouseDown,
     recalculate,
     handleResize,
+    isDragging,
   };
 };

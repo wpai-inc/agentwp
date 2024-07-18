@@ -24,10 +24,17 @@ const Corners = () => {
   );
 };
 
-export default function WindowActions( { show = false } ) {
+export default function WindowActions( {
+  show = false,
+  dragHandler,
+  ...props
+}: {
+  show?: boolean;
+  onMouseEnter?: () => void;
+  dragHandler: ( e: React.MouseEvent< HTMLDivElement > ) => void;
+} ) {
   const { toggle, isMaximized, reduceWindow } = useChat();
   const [ isFirstLoad ] = useState( false );
-  const [ isDragging ] = useState( false );
 
   function handleMaximize() {
     //
@@ -35,16 +42,18 @@ export default function WindowActions( { show = false } ) {
 
   return (
     <div
+      onMouseDown={ dragHandler }
       className={ cn(
         'absolute bg-brand-gray h-20 w-6 top-16 left-0',
         'flex flex-col items-center justify-center gap-2',
         'rounded-bl-lg rounded-tl-lg opacity-0 transition-all duration-300',
         {
           'opacity-100 -translate-x-full': show,
-          'animate-slide-in': show || isDragging,
-          'animate-slide-out': ! show && ! isFirstLoad && ! isDragging,
+          'animate-slide-in': show,
+          'animate-slide-out': ! show && ! isFirstLoad,
         },
-      ) }>
+      ) }
+      { ...props }>
       <AgentTooltip content="Drag or double-click to reset window position" side="right">
         <DragIcon
           id="dragHandle"

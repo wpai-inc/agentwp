@@ -10,7 +10,7 @@ import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 
 export default function ChatContainer() {
   const containerRef = useRef( null );
-  const { position, handleMouseDown, handleResize } = usePosition( {
+  const { position, handleMouseDown, handleResize, isDragging } = usePosition( {
     ref: containerRef,
   } );
   const { open } = useChat();
@@ -33,13 +33,18 @@ export default function ChatContainer() {
         'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000]',
         {
           'opacity-100': true,
+          'user-select-none': isDragging,
           // 'opacity-100': open,
           // 'opacity-0': ! open,
         },
       ) }>
       <ChatTopBar dragHandler={ handleMouseDown } />
       <Conversation />
-      <WindowActions show={ isHovering } />
+      <WindowActions
+        dragHandler={ handleMouseDown }
+        onMouseEnter={ () => setIsHovering( true ) }
+        show={ isHovering || isDragging }
+      />
       <ResizeHandles resizeHandler={ handleResize } />
     </div>
   );
