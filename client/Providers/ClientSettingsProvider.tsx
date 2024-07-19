@@ -2,10 +2,10 @@ import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { getStorage, setStorage } from '@/lib/utils';
 
 export type ClientSettings = {
-  chatOpen?: boolean;
-  chatMaximized?: boolean;
-  x: number;
-  y: number;
+  chatOpen: boolean;
+  chatMaximized: boolean;
+  right: number;
+  bottom: number;
   width: string;
   height: string;
 };
@@ -47,15 +47,14 @@ export const useClientSettings = () => {
 
 export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
   const [ settings, setSettings ] = useState< ClientSettings >( {
-    chatOpen: getLocalStorage( 'chatOpen', false ),
-    chatMaximized: getLocalStorage( 'chatMaximized', false ),
-    x: getLocalStorage( 'x', window.innerWidth - 16 ),
-    y: getLocalStorage( 'y', window.innerHeight - 16 ),
-    width: getLocalStorage( 'width', '400px' ),
-    height: getLocalStorage( 'height', ( 2 * window.innerHeight ) / 3 + 'px' ),
+    chatOpen: getLocalStorage( 'chatOpen', false ) as boolean,
+    chatMaximized: getLocalStorage( 'chatMaximized', false ) as boolean,
+    right: getLocalStorage( 'right', 16 ) as number,
+    bottom: getLocalStorage( 'bottom', 16 ) as number,
+    width: getLocalStorage( 'width', '400px' ) as string,
+    height: getLocalStorage( 'height', 'min(400px, 80vh)' ) as string,
   } );
 
-  console.log( settings );
   useEffect( () => {
     for ( const [ key, value ] of Object.entries( settings ) ) {
       setLocalStorage( key as keyof ClientSettings, value );

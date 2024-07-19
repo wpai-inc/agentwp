@@ -26,12 +26,12 @@ const Corners = () => {
 
 export default function WindowActions( {
   show = false,
-  dragHandler,
+  handleDrag,
   ...props
 }: {
   show?: boolean;
   onMouseEnter?: () => void;
-  dragHandler: ( e: React.MouseEvent< HTMLDivElement > ) => void;
+  handleDrag: ( e: React.MouseEvent< HTMLDivElement > ) => void;
 } ) {
   const { toggle, isMaximized, reduceWindow } = useChat();
   const [ isFirstLoad ] = useState( false );
@@ -42,7 +42,7 @@ export default function WindowActions( {
 
   return (
     <div
-      onMouseDown={ dragHandler }
+      onMouseDown={ handleDrag }
       className={ cn(
         'absolute bg-brand-gray h-20 w-6 top-16 left-0',
         'flex flex-col items-center justify-center gap-2',

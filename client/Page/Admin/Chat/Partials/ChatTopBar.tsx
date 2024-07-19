@@ -12,22 +12,18 @@ import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversation
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import ChatSettings from '../Settings/ChatSettings';
 
-export default function ChatTopBar( {
-  dragHandler,
-}: {
-  dragHandler: ( e: React.MouseEvent< HTMLDivElement > ) => void;
-} ) {
+export default function ChatTopBar( { handleDrag }: { handleDrag: () => void } ) {
   const { setChatSetting } = useChat();
   const { userProfileUrl } = useClient();
 
-  function onUpgradeClick( e: React.FormEvent ) {
+  function onUpgradeClick() {
     setChatSetting( {
       component: <p>Upgrading</p>,
       header: 'Upgrading',
     } );
   }
 
-  function handleHistorySettings( e: React.FormEvent ) {
+  function handleHistorySettings() {
     setChatSetting( {
       component: <History />,
       header: 'History',
@@ -43,7 +39,7 @@ export default function ChatTopBar( {
 
   return (
     <div
-      onMouseDown={ dragHandler }
+      onMouseDown={ handleDrag }
       className={ cn(
         'py-2 px-2 cursor-move border-b border-b-brand-gray-25',
         'flex justify-between',

@@ -1,150 +1,93 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
-type Position = {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
+/**
+ * Position is caculated as the distance of the bottom corner
+ * of the element to the bottom right of the screen
+ */
+type ChatWindowPosition = {
+  right: number;
+  bottom: number;
 };
 
-type DragInfo = {
-  startX: number;
-  startY: number;
-  top: number;
-  left: number;
-  width: number;
-  height: number;
+type ChatWindowSize = {
+  width: string;
+  height: string;
 };
 
 export type ResizeHandler = ( width: number, height: number ) => void;
 
-export const usePosition = ( { ref, calculateFor = 'topLeft' } ) => {
-  const [ dragInfo, setDragInfo ] = useState< DragInfo >();
-  const [ finalPosition, setFinalPosition ] = useState< Position >( {} );
+export const usePosition = ( {
+  chatWindowRef,
+}: {
+  chatWindowRef: React.RefObject< HTMLDivElement >;
+} ) => {
+  /**
+   * State
+   */
+  const { settings, setSettings } = useClientSettings();
   const [ isDragging, setIsDragging ] = useState( false );
+  const [ position, setPosition ] = useState< ChatWindowPosition >( {
+    right: settings.right,
+    bottom: settings.bottom,
+  } );
+  const [ size, setSize ] = useState< ChatWindowSize >( {
+    width: settings.width,
+    height: settings.height,
+  } );
 
-  const handleResize = useCallback(
-    ( width: number, height: number ) => {
-      const { current: draggableElement } = ref;
-
-      if ( ! draggableElement ) {
-        return;
-      }
-
-      const { top, left } = draggableElement.getBoundingClientRect();
-
-      updateFinalPosition( width, height, left, top );
-    },
-    [ ref ],
-  );
-
-  const updateFinalPosition = useCallback(
-    ( width: number, height: number, x: number, y: number ) => {
-      if ( calculateFor === 'bottomRight' ) {
-        setFinalPosition( {
-          x: Math.max(
-            Math.min( window.innerWidth - width, window.innerWidth - ( x + width ) ),
-            0,
-          ),
-          y: Math.max(
-            Math.min( window.innerHeight - height, window.innerHeight - ( y + height ) ),
-            0,
-          ),
-          w: width,
-          h: height,
-        } );
-
-        return;
-      }
-
-      setFinalPosition( {
-        x: Math.min( Math.max( 0, x ), window.innerWidth - width ),
-        y: Math.min( Math.max( 0, y ), window.innerHeight - height ),
-        w: width,
-        h: height,
-      } );
-    },
-    [ calculateFor ],
-  );
-
-  const handleMouseUp = ( evt: React.MouseEvent< HTMLDivElement > ) => {
-    evt.preventDefault();
-
-    setIsDragging( false );
-  };
-
-  const handleMouseDown = ( evt: React.MouseEvent< HTMLDivElement > ) => {
-    evt.preventDefault();
-
-    const { clientX, clientY } = evt;
-    const { current: draggableElement } = ref;
-
-    if ( ! draggableElement ) {
-      return;
-    }
-
-    const { top, left, width, height } = draggableElement.getBoundingClientRect();
-
-    setIsDragging( true );
-    setDragInfo( {
-      startX: clientX,
-      startY: clientY,
-      top,
-      left,
-      width,
-      height,
-    } );
-  };
-
-  const handleMouseMove = useCallback(
-    evt => {
-      const { current: draggableElement } = ref;
-
-      if ( ! isDragging || ! draggableElement ) return;
-
-      evt.preventDefault();
-
-      const { clientX, clientY } = evt;
-
-      const position = {
-        x: dragInfo.startX - clientX,
-        y: dragInfo.startY - clientY,
-      };
-
-      const { top, left, width, height } = dragInfo;
-
-      updateFinalPosition( width, height, left - position.x, top - position.y );
-    },
-    [ isDragging, dragInfo, ref, updateFinalPosition ],
-  );
-
-  const recalculate = ( width: number, height: number ) => {
-    const { current: draggableElement } = ref;
-    const {
-      top,
-      left,
-      width: boundingWidth,
-      height: boundingHeight,
-    } = draggableElement.getBoundingClientRect();
-
-    updateFinalPosition( width ?? boundingWidth, height ?? boundingHeight, left, top );
-  };
-
+  /**
+   * Mouse Handler Listeners
+   */
   useEffect( () => {
-    document.addEventListener( 'mousemove', handleMouseMove );
+    document.addEventListener( 'mousemove', handleDrag );
     document.addEventListener( 'mouseup', handleMouseUp );
+    document.addEventListener( 'mousedown', handleMouseDown );
 
     return () => {
-      document.removeEventListener( 'mousemove', handleMouseMove );
+      document.removeEventListener( 'mousemove', handleDrag );
       document.removeEventListener( 'mouseup', handleMouseUp );
+      document.removeEventListener( 'mousedown', handleMouseDown );
     };
-  }, [ handleMouseMove ] );
+  }, [ handleDrag, handleMouseUp ] );
+
+  /**
+   * Persist to local settings
+   */
+  useEffect( () => setSettings( settings => ( { ...settings, ...position } ) ), [ position ] );
+
+  function handleMouseUp() {
+    setIsDragging( false );
+  }
+
+  function handleMouseDown() {
+    setIsDragging( true );
+  }
+
+  function handleDrag( e ) {
+    e.preventDefault();
+    if ( isDragging ) {
+      console.log( 'handleDrag' );
+      trackPosition();
+    }
+  }
+
+  function trackPosition() {
+    if ( chatWindowRef?.current ) {
+      const { top, left, width, height } = chatWindowRef.current.getBoundingClientRect();
+
+      console.log( 'topPOS', top );
+      setPosition( {
+        right: Math.max( window.innerWidth - left - width, 0 ),
+        bottom: Math.max( window.innerHeight - top - height, 0 ),
+      } );
+    }
+  }
 
   return {
-    position: finalPosition,
-    handleMouseDown,
-    recalculate,
-    handleResize,
+    position,
+    size,
+    handleDrag,
     isDragging,
   };
 };
