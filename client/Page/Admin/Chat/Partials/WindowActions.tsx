@@ -31,7 +31,7 @@ export default function WindowActions( {
 }: {
   show?: boolean;
   onMouseEnter?: () => void;
-  handleDrag: ( e: React.MouseEvent< HTMLDivElement > ) => void;
+  handleDrag: ( e: MouseEvent ) => void;
 } ) {
   const { toggle, isMaximized, reduceWindow } = useChat();
   const [ isFirstLoad ] = useState( false );

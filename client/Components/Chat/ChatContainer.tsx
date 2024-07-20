@@ -8,7 +8,7 @@ import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 
 export default function ChatContainer() {
   const containerRef = useRef< HTMLDivElement >( null );
-  const { position, size, handleDrag, isDragging } = usePosition( {
+  const { position, size, onDrag, isDragging } = usePosition( {
     chatWindowRef: containerRef,
   } );
   const [ isHovering, setIsHovering ] = useState( false );
@@ -31,10 +31,10 @@ export default function ChatContainer() {
           'user-select-none': isDragging,
         },
       ) }>
-      <ChatTopBar handleDrag={ handleDrag } />
+      <ChatTopBar handleDrag={ onDrag } />
       <Conversation />
       <WindowActions
-        handleDrag={ handleDrag }
+        handleDrag={ onDrag }
         onMouseEnter={ () => setIsHovering( true ) }
         show={ isHovering || isDragging }
       />

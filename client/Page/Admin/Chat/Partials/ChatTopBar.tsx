@@ -12,7 +12,7 @@ import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversation
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import ChatSettings from '../Settings/ChatSettings';
 
-export default function ChatTopBar( { handleDrag }: { handleDrag: () => void } ) {
+export default function ChatTopBar( { handleDrag }: { handleDrag: ( e: MouseEvent ) => void } ) {
   const { setChatSetting } = useChat();
   const { userProfileUrl } = useClient();
 

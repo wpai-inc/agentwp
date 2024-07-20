@@ -87,6 +87,7 @@ export default function ChatProvider( {
 
   function toggle() {
     setOpen( prev => ! prev );
+    setSettings( settings => ( { ...settings, chatOpen: ! settings.chatOpen } ) );
   }
 
   function maximizeChatWindow( chatWindowElement ) {
