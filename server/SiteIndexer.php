@@ -3,7 +3,6 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Jobs\SiteIndexerJob;
 use WpAi\AgentWp\Services\Cache;
 
 class SiteIndexer implements Registrable
@@ -28,13 +27,7 @@ class SiteIndexer implements Registrable
             $cache = new Cache('site_data', SiteData::getDebugData());
 
             if ($cache->miss()) {
-                $data = [
-                    'access_token' => $this->main->settings->getAccessToken(),
-                    'data' => json_encode($cache->getData())
-                ];
-
-                $job = new SiteIndexerJob();
-                $job->data($data)->dispatch();
+                $this->main->client()->indexSite(json_encode($cache->getData()));
             }
         }
     }
