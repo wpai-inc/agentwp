@@ -3,7 +3,13 @@ import { useStream } from '@/Providers/StreamProvider';
 import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useAdminRoute } from './AdminRouteProvider';
-import { WriteToEditor } from '@/Services/WriteToEditor';
+
+export type StoreAgentResponse = {
+  status: string;
+  data: {
+    results: any[];
+  };
+};
 
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamClosed, startStreamFromRequest } = useStream();
@@ -12,10 +18,14 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { client } = useClient();
 
   useEffect( () => {
-    if ( currentAction && streamClosed && currentAction.action ) {
-      executeAndContinueAction( currentAction, currentUserRequestId ).then( r =>
-        console.log( 'executeAndContinueAction', currentAction.action.ability ),
-      );
+    if ( currentAction && streamClosed ) {
+      if ( currentAction.action ) {
+        executeAndContinueAction( currentAction, currentUserRequestId );
+        return;
+      }
+      if ( currentAction.final && ! currentAction.hasExecuted ) {
+        startStreamFromRequest( currentUserRequestId );
+      }
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
 
@@ -25,12 +35,12 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
       aa.hasExecuted = true;
     }
 
-    continueActionStream( reqId, aa );
+    await continueActionStream( reqId, aa );
   }
 
-  function continueActionStream( reqId: string | null, aa: AgentAction ) {
+  async function continueActionStream( reqId: string | null, aa: AgentAction ) {
     if ( reqId && ! aa.final && aa.hasExecuted ) {
-      startStreamFromRequest( reqId );
+      await startStreamFromRequest( reqId );
     }
   }
 
@@ -64,6 +74,9 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
           status: 'success',
         } );
         window.location.href = aa.action.url;
+        return new Promise( () => {
+          /* never resolve to stop further execution */
+        } );
         break;
       case 'message':
         await client.storeAgentResult( aa.id, {
@@ -71,6 +84,11 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         } );
         break;
       case 'write_to_editor':
+        await client.storeAgentResult( aa.id, {
+          status: 'success',
+        } );
+        break;
+      case 'write_to_input':
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );

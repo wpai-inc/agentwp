@@ -3,6 +3,7 @@
 export type PageData = {
   home_url: string;
   plugin_url: string;
+  settings_page: string;
   admin_route: string;
   nonce: string;
   wp_rest_nonce: string;
@@ -42,11 +43,30 @@ export type AgentWpUser = {
 };
 
 export type BlockType = {
-  blockName: string;
-  attrs: any;
-  content: string;
+  name: string;
+  clientId: string;
+  attributes: {
+    content?: string;
+  };
   innerBlocks?: BlockType[];
   status?: string;
   valid?: boolean;
-  clientId?: string;
+};
+
+export type GutenbergStreamType = {
+  content: BlockType[];
+  summary: string;
+};
+
+type selectedInputType = {
+  inputPath: string;
+  inputLabel: string;
+  inputName: string | null;
+  inputId: string | null;
+  inputValue: string | null;
+};
+
+type streamableFieldType = {
+  type: string;
+  data: selectedInputType | null;
 };

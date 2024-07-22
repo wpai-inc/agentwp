@@ -16,13 +16,6 @@ export default function ChatTopBar( { handleDrag }: { handleDrag: ( e: MouseEven
   const { setChatSetting } = useChat();
   const { userProfileUrl } = useClient();
 
-  function onUpgradeClick() {
-    setChatSetting( {
-      component: <p>Upgrading</p>,
-      header: 'Upgrading',
-    } );
-  }
-
   function handleHistorySettings() {
     setChatSetting( {
       component: <History />,
@@ -39,17 +32,17 @@ export default function ChatTopBar( { handleDrag }: { handleDrag: ( e: MouseEven
 
   return (
     <div
-      onMouseDown={ handleDrag }
+      onMouseDown={ (e) => handleDrag(e.nativeEvent) }
       className={ cn(
         'py-2 px-2 cursor-move border-b border-b-brand-gray-25',
         'flex justify-between',
       ) }>
       <div className="flex h-8 items-center gap-2">
         <Logo className="h-full" />
-        <Badge variant="primary">Free</Badge>
+        {/* <Badge variant="primary">Free</Badge>
         <Badge onClick={ onUpgradeClick } className="cursor-pointer">
           Upgrade
-        </Badge>
+        </Badge> */}
       </div>
       <div className="flex items-center gap-1 text-gray-900 hover:text-black">
         <AgentTooltip content="New conversation">

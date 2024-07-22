@@ -1,11 +1,11 @@
 import ActionContainer from './ActionContainer';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
-import IconQuery from '@material-design-icons/svg/outlined/query_stats.svg?react';
+import IconEdit from '@material-design-icons/svg/outlined/edit.svg?react';
 
 export default function ActionWriteToEditor( { hasExecuted, action }: AgentAction ) {
   return (
-    <ActionContainer pending={ ! hasExecuted } icon={ <IconQuery /> }>
-      Content updated { action.ability }...
+    <ActionContainer pending={ ! hasExecuted } icon={ <IconEdit /> }>
+      Content updated
     </ActionContainer>
   );
 }

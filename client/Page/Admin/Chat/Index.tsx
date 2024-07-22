@@ -14,17 +14,18 @@ import { ClientProvider } from '@/Providers/ClientProvider';
 import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
+import { InputSelectProvider } from '@/Providers/InputSelectProvider';
 
-const rootElement = document.getElementById( 'agent-wp-admin-chat' );
+const rootElement = document.getElementById('agentwp-admin-chat');
 
 declare const agentwp_settings: PageData;
 
-if ( rootElement ) {
-  const root = ReactDOM.createRoot( rootElement );
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <PageProvider page={ agentwp_settings }>
-        <NotificationsProvider>
+      <NotificationsProvider>
+        <PageProvider page={agentwp_settings}>
           <App>
             <ErrorProvider>
               <AdminRouteProvider>
@@ -34,9 +35,11 @@ if ( rootElement ) {
                       <UserRequestsProvider>
                         <StreamProvider>
                           <ActionListenerProvider>
-                            <ChatProvider>
-                              <Chat />
-                            </ChatProvider>
+                            <InputSelectProvider>
+                              <ChatProvider>
+                                <Chat />
+                              </ChatProvider>
+                            </InputSelectProvider>
                           </ActionListenerProvider>
                         </StreamProvider>
                       </UserRequestsProvider>
@@ -46,11 +49,11 @@ if ( rootElement ) {
               </AdminRouteProvider>
             </ErrorProvider>
           </App>
-        </NotificationsProvider>
-      </PageProvider>
+        </PageProvider>
+      </NotificationsProvider>
     </React.StrictMode>,
   );
 } else {
   // Handle the case where the root element is not found
-  console.error( 'Root element not found' );
+  console.error('Root element not found');
 }

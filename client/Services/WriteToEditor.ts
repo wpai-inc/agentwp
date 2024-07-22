@@ -1,152 +1,140 @@
 declare const wp: any;
 import { parse } from 'partial-json';
 
-import { type BlockType } from '@/Types/types';
+import { type BlockType, GutenbergStreamType } from '@/Types/types';
 
 export function WriteToEditor( content: string, previousContent: BlockType[] ) {
   try {
     if ( content ) {
-      const newContent = parse( content ) as BlockType[];
-      console.log( 'newContent', newContent );
+      console.log( 'Writing to content' );
+      const updatedBlocks = parse( content ) as GutenbergStreamType;
+      if ( ! updatedBlocks.content ) {
+        console.info( 'No content to write...' );
+        return;
+      }
+      const blocksCount = updatedBlocks.content.length;
+      const key = blocksCount - 1;
+      const block = updatedBlocks.content[ key ] || {};
 
-      const blocksCount = newContent.length;
+      block.status = previousContent[ key ]?.status || 'initial';
+      block.clientId = previousContent[ key ]?.clientId || '';
+      block.valid = previousContent[ key ]?.valid || undefined;
 
-      newContent.forEach( ( block: BlockType, key: number ) => {
-        // >>>>>
-        block.status = previousContent[ key ]?.status || 'initial';
-        block.clientId = previousContent[ key ]?.clientId || '';
-        block.valid = previousContent[ key ]?.valid || undefined;
-        const { blockName, content, status, innerBlocks } = block;
+      // validate name, if the name is not valid, skip
+      if ( ! block.name || ! wp.blocks.getBlockType( block.name ) ) {
+        console.info( 'Skipping... the block name is not valid...', block.name );
+        return;
+      }
+      updatedBlocks.content[ key ].valid = true;
 
-        // Skip if block is already done
-        if ( status === 'done' ) {
-          return;
-        }
-
-        // Insert block if the AI is already streaming the next block and status is not yet DONE
-        // TODO: Also check this on stream end
-        if ( key === blocksCount - 2 ) {
-          if ( block.status !== 'done' ) {
-            if ( block.valid === true ) {
-              const prevBlock = updateBlock( block );
-              prevBlock.clientId;
-            } else {
-              newContent[ blocksCount - 2 ].valid = false;
+      // Insert the block and the status ready
+      if ( ! block.clientId ) {
+        insertBlock( block ).then( clientId => {
+          updatedBlocks.content[ key ].clientId = clientId;
+          updatedBlocks.content[ key ].status = 'ready';
+          // console.log( 'Block Inserted', key, updatedBlocks[ key ] );
+        } );
+      } else if (
+        block.attributes?.content &&
+        block.attributes?.content !== previousContent[ key ]?.attributes?.content
+      ) {
+        updatedBlocks.content[ key ].status = 'updating_content';
+        if ( ! block.clientId ) {
+          insertBlock( block ).then( clientId => {
+            updatedBlocks.content[ key ].clientId = clientId;
+          } );
+        } else {
+          updateBlockContent( block ).then( clientId => {
+            if ( clientId ) {
+              updatedBlocks.content[ key ].clientId = clientId;
             }
-            newContent[ blocksCount - 2 ].status = 'done';
-          }
+          } );
         }
-
-        // validate blockName, if the blockName is not valid, skip
-        if ( ! blockName || ! wp.blocks.getBlockType( blockName ) ) {
-          return;
+        // console.log( 'Block Content Updated', key, updatedBlocks[ key ] );
+      } else if (
+        block.innerBlocks &&
+        block.innerBlocks?.length > 0 &&
+        JSON.stringify( block.innerBlocks ) !==
+          JSON.stringify( previousContent[ key ]?.innerBlocks )
+      ) {
+        updatedBlocks.content[ key ].status = 'updating_inner_blocks';
+        if ( ! block.clientId ) {
+          insertBlock( block ).then( clientId => {
+            updatedBlocks.content[ key ].clientId = clientId;
+          } );
+        } else {
+          updateBlockInnerBlocks( block ).then( clientId => {
+            if ( clientId ) {
+              updatedBlocks.content[ key ].clientId = clientId;
+            }
+          } );
         }
-        newContent[ key ].valid = true;
-
-        // Insert the block and the status ready
-        if ( ! newContent[ key ].clientId ) {
-          newContent[ key ].clientId = insertBlock( block );
-          newContent[ key ].status = 'ready';
-        }
-
-        if ( content && content !== previousContent[ key ]?.content ) {
-          newContent[ key ].status = 'updating_content';
-          if ( ! block.clientId ) {
-            newContent[ key ].clientId = insertBlock( block );
-          } else {
-            updateBlockContent( block );
-          }
-        }
-        if (
-          innerBlocks &&
-          innerBlocks?.length > 0 &&
-          JSON.stringify( innerBlocks ) !== JSON.stringify( previousContent[ key ]?.innerBlocks )
-        ) {
-          newContent[ key ].status = 'updating_inner_blocks';
-          if ( ! block.clientId ) {
-            newContent[ key ].clientId = insertBlock( block );
-          } else {
-            updateBlockInnerBlocks( block );
-          }
-        }
-      } );
-      return newContent;
+        // console.log( 'Block Inner Blocks Updated', key, updatedBlocks[ key ] );
+      }
+      // } );
+      return updatedBlocks;
     }
   } catch ( error ) {
-    console.error( 'Error writing to editor', error );
+    console.info( 'Error writing to editor', error );
   }
 }
 
-function insertBlock( block: BlockType ) {
-  console.log( 'insert block', block );
-  console.log(
-    'wp.blocks.getBlockType( block.blockName',
-    wp.blocks.getBlockType( block.blockName ),
-  );
+export async function CleanGutenbergContent() {
+  try {
+    const blocks = wp.data.select( 'core/block-editor' ).getBlocks();
+    if ( blocks && blocks.length > 0 ) {
+      await wp.data
+        .dispatch( 'core/block-editor' )
+        .removeBlocks( blocks.map( block => block.clientId ) );
+    }
+  } catch ( error ) {
+    console.info( 'Error cleaning content', error );
+  }
+}
+
+async function insertBlock( block: BlockType ) {
+  if ( block.clientId ) {
+    return;
+  }
 
   const { dispatch } = wp.data;
-  const { blockName, attrs, content } = block;
-
-  // Create block attributes object
-  const blockAttrs = attrs || {};
+  const { name, attributes } = block;
 
   // Create block with content
-  const blockContent = wp.blocks.createBlock( blockName, {
-    ...blockAttrs,
-    content: content || '',
-  } );
+  const newBlock = wp.blocks.createBlock( name, attributes );
 
   // Insert block into editor
-  dispatch( 'core/block-editor' ).insertBlocks( blockContent );
+  await dispatch( 'core/block-editor' ).insertBlocks( newBlock );
 
-  return blockContent.clientId;
+  return newBlock.clientId;
 }
 
-function updateBlockContent( block: BlockType ) {
+async function updateBlockContent( block: BlockType ) {
   if ( ! block.clientId ) {
-    return '';
+    return;
   }
-  console.log( 'Updating block content', block );
   const { dispatch } = wp.data;
-
-  // Update block content
-  const updatedBlock = dispatch( 'core/block-editor' ).updateBlockAttributes( block.clientId, {
-    ...block,
-  } );
-  console.log( 'Updated block content', updatedBlock );
-  return updatedBlock;
+  await dispatch( 'core/block-editor' ).updateBlockAttributes( block.clientId, block.attributes );
+  return block.clientId;
 }
 
-function updateBlock( block: BlockType ) {
+async function updateBlockInnerBlocks( block: BlockType ) {
   if ( ! block.clientId ) {
     return '';
   }
   const { dispatch } = wp.data;
-  // Update block content
-  const updatedBlock = dispatch( 'core/block-editor' ).updateBlockAttributes( block.clientId, {
-    ...block,
-  } );
-  console.log( 'Updated block', updatedBlock );
-
-  return updatedBlock;
-}
-
-const createBlocksFromObject = blockObject => {
-  const { blockName, attrs, innerBlocks, content } = blockObject;
-  const innerBlocksCreated = innerBlocks ? innerBlocks.map( createBlocksFromObject ) : [];
-  return wp.data.createBlock( blockName, attrs, content ? { content } : {}, innerBlocksCreated );
-};
-
-function updateBlockInnerBlocks( block: BlockType ) {
-  if ( ! block.clientId ) {
-    return '';
+  try {
+    // Create inner blocks
+    const theInnerBlocks = wp.blocks.createBlocksFromInnerBlocksTemplate( block.innerBlocks );
+    if ( theInnerBlocks ) {
+      // Create new block with inner blocks
+      const newBlock = wp.blocks.createBlock( block.name, block.attributes || {}, theInnerBlocks );
+      // Replace the block with the new block
+      await dispatch( 'core/block-editor' ).replaceBlocks( block.clientId, newBlock );
+      // Return the new block clientId
+      return newBlock.clientId;
+    }
+  } catch ( error: any ) {
+    console.error( 'Skipping... the block is incomplete...', error.message );
   }
-  const { dispatch } = wp.data;
-  // Update block content
-  const newBlocks = [ block ].map( createBlocksFromObject );
-
-  const updatedBlock = dispatch( 'core/block-editor' ).replaceBlocks( block.clientId, newBlocks );
-  console.log( 'Replace Inner Blocks', updatedBlock );
-
-  return updatedBlock;
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import { useStream } from '@/Providers/StreamProvider';
@@ -7,11 +7,16 @@ import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?re
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import Commands from '../Commands/Commands';
 import { AgentTooltip } from '@/Components/ui/tooltip';
+import { usePage } from '@/Providers/PageProvider';
+import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
+import { useInputSelect } from '@/Providers/InputSelectProvider';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting } = useChat();
+  const { setSelectedInput } = useInputSelect();
   const { streamClosed } = useStream();
   const [ message, setMessage ] = useState( '' );
+  const { page } = usePage();
   const [ keyUpEvent, setKeyUpEvent ] = useState<
     React.KeyboardEvent< HTMLTextAreaElement > | undefined
   >();
@@ -21,7 +26,7 @@ export default function MessageBox() {
       sendMessage( msg );
       setMessage( '' );
     },
-    [ sendMessage, message ],
+    [ sendMessage ],
   );
 
   function submit( e: React.FormEvent< HTMLFormElement > ) {
@@ -41,7 +46,9 @@ export default function MessageBox() {
 
   function onSettingsClick( e: React.FormEvent ) {
     e.preventDefault();
-    setChatSetting( { component: <p>Settings</p>, header: 'Settings' } );
+    if ( page.onboarding_completed && page.agentwp_access ) {
+      setChatSetting( { component: <ChatSettings />, header: 'Settings' } );
+    }
   }
 
   return (
@@ -49,11 +56,13 @@ export default function MessageBox() {
       <Commands onMessageBoxKeyUp={ keyUpEvent } onSetMessage={ setMessage } message={ message } />
       <textarea
         onChange={ e => setMessage( e.target.value ) }
+        onFocus={ () => setSelectedInput( null ) }
         value={ message }
         className="h-24 w-full resize-none p-2 text-base"
         placeholder="Message..."
         onKeyDown={ handleKeyDown }
         onKeyUp={ handleKeyUp }
+        disabled={ ! page.onboarding_completed && ! page.agentwp_access }
       />
       <div className="flex items-center justify-between">
         <AgentTooltip content="Conversation Settings">
@@ -62,6 +71,7 @@ export default function MessageBox() {
             onClick={ onSettingsClick }
             variant="ghost"
             size="icon"
+            disabled={ ! page.onboarding_completed && ! page.agentwp_access }
             className="text-brand-gray-50 hover:bg-inherit">
             <TuneIcon className="h-6 w-6" />
           </Button>
@@ -69,7 +79,7 @@ export default function MessageBox() {
         <Button
           type="submit"
           className={ cn( 'rounded bg-brand-primary px-2' ) }
-          disabled={ ! streamClosed }>
+          disabled={ ! streamClosed || ! page.onboarding_completed || ! page.agentwp_access }>
           { streamClosed ? <UpArrowIcon /> : 'Pending...' }
         </Button>
       </div>

@@ -12,7 +12,7 @@ export const BarGraphMessage = {
       ability: 'message',
       text: 'A Bar Graph',
       graph: {
-        graphType: 'bar',
+        visualization: 'bar-chart',
         data: [
           { label: '2020', value: 1000 },
           { label: '2021', value: 1500 },
@@ -30,7 +30,7 @@ export const LineGraphMessage = {
       ability: 'message',
       text: 'A Bar Graph',
       graph: {
-        graphType: 'line',
+        visualization: 'line-chart',
         data: [
           { label: '2020', value: 1000 },
           { label: '2021', value: 1500 },
@@ -48,7 +48,7 @@ export const PieGraphMessage = {
       ability: 'message',
       text: 'A Bar Graph',
       graph: {
-        graphType: 'pie',
+        visualization: 'donut-chart',
         data: [
           { label: '2020', value: 1000 },
           { label: '2021', value: 1500 },

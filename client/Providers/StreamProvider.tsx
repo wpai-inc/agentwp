@@ -1,9 +1,12 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useRef, useCallback } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
+import { usePage } from '@/Providers/PageProvider';
+import { useScreen } from '@/Providers/ScreenProvider';
+
 export const StreamContext = createContext< any | undefined >( undefined );
 
 export function useStream() {
@@ -14,30 +17,44 @@ export function useStream() {
   return stream;
 }
 
+const useForceUpdate = () => {
+  const [ , setTick ] = useState( 0 );
+  const update = useCallback( () => {
+    setTick( tick => tick + 1 );
+  }, [] );
+  return update;
+};
+
 export default function StreamProvider( { children }: { children: React.ReactNode } ) {
-  const [ liveAction, setLiveAction ] = useState< AgentAction | null >( null );
+  const { screen } = useScreen();
+  const forceUpdate = useForceUpdate();
+  const liveAction = useRef< AgentAction | null >( null );
   const [ streamClosed, setStreamClosed ] = useState( true );
-  const [ streamCompleted, setStreamCompleted ] = useState( false );
-  const { setCurrentUserRequestId, setCurrentAction } = useUserRequests();
+  const { setCurrentUserRequestId, addActionToCurrentRequest } = useUserRequests();
   const { addErrors } = useError();
   const { client } = useClient();
+  const { page } = usePage();
   const ctrl = new AbortController();
 
   async function startStream( stream_url: string, user_request_id: string ) {
     setCurrentUserRequestId( user_request_id );
-
     resetStream();
 
     try {
       await fetchEventSource( stream_url, {
-        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify( { screen } ),
         headers: {
           'Authorization': 'Bearer ' + client.token,
           'X-WP-AGENT-VERSION': client.agentWpVersion,
+          'X-Wp-Agent-Version': client.agentWpVersion,
+          'X-Wp-User-Id': page.user.ID,
+          'X-Wp-Site-Id': page.site_id,
+          'Content-Type': 'application/json',
         },
         signal: ctrl.signal,
         openWhenHidden: true,
-        onclose: closeStream,
+        onclose: () => setStreamClosed( true ),
         async onopen( response ) {
           if ( response.status > 300 ) {
             throw new Error( `Server responded with: ${ response.status }` );
@@ -48,13 +65,15 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             let aar = JSON.parse( ev.data );
             throw new Error( `Error when processing message: ${ aar }` );
           }
-          if ( ev.event === 'close' ) {
-            setStreamCompleted( true );
+          if ( ev.event === 'close' && liveAction.current ) {
+            addActionToCurrentRequest( user_request_id, liveAction.current );
+            setStreamClosed( true );
             return;
           }
 
           let aa = JSON.parse( ev.data ) as AgentAction;
-          setLiveAction( aa );
+          liveAction.current = aa;
+          forceUpdate();
         },
         onerror( err ) {
           throw err;
@@ -62,7 +81,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       } );
     } catch ( e ) {
       await handleStreamError( e );
-      closeStream();
+      setStreamClosed( true );
     }
   }
 
@@ -78,14 +97,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   function resetStream() {
     setStreamClosed( false );
-    setLiveAction( null );
-  }
-
-  function closeStream() {
-    setStreamClosed( true );
-    if ( streamCompleted && liveAction ) {
-      setCurrentAction( liveAction );
-    }
+    liveAction.current = null;
   }
 
   return (
@@ -93,7 +105,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       value={ {
         startStream,
         startStreamFromRequest,
-        liveAction,
+        liveAction: liveAction.current,
         streamClosed,
       } }>
       { children }

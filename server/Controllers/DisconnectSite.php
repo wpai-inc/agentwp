@@ -11,9 +11,7 @@ class DisconnectSite extends BaseController
     public function disconnect_site(): void
     {
         $this->verifyNonce();
-
-        (new RevokeApiToken($this->main))->revoke();
-        $this->main->settings->delete(['site_id', 'client_id', 'client_secret', 'token', 'verification_key']);
+        $this->main->settings->disconnectSite($this->main);
         $this->respond();
     }
 

@@ -3,7 +3,8 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Factory\AwpClientFactory;
+use WpAi\AgentWp\Services\AwpClient;
+use WpAi\AgentWp\Services\Cache;
 
 class SiteIndexer implements Registrable
 {
@@ -28,26 +29,15 @@ class SiteIndexer implements Registrable
      */
     public function indexSite()
     {
-        if ($siteId = $this->main->siteId()) {
-
+        if ($this->main->siteId()) {
             if (defined('DOING_AJAX') && DOING_AJAX) {
                 return;
             }
 
-            $debug_data = SiteData::getDebugData();
-            $awpClient = AwpClientFactory::create($this->main);
-
-            $data = json_encode($debug_data);
-            $data_hash = md5($data);
-
-            $last_hash = get_option('agentwp_last_hash');
-            if ($last_hash === $data_hash) {
-                return;
+            $cache = new Cache('site_data', SiteData::getDebugData());
+            if ($cache->miss()) {
+                (new AwpClient($this->main, false))->indexSite(json_encode($cache->getData()));
             }
-
-            update_option('agentwp_last_hash', $data_hash, true);
-
-            $awpClient->indexSite($siteId, $data);
         }
     }
 

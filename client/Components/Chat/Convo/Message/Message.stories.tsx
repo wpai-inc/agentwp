@@ -11,7 +11,6 @@ export const SampleUserRequest = {
   },
   args: {
     id: '1',
-    wp_user_id: 1,
     created_at: '2021-10-01T00:00:00',
     human_created_at: '2 hours ago',
     message: 'Can you please change my Store Address to 123 main street?',
@@ -47,7 +46,7 @@ export const SampleUserRequest = {
         action: {
           ability: 'message',
           graph: {
-            graphType: 'bar',
+            visualization: 'bar-chart',
             title: 'Number of Posts Per Month',
             data: [ { label: '2024-04', value: 1 } ],
           },
@@ -68,7 +67,6 @@ export const ActionWithEscalation = {
   },
   args: {
     id: '1',
-    wp_user_id: 1,
     created_at: '2021-10-01T00:00:00',
     human_created_at: '2 hours ago',
     message: 'I need an extreme help for someone to code something for me.',

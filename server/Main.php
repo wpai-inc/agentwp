@@ -14,7 +14,7 @@ use WpAi\AgentWp\Services\AwpRestRoute;
  */
 class Main
 {
-    const SLUG = 'agent-wp';
+    const SLUG = 'agentwp';
 
     const PLUGIN_VERSION = '0.1.0';
 
@@ -32,6 +32,8 @@ class Main
 
     public string $pluginUrl;
 
+    public string $settingsPage;
+
     public function __construct(private string $file)
     {
         $this->settings = new Settings();
@@ -39,6 +41,7 @@ class Main
         $this->clientId = $this->settings->client_id;
         add_action('admin_head', [$this, 'pageData']);
         $this->pluginUrl = plugin_dir_url($this->file);
+        $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
     }
 
     public function buildPath(): string
@@ -109,6 +112,7 @@ class Main
         $agentwp_settings = [
             'home_url' => home_url(),
             'plugin_url' => $this->pluginUrl,
+            'settings_page' => $this->settingsPage,
             'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
             'rest_route' => rest_url(),
             'admin_route' => admin_url(),
@@ -131,7 +135,7 @@ class Main
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
         <style>
-            body.agent-wp-admin-settings {
+            body.agentwp-admin-settings {
                 background-color: #ffffff;
             }
 

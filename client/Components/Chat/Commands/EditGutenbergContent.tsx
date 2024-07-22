@@ -21,7 +21,7 @@ export default function EditGutenbergContent( {
     // Get the post content
     const postContent = select( 'core/editor' ).getEditedPostContent();
     const postTitle = select( 'core/editor' ).getEditedPostAttribute( 'title' );
-    setScreen( { ...screen, post_content: postContent, post_title: postTitle } );
+    setScreen( { ...screen, post: { post_content: postContent, post_title: postTitle } } );
 
     // You can also set up a subscription to react to changes in the content
     const unsubscribe = wp.data.subscribe( () => {
@@ -29,7 +29,7 @@ export default function EditGutenbergContent( {
       const newTitle = select( 'core/editor' ).getEditedPostAttribute( 'title' );
       if ( newContent === postContent ) return;
 
-      setScreen( { ...screen, post_content: newContent, post_title: newTitle } );
+      setScreen( { ...screen, post: { post_content: newContent, post_title: newTitle } } );
     } );
 
     // Clean up the subscription

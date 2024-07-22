@@ -4,12 +4,12 @@ import Chat from './Chat';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
 
 //👇 This default export determines where your story goes in the story list
-const meta: Meta<typeof Chat> = {
+const meta: Meta< typeof Chat > = {
   component: Chat,
 };
 
 export default meta;
-type Story = StoryObj<typeof Chat>;
+type Story = StoryObj< typeof Chat >;
 
 const sampleRichMessages: UserRequestType[] = [
   {
@@ -34,7 +34,7 @@ const sampleRichMessages: UserRequestType[] = [
           ability: 'message',
           text: "Here's a chart with user growth for the current year",
           graph: {
-            graphType: 'line',
+            visualization: 'line-chart',
             data: [
               { label: 'Jan', value: 300 },
               { label: 'Feb', value: 500 },
@@ -68,7 +68,7 @@ const sampleRichMessages: UserRequestType[] = [
           ability: 'message',
           text: "Here's a chart with user growth for the current year",
           graph: {
-            graphType: 'bar',
+            visualization: 'bar-chart',
             data: [
               { label: 'Jan', value: 300 },
               { label: 'Feb', value: 500 },
@@ -102,7 +102,7 @@ const sampleRichMessages: UserRequestType[] = [
           ability: 'message',
           text: "Here's a chart comparing free vs paid users",
           graph: {
-            graphType: 'pie',
+            visualization: 'donut-chart',
             data: [
               { label: 'Free', value: 300 },
               { label: 'Paid', value: 500 },
