@@ -17,10 +17,12 @@ export const InputSelectContext = createContext< ContextProps | undefined >( und
 
 export const useInputSelect = () => {
   const inputSelect = useContext( InputSelectContext );
-  if ( inputSelect === undefined ) {
-    throw new Error( 'useInputSelect must be used within InputSelectProvider' );
-  }
-  return inputSelect;
+  return (
+    inputSelect ?? {
+      selectedInput: null,
+      setSelectedInput: () => {},
+    }
+  );
 };
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
@@ -34,7 +36,6 @@ export const InputSelectProvider = ( { children }: { children: ReactNode } ) => 
   }, [] );
 
   useEffect( () => {
-    console.log( 'selectedInput', selectedInput );
     if ( selectedInput ) {
       const theScreen = { ...screen, selectedInput };
       if ( selectedInput.type === 'post_content' || selectedInput.type === 'post_title' ) {
