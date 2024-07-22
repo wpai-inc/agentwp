@@ -33,7 +33,7 @@ class SiteIndexer extends \WP_Async_Request implements Registrable
 
             $cache = new Cache('site_data', SiteData::getDebugData());
             if ($cache->miss()) {
-                $this->data(['data' => $cache->data()])->dispatch();
+                $this->data(['data' => json_encode($cache->data())])->dispatch();
             }
         }
     }
@@ -98,6 +98,6 @@ class SiteIndexer extends \WP_Async_Request implements Registrable
      */
     protected function handle()
     {
-        (new AwpClient($this->main, false))->indexSite(json_encode($_POST['data']));
+        (new AwpClient($this->main, false))->indexSite($_POST['data']);
     }
 }

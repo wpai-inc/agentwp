@@ -31,7 +31,7 @@ class IndexSiteSummary extends \WP_Async_Request implements Registrable
             $summarizer = new SiteSummarizer();
 
             if ($summarizer->hasUpdated()) {
-                $this->data(['data' => $summarizer->data()])->dispatch();
+                $this->data(['data' => json_encode($summarizer->data())])->dispatch();
             }
         }
     }
@@ -46,6 +46,6 @@ class IndexSiteSummary extends \WP_Async_Request implements Registrable
      */
     protected function handle()
     {
-        (new AwpClient($this->main, false))->summarizeSite(json_encode($_POST['data']));
+        (new AwpClient($this->main, false))->summarizeSite($_POST['data']);
     }
 }
