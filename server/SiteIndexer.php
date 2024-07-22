@@ -6,8 +6,12 @@ use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Services\AwpClient;
 use WpAi\AgentWp\Services\Cache;
 
-class SiteIndexer implements Registrable
+class SiteIndexer extends \WP_Async_Request implements Registrable
 {
+    protected $prefix = 'agentwp';
+
+    protected $action = 'site_indexer';
+
     public function __construct(private Main $main)
     {
     }
@@ -20,13 +24,6 @@ class SiteIndexer implements Registrable
         add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
     }
 
-    /**
-     * Temporary for demo, terrible performance.
-     * Needs to run intermittently and check for hash changes before sending
-     * Explore: transients or cron jobs
-     * 2024-05-20: Hash check implemented; It will only be sent on admin init if is not an AJAX request
-     * TODO: probably use a cron job to send the data (BUT the cron job can be disabled)
-     */
     public function indexSite()
     {
         if ($this->main->siteId()) {
@@ -36,7 +33,7 @@ class SiteIndexer implements Registrable
 
             $cache = new Cache('site_data', SiteData::getDebugData());
             if ($cache->miss()) {
-                (new AwpClient($this->main, false))->indexSite(json_encode($cache->getData()));
+                $this->data(['data' => $cache->data()])->dispatch();
             }
         }
     }
@@ -94,5 +91,13 @@ class SiteIndexer implements Registrable
         }
 
         return $info;
+    }
+
+    /**
+     * Handle a dispatched request.
+     */
+    protected function handle()
+    {
+        (new AwpClient($this->main, false))->indexSite(json_encode($_POST['data']));
     }
 }
