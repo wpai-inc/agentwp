@@ -144,6 +144,19 @@ export const usePosition = ( {
     ( e: MouseEvent ) => {
       e.preventDefault();
       if ( isResizing && chatWindowRef?.current && mouseStartPos && elementStartPos ) {
+        // Abondon resize if mouse is outside of boundaries
+        const container = chatWindowRef?.current?.parentElement || document.body;
+        const parentRect = container.getBoundingClientRect();
+
+        if (
+          e.clientX > window.innerWidth ||
+          e.clientY > window.innerHeight ||
+          e.clientX < parentRect?.left ||
+          e.clientY < parentRect?.top
+        ) {
+          return;
+        }
+
         const dx = e.clientX - mouseStartPos.x;
         const dy = e.clientY - mouseStartPos.y;
 
@@ -167,7 +180,6 @@ export const usePosition = ( {
             offset.x = dx;
             break;
         }
-
         setSize( {
           width: newWidth,
           height: newHeight,
