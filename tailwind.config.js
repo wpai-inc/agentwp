@@ -4,7 +4,7 @@ module.exports = {
     content: [
         './client/**/*.{ts,tsx}',
     ],
-    // important: 'div[id^="agent-wp"]',
+    // important: 'div[id^="agentwp"]',
     prefix: '',
     theme: {
         fontSize: {

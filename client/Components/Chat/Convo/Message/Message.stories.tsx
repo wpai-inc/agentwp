@@ -46,7 +46,7 @@ export const SampleUserRequest = {
         action: {
           ability: 'message',
           graph: {
-            graphType: 'bar',
+            visualization: 'bar-chart',
             title: 'Number of Posts Per Month',
             data: [ { label: '2024-04', value: 1 } ],
           },

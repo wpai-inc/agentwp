@@ -18,7 +18,7 @@ class ConnectNotice implements Registrable
     private function maybeAddInstallNotice()
     {
         $current_page = $_SERVER['REQUEST_URI'];
-        if (!$this->main->settings->isConnectedToAwp() && strpos($current_page, 'options-general.php?page=agent-wp-admin-settings') === false) {
+        if (! $this->main->settings->isConnectedToAwp() && strpos($current_page, 'options-general.php?page=agentwp-admin-settings') === false) {
             add_action('admin_notices', [$this, 'admin_notice_install']);
         }
     }

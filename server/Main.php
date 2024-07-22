@@ -14,7 +14,7 @@ use WpAi\AgentWp\Services\AwpRestRoute;
  */
 class Main
 {
-    const SLUG = 'agent-wp';
+    const SLUG = 'agentwp';
 
     const PLUGIN_VERSION = '0.1.0';
 
@@ -31,6 +31,7 @@ class Main
     private ?string $clientId;
 
     public string $pluginUrl;
+
     public string $settingsPage;
 
     public function __construct(private string $file)
@@ -40,7 +41,7 @@ class Main
         $this->clientId = $this->settings->client_id;
         add_action('admin_head', [$this, 'pageData']);
         $this->pluginUrl = plugin_dir_url($this->file);
-        $this->settingsPage = admin_url('options-general.php?page=agent-wp-admin-settings');
+        $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
     }
 
     public function buildPath(): string
@@ -60,7 +61,7 @@ class Main
 
     public function asset(?string $path = null): string
     {
-        return $this->url(self::BUILD_DIR . '/' . $path);
+        return $this->url(self::BUILD_DIR.'/'.$path);
     }
 
     public function pluginPath(): string
@@ -70,7 +71,7 @@ class Main
 
     public function path(?string $path = null): string
     {
-        return plugin_dir_path($this->file) . ltrim($path, '/');
+        return plugin_dir_path($this->file).ltrim($path, '/');
     }
 
     public function url(?string $path = null): string
@@ -129,12 +130,12 @@ class Main
             'user' => $current_user,
             'onboarding_completed' => $this->settings->onboarding_completed,
         ];
-    ?>
+        ?>
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
         <style>
-            body.agent-wp-admin-settings {
+            body.agentwp-admin-settings {
                 background-color: #ffffff;
             }
 
