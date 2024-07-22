@@ -3,15 +3,11 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Jobs\SiteSummarizerJob;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
-use WpAi\AgentWp\Services\AwpClient;
 
-class IndexSiteSummary extends \WP_Async_Request implements Registrable
+class IndexSiteSummary implements Registrable
 {
-    protected $prefix = 'agentwp';
-
-    protected $action = 'site_summarizer';
-
     public function __construct(private Main $main)
     {
     }
@@ -30,22 +26,20 @@ class IndexSiteSummary extends \WP_Async_Request implements Registrable
 
             $summarizer = new SiteSummarizer();
 
-            if ($summarizer->hasUpdated()) {
-                $this->data(['data' => $summarizer->data()])->dispatch();
-            }
+//            if ($summarizer->hasUpdated()) {
+                $data = [
+                    'access_token' => $this->main->settings->getAccessToken(),
+                    'data' => json_encode($summarizer->data())
+                ];
+
+                $job = new SiteSummarizerJob();
+                $job->data($data)->dispatch();
+//            }
         }
     }
 
     private function getDataForSummarization(): array
     {
         return ['some sample data'];
-    }
-
-    /**
-     * Handle a dispatched request.
-     */
-    protected function handle()
-    {
-        (new AwpClient($this->main, false))->summarizeSite(json_encode($_POST['data']));
     }
 }
