@@ -6,8 +6,12 @@ use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Services\AwpClient;
 
-class IndexSiteSummary implements Registrable
+class IndexSiteSummary extends \WP_Async_Request implements Registrable
 {
+    protected $prefix = 'agentwp';
+
+    protected $action = 'site_summarizer';
+
     public function __construct(private Main $main)
     {
     }
@@ -27,7 +31,7 @@ class IndexSiteSummary implements Registrable
             $summarizer = new SiteSummarizer();
 
             if ($summarizer->hasUpdated()) {
-                (new AwpClient($this->main, false))->summarizeSite(json_encode($summarizer->data()));
+                $this->data(['data' => $summarizer->data()])->dispatch();
             }
         }
     }
@@ -35,5 +39,13 @@ class IndexSiteSummary implements Registrable
     private function getDataForSummarization(): array
     {
         return ['some sample data'];
+    }
+
+    /**
+     * Handle a dispatched request.
+     */
+    protected function handle()
+    {
+        (new AwpClient($this->main, false))->summarizeSite(json_encode($_POST['data']));
     }
 }
