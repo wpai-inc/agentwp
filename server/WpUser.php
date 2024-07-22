@@ -20,18 +20,16 @@ class WpUser implements Registrable
 
     public function updateUser(): void
     {
-        if($this->main->auth()->hasAccess()){
-            (new AwpClient($this->main))->updateUser();
+        if ($this->main->auth()->hasAccess()) {
+            AwpClient::fromMain($this->main)->updateUser();
         }
-
     }
+
     public function updateUserOnLogin($user_login, $user): void
     {
         $userAuth = new UserAuth($user);
-        if($userAuth->hasAccess()) {
-            (new AwpClient($this->main, false))->setWpUser($user)->updateUser($user->ID);
+        if ($userAuth->hasAccess()) {
+            AwpClient::fromMain($this->main)->setWpUser($user)->updateUser($user->ID);
         }
     }
-
-
 }

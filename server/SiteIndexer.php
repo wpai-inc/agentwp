@@ -3,15 +3,11 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Services\AwpClient;
+use WpAi\AgentWp\Jobs\SiteIndexerJob;
 use WpAi\AgentWp\Services\Cache;
 
-class SiteIndexer extends \WP_Async_Request implements Registrable
+class SiteIndexer implements Registrable
 {
-    protected $prefix = 'agentwp';
-
-    protected $action = 'site_indexer';
-
     public function __construct(private Main $main) {}
 
     public function register()
@@ -30,8 +26,15 @@ class SiteIndexer extends \WP_Async_Request implements Registrable
             }
 
             $cache = new Cache('site_data', SiteData::getDebugData());
+
             if ($cache->miss()) {
-                $this->data(['data' => json_encode($cache->getData())])->dispatch();
+                $data = [
+                    'access_token' => $this->main->settings->getAccessToken(),
+                    'data' => json_encode($cache->getData())
+                ];
+
+                $job = new SiteIndexerJob();
+                $job->data($data)->dispatch();
             }
         }
     }
@@ -89,13 +92,5 @@ class SiteIndexer extends \WP_Async_Request implements Registrable
         }
 
         return $info;
-    }
-
-    /**
-     * Handle a dispatched request.
-     */
-    protected function handle()
-    {
-        (new AwpClient($this->main, false))->indexSite($_POST['data']);
     }
 }

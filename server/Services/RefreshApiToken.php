@@ -20,8 +20,8 @@ class RefreshApiToken
             if (!$refresh_token || !$client_id || !$client_secret) {
                 return null;
             }
-            $awp_client = new AwpClient($this->main);
-            $response = $awp_client->request('POST', $this->main->apiHost() . '/oauth/token', [], json_encode([
+            $response = AwpClient::fromMain($this->main)
+                ->request('POST', $this->main->apiHost() . '/oauth/token', [], json_encode([
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $refresh_token,
                 'client_id' => $this->main->settings->client_id,

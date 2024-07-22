@@ -12,22 +12,37 @@ class AwpClient
 {
     use ClientRequests;
 
+    private Main $main;
+
     private ?string $token = null;
 
     private int $timeout = 15;
 
     private string $agentWpVersion = '0.1-alpha1';
+
     private ?\WP_User $wp_user;
 
-    public function __construct(private Main $main, private $checkUserAccessRights = true)
+    public function __construct()
     {
-        if ( ! $checkUserAccessRights && $access_token = $this->main->settings->getAccessToken()) {
-            $this->setToken($access_token);
-        } elseif ($access_token = $this->main->auth()->getAccessToken()) {
-            $this->setToken($access_token);
-        }
+        $this->main = new Main(__FILE__);
 
         $this->wp_user = wp_get_current_user();
+    }
+
+    public static function fromMain(Main $main, $checkUserAccessRights = true)
+    {
+        $instance = new self();
+        $instance->main = $main;
+
+        if ( ! $checkUserAccessRights && $access_token = $main->settings->getAccessToken()) {
+            $instance->setToken($access_token);
+        } elseif ($access_token = $main->auth()->getAccessToken()) {
+            $instance->setToken($access_token);
+        }
+
+        $instance->wp_user = wp_get_current_user();
+
+        return $instance;
     }
 
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
