@@ -39,14 +39,6 @@ Classes for enabling animations for maximizing, expanding and minimizing
   height: calc( 100vh - 60px );
 }
 
-.expand .minimize-overlay,
-.minimize .minimize-overlay {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  background-color: #fff;
-}
-
 .animate-open-chat-overlay {
   animation-name: open-chat-overlay;
   animation-duration: 0.5s;
@@ -151,15 +143,6 @@ Animations for maximizing, expanding and minimizing
   }
   to {
     height: 90vh;
-  }
-}
-
-@keyframes minimize-overlay {
-  from {
-    background-color: transparent;
-  }
-  to {
-    background-color: #fff;
   }
 }
 

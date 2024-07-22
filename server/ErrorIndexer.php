@@ -76,8 +76,6 @@ class ErrorIndexer implements Registrable
 
     private function sendTheErrors($error_data): void
     {
-        $awpClient = new AwpClient($this->main, false);
-        // only make the request if a token is available
-        $awpClient->indexError(json_encode($error_data));
+        AwpClient::fromMain($this->main, false)->indexError(json_encode($error_data));
     }
 }

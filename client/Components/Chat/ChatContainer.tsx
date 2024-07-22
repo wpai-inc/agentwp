@@ -1,108 +1,57 @@
-import { useEffect, useRef, useState } from 'react';
-import { cn, isChatWindowMaximized, resetChatWindowPosition } from '@/lib/utils';
-import { useChat } from '@/Providers/ChatProvider';
-import Dialog from '@/Components/Chat/Convo/Dialog';
-import MessageBox from './MessageBox/MessageBox';
+import { useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
-import { useClientSettings } from '@/Providers/ClientSettingsProvider';
-import ChatOverlay from '@/Components/Chat/ChatOverlay';
-import DragHandles from '@/Components/Chat/DragHandles/DragHandles';
-import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import LoadingScreen from '@/Components/Chat/LoadingScreen';
-import { usePage } from '@/Providers/PageProvider';
+import Conversation from './Convo/Conversation';
+import { usePosition } from '@/Hooks/position';
+import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 
 export default function ChatContainer() {
-  const windowRef = useRef< HTMLDivElement >( null );
-  const { open, minimizing, expanding, maximizing, reducing, isMaximized } = useChat();
-  const { settings, setSettings } = useClientSettings();
-  const { conversation, chatSetting } = useChat();
+  const containerRef = useRef< HTMLDivElement >( null );
+  const {
+    position,
+    size,
+    onDrag,
+    isDragging,
+    onChatWindowResize,
+    maximizeWindow,
+    isMaximized,
+    restoreWindow,
+  } = usePosition( {
+    chatWindowRef: containerRef,
+  } );
   const [ isHovering, setIsHovering ] = useState( false );
-  const { loadingConversation } = useUserRequests();
-  const { page } = usePage();
-
-  function onMouseEnter() {
-    setIsHovering( true );
-  }
-
-  function onMouseLeave() {
-    setIsHovering( false );
-  }
-
-  useEffect( () => {
-    const windowElement = windowRef.current;
-    if ( windowElement ) {
-      windowElement.style.transform = `translate(${ settings.x }px, ${ settings.y }px)`;
-      windowElement.style.width = settings.width + 'px';
-      windowElement.style.height = settings.height + 'px';
-
-      const resetChatWindow = () => {
-        if ( isChatWindowMaximized() ) {
-          return;
-        }
-        resetChatWindowPosition();
-        setSettings( {
-          x: 0,
-          y: 0,
-          width: null,
-          height: null,
-        } );
-      };
-
-      window.addEventListener( 'resize', resetChatWindow );
-
-      return () => {
-        window.removeEventListener( 'resize', resetChatWindow );
-      };
-    }
-  }, [] );
 
   return (
     <div
-      onMouseEnter={ onMouseEnter }
-      onMouseLeave={ onMouseLeave }
-      ref={ windowRef }
-      id="awp-chat"
+      ref={ containerRef }
+      onMouseEnter={ () => setIsHovering( true ) }
+      onMouseLeave={ () => setIsHovering( false ) }
+      style={ {
+        right: position.right + 'px',
+        bottom: position.bottom + 'px',
+        width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
+        height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
+        transform: `translate(${ size.offset.x }px, ${ size.offset.y }px)`,
+      } }
       className={ cn(
-        'fixed bottom-4 right-10',
-        'h-[90vh] w-[400px]',
-        'z-[100000] bg-brand-gray',
-        'shadow-xl transition-shadow duration-100 flex flex-col',
-        'border-gray-200 rounded-xl opacity-100',
+        'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000]',
         {
-          'w-0 h-0 overflow-hidden border-0': ! open,
-          'minimize': minimizing,
-          'expand': expanding,
-          'maximize shadow-3xl': maximizing,
-          'maximized shadow-3xl': isMaximized,
-          'reduce shadow-xl': reducing,
+          'opacity-100': true,
+          'user-select-none': isDragging,
         },
       ) }>
-      <div className="minimize-overlay"></div>
-      <ChatTopBar />
-      <div className="flex-1 flex flex-col relative overflow-auto">
-        { loadingConversation ? (
-          <LoadingScreen />
-        ) : (
-          <>
-            <Dialog conversation={ conversation } />
-            <div className="relative">
-              <div
-                className={ cn(
-                  'absolute -top-12 right-0 left-0 z-10 h-12 from-brand-gray to-transparent bg-gradient-to-t',
-                ) }></div>
-              <div className="p-1.5">
-                { page.onboarding_completed && page.agentwp_access && <MessageBox /> }
-              </div>
-            </div>
-            { chatSetting && (
-              <ChatOverlay header={ chatSetting?.header }>{ chatSetting?.component }</ChatOverlay>
-            ) }
-          </>
-        ) }
-      </div>
-      <WindowActions isShowing={ isHovering } />
-      { ! maximizing && ! isMaximized && <DragHandles isShowing={ isHovering } /> }
+      <ChatTopBar handleDrag={ onDrag } />
+      <Conversation />
+      <WindowActions
+        handleDrag={ onDrag }
+        onMouseEnter={ () => setIsHovering( true ) }
+        show={ isHovering || isDragging }
+        maximizeWindow={ maximizeWindow }
+        isMaximized={ isMaximized }
+        restoreWindow={ restoreWindow }
+      />
+      <ResizeHandles resizeHandler={ onChatWindowResize } />
     </div>
   );
 }
