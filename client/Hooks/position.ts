@@ -30,12 +30,19 @@ export const usePosition = ( {
 }: {
   chatWindowRef: React.RefObject< HTMLDivElement >;
 } ) => {
+  const chatWindowEl = chatWindowRef.current;
+  const chatWindowContainer = chatWindowEl?.parentElement || document.body;
   /**
    * State
    */
   const { settings, setSettings } = useClientSettings();
   const [ isDragging, setIsDragging ] = useState( false );
   const [ isResizing, setIsResizing ] = useState( false );
+  const [ maximization, setMaximization ] = useState< {
+    isMaximized: boolean;
+    position: ChatWindowPosition;
+    size: ChatWindowSize;
+  } >();
   const [ resizeSide, setResizeSide ] = useState< ResizeSide >();
   const [ mouseStartPos, setMouseStartPos ] = useState< TwoDCoord >();
   const [ elementStartPos, setElementStartPos ] = useState< TwoDCoord >();
@@ -53,18 +60,23 @@ export const usePosition = ( {
    * Calculate boundaries based on parent element and window size
    */
   const calculateBoundaries = useCallback( () => {
-    let maxRight = window.innerWidth;
-    let maxBottom = window.innerHeight;
+    if ( chatWindowContainer && chatWindowEl ) {
+      const parentRect = chatWindowContainer.getBoundingClientRect();
+      const { width, height } = chatWindowEl.getBoundingClientRect();
+      const maxHeight = window.innerHeight - parentRect.top;
+      const maxRight = Math.max( parentRect.width - width, 0 );
+      const maxBottom = Math.max( maxHeight - height, 0 );
 
-    if ( chatWindowRef?.current?.parentElement ) {
-      const parentRect = chatWindowRef.current.parentElement.getBoundingClientRect();
-      const { width, height } = chatWindowRef.current.getBoundingClientRect();
-      maxRight = Math.max( parentRect.width - width, 0 );
-      maxBottom = Math.max( window.innerHeight - parentRect.top - height, 0 );
+      return { maxRight, maxBottom, width: parentRect.width, height: maxHeight };
+    } else {
+      return {
+        maxRight: window.innerWidth,
+        maxBottom: window.innerHeight,
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
     }
-
-    return { maxRight, maxBottom };
-  }, [ chatWindowRef ] );
+  }, [ chatWindowEl, chatWindowContainer ] );
 
   /**
    * Handlers
@@ -77,8 +89,8 @@ export const usePosition = ( {
   const onDrag = useCallback(
     ( e: MouseEvent ) => {
       e.preventDefault();
-      if ( chatWindowRef?.current ) {
-        const { right, bottom } = chatWindowRef.current.getBoundingClientRect();
+      if ( chatWindowEl ) {
+        const { right, bottom } = chatWindowEl.getBoundingClientRect();
         setIsDragging( true );
         setMouseStartPos( { x: e.clientX, y: e.clientY } );
         setElementStartPos( { x: right, y: bottom } );
@@ -89,13 +101,13 @@ export const usePosition = ( {
         setSize( { ...size, offset: { x: 0, y: 0 } } );
       }
     },
-    [ chatWindowRef, settings, size, setPosition ],
+    [ chatWindowEl, settings, size, setPosition ],
   );
 
   const handleMove = useCallback(
     ( e: MouseEvent ) => {
       e.preventDefault();
-      if ( isDragging && chatWindowRef?.current && mouseStartPos && elementStartPos ) {
+      if ( isDragging && chatWindowEl && mouseStartPos && elementStartPos ) {
         const dx = e.clientX - mouseStartPos.x;
         const dy = e.clientY - mouseStartPos.y;
 
@@ -110,11 +122,11 @@ export const usePosition = ( {
         } );
       }
     },
-    [ isDragging, chatWindowRef, mouseStartPos, elementStartPos, calculateBoundaries ],
+    [ isDragging, chatWindowEl, mouseStartPos, elementStartPos, calculateBoundaries ],
   );
 
   const handleWindowResize = useCallback( () => {
-    if ( chatWindowRef?.current ) {
+    if ( chatWindowEl ) {
       const { maxRight, maxBottom } = calculateBoundaries();
 
       setPosition( position => ( {
@@ -122,31 +134,29 @@ export const usePosition = ( {
         bottom: Math.min( position.bottom, maxBottom ),
       } ) );
     }
-  }, [ chatWindowRef, calculateBoundaries ] );
+  }, [ chatWindowEl, calculateBoundaries ] );
 
   const onChatWindowResize = useCallback(
     ( e: MouseEvent, side: ResizeSide ) => {
       e.preventDefault();
-      if ( chatWindowRef?.current ) {
+      if ( chatWindowEl ) {
         setIsResizing( true );
         setMouseStartPos( { x: e.clientX, y: e.clientY } );
         setElementStartPos( {
-          x: chatWindowRef.current.offsetWidth,
-          y: chatWindowRef.current.offsetHeight,
+          x: chatWindowEl.offsetWidth,
+          y: chatWindowEl.offsetHeight,
         } );
         setResizeSide( side );
       }
     },
-    [ chatWindowRef ],
+    [ chatWindowEl ],
   );
 
   const handleResize = useCallback(
     ( e: MouseEvent ) => {
       e.preventDefault();
-      if ( isResizing && chatWindowRef?.current && mouseStartPos && elementStartPos ) {
-        // Abondon resize if mouse is outside of boundaries
-        const container = chatWindowRef?.current?.parentElement || document.body;
-        const parentRect = container.getBoundingClientRect();
+      if ( isResizing && chatWindowContainer && mouseStartPos && elementStartPos ) {
+        const parentRect = chatWindowContainer.getBoundingClientRect();
 
         if (
           e.clientX > window.innerWidth ||
@@ -196,8 +206,34 @@ export const usePosition = ( {
       elementStartPos,
       setPosition,
       position,
+      chatWindowContainer,
     ],
   );
+
+  /**
+   * Functions
+   */
+  function maximizeWindow() {
+    setMaximization( {
+      isMaximized: true,
+      position,
+      size,
+    } );
+    const { width, height } = calculateBoundaries();
+    setPosition( { right: 0, bottom: 0 } );
+    setSize( { width, height, offset: { x: 0, y: 0 } } );
+  }
+
+  function restoreWindow() {
+    if ( maximization ) {
+      const { position, size } = maximization;
+      setPosition( position );
+      setSize( size );
+      setMaximization( undefined );
+    }
+  }
+
+  const isMaximized = maximization?.isMaximized;
 
   /**
    * Mouse Handler Listeners
@@ -233,5 +269,9 @@ export const usePosition = ( {
     onChatWindowResize,
     isDragging,
     isResizing,
+    chatWindowContainer,
+    maximizeWindow,
+    restoreWindow,
+    isMaximized,
   };
 };

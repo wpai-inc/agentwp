@@ -27,22 +27,24 @@ const Corners = () => {
 export default function WindowActions( {
   show = false,
   handleDrag,
+  maximizeWindow,
+  restoreWindow,
+  isMaximized,
   ...props
 }: {
   show?: boolean;
   onMouseEnter?: () => void;
+  maximizeWindow?: () => void;
+  restoreWindow?: () => void;
+  isMaximized?: boolean;
   handleDrag: ( e: MouseEvent ) => void;
 } ) {
-  const { toggle, isMaximized, reduceWindow } = useChat();
+  const { toggle } = useChat();
   const [ isFirstLoad ] = useState( false );
-
-  function handleMaximize() {
-    //
-  }
 
   return (
     <div
-      onMouseDown={ handleDrag }
+      onMouseDown={ e => handleDrag( e.nativeEvent ) }
       className={ cn(
         'absolute bg-brand-gray h-20 w-6 top-16 left-0',
         'flex flex-col items-center justify-center gap-2',
@@ -63,7 +65,7 @@ export default function WindowActions( {
       { isMaximized ? (
         <AgentTooltip content="Return chat window to normal size" side="right">
           <ReduceWindowIcon
-            onClick={ reduceWindow }
+            onClick={ restoreWindow }
             className={ cn( 'h-4 w-4 cursor-pointer hover:text-teal-500', 'text-gray-400' ) }
           />
         </AgentTooltip>
@@ -72,7 +74,7 @@ export default function WindowActions( {
           content="Maximize the chat window to take all the available space"
           side="right">
           <MaximizeIcon
-            onClick={ handleMaximize }
+            onClick={ maximizeWindow }
             className={ cn(
               'h-4 w-4 cursor-pointer hover:text-teal-500 rotate-45',
               'text-gray-400',
