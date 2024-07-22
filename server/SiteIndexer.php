@@ -12,9 +12,7 @@ class SiteIndexer extends \WP_Async_Request implements Registrable
 
     protected $action = 'site_indexer';
 
-    public function __construct(private Main $main)
-    {
-    }
+    public function __construct(private Main $main) {}
 
     public function register()
     {
@@ -33,7 +31,7 @@ class SiteIndexer extends \WP_Async_Request implements Registrable
 
             $cache = new Cache('site_data', SiteData::getDebugData());
             if ($cache->miss()) {
-                $this->data(['data' => $cache->data()])->dispatch();
+                $this->data(['data' => $cache->getData()])->dispatch();
             }
         }
     }
