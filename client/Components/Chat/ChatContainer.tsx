@@ -8,7 +8,7 @@ import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 
 export default function ChatContainer() {
   const containerRef = useRef< HTMLDivElement >( null );
-  const { position, size, onDrag, isDragging } = usePosition( {
+  const { position, size, onDrag, isDragging, onChatWindowResize } = usePosition( {
     chatWindowRef: containerRef,
   } );
   const [ isHovering, setIsHovering ] = useState( false );
@@ -21,8 +21,9 @@ export default function ChatContainer() {
       style={ {
         right: position.right + 'px',
         bottom: position.bottom + 'px',
-        width: size.width,
-        height: size.height,
+        width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
+        height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
+        transform: `translate(${ size.offset.x }px, ${ size.offset.y }px)`,
       } }
       className={ cn(
         'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000]',
@@ -38,7 +39,7 @@ export default function ChatContainer() {
         onMouseEnter={ () => setIsHovering( true ) }
         show={ isHovering || isDragging }
       />
-      <ResizeHandles resizeHandler={ () => {} } />
+      <ResizeHandles resizeHandler={ onChatWindowResize } />
     </div>
   );
 }

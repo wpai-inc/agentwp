@@ -11,14 +11,17 @@ type ChatWindowPosition = {
 };
 
 type ChatWindowSize = {
-  width: string;
-  height: string;
+  width: number;
+  height: number;
+  offset: TwoDCoord;
 };
 
-type TwoDCoord = {
+export type TwoDCoord = {
   x: number;
   y: number;
 };
+
+export type ResizeSide = 'top' | 'bottom' | 'left' | 'right';
 
 export type ResizeHandler = ( width: number, height: number ) => void;
 
@@ -32,6 +35,8 @@ export const usePosition = ( {
    */
   const { settings, setSettings } = useClientSettings();
   const [ isDragging, setIsDragging ] = useState( false );
+  const [ isResizing, setIsResizing ] = useState( false );
+  const [ resizeSide, setResizeSide ] = useState< ResizeSide >();
   const [ mouseStartPos, setMouseStartPos ] = useState< TwoDCoord >();
   const [ elementStartPos, setElementStartPos ] = useState< TwoDCoord >();
   const [ position, setPosition ] = useState< ChatWindowPosition >( {
@@ -41,6 +46,7 @@ export const usePosition = ( {
   const [ size, setSize ] = useState< ChatWindowSize >( {
     width: settings.width,
     height: settings.height,
+    offset: settings.offset,
   } );
 
   /**
@@ -65,6 +71,7 @@ export const usePosition = ( {
    */
   const handleMouseUp = useCallback( () => {
     setIsDragging( false );
+    setIsResizing( false );
   }, [] );
 
   const onDrag = useCallback(
@@ -75,9 +82,14 @@ export const usePosition = ( {
         setIsDragging( true );
         setMouseStartPos( { x: e.clientX, y: e.clientY } );
         setElementStartPos( { x: right, y: bottom } );
+        setPosition( position => ( {
+          right: position.right + size.offset.x,
+          bottom: position.bottom + size.offset.y,
+        } ) );
+        setSize( { ...size, offset: { x: 0, y: 0 } } );
       }
     },
-    [ chatWindowRef ],
+    [ chatWindowRef, settings, size, setPosition ],
   );
 
   const handleMove = useCallback(
@@ -101,7 +113,7 @@ export const usePosition = ( {
     [ isDragging, chatWindowRef, mouseStartPos, elementStartPos, calculateBoundaries ],
   );
 
-  const handleResize = useCallback( () => {
+  const handleWindowResize = useCallback( () => {
     if ( chatWindowRef?.current ) {
       const { maxRight, maxBottom } = calculateBoundaries();
 
@@ -112,33 +124,102 @@ export const usePosition = ( {
     }
   }, [ chatWindowRef, calculateBoundaries ] );
 
+  const onChatWindowResize = useCallback(
+    ( e: MouseEvent, side: ResizeSide ) => {
+      e.preventDefault();
+      if ( chatWindowRef?.current ) {
+        setIsResizing( true );
+        setMouseStartPos( { x: e.clientX, y: e.clientY } );
+        setElementStartPos( {
+          x: chatWindowRef.current.offsetWidth,
+          y: chatWindowRef.current.offsetHeight,
+        } );
+        setResizeSide( side );
+      }
+    },
+    [ chatWindowRef ],
+  );
+
+  const handleResize = useCallback(
+    ( e: MouseEvent ) => {
+      e.preventDefault();
+      if ( isResizing && chatWindowRef?.current && mouseStartPos && elementStartPos ) {
+        const dx = e.clientX - mouseStartPos.x;
+        const dy = e.clientY - mouseStartPos.y;
+
+        let newWidth = elementStartPos.x;
+        let newHeight = elementStartPos.y;
+        let offset = size.offset;
+
+        switch ( resizeSide ) {
+          case 'top':
+            newHeight = Math.max( elementStartPos.y - dy, 0 );
+            break;
+          case 'bottom':
+            newHeight = Math.max( elementStartPos.y + dy, 0 );
+            offset.y = dy;
+            break;
+          case 'left':
+            newWidth = Math.max( elementStartPos.x - dx, 0 );
+            break;
+          case 'right':
+            newWidth = Math.max( elementStartPos.x + dx, 0 );
+            offset.x = dx;
+            break;
+        }
+
+        setSize( {
+          width: newWidth,
+          height: newHeight,
+          offset,
+        } );
+      }
+    },
+    [
+      isResizing,
+      resizeSide,
+      size,
+      setSize,
+      mouseStartPos,
+      elementStartPos,
+      setPosition,
+      position,
+    ],
+  );
+
   /**
    * Mouse Handler Listeners
    */
   useEffect( () => {
-    document.addEventListener( 'mousemove', handleMove );
-    document.addEventListener( 'mouseup', handleMouseUp );
-    window.addEventListener( 'resize', handleResize );
+    if ( isDragging || isResizing ) {
+      document.addEventListener( 'mousemove', handleMove );
+      document.addEventListener( 'mousemove', handleResize );
+      document.addEventListener( 'mouseup', handleMouseUp );
+    }
+
+    window.addEventListener( 'resize', handleWindowResize );
 
     return () => {
       document.removeEventListener( 'mousemove', handleMove );
+      document.removeEventListener( 'mousemove', handleResize );
       document.removeEventListener( 'mouseup', handleMouseUp );
-      window.removeEventListener( 'resize', handleResize );
+      window.removeEventListener( 'resize', handleWindowResize );
     };
-  }, [ handleMouseUp, handleMove, handleResize ] );
+  }, [ handleMouseUp, handleMove, handleResize, handleWindowResize, isDragging, isResizing ] );
 
   /**
    * Persist to local settings
    */
-  useEffect(
-    () => setSettings( settings => ( { ...settings, ...position } ) ),
-    [ position, setSettings ],
-  );
+  useEffect( () => {
+    setSettings( settings => ( { ...settings, ...position, ...size } ) );
+  }, [ position, setSettings, size, setSize ] );
 
   return {
     position,
     size,
     onDrag,
+    onChatWindowResize,
     isDragging,
+    isResizing,
   };
 };

@@ -1,16 +1,18 @@
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { getStorage, setStorage } from '@/lib/utils';
+import { TwoDCoord } from '@/Hooks/position';
 
 export type ClientSettings = {
   chatOpen: boolean;
   chatMaximized: boolean;
   right: number;
   bottom: number;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
+  offset: TwoDCoord;
 };
 
-type ClientSettingValue = string | boolean | number | null;
+type ClientSettingValue = string | boolean | number | null | object;
 
 interface ContextProps {
   settings: ClientSettings;
@@ -51,8 +53,9 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
     chatMaximized: getLocalStorage( 'chatMaximized', false ) as boolean,
     right: getLocalStorage( 'right', 16 ) as number,
     bottom: getLocalStorage( 'bottom', 16 ) as number,
-    width: getLocalStorage( 'width', '400px' ) as string,
-    height: getLocalStorage( 'height', 'min(400px, 80vh)' ) as string,
+    width: getLocalStorage( 'width', 400 ) as number,
+    height: getLocalStorage( 'height', 800 ) as number,
+    offset: getLocalStorage( 'offset', { x: 0, y: 0 } ) as TwoDCoord,
   } );
 
   useEffect( () => {
