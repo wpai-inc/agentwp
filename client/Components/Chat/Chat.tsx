@@ -4,14 +4,14 @@ import { useChat } from '@/Providers/ChatProvider';
 import { usePage } from '@/Providers/PageProvider';
 
 export default function Chat() {
-  const { open, expanding } = useChat();
+  const { open } = useChat();
   const { canAccessAgent } = usePage();
 
   return (
     <>
       { canAccessAgent && (
         <>
-          { ( open || expanding ) && <ChatContainer /> }
+          { ( open ) && <ChatContainer /> }
           <ChatTrigger open={ open } />
         </>
       ) }
