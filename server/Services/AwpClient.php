@@ -29,41 +29,25 @@ class AwpClient
         $this->wp_user = wp_get_current_user();
     }
 
-    public static function fromMain(Main $main, $checkUserAccessRights = true)
-    {
-        $instance = new self();
-        $instance->main = $main;
-
-        if ( ! $checkUserAccessRights && $access_token = $main->settings->getAccessToken()) {
-            $instance->setToken($access_token);
-        } elseif ($access_token = $main->auth()->getAccessToken()) {
-            $instance->setToken($access_token);
-        }
-
-        $instance->wp_user = wp_get_current_user();
-
-        return $instance;
-    }
-
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
     {
-        $client         = $this->buildClient();
+        $client = $this->buildClient();
         $defaultHeaders = [
-            'Accept'             => 'application/json',
-            'Content-Type'       => 'application/json',
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
             'X-Wp-Agent-Version' => $this->agentWpVersion,
-            'X-Wp-User-Id'       => $this->wp_user->ID,
-            'X-Wp-Site-Id'       => $this->main->siteId(),
+            'X-Wp-User-Id' => $this->wp_user->ID,
+            'X-Wp-Site-Id' => $this->main->siteId(),
         ];
-        $authHeader     = $this->token ? [
+        $authHeader = $this->token ? [
             'Authorization' => "Bearer $this->token",
         ] : [];
-        $headers        = array_merge(
+        $headers = array_merge(
             $defaultHeaders,
             $authHeader,
             $additionalHeaders,
         );
-        $request        = new Request($method, $url, $headers, $body);
+        $request = new Request($method, $url, $headers, $body);
 
         return $client->send($request);
     }
@@ -95,5 +79,4 @@ class AwpClient
 
         return $this;
     }
-
 }

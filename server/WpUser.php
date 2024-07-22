@@ -3,14 +3,10 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Services\AwpClient;
 
 class WpUser implements Registrable
 {
-
-    public function __construct(private Main $main)
-    {
-    }
+    public function __construct(private Main $main) {}
 
     public function register(): void
     {
@@ -21,7 +17,7 @@ class WpUser implements Registrable
     public function updateUser(): void
     {
         if ($this->main->auth()->hasAccess()) {
-            AwpClient::fromMain($this->main)->updateUser();
+            $this->main->client()->updateUser();
         }
     }
 
@@ -29,7 +25,7 @@ class WpUser implements Registrable
     {
         $userAuth = new UserAuth($user);
         if ($userAuth->hasAccess()) {
-            AwpClient::fromMain($this->main)->setWpUser($user)->updateUser($user->ID);
+            $this->main->client()->setWpUser($user)->updateUser($user->ID);
         }
     }
 }

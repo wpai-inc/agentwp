@@ -3,22 +3,21 @@
 namespace WpAi\AgentWp\Controllers;
 
 use WpAi\AgentWp\Enums\RouteMethods;
-use WpAi\AgentWp\Services\AwpClient;
 use WpAi\AgentWp\UserAuth;
 
 class UpdateUserCapabilities extends BaseController
 {
-
     protected string|array $permission = UserAuth::CAP_MANAGE_AGENTWP_USERS;
+
     protected RouteMethods $method = RouteMethods::POST;
 
     public function update_user_capabilities(): void
     {
         $this->verifyNonce();
 
-        $data    = json_decode(file_get_contents('php://input'), true);
+        $data = json_decode(file_get_contents('php://input'), true);
         $user_id = sanitize_text_field($data['user']);
-        $user    = new \WP_User($user_id);
+        $user = new \WP_User($user_id);
         if (isset($data['agentwp_access'])) {
             $agentwp_access = sanitize_text_field($data['agentwp_access']);
             if ($agentwp_access) {
@@ -35,11 +34,10 @@ class UpdateUserCapabilities extends BaseController
             }
         }
 
-        AwpClient::fromMain($this->main)
+        $this->main->client()
             ->setWpUser($user)
             ->updateUser($user->ID);
 
         $this->respond();
     }
-
 }
