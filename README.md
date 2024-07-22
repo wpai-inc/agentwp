@@ -40,7 +40,7 @@ The client contains all the frontend assets built with **React** using **Typescr
 
 The server contains the backend PHP. It consists of a "Provier Registry" which is just a collection of service provider classes that hook into WordPress.
 
-All providers must have a `register()` method that contains the WordPress Hooks necessary to run the provider's service. They must implement `Registrable` and be registered in the plugin entrypoint `agent-wp.php` under the register method. They all have the `Main` plugin as a dependency which contains common configuration and methods. This is how we bootstrap the plugin and hook all of our code into WordPress's hook system (every provider class has a register method where it hooks itself).
+All providers must have a `register()` method that contains the WordPress Hooks necessary to run the provider's service. They must implement `Registrable` and be registered in the plugin entrypoint `agentwp.php` under the register method. They all have the `Main` plugin as a dependency which contains common configuration and methods. This is how we bootstrap the plugin and hook all of our code into WordPress's hook system (every provider class has a register method where it hooks itself).
 
 ## Adding React Clients / Entrypoints
 
@@ -54,7 +54,7 @@ To add a React app somewhere in WordPress you must:
 - Create a companion React page/entrypoint under `client/Page`
   - make sure the root ID has the same corresponding slug.
   - Register this entrypoint with vite in `vite.config.ts`
-- As always, make sure the Provider class is registered under `agent-wp.php` to activate it.
+- As always, make sure the Provider class is registered under `agentwp.php` to activate it.
 
 #### HasPage Trait
 
@@ -66,7 +66,7 @@ This creates a menu item for your page.
 
 ## Frontend
 
-The components and styling use [Tailwind](https://tailwindcss.com) with [shad/cn components](https://ui.shadcn.com). To avoid conflicts, all Tailwind classes have been scoped under any ID starting with `#agent-wp`, which corresponds to how we create the root IDs in the React entrypoints. This should allow us to avoid collisions.
+The components and styling use [Tailwind](https://tailwindcss.com) with [shad/cn components](https://ui.shadcn.com). To avoid conflicts, all Tailwind classes have been scoped under any ID starting with `#agentwp`, which corresponds to how we create the root IDs in the React entrypoints. This should allow us to avoid collisions.
 
 To add a shad/cn component, use `npx shadcn-ui@latest add [component]`
 

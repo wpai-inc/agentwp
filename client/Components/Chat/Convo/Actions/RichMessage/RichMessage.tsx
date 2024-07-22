@@ -15,23 +15,23 @@ export default function RichMessage( props: AgentAction ) {
 
     const action = props.action;
     if ( isGraph ) {
-      const graphType = action.graph?.graphType;
+      const visualization = action.graph?.visualization;
       const data = action.graph?.data;
-      if ( graphType === 'bar' ) {
+      if ( visualization === 'bar-chart' ) {
         return (
           <GraphContainer>
             <ActionSimpleMessage { ...props } />
             <Bar data={ data ?? [] } valueDataKey="value" xDataKey="label" width={ '100%' } />
           </GraphContainer>
         );
-      } else if ( graphType === 'line' ) {
+      } else if ( visualization === 'line-chart' ) {
         return (
           <GraphContainer>
             <ActionSimpleMessage { ...props } />
             <Line data={ data ?? [] } width={ '100%' } />
           </GraphContainer>
         );
-      } else if ( graphType === 'pie' ) {
+      } else if ( visualization === 'donut-chart' ) {
         return (
           <GraphContainer>
             <ActionSimpleMessage { ...props } />

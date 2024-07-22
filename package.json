@@ -1,15 +1,15 @@
 {
-  "name": "agent-wp",
+  "name": "agentwp",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "clean": "rimraf dist agent-wp.zip",
+    "clean": "rimraf dist agentwp.zip",
     "preview": "vite preview",
     "copy-files": "copyfiles \"build/**/*\" \"assets/**/*\" \"server/**/*\" \"vendor/**/*\" *.php *.txt dist/",
-    "zip": "cd dist && zip -r ../agent-wp.zip .",
+    "zip": "cd dist && zip -r ../agentwp.zip .",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "storybook": "STORYBOOK_ENV=1 storybook dev -p 6006",

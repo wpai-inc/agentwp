@@ -9,21 +9,21 @@ import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ClientProvider } from '@/Providers/ClientProvider';
 
-const rootElement = document.getElementById( 'agent-wp-admin-settings' );
+const rootElement = document.getElementById('agentwp-admin-settings');
 
 declare const agentwp_settings: PageData;
 
-if ( rootElement ) {
-  const root = ReactDOM.createRoot( rootElement );
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
 
   root.render(
     <React.StrictMode>
-      <PageProvider page={ agentwp_settings }>
+      <PageProvider page={agentwp_settings}>
         <NotificationsProvider>
           <App>
             <AdminRouteProvider>
               <ClientProvider>
-                { agentwp_settings?.onboarding_completed ? <Settings /> : <Wizard /> }
+                {agentwp_settings?.onboarding_completed ? <Settings /> : <Wizard />}
               </ClientProvider>
             </AdminRouteProvider>
           </App>
@@ -33,5 +33,5 @@ if ( rootElement ) {
   );
 } else {
   // Handle the case where the root element is not found
-  console.error( 'Root element not found' );
+  console.error('Root element not found');
 }
