@@ -12,8 +12,6 @@ type ScreenType = {
   links: string[];
   screenshot?: string;
   post?: postContentType;
-  //   buttons: string[];
-  //   forms: { action: string; method: string }[];
 };
 
 type ScreenContextType = {
@@ -26,8 +24,7 @@ const ScreenContext = createContext< ScreenContextType >( {
     url: '',
     title: '',
     links: [],
-    // buttons: [],
-    // forms: [],
+    screenshot: '',
   },
   setScreen: () => {},
 } );
@@ -42,9 +39,13 @@ export function useScreen() {
 
 async function getScreenshot(): Promise< string > {
   const node = document.body;
-  //depending on the request, we can either do a full screen or viewport-specific screenshot
+
   if ( node ) {
-    return await toJpeg( node, { quality: 0.5 } );
+    const filter = ( node: HTMLElement ) => {
+      return node.id !== 'agentwp-admin-chat';
+    };
+
+    return await toJpeg( node, { quality: 0.5, filter } );
   } else {
     console.error( 'Problemo.' );
     return '';
@@ -56,8 +57,7 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
     url: '',
     title: '',
     links: [],
-    // buttons: [],
-    // forms: [],
+    screenshot: '',
   } );
 
   useEffect( () => {
@@ -66,14 +66,6 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
       const title = document.title;
       const links = Array.from( document.links ).map( link => link.href );
       const screenshot = await getScreenshot();
-      // screen.buttons = Array.from(document.querySelectorAll('button')).map(
-      //   (button) => button.innerText,
-      // );
-
-      // screen.forms = Array.from(document.forms).map((form) => ({
-      //   action: form.action,
-      //   method: form.method,
-      // }));
 
       setScreen( {
         url,
