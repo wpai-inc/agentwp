@@ -3,7 +3,6 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Jobs\SiteSummarizerJob;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 
 class IndexSiteSummary implements Registrable

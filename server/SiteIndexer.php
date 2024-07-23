@@ -3,7 +3,6 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Jobs\SiteIndexerJob;
 use WpAi\AgentWp\Services\Cache;
 
 class SiteIndexer implements Registrable
