@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Jobs\SiteSummarizerJob;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 
 class IndexSiteSummary implements Registrable
@@ -23,9 +24,15 @@ class IndexSiteSummary implements Registrable
 
             $summarizer = new SiteSummarizer();
 
-            if ($summarizer->hasUpdated()) {
-                $this->main->client()->summarizeSite(json_encode($summarizer->data()));
-            }
+//            if ($summarizer->hasUpdated()) {
+                $data = [
+                    'access_token' => $this->main->settings->getAccessToken(),
+                    'data' => json_encode($summarizer->data())
+                ];
+
+                $job = new SiteSummarizerJob();
+                $job->data($data)->dispatch();
+//            }
         }
     }
 
