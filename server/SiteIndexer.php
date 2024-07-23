@@ -8,7 +8,12 @@ use WpAi\AgentWp\Services\Cache;
 
 class SiteIndexer implements Registrable
 {
-    public function __construct(private Main $main) {}
+    private SiteIndexerJob $job;
+
+    public function __construct(private Main $main)
+    {
+        $this->job = new SiteIndexerJob();
+    }
 
     public function register()
     {
@@ -33,8 +38,7 @@ class SiteIndexer implements Registrable
                     'data' => json_encode($cache->getData())
                 ];
 
-                $job = new SiteIndexerJob();
-                $job->data($data)->dispatch();
+                $this->job->data($data)->dispatch();
             }
         }
     }

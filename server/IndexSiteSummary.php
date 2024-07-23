@@ -8,8 +8,11 @@ use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 
 class IndexSiteSummary implements Registrable
 {
+    private SiteSummarizerJob $job;
+
     public function __construct(private Main $main)
     {
+        $this->job = new SiteSummarizerJob();
     }
 
     public function register()
@@ -26,15 +29,14 @@ class IndexSiteSummary implements Registrable
 
             $summarizer = new SiteSummarizer();
 
-//            if ($summarizer->hasUpdated()) {
+            if ($summarizer->hasUpdated()) {
                 $data = [
                     'access_token' => $this->main->settings->getAccessToken(),
                     'data' => json_encode($summarizer->data())
                 ];
 
-                $job = new SiteSummarizerJob();
-                $job->data($data)->dispatch();
-//            }
+                $this->job->data($data)->dispatch();
+            }
         }
     }
 
