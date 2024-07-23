@@ -1,7 +1,7 @@
 import CloseIcon from '@material-design-icons/svg/outlined/close.svg?react';
-import MaximizeIcon from '@material-design-icons/svg/outlined/open_with.svg?react';
+import Fullscreen from '@material-design-icons/svg/outlined/fullscreen.svg?react';
+import ExitFullscreen from '@material-design-icons/svg/outlined/fullscreen_exit.svg?react';
 import DragIcon from '@material-design-icons/svg/outlined/drag_indicator.svg?react';
-import ReduceWindowIcon from '@material-design-icons/svg/outlined/close_fullscreen.svg?react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
@@ -46,7 +46,7 @@ export default function WindowActions( {
         <div className="bg-brand-gray w-6 flex flex-col items-center justify-center gap-2 rounded-bl-lg rounded-tl-lg shadow-xl relative z-0 mt-16 py-2">
           { isMaximized ? (
             <AgentTooltip content="Return chat window to normal size" side="right">
-              <ReduceWindowIcon
+              <ExitFullscreen
                 onClick={ restoreWindow }
                 className={ cn( 'h-4 w-4 cursor-pointer hover:text-teal-500', 'text-gray-400' ) }
               />
@@ -55,12 +55,9 @@ export default function WindowActions( {
             <AgentTooltip
               content="Maximize the chat window to take all the available space"
               side="right">
-              <MaximizeIcon
+              <Fullscreen
                 onClick={ maximizeWindow }
-                className={ cn(
-                  'h-4 w-4 cursor-pointer hover:text-teal-500 rotate-45',
-                  'text-gray-400',
-                ) }
+                className={ cn( 'h-4 w-4 cursor-pointer hover:text-teal-500', 'text-gray-400' ) }
               />
             </AgentTooltip>
           ) }

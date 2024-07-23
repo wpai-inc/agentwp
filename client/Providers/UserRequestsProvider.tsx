@@ -77,7 +77,7 @@ export default function UserRequestsProvider( {
   const { getConversation } = useClient();
   const [ since, setSince ] = useState< string | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
-  const [ loadingConversation, setLoadingConversation ] = useState< boolean >( false );
+  const [ loadingConversation, setLoadingConversation ] = useState< boolean >( true );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ refresh, setRefresh ] = useState< boolean >( false );
 
@@ -133,7 +133,6 @@ export default function UserRequestsProvider( {
   );
 
   async function fetchConvo( since: string | null ) {
-    setLoadingConversation( true );
     const items = await getConversation( since );
     if ( items && items.length > 0 ) {
       setCurrentUserRequestId( items[ 0 ]?.id );
