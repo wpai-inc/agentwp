@@ -25,6 +25,7 @@ class IndexSiteSummary implements Registrable
             }
 
             $summarizer = new SiteSummarizer();
+            // var_dump($summarizer->data());
 
             if ($summarizer->hasUpdated()) {
                 (new AwpClient($this->main, false))->summarizeSite(json_encode($summarizer->data()));
