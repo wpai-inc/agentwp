@@ -4,13 +4,10 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
-use WpAi\AgentWp\Services\AwpClient;
 
 class IndexSiteSummary implements Registrable
 {
-    public function __construct(private Main $main)
-    {
-    }
+    public function __construct(private Main $main) {}
 
     public function register()
     {
@@ -28,7 +25,7 @@ class IndexSiteSummary implements Registrable
             // var_dump($summarizer->data());
 
             if ($summarizer->hasUpdated()) {
-                (new AwpClient($this->main, false))->summarizeSite(json_encode($summarizer->data()));
+                $this->main->client()->summarizeSite(json_encode($summarizer->data()));
             }
         }
     }

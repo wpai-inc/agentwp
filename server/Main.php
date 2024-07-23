@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp;
 
+use WpAi\AgentWp\Services\AwpClient;
 use WpAi\AgentWp\Services\AwpRestRoute;
 
 /**
@@ -92,6 +93,20 @@ class Main
     public function apiClientHost()
     {
         return Helper::config('AGENT_WP_CLIENT_BASE_URL') ?? $this->runtimeApiHost();
+    }
+
+    public function client($checkUserAccessRights = true): AwpClient
+    {
+        $client = new AwpClient();
+        if (! $checkUserAccessRights && $access_token = $this->settings->getAccessToken()) {
+            $client->setToken($access_token);
+        } elseif ($access_token = $this->auth()->getAccessToken()) {
+            $client->setToken($access_token);
+        }
+
+        $client->setWpUser(wp_get_current_user());
+
+        return $client;
     }
 
     public function pageData()
