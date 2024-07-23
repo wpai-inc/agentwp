@@ -12,7 +12,6 @@ class SiteSummarizerJob extends \WP_Async_Request
 
     protected function handle()
     {
-        error_log( "test" );
         $awpClient = new AwpClient();
         $awpClient->setToken($_POST['access_token']);
         $awpClient->summarizeSite($_POST['data']);
