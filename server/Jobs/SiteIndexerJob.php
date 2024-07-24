@@ -4,16 +4,14 @@ namespace WpAi\AgentWp\Jobs;
 
 use WpAi\AgentWp\Services\AwpClient;
 
-class SiteIndexerJob extends \WP_Async_Request
+class SiteIndexerJob extends BaseJob
 {
-    protected $prefix = 'agentwp';
-
     protected $action = 'site_indexer';
 
     protected function handle()
     {
-        $awpClient = new AwpClient();
-        $awpClient->setToken($_POST['access_token']);
-        $awpClient->indexSite($_POST['data']);
+        $this->handleAsync(function (AwpClient $client, string $data) {
+            $client->indexSite($data);
+        });
     }
 }
