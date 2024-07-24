@@ -41,8 +41,6 @@ export default function ChatContainer() {
           'user-select-none': isDragging,
         },
       ) }>
-      <ChatTopBar handleDrag={ onDrag } />
-      <Conversation />
       <WindowActions
         handleDrag={ onDrag }
         onMouseEnter={ () => setIsHovering( true ) }
@@ -51,6 +49,8 @@ export default function ChatContainer() {
         isMaximized={ isMaximized }
         restoreWindow={ restoreWindow }
       />
+      <ChatTopBar handleDrag={ onDrag } />
+      <Conversation />
       <ResizeHandles resizeHandler={ onChatWindowResize } />
     </div>
   );
