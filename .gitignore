@@ -3,6 +3,7 @@
 /vendor/
 /node_modules/
 /dist/
+/agentwp.zip
 agentwp.zip
 
 # Logs
