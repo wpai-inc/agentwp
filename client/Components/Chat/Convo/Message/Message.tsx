@@ -12,7 +12,10 @@ export default function Message( userRequest: UserRequestType ) {
   const sameUserRequest = userRequest.id === currentUserRequestId;
   const { streamClosed } = useStream();
   const pending = sameUserRequest && ! streamClosed;
-  const isIncomplete = streamClosed && userRequest.agent_actions?.some( aa => ! aa.action );
+  const isIncomplete =
+    streamClosed &&
+    ( userRequest.agent_actions?.length === 0 ||
+      userRequest.agent_actions?.some( aa => ! aa.action ) );
 
   return (
     <FeedbackProvider userRequestId={ userRequest.id } feedback={ userRequest.feedback }>
