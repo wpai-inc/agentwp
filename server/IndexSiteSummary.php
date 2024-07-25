@@ -22,6 +22,7 @@ class IndexSiteSummary implements Registrable
             }
 
             $summarizer = new SiteSummarizer();
+            // var_dump($summarizer->data());
 
             if ($summarizer->hasUpdated()) {
                 $this->main->client()->summarizeSite(json_encode($summarizer->data()));
