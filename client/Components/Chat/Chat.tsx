@@ -8,13 +8,11 @@ export default function Chat() {
   const { canAccessAgent } = usePage();
 
   return (
-    <>
-      { canAccessAgent && (
-        <>
-          { ( open ) && <ChatContainer /> }
-          <ChatTrigger open={ open } />
-        </>
-      ) }
-    </>
+    canAccessAgent && (
+      <>
+        <ChatContainer open={ open } />
+        <ChatTrigger open={ open } />
+      </>
+    )
   );
 }

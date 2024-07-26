@@ -5,8 +5,9 @@ import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import Conversation from './Convo/Conversation';
 import { usePosition } from '@/Hooks/position';
 import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
+import { motion } from 'framer-motion';
 
-export default function ChatContainer() {
+export default function ChatContainer( { open }: { open: boolean } ) {
   const containerRef = useRef< HTMLDivElement >( null );
   const {
     position,
@@ -22,8 +23,37 @@ export default function ChatContainer() {
   } );
   const [ isHovering, setIsHovering ] = useState( false );
 
+  const openAnimation = open
+    ? {
+        opacity: 100,
+        right: position.right,
+        bottom: position.bottom,
+        width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
+        height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
+      }
+    : {
+        opacity: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+      };
+
   return (
-    <div
+    <motion.div
+      initial={ {
+        opacity: 0,
+        right: position.right + 'px',
+        bottom: position.bottom + 'px',
+        width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
+        height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
+      } }
+      animate={ openAnimation }
+      transition={ {
+        type: 'spring',
+        stiffness: 260,
+        damping: 20,
+      } }
       ref={ containerRef }
       onMouseEnter={ () => setIsHovering( true ) }
       onMouseLeave={ () => setIsHovering( false ) }
@@ -37,7 +67,6 @@ export default function ChatContainer() {
       className={ cn(
         'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000]',
         {
-          'opacity-100': true,
           'user-select-none': isDragging,
         },
       ) }>
@@ -52,6 +81,6 @@ export default function ChatContainer() {
       <ChatTopBar handleDrag={ onDrag } />
       <Conversation />
       <ResizeHandles resizeHandler={ onChatWindowResize } />
-    </div>
+    </motion.div>
   );
 }
