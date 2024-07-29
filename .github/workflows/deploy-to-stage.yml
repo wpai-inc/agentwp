@@ -33,7 +33,7 @@ jobs:
         uses: burnett01/rsync-deployments@7.0.1
         with:
           switches: -avzr --delete --exclude='plugins' --include='plugins/agentwp'
-          path: dist/
+          path: agentwp/
           remote_path: /home/forge/stage.wp.agentwp.com/wp-content/plugins/agentwp/
           remote_host: '165.22.180.128'
           remote_user: 'forge'
