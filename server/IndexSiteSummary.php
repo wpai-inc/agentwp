@@ -7,7 +7,9 @@ use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 
 class IndexSiteSummary implements Registrable
 {
-    public function __construct(private Main $main) {}
+    public function __construct(private Main $main)
+    {
+    }
 
     public function register(): void
     {
@@ -17,8 +19,10 @@ class IndexSiteSummary implements Registrable
 
     public function sendByCron(): void
     {
-        if (!wp_next_scheduled('agentwp_send_site_summary')) {
+        $throttle = get_transient('agentwp_send_site_summary_throttle');
+        if (!wp_next_scheduled('agentwp_send_site_summary') && !$throttle) {
             wp_schedule_single_event(time(), 'agentwp_send_site_summary');
+            set_transient('agentwp_send_site_summary_throttle', true, $this->main::AGENTWP_CRON_THROTTLE);
         }
     }
 

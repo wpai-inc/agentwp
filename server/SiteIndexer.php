@@ -7,7 +7,9 @@ use WpAi\AgentWp\Services\Cache;
 
 class SiteIndexer implements Registrable
 {
-    public function __construct(private Main $main) {}
+    public function __construct(private Main $main)
+    {
+    }
 
     public function register()
     {
@@ -20,8 +22,10 @@ class SiteIndexer implements Registrable
 
     public function sendByCron(): void
     {
-        if (!wp_next_scheduled('agentwp_send_site_index')) {
+        $throttle = get_transient('agentwp_send_site_index_throttle');
+        if (!wp_next_scheduled('agentwp_send_site_index') && !$throttle) {
             wp_schedule_single_event(time(), 'agentwp_send_site_index');
+            set_transient('agentwp_send_site_index_throttle', true, $this->main::AGENTWP_CRON_THROTTLE);
         }
     }
 
@@ -53,7 +57,7 @@ class SiteIndexer implements Registrable
                 if ($plugin_slug === '.') {
                     $plugin_slug = basename($plugin, '.php');
                 }
-                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR.'/'.$plugin);
+                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
             }
 
             foreach ($info['wp-plugins-active']['fields'] as $plugin_name => $plugin_info) {
@@ -84,7 +88,7 @@ class SiteIndexer implements Registrable
         $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
         $tables = array_map('current', $tables);
         foreach ($tables as $table) {
-            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
+            $rows = $wpdb->get_results('DESCRIBE ' . $table, ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
             $info['db-schema']['tables'][$table] = array_map(function ($row) {

@@ -21,6 +21,8 @@ class Main
 
     const BUILD_DIR = 'build';
 
+    const AGENTWP_CRON_THROTTLE = 300;
+
     public $companyName = 'Agent WP';
 
     public $attributionUrl = 'https://agentwp.com';
