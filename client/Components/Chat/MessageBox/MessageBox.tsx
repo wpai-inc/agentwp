@@ -56,7 +56,6 @@ export default function MessageBox() {
       <Commands onMessageBoxKeyUp={ keyUpEvent } onSetMessage={ setMessage } message={ message } />
       <textarea
         onChange={ e => setMessage( e.target.value ) }
-        onFocus={ () => setSelectedInput( null ) }
         value={ message }
         className="h-24 w-full resize-none p-2 text-base"
         placeholder="Message..."

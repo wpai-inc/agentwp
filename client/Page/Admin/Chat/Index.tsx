@@ -35,11 +35,11 @@ if ( rootElement ) {
                       <UserRequestsProvider>
                         <StreamProvider>
                           <ActionListenerProvider>
-                            { /* <InputSelectProvider> */ }
-                            <ChatProvider>
-                              <Chat />
-                            </ChatProvider>
-                            { /* </InputSelectProvider> */ }
+                            <InputSelectProvider>
+                              <ChatProvider>
+                                <Chat />
+                              </ChatProvider>
+                            </InputSelectProvider>
                           </ActionListenerProvider>
                         </StreamProvider>
                       </UserRequestsProvider>

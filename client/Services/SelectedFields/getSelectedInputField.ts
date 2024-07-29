@@ -14,10 +14,10 @@ export default function getSelectedInputField(
   document.body.addEventListener( 'focusin', function ( event ) {
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLElement;
     if (
-      ( inputElement.tagName === 'INPUT' ||
+      ( ( inputElement.tagName === 'INPUT' && inputElement.type === 'text' ) ||
         inputElement.tagName === 'TEXTAREA' ||
         ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
-      ! inputElement.closest( '#awp-chat' )
+      ! inputElement.closest( '#agentwp-admin-chat' )
     ) {
       const inputName = inputElement.getAttribute( 'name' );
       const inputId = inputElement.getAttribute( 'id' );
@@ -57,7 +57,7 @@ export default function getSelectedInputField(
 
   document.addEventListener( 'mousedown', event => {
     const clickedElement = event.target as HTMLElement;
-    if ( ! clickedElement.closest( '#awp-chat' ) ) {
+    if ( ! clickedElement.closest( '#agentwp-admin-chat' ) ) {
       setSelectedInput( null );
     }
   } );
