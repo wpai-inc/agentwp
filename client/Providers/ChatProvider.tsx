@@ -20,14 +20,7 @@ type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 const ChatContext = createContext( {
   open: false,
   setOpen: ( _open: boolean ) => {},
-  toggle: () => {},
-  maximizeChatWindow: ( _element: HTMLElement ) => {},
-  reduceWindow: () => {},
-  isMaximized: false,
-  minimizing: false,
-  expanding: false,
-  maximizing: false,
-  reducing: false,
+  toggle: ( _callback?: () => void ) => {},
   conversation: [] as UserRequestType[],
   sendMessage: ( _message: string ) => {},
   setChatSetting: ( _setting: ChatSettingProps ) => {},
@@ -52,11 +45,6 @@ export default function ChatProvider( {
   const { client } = useClient();
   const { settings, setSettings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
-  const [ minimizing, setMinimizing ] = useState( false );
-  const [ expanding, setExpanding ] = useState( false );
-  const [ maximizing, setMaximizing ] = useState( false );
-  const [ reducing, setReducing ] = useState( false );
-  const [ isMaximized, setIsMaximized ] = useState( settings.chatMaximized ?? false );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error } = useStream();
@@ -66,7 +54,6 @@ export default function ChatProvider( {
     userRequestId: '',
     liveAction: null as AgentAction | null,
   } );
-  //todo: use ref's ...
 
   const { selectedInput } = useInputSelect();
 
@@ -127,41 +114,12 @@ export default function ChatProvider( {
     }
   }, [ error ] );
 
-  function toggle() {
+  function toggle( callback?: () => void ) {
     setOpen( prev => ! prev );
+    if ( callback ) {
+      callback();
+    }
     setSettings( settings => ( { ...settings, chatOpen: ! settings.chatOpen } ) );
-  }
-
-  function maximizeChatWindow( chatWindowElement: HTMLElement ) {
-    setMaximizing( true );
-    setTimeout( () => {
-      setMaximizing( false );
-      setIsMaximized( true );
-      chatWindowElement.removeAttribute( 'style' );
-      chatWindowElement.style.transform = 'translate(0px, 0px)';
-      setSettings( {
-        chatMaximized: true,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
-      } );
-    }, 1000 );
-  }
-
-  function reduceWindow() {
-    setReducing( true );
-    setTimeout( () => {
-      setReducing( false );
-      setIsMaximized( false );
-      setSettings( {
-        chatMaximized: false,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
-      } );
-    }, 1000 );
   }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
@@ -215,13 +173,6 @@ export default function ChatProvider( {
         open,
         setOpen,
         toggle,
-        maximizeChatWindow,
-        reduceWindow,
-        isMaximized,
-        maximizing,
-        reducing,
-        minimizing,
-        expanding,
         conversation,
         sendMessage,
         setChatSetting,

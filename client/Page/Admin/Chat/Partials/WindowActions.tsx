@@ -17,6 +17,7 @@ const Corners = () => {
 
 export default function WindowActions( {
   show = false,
+  toggle,
   handleDrag,
   maximizeWindow,
   restoreWindow,
@@ -24,14 +25,13 @@ export default function WindowActions( {
   ...props
 }: {
   show?: boolean;
+  toggle: () => void;
   onMouseEnter?: () => void;
   maximizeWindow?: () => void;
   restoreWindow?: () => void;
   isMaximized?: boolean;
   handleDrag: ( e: MouseEvent ) => void;
 } ) {
-  const { toggle } = useChat();
-
   return (
     <div
       onMouseDown={ e => handleDrag( e.nativeEvent ) }
