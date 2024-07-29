@@ -9,7 +9,7 @@
     "clean": "rimraf agentwp agentwp.zip",
     "preview": "vite preview",
     "copy-files": "copyfiles \"build/**/*\" \"assets/**/*\" \"server/**/*\" \"vendor/**/*\" *.php *.txt agentwp/",
-    "zip": "zip -r agentwp.zip agentwp && rimraf agentwp",
+    "zip": "zip -r agentwp.zip agentwp",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "storybook": "STORYBOOK_ENV=1 storybook dev -p 6006",
