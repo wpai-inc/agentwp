@@ -11,13 +11,21 @@ class SiteIndexer implements Registrable
 
     public function register()
     {
-        add_action('admin_init', [$this, 'indexSite']);
+        add_action('admin_init', [$this, 'sendByCron']);
+        add_action('agentwp_send_site_index', [$this, 'send']);
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
         add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
     }
 
-    public function indexSite()
+    public function sendByCron(): void
+    {
+        if (!wp_next_scheduled('agentwp_send_site_index')) {
+            wp_schedule_single_event(time(), 'agentwp_send_site_index');
+        }
+    }
+
+    public function send()
     {
         if ($this->main->siteId()) {
             if (defined('DOING_AJAX') && DOING_AJAX) {
@@ -27,7 +35,7 @@ class SiteIndexer implements Registrable
             $cache = new Cache('site_data', SiteData::getDebugData());
 
             if ($cache->miss()) {
-                $this->main->client()->indexSite(json_encode($cache->getData()));
+                $this->main->client(false)->indexSite(json_encode($cache->getData()));
             }
         }
     }

@@ -11,9 +11,6 @@ use WpAi\AgentWp\Traits\ClientRequests;
 class AwpClient
 {
     use ClientRequests;
-
-    private Main $main;
-
     private ?string $token = null;
 
     private int $timeout = 15;
@@ -22,10 +19,8 @@ class AwpClient
 
     private ?\WP_User $wp_user;
 
-    public function __construct()
+    public function __construct(private Main $main)
     {
-        $this->main = new Main(__FILE__);
-
         $this->wp_user = wp_get_current_user();
     }
 
@@ -47,6 +42,7 @@ class AwpClient
             $authHeader,
             $additionalHeaders,
         );
+
         $request = new Request($method, $url, $headers, $body);
 
         return $client->send($request);

@@ -97,7 +97,7 @@ class Main
 
     public function client($checkUserAccessRights = true): AwpClient
     {
-        $client = new AwpClient();
+        $client = new AwpClient($this);
         if (!$checkUserAccessRights && $access_token = $this->settings->getAccessToken()) {
             $client->setToken($access_token);
         } elseif ($access_token = $this->auth()->getAccessToken()) {
