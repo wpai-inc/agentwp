@@ -70,7 +70,7 @@ export default function AgentResponse( {
         <>
           { pending && <ActionPending /> }
 
-          { incomplete && <ActionIncomplete userRequestId={ userRequestId } /> }
+          { incomplete && ! pending && <ActionIncomplete userRequestId={ userRequestId } /> }
         </>
       ) }
     </div>
