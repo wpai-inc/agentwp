@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { animate } from 'framer-motion';
 
@@ -39,7 +39,6 @@ export const usePosition = ( {
   const { settings, setSettings } = useClientSettings();
   const [ isDragging, setIsDragging ] = useState( false );
   const [ isResizing, setIsResizing ] = useState( false );
-  const [ isMaximizing, setIsMaximizing ] = useState( false );
   const [ maximization, setMaximization ] = useState< {
     isMaximized: boolean;
     position: ChatWindowPosition;
@@ -157,6 +156,9 @@ export const usePosition = ( {
   const handleResize = useCallback(
     ( e: MouseEvent ) => {
       e.preventDefault();
+      if ( maximization?.isMaximized ) {
+        setMaximization( undefined );
+      }
       if ( isResizing && chatWindowContainer && mouseStartPos && elementStartPos ) {
         const parentRect = chatWindowContainer.getBoundingClientRect();
 
@@ -209,6 +211,7 @@ export const usePosition = ( {
       setPosition,
       position,
       chatWindowContainer,
+      maximization,
     ],
   );
 
@@ -224,15 +227,7 @@ export const usePosition = ( {
     const { width, height } = calculateBoundaries();
     setPosition( { right: 0, bottom: 0 } );
     setSize( { width, height, offset: { x: 0, y: 0 } } );
-    if ( chatWindowRef.current ) {
-      animate( chatWindowRef.current, {
-        width,
-        height,
-        right: 0,
-        bottom: 0,
-      } );
-    }
-  }, [ position, calculateBoundaries, animate, chatWindowRef ] );
+  }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
 
   const restoreWindow = useCallback( () => {
     if ( maximization ) {
@@ -240,17 +235,10 @@ export const usePosition = ( {
       setPosition( position );
       setSize( size );
       setMaximization( undefined );
-      if ( chatWindowRef.current ) {
-        animate( chatWindowRef.current, {
-          width: size.width,
-          height: size.height,
-          ...position,
-        } );
-      }
     }
-  }, [ maximization, position, chatWindowRef ] );
+  }, [ maximization, position ] );
 
-  const isMaximized = maximization?.isMaximized;
+  const isMaximized = maximization?.isMaximized ? true : false;
 
   /**
    * Mouse Handler Listeners
@@ -290,6 +278,5 @@ export const usePosition = ( {
     maximizeWindow,
     restoreWindow,
     isMaximized,
-    isMaximizing,
   };
 };

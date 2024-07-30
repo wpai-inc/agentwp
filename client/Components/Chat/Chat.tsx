@@ -6,7 +6,7 @@ import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import Conversation from './Convo/Conversation';
 import { usePosition } from '@/Hooks/position';
 import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
-import { useAnimate } from 'framer-motion';
+import { useAnimate, ValueAnimationTransition } from 'framer-motion';
 import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
 import { Button } from '@/Components/ui/button';
 import Logo from '../Logo';
@@ -21,6 +21,14 @@ export default function Chat( defaultOpen = false ) {
   const [ scope, animate ] = useAnimate();
   const [ isOpening, setIsOpening ] = useState( false );
   const [ isClosing, setIsClosing ] = useState( false );
+  const [ shouldAnimate, setShouldAnimate ] = useState( false );
+  const noTransition = { duration: 0 };
+  const transition: ValueAnimationTransition = {
+    type: 'spring',
+    duration: 0.5,
+    bounce: 0.25,
+  };
+
   const {
     position,
     size,
@@ -33,8 +41,6 @@ export default function Chat( defaultOpen = false ) {
   } = usePosition( {
     chatWindowRef: scope,
   } );
-
-  const isToggling = isOpening || isClosing;
 
   const triggerPosition = useMemo( () => {
     const el = chatTriggerRef.current?.getBoundingClientRect();
@@ -54,11 +60,12 @@ export default function Chat( defaultOpen = false ) {
     };
 
     if ( scope.current ) {
-      animate( scope.current, styles, { duration: 0 } );
+      const animation = shouldAnimate ? transition : noTransition;
+      animate( scope.current, styles, animation );
     }
 
     return styles;
-  }, [ size, position, scope ] );
+  }, [ size, position, scope, shouldAnimate ] );
 
   const closedStyles = useMemo(
     () => ( {
@@ -66,6 +73,7 @@ export default function Chat( defaultOpen = false ) {
       borderRadius: '100%',
       width: 0,
       height: 0,
+      transform: `translate(0, 0)`,
       ...triggerPosition,
     } ),
     [ triggerPosition ],
@@ -79,11 +87,7 @@ export default function Chat( defaultOpen = false ) {
     setOpen( isOpen );
     if ( isOpen ) {
       setIsOpening( true );
-      animate( scope.current, openedStyles, {
-        type: 'spring',
-        duration: 0.5,
-        bounce: 0.25,
-      } ).then( () => setIsOpening( false ) );
+      animate( scope.current, openedStyles, transition ).then( () => setIsOpening( false ) );
     } else {
       setIsClosing( true );
       animate( scope.current, closedStyles, {
@@ -93,7 +97,7 @@ export default function Chat( defaultOpen = false ) {
       } ).then( () => setIsClosing( false ) );
     }
     updateSetting( 'chatOpen', isOpen );
-  }, [ scope, openedStyles, closedStyles, updateSetting, animate ] );
+  }, [ scope, openedStyles, closedStyles, updateSetting, animate, transition ] );
 
   /**
    * Animate on mount
@@ -106,6 +110,22 @@ export default function Chat( defaultOpen = false ) {
     }
   }, [] );
 
+  useEffect( () => {
+    if ( ! isMaximized ) {
+      setShouldAnimate( false );
+    }
+  }, [ isMaximized ] );
+
+  function handleMaximize() {
+    setShouldAnimate( true );
+    maximizeWindow();
+  }
+
+  function handleRestore() {
+    setShouldAnimate( true );
+    restoreWindow();
+  }
+
   return (
     canAccessAgent && (
       <>
@@ -117,7 +137,7 @@ export default function Chat( defaultOpen = false ) {
             'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000] origin-bottom-right',
             {
               'user-select-none': isDragging,
-              'overflow-hidden': isToggling,
+              'overflow-hidden': isOpening || isClosing,
             },
           ) }>
           <WindowActions
@@ -125,9 +145,9 @@ export default function Chat( defaultOpen = false ) {
             handleDrag={ onDrag }
             onMouseEnter={ () => setIsHovering( true ) }
             show={ isHovering || isDragging }
-            maximizeWindow={ maximizeWindow }
             isMaximized={ isMaximized }
-            restoreWindow={ restoreWindow }
+            maximizeWindow={ handleMaximize }
+            restoreWindow={ handleRestore }
           />
           <ChatTopBar handleDrag={ onDrag } />
           <Conversation />
