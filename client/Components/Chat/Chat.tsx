@@ -46,10 +46,11 @@ export default function Chat( defaultOpen = false ) {
     const styles = {
       scale: 1,
       borderRadius: '0.75rem',
-      width: size.width,
-      height: size.height,
-      bottom: position.bottom,
-      right: position.right,
+      width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
+      height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
+      right: position.right + 'px',
+      bottom: position.bottom + 'px',
+      transform: `translate(${ size.offset.x }px, ${ size.offset.y }px)`,
     };
 
     if ( scope.current ) {
@@ -112,16 +113,8 @@ export default function Chat( defaultOpen = false ) {
           ref={ scope }
           onMouseEnter={ () => setIsHovering( true ) }
           onMouseLeave={ () => setIsHovering( false ) }
-          style={ {
-            right: position.right + 'px',
-            bottom: position.bottom + 'px',
-            width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
-            height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
-            transform: `translate(${ size.offset.x }px, ${ size.offset.y }px)`,
-            transformOrigin: 'bottom right',
-          } }
           className={ cn(
-            'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000]',
+            'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000] origin-bottom-right',
             {
               'user-select-none': isDragging,
               'overflow-hidden': isToggling,
