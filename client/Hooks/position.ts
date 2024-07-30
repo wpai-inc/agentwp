@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { animate } from 'framer-motion';
 
 /**
  * Position is calculated as the distance of the bottom corner
@@ -38,6 +39,7 @@ export const usePosition = ( {
   const { settings, setSettings } = useClientSettings();
   const [ isDragging, setIsDragging ] = useState( false );
   const [ isResizing, setIsResizing ] = useState( false );
+  const [ isMaximizing, setIsMaximizing ] = useState( false );
   const [ maximization, setMaximization ] = useState< {
     isMaximized: boolean;
     position: ChatWindowPosition;
@@ -213,7 +215,7 @@ export const usePosition = ( {
   /**
    * Functions
    */
-  function maximizeWindow() {
+  const maximizeWindow = useCallback( () => {
     setMaximization( {
       isMaximized: true,
       position,
@@ -222,16 +224,31 @@ export const usePosition = ( {
     const { width, height } = calculateBoundaries();
     setPosition( { right: 0, bottom: 0 } );
     setSize( { width, height, offset: { x: 0, y: 0 } } );
-  }
+    if ( chatWindowRef.current ) {
+      animate( chatWindowRef.current, {
+        width,
+        height,
+        right: 0,
+        bottom: 0,
+      } );
+    }
+  }, [ position, calculateBoundaries, animate, chatWindowRef ] );
 
-  function restoreWindow() {
+  const restoreWindow = useCallback( () => {
     if ( maximization ) {
       const { position, size } = maximization;
       setPosition( position );
       setSize( size );
       setMaximization( undefined );
+      if ( chatWindowRef.current ) {
+        animate( chatWindowRef.current, {
+          width: size.width,
+          height: size.height,
+          ...position,
+        } );
+      }
     }
-  }
+  }, [ maximization, position, chatWindowRef ] );
 
   const isMaximized = maximization?.isMaximized;
 
@@ -273,5 +290,6 @@ export const usePosition = ( {
     maximizeWindow,
     restoreWindow,
     isMaximized,
+    isMaximizing,
   };
 };

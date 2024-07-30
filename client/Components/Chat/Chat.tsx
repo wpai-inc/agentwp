@@ -18,6 +18,9 @@ export default function Chat() {
   const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
+  const [ isOpening, setIsOpening ] = useState( false );
+  const [ isClosing, setIsClosing ] = useState( false );
+
   const {
     position,
     size,
@@ -31,41 +34,33 @@ export default function Chat() {
     chatWindowRef: scope,
   } );
 
+  const isToggling = isOpening || isClosing;
+
   const onToggle = useCallback( () => {
     if ( open ) {
-      animate(
-        scope.current,
-        {
-          scale: 1,
-          borderRadius: 0,
-          ...position,
-        },
-        {
-          ...{ type: 'spring', stiffness: 100, duration: 0.6 },
-          scale: { ease: 'easeIn', duration: 0.3, delay: 0 },
-          borderRadius: { ease: 'easeIn', duration: 0.3, delay: 0.3 },
-        },
-      );
+      setIsOpening( true );
+      animate( scope.current, {
+        scale: 1,
+        borderRadius: '0.75rem',
+        width: size.width,
+        height: size.height,
+        ...position,
+      } ).then( () => setIsOpening( false ) );
     } else if ( chatTriggerRef.current ) {
       const el = chatTriggerRef.current.getBoundingClientRect();
       const bottom = window.innerHeight - el.bottom;
       const right = window.innerWidth - el.right;
-      animate(
-        scope.current,
-        {
-          scale: 0,
-          borderRadius: '1000rem',
-          bottom,
-          right,
-        },
-        {
-          ...{ type: 'spring', stiffness: 100, duration: 0.6 },
-          scale: { ease: 'easeIn', duration: 0.3, delay: 0 },
-          borderRadius: { ease: 'easeIn', duration: 0.3, delay: 0.3 },
-        },
-      );
+      setIsClosing( true );
+      animate( scope.current, {
+        scale: 0,
+        borderRadius: '1000rem',
+        bottom,
+        right,
+        width: 0,
+        height: 0,
+      } ).then( () => setIsClosing( false ) );
     }
-  }, [ open, scope, animate, position, chatTriggerRef ] );
+  }, [ open, size, scope, animate, position, chatTriggerRef ] );
 
   const handleToggle = useCallback( () => toggle( onToggle ), [ onToggle ] );
 
@@ -88,6 +83,7 @@ export default function Chat() {
             'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000]',
             {
               'user-select-none': isDragging,
+              'overflow-hidden': isToggling,
             },
           ) }>
           <WindowActions
