@@ -21,14 +21,6 @@ export default function Chat( defaultOpen = false ) {
   const [ scope, animate ] = useAnimate();
   const [ isOpening, setIsOpening ] = useState( false );
   const [ isClosing, setIsClosing ] = useState( false );
-
-  const triggerPosition = useCallback( () => {
-    const el = chatTriggerRef.current?.getBoundingClientRect() ?? { right: 0, bottom: 0 };
-    const bottom = window.innerHeight - el.bottom;
-    const right = window.innerWidth - el.right;
-    return { bottom, right };
-  }, [ chatTriggerRef ] );
-
   const {
     position,
     size,
@@ -44,21 +36,33 @@ export default function Chat( defaultOpen = false ) {
 
   const isToggling = isOpening || isClosing;
 
-  const openedStyles = useMemo(
-    () => ( {
+  const triggerPosition = useMemo( () => {
+    const el = chatTriggerRef.current?.getBoundingClientRect();
+    if ( ! el ) return { bottom: 0, right: 0 };
+    return { bottom: window.innerHeight - el.bottom, right: window.innerWidth - el.right };
+  }, [ chatTriggerRef ] );
+
+  const openedStyles = useMemo( () => {
+    const styles = {
       scale: 1,
       borderRadius: '0.75rem',
       width: size.width,
       height: size.height,
-      ...position,
-    } ),
-    [ size, position ],
-  );
+      bottom: position.bottom,
+      right: position.right,
+    };
+
+    if ( scope.current ) {
+      animate( scope.current, styles, { duration: 0 } );
+    }
+
+    return styles;
+  }, [ size, position, scope ] );
 
   const closedStyles = useMemo(
     () => ( {
       scale: 0,
-      borderRadius: '1000rem',
+      borderRadius: '100%',
       width: 0,
       height: 0,
       ...triggerPosition,
@@ -66,19 +70,33 @@ export default function Chat( defaultOpen = false ) {
     [ triggerPosition ],
   );
 
+  /**
+   * Animate toggle
+   */
   const toggle = useCallback( () => {
     const isOpen = ! open;
     setOpen( isOpen );
     if ( isOpen ) {
       setIsOpening( true );
-      animate( scope.current, openedStyles ).then( () => setIsOpening( false ) );
+      animate( scope.current, openedStyles, {
+        type: 'spring',
+        duration: 0.5,
+        bounce: 0.25,
+      } ).then( () => setIsOpening( false ) );
     } else {
       setIsClosing( true );
-      animate( scope.current, closedStyles ).then( () => setIsClosing( false ) );
+      animate( scope.current, closedStyles, {
+        type: 'tween',
+        ease: 'anticipate',
+        duration: 0.5,
+      } ).then( () => setIsClosing( false ) );
     }
     updateSetting( 'chatOpen', isOpen );
-  }, [ scope, animate, openedStyles, closedStyles, updateSetting ] );
+  }, [ scope, openedStyles, closedStyles, updateSetting, animate ] );
 
+  /**
+   * Animate on mount
+   */
   useEffect( () => {
     if ( open ) {
       animate( scope.current, openedStyles );
