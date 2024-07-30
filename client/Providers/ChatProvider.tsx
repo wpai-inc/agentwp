@@ -1,5 +1,4 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -18,9 +17,6 @@ type CreateUserRequestResponse = {
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 const ChatContext = createContext( {
-  open: false,
-  setOpen: ( _open: boolean ) => {},
-  toggle: ( _callback?: () => void ) => {},
   conversation: [] as UserRequestType[],
   sendMessage: ( _message: string ) => {},
   setChatSetting: ( _setting: ChatSettingProps ) => {},
@@ -35,16 +31,8 @@ export function useChat() {
   return chat;
 }
 
-export default function ChatProvider( {
-  defaultOpen = false,
-  children,
-}: {
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-} ) {
+export default function ChatProvider( { children }: { children: React.ReactNode } ) {
   const { client } = useClient();
-  const { settings, setSettings } = useClientSettings();
-  const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error } = useStream();
@@ -114,14 +102,6 @@ export default function ChatProvider( {
     }
   }, [ error ] );
 
-  function toggle( callback?: () => void ) {
-    setOpen( prev => ! prev );
-    if ( callback ) {
-      callback();
-    }
-    setSettings( settings => ( { ...settings, chatOpen: ! settings.chatOpen } ) );
-  }
-
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
     const response = await client.storeConversation( { message, selected_input: selectedInput } );
 
@@ -170,9 +150,6 @@ export default function ChatProvider( {
   return (
     <ChatContext.Provider
       value={ {
-        open,
-        setOpen,
-        toggle,
         conversation,
         sendMessage,
         setChatSetting,
