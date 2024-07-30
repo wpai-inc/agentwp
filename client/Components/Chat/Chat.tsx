@@ -1,6 +1,5 @@
-import { useChat } from '@/Providers/ChatProvider';
 import { usePage } from '@/Providers/PageProvider';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
@@ -11,15 +10,24 @@ import { useAnimate } from 'framer-motion';
 import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
 import { Button } from '@/Components/ui/button';
 import Logo from '../Logo';
+import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
-export default function Chat() {
+export default function Chat( defaultOpen = false ) {
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
-  const { open, toggle } = useChat();
+  const { settings, updateSetting } = useClientSettings();
+  const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
   const [ isOpening, setIsOpening ] = useState( false );
   const [ isClosing, setIsClosing ] = useState( false );
+
+  const triggerPosition = useCallback( () => {
+    const el = chatTriggerRef.current?.getBoundingClientRect() ?? { right: 0, bottom: 0 };
+    const bottom = window.innerHeight - el.bottom;
+    const right = window.innerWidth - el.right;
+    return { bottom, right };
+  }, [ chatTriggerRef ] );
 
   const {
     position,
@@ -36,33 +44,48 @@ export default function Chat() {
 
   const isToggling = isOpening || isClosing;
 
-  const onToggle = useCallback( () => {
-    if ( open ) {
-      setIsOpening( true );
-      animate( scope.current, {
-        scale: 1,
-        borderRadius: '0.75rem',
-        width: size.width,
-        height: size.height,
-        ...position,
-      } ).then( () => setIsOpening( false ) );
-    } else if ( chatTriggerRef.current ) {
-      const el = chatTriggerRef.current.getBoundingClientRect();
-      const bottom = window.innerHeight - el.bottom;
-      const right = window.innerWidth - el.right;
-      setIsClosing( true );
-      animate( scope.current, {
-        scale: 0,
-        borderRadius: '1000rem',
-        bottom,
-        right,
-        width: 0,
-        height: 0,
-      } ).then( () => setIsClosing( false ) );
-    }
-  }, [ open, size, scope, animate, position, chatTriggerRef ] );
+  const openedStyles = useMemo(
+    () => ( {
+      scale: 1,
+      borderRadius: '0.75rem',
+      width: size.width,
+      height: size.height,
+      ...position,
+    } ),
+    [ size, position ],
+  );
 
-  const handleToggle = useCallback( () => toggle( onToggle ), [ onToggle ] );
+  const closedStyles = useMemo(
+    () => ( {
+      scale: 0,
+      borderRadius: '1000rem',
+      width: 0,
+      height: 0,
+      ...triggerPosition,
+    } ),
+    [ triggerPosition ],
+  );
+
+  const toggle = useCallback( () => {
+    const isOpen = ! open;
+    setOpen( isOpen );
+    if ( isOpen ) {
+      setIsOpening( true );
+      animate( scope.current, openedStyles ).then( () => setIsOpening( false ) );
+    } else {
+      setIsClosing( true );
+      animate( scope.current, closedStyles ).then( () => setIsClosing( false ) );
+    }
+    updateSetting( 'chatOpen', isOpen );
+  }, [ scope, animate, openedStyles, closedStyles, updateSetting ] );
+
+  useEffect( () => {
+    if ( open ) {
+      animate( scope.current, openedStyles );
+    } else {
+      animate( scope.current, closedStyles, { duration: 0 } );
+    }
+  }, [] );
 
   return (
     canAccessAgent && (
@@ -87,7 +110,7 @@ export default function Chat() {
             },
           ) }>
           <WindowActions
-            toggle={ handleToggle }
+            toggle={ toggle }
             handleDrag={ onDrag }
             onMouseEnter={ () => setIsHovering( true ) }
             show={ isHovering || isDragging }
@@ -101,7 +124,7 @@ export default function Chat() {
         </div>
         <Button
           ref={ chatTriggerRef }
-          onClick={ handleToggle }
+          onClick={ toggle }
           variant="ghost"
           className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
           { open ? <ArrowRightIcon /> : <Logo className="w-full" /> }
