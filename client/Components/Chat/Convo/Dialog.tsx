@@ -8,25 +8,25 @@ import { usePage } from '@/Providers/PageProvider';
 import ContentContext from '@/Components/Chat/ContentContext/ContentContext';
 import { useInputSelect } from '@/Providers/InputSelectProvider';
 
-export default function Dialog( { conversation }: { conversation: UserRequestType[] } ) {
+export default function Dialog({ conversation }: { conversation: UserRequestType[] }) {
   const { errors } = useError();
   const { page } = usePage();
   const { selectedInput } = useInputSelect();
 
   return (
     <div
-      className={ cn(
-        'flex-1 flex flex-col-reverse overflow-y-auto p-4 relative max-w-screen-md mx-auto w-full',
-      ) }>
-      { ! conversation.length ? (
+      className={cn(
+        'relative mx-auto flex w-full max-w-screen-md flex-1 flex-col-reverse overflow-y-auto p-4',
+      )}>
+      {!conversation.length ? (
         <>
-          <ChatWelcome user={ page.user } />{ ' ' }
+          <ChatWelcome user={page.user} />{' '}
         </>
       ) : (
-        conversation.map( msg => <Message key={ msg.id } { ...msg } /> )
-      ) }
-      { !! errors.length && <ChatError errors={ errors } /> }
-      { selectedInput && <ContentContext selectedInput={ selectedInput } /> }
+        conversation.map(msg => <Message key={msg.id} {...msg} />)
+      )}
+      {!!errors.length && <ChatError errors={errors} />}
+      {selectedInput && <ContentContext selectedInput={selectedInput} />}
     </div>
   );
 }

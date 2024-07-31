@@ -67,13 +67,17 @@ export default function AgentResponse( {
 
       { opened && <Reason /> }
 
+      { aborted && <ActionAborted /> }
+
       { messageAction ? (
         <ActionComponent { ...messageAction } />
       ) : (
         <>
           { pending && <ActionPending /> }
           { incomplete && aborted && <ActionAborted /> }
-          { incomplete && ! pending && <ActionIncomplete userRequestId={ userRequestId } /> }
+          { incomplete && ! pending && ! aborted && (
+            <ActionIncomplete userRequestId={ userRequestId } />
+          ) }
         </>
       ) }
     </div>

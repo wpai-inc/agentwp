@@ -91,6 +91,9 @@ export default class AwpClient {
       { result: data },
     );
   }
+  async abortUserRequest(userRequestId: string): Promise<AxiosResponse> {
+    return this.request('POST', `${this.baseUrl}/api/request/${userRequestId}/abort`, {}, {});
+  }
 
   async getSettings(): Promise<AxiosResponse> {
     return this.request('GET', `${this.baseUrl}/api/site/settings`);
