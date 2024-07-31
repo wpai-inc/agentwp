@@ -99,14 +99,13 @@ class Main
 
     public function client($checkUserAccessRights = true): AwpClient
     {
-        $client = new AwpClient($this);
+        $client = new AwpClient();
         if (!$checkUserAccessRights && $access_token = $this->settings->getAccessToken()) {
             $client->setToken($access_token);
         } elseif ($access_token = $this->auth()->getAccessToken()) {
             $client->setToken($access_token);
         }
-
-        $client->setWpUser(wp_get_current_user());
+        $client->setWpUser(wp_get_current_user())->setSiteId($this->siteId());
 
         return $client;
     }

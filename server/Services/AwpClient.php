@@ -19,7 +19,9 @@ class AwpClient
 
     private ?\WP_User $wp_user;
 
-    public function __construct(private Main $main)
+    private ?string $siteId;
+
+    public function __construct()
     {
         $this->wp_user = wp_get_current_user();
     }
@@ -32,7 +34,7 @@ class AwpClient
             'Content-Type' => 'application/json',
             'X-Wp-Agent-Version' => $this->agentWpVersion,
             'X-Wp-User-Id' => $this->wp_user->ID,
-            'X-Wp-Site-Id' => $this->main->siteId(),
+            'X-Wp-Site-Id' => $this->siteId,
         ];
         $authHeader = $this->token ? [
             'Authorization' => "Bearer $this->token",
@@ -72,6 +74,13 @@ class AwpClient
     public function setWpUser($wp_user): self
     {
         $this->wp_user = $wp_user;
+
+        return $this;
+    }
+
+    public function setSiteId(?string $siteId): self
+    {
+        $this->siteId = $siteId;
 
         return $this;
     }
