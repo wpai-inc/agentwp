@@ -105,7 +105,9 @@ class Main
         } elseif ($access_token = $this->auth()->getAccessToken()) {
             $client->setToken($access_token);
         }
-        $client->setWpUser(wp_get_current_user())->setSiteId($this->siteId());
+        $client->setWpUser(wp_get_current_user())
+            ->setSiteId($this->siteId())
+            ->setApiHost($this->apiHost());
 
         return $client;
     }

@@ -21,6 +21,8 @@ class AwpClient
 
     private ?string $siteId;
 
+    private ?string $apiHost;
+
     public function __construct()
     {
         $this->wp_user = wp_get_current_user();
@@ -81,6 +83,13 @@ class AwpClient
     public function setSiteId(?string $siteId): self
     {
         $this->siteId = $siteId;
+
+        return $this;
+    }
+
+    public function setApiHost(?string $apiHost): self
+    {
+        $this->apiHost = $apiHost;
 
         return $this;
     }
