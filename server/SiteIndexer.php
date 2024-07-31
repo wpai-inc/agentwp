@@ -4,9 +4,11 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Services\Cache;
+use WpAi\AgentWp\Traits\ScheduleEvent;
 
 class SiteIndexer implements Registrable
 {
+    use ScheduleEvent;
     public function __construct(private Main $main)
     {
     }
@@ -22,11 +24,10 @@ class SiteIndexer implements Registrable
 
     public function sendByCron(): void
     {
-        $throttle = get_transient('agentwp_send_site_index_throttle');
-        if (!wp_next_scheduled('agentwp_send_site_index') && !$throttle) {
-            wp_schedule_single_event(time(), 'agentwp_send_site_index');
-            set_transient('agentwp_send_site_index_throttle', true, $this->main::AGENTWP_CRON_THROTTLE);
-        }
+        $this->scheduleSingleCronEvent(
+            'agentwp_send_site_index',
+            $this->main::AGENTWP_CRON_THROTTLE
+        );
     }
 
     public function send()

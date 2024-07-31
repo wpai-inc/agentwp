@@ -4,9 +4,13 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
+use WpAi\AgentWp\Traits\ScheduleEvent;
 
 class IndexSiteSummary implements Registrable
 {
+
+    use ScheduleEvent;
+
     public function __construct(private Main $main)
     {
     }
@@ -19,11 +23,10 @@ class IndexSiteSummary implements Registrable
 
     public function sendByCron(): void
     {
-        $throttle = get_transient('agentwp_send_site_summary_throttle');
-        if (!wp_next_scheduled('agentwp_send_site_summary') && !$throttle) {
-            wp_schedule_single_event(time(), 'agentwp_send_site_summary');
-            set_transient('agentwp_send_site_summary_throttle', true, $this->main::AGENTWP_CRON_THROTTLE);
-        }
+        $this->scheduleSingleCronEvent(
+            'agentwp_send_site_summary',
+            $this->main::AGENTWP_CRON_THROTTLE
+        );
     }
 
     public function send(): void
