@@ -1,5 +1,4 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -17,10 +16,8 @@ type CreateUserRequestResponse = {
 
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
-const ChatContext = createContext({
-  open: false,
-  setOpen: (_open: boolean) => {},
-  toggle: (_callback?: () => void) => {},
+
+const ChatContext = createContext( {
   conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
   cancelStreaming: () => {},
@@ -36,17 +33,10 @@ export function useChat() {
   return chat;
 }
 
-export default function ChatProvider({
-  defaultOpen = false,
-  children,
-}: {
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-}) {
+
+export default function ChatProvider( { children }: { children: React.ReactNode } ) {
   const { client } = useClient();
-  const { settings, setSettings } = useClientSettings();
-  const [open, setOpen] = useState(settings.chatOpen ?? defaultOpen);
-  const [chatSetting, setChatSetting] = useState<ChatSettingProps>(null);
+  const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error, streamsAbborted } = useStream();
   const { addErrors } = useError();
@@ -58,11 +48,10 @@ export default function ChatProvider({
 
   const { selectedInput } = useInputSelect();
 
-  useEffect(() => {
-    // console.log( 'liveAction && currentUserRequestId', liveAction, currentUserRequestId );
-    if (liveAction && currentUserRequestId) {
-      if (startingStreaming.userRequestId !== currentUserRequestId) {
-        setStartingStreaming({
+  useEffect( () => {
+    if ( liveAction && currentUserRequestId ) {
+      if ( startingStreaming.userRequestId !== currentUserRequestId ) {
+        setStartingStreaming( {
           userRequestId: currentUserRequestId,
           liveAction,
         });
@@ -157,17 +146,8 @@ export default function ChatProvider({
     }
   }, [streamsAbborted]);
 
-  function toggle(callback?: () => void) {
-    setOpen(prev => !prev);
-    if (callback) {
-      callback();
-    }
-    setSettings(settings => ({ ...settings, chatOpen: !settings.chatOpen }));
-  }
-
-  async function userRequest(message: string): Promise<CreateUserRequestResponse> {
-    const response = await client.storeConversation({ message, selected_input: selectedInput });
-
+  async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
+    const response = await client.storeConversation( { message, selected_input: selectedInput } );
     return response.data;
   }
 
@@ -227,10 +207,7 @@ export default function ChatProvider({
 
   return (
     <ChatContext.Provider
-      value={{
-        open,
-        setOpen,
-        toggle,
+      value={ {
         conversation,
         sendMessage,
         cancelStreaming,

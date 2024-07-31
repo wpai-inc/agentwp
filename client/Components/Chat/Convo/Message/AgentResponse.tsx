@@ -74,7 +74,6 @@ export default function AgentResponse({
       ) : (
         <>
           {pending && <ActionPending />}
-
           {incomplete && !pending && !aborted && <ActionIncomplete userRequestId={userRequestId} />}
         </>
       )}

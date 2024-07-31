@@ -17,6 +17,7 @@ type ClientSettingValue = string | boolean | number | null | object;
 interface ContextProps {
   settings: ClientSettings;
   setSettings: React.Dispatch< React.SetStateAction< ClientSettings > >;
+  updateSetting: ( key: keyof ClientSettings, value: ClientSettingValue ) => void;
 }
 
 const namespace = 'awp_settings.';
@@ -58,6 +59,10 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
     offset: getLocalStorage( 'offset', { x: 0, y: 0 } ) as TwoDCoord,
   } );
 
+  function updateSetting( key: keyof ClientSettings, value: ClientSettingValue ) {
+    setSettings( prev => ( { ...prev, [ key ]: value } ) );
+  }
+
   useEffect( () => {
     for ( const [ key, value ] of Object.entries( settings ) ) {
       setLocalStorage( key as keyof ClientSettings, value );
@@ -65,7 +70,7 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
   }, [ settings ] );
 
   return (
-    <ClientSettingsContext.Provider value={ { settings, setSettings } }>
+    <ClientSettingsContext.Provider value={ { settings, setSettings, updateSetting } }>
       { children }
     </ClientSettingsContext.Provider>
   );
