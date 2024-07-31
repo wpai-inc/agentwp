@@ -21,6 +21,8 @@ class Main
 
     const BUILD_DIR = 'build';
 
+    const AGENTWP_CRON_THROTTLE = 300;
+
     public $companyName = 'Agent WP';
 
     public $attributionUrl = 'https://agentwp.com';
@@ -103,8 +105,9 @@ class Main
         } elseif ($access_token = $this->auth()->getAccessToken()) {
             $client->setToken($access_token);
         }
-
-        $client->setWpUser(wp_get_current_user());
+        $client->setWpUser(wp_get_current_user())
+            ->setSiteId($this->siteId())
+            ->setApiHost($this->apiHost());
 
         return $client;
     }

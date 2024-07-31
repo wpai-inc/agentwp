@@ -4,20 +4,33 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Services\Cache;
+use WpAi\AgentWp\Traits\ScheduleEvent;
 
 class SiteIndexer implements Registrable
 {
-    public function __construct(private Main $main) {}
+    use ScheduleEvent;
+    public function __construct(private Main $main)
+    {
+    }
 
     public function register()
     {
-        add_action('admin_init', [$this, 'indexSite']);
+        add_action('admin_init', [$this, 'sendByCron']);
+        add_action('agentwp_send_site_index', [$this, 'send']);
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
         add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
     }
 
-    public function indexSite()
+    public function sendByCron(): void
+    {
+        $this->scheduleSingleCronEvent(
+            'agentwp_send_site_index',
+            $this->main::AGENTWP_CRON_THROTTLE
+        );
+    }
+
+    public function send()
     {
         if ($this->main->siteId()) {
             if (defined('DOING_AJAX') && DOING_AJAX) {
@@ -27,7 +40,7 @@ class SiteIndexer implements Registrable
             $cache = new Cache('site_data', SiteData::getDebugData());
 
             if ($cache->miss()) {
-                $this->main->client()->indexSite(json_encode($cache->getData()));
+                $this->main->client(false)->indexSite(json_encode($cache->getData()));
             }
         }
     }
@@ -45,7 +58,7 @@ class SiteIndexer implements Registrable
                 if ($plugin_slug === '.') {
                     $plugin_slug = basename($plugin, '.php');
                 }
-                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR.'/'.$plugin);
+                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
             }
 
             foreach ($info['wp-plugins-active']['fields'] as $plugin_name => $plugin_info) {
@@ -76,7 +89,7 @@ class SiteIndexer implements Registrable
         $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
         $tables = array_map('current', $tables);
         foreach ($tables as $table) {
-            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
+            $rows = $wpdb->get_results('DESCRIBE ' . $table, ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
             $info['db-schema']['tables'][$table] = array_map(function ($row) {

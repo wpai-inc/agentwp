@@ -11,7 +11,7 @@ trait ClientRequests
         try {
             return $this->request(
                 method: 'POST',
-                url: "{$this->main->apiHost()}/api/site/health",
+                url: "{$this->apiHost}/api/site/health",
                 body: $data
             );
         } catch (\Exception $e) {
@@ -27,7 +27,7 @@ trait ClientRequests
         try {
             return $this->request(
                 method: 'POST',
-                url: "{$this->main->apiHost()}/api/site/summarize",
+                url: "{$this->apiHost}/api/site/summarize",
                 body: $data
             );
         } catch (\Exception $e) {
@@ -43,7 +43,7 @@ trait ClientRequests
         try {
             return $this->request(
                 method: 'POST',
-                url: "{$this->main->apiHost()}/api/site/errors",
+                url: "{$this->apiHost}/api/site/errors",
                 body: $data
             );
         } catch (\Exception $e) {
@@ -71,7 +71,7 @@ trait ClientRequests
         try {
             return $this->request(
                 method: 'PUT',
-                url: "{$this->main->apiHost()}/api/user/wp-user",
+                url: "{$this->apiHost}/api/user/wp-user",
                 body: json_encode($data)
             );
         } catch (\Exception $e) {
