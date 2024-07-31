@@ -14,8 +14,7 @@ export default function Message(userRequest: UserRequestType) {
   const pending = sameUserRequest && !streamClosed;
   const isIncomplete =
     userRequest.agent_actions?.length === 0 || userRequest.agent_actions?.some(aa => !aa.action);
-  const isAborted =
-    streamClosed && userRequest.agent_actions?.some(aa => aa?.result?.status === 'aborted');
+  const isAborted = userRequest.agent_actions?.some(aa => aa?.result?.status === 'aborted');
 
   return (
     <FeedbackProvider userRequestId={userRequest.id} feedback={userRequest.feedback}>

@@ -48,7 +48,7 @@ export default function ChatProvider({
   const [open, setOpen] = useState(settings.chatOpen ?? defaultOpen);
   const [chatSetting, setChatSetting] = useState<ChatSettingProps>(null);
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
-  const { startStream, liveAction, error } = useStream();
+  const { startStream, liveAction, error, streamsAbborted } = useStream();
   const { addErrors } = useError();
   const [editorContent, setEditorContent] = useState<BlockType[]>([]);
   const [startingStreaming, setStartingStreaming] = useState({
@@ -115,6 +115,31 @@ export default function ChatProvider({
     }
   }, [error]);
 
+  useEffect(() => {
+    if (streamsAbborted.length > 0) {
+      // update conversations
+      setConversation(prev =>
+        prev.map(msg => {
+          if (streamsAbborted.includes(msg.id)) {
+            console.log('streamsAbborted', streamsAbborted);
+            return {
+              ...msg,
+              agent_actions: msg.agent_actions.map(aa => {
+                return {
+                  ...aa,
+                  result: {
+                    status: 'aborted',
+                  },
+                };
+              }),
+            };
+          }
+          return msg;
+        }),
+      );
+    }
+  }, [streamsAbborted]);
+
   function toggle(callback?: () => void) {
     setOpen(prev => !prev);
     if (callback) {
@@ -178,6 +203,10 @@ export default function ChatProvider({
       console.error(e);
     }
   }
+
+  useEffect(() => {
+    console.log('conversation', conversation);
+  }, [conversation]);
 
   return (
     <ChatContext.Provider

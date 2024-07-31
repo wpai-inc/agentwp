@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import { useStream } from '@/Providers/StreamProvider';
@@ -48,6 +48,10 @@ export default function MessageBox() {
       setChatSetting({ component: <ChatSettings />, header: 'Settings' });
     }
   }
+
+  useEffect(() => {
+    console.log('streamClosed');
+  }, [streamClosed]);
 
   return (
     <form className="relative rounded-lg bg-white p-2" onSubmit={submit}>

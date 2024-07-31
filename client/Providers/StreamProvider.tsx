@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useCallback } from 'react';
+import { createContext, useContext, useState, useRef, useCallback, useEffect } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
@@ -30,7 +30,9 @@ export default function StreamProvider({ children }: { children: React.ReactNode
   const forceUpdate = useForceUpdate();
   const liveAction = useRef<AgentAction | null>(null);
   const [streamClosed, setStreamClosed] = useState(true);
-  const { setCurrentUserRequestId, addActionToCurrentRequest } = useUserRequests();
+  const [streamsAbborted, setStreamsAbborted] = useState([]);
+  const { setCurrentUserRequestId, addActionToCurrentRequest, currentUserRequestId } =
+    useUserRequests();
   const { addErrors } = useError();
   const { client } = useClient();
   const { page } = usePage();
@@ -86,13 +88,11 @@ export default function StreamProvider({ children }: { children: React.ReactNode
   }
 
   async function cancelStream() {
-    const aa = liveAction.current;
     ctrl.current.abort();
-    await client.storeAgentResult(aa?.id, {
-      status: 'aborted',
-    });
-    setStreamClosed(true);
     resetStream();
+    setStreamClosed(true);
+    setStreamsAbborted(prev => [...prev, currentUserRequestId]);
+    client.abortUserRequest(currentUserRequestId);
   }
 
   async function startStreamFromRequest(user_request_id: string) {
@@ -118,6 +118,7 @@ export default function StreamProvider({ children }: { children: React.ReactNode
         startStreamFromRequest,
         liveAction: liveAction.current,
         streamClosed,
+        streamsAbborted,
       }}>
       {children}
     </StreamContext.Provider>
