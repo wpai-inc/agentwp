@@ -1,5 +1,5 @@
 {
-    "name": "wpai/agent-wp",
+    "name": "wpai/agentwp",
     "description": "Adds a AI Agent to your WordPress installation.",
     "license": "GPL2",
     "autoload": {
@@ -17,13 +17,15 @@
     "prefer-stable": true,
     "require-dev": {
         "laravel/pint": "^1.14",
-        "php-stubs/wordpress-stubs": "^6.4"
+        "php-stubs/wordpress-stubs": "^6.4",
+        "yahnis-elsts/plugin-update-checker": "^5.4"
     },
     "require": {
         "php": ">=7.4",
         "kucrut/vite-for-wp": "^0.8.0",
         "guzzlehttp/guzzle": "^7.0",
         "vlucas/phpdotenv": "^5.6",
-        "symfony/http-foundation": "^5.0"
+        "symfony/http-foundation": "^5.0",
+        "deliciousbrains/wp-background-processing": "^1.3"
     }
 }

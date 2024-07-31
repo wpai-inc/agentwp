@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
-import { useClient } from '@/Providers/ClientProvider';
+import { useError } from './ErrorProvider';
 import { useAdminRoute } from './AdminRouteProvider';
+import { useClient } from './ClientProvider';
 
 export type StoreAgentResponse = {
   status: string;
@@ -16,6 +17,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { currentAction, currentUserRequestId } = useUserRequests();
   const adminRequest = useAdminRoute();
   const { client } = useClient();
+  const { errors } = useError();
 
   useEffect( () => {
     if ( currentAction && streamClosed ) {
@@ -23,7 +25,16 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         executeAndContinueAction( currentAction, currentUserRequestId );
         return;
       }
-      if ( currentAction.final && ! currentAction.hasExecuted ) {
+      /**
+       * Tries reconnecting stream.
+       * Allows for two errors before stopping the stream.
+       */
+      if (
+        currentAction.final &&
+        ! currentAction.hasExecuted &&
+        currentAction.action &&
+        errors.length < 2
+      ) {
         startStreamFromRequest( currentUserRequestId );
       }
     }

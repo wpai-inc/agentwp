@@ -13,12 +13,6 @@ export default function Dialog( { conversation }: { conversation: UserRequestTyp
   const { page } = usePage();
   const { selectedInput } = useInputSelect();
 
-  function hasSelectedInput(): boolean {
-    if ( selectedInput?.data?.inputPath?.startsWith( 'div#awp-chat' ) ) return false;
-
-    return selectedInput !== null;
-  }
-
   return (
     <div
       className={ cn(
@@ -32,7 +26,7 @@ export default function Dialog( { conversation }: { conversation: UserRequestTyp
         conversation.map( msg => <Message key={ msg.id } { ...msg } /> )
       ) }
       { !! errors.length && <ChatError errors={ errors } /> }
-      { hasSelectedInput() && <ContentContext selectedInput={ selectedInput } /> }
+      { selectedInput && <ContentContext selectedInput={ selectedInput } /> }
     </div>
   );
 }

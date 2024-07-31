@@ -3,16 +3,31 @@
 namespace WpAi\AgentWp\Traits;
 
 use Psr\Http\Message\ResponseInterface;
-use WpAi\AgentWp\Services\AwpClient;
 
 trait ClientRequests
 {
-    public function indexSite($data): ?ResponseInterface
+    public function indexSite(string $data): ?ResponseInterface
     {
         try {
             return $this->request(
                 method: 'POST',
                 url: "{$this->main->apiHost()}/api/site/health",
+                body: $data
+            );
+        } catch (\Exception $e) {
+            // Handle the exception
+            error_log($e->getMessage());
+
+            return null;
+        }
+    }
+
+    public function summarizeSite(string $data): ?ResponseInterface
+    {
+        try {
+            return $this->request(
+                method: 'POST',
+                url: "{$this->main->apiHost()}/api/site/summarize",
                 body: $data
             );
         } catch (\Exception $e) {
@@ -43,14 +58,14 @@ trait ClientRequests
     {
         if ($user_id) {
             $user = get_user_by('ID', $user_id);
-        }else{
+        } else {
             $user = wp_get_current_user();
         }
 
         $data = [
             'display_name' => $user->display_name,
             'nicename' => $user->user_nicename,
-            'role' => $user->roles[0]
+            'role' => $user->roles[0],
         ];
 
         try {

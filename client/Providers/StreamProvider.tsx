@@ -45,6 +45,7 @@ export default function StreamProvider({ children }: { children: React.ReactNode
         method: 'POST',
         body: JSON.stringify({ screen }),
         headers: {
+          'Accept': 'application/json',
           'Authorization': 'Bearer ' + client.token,
           'X-WP-AGENT-VERSION': client.agentWpVersion,
           'X-Wp-Agent-Version': client.agentWpVersion,
@@ -54,10 +55,11 @@ export default function StreamProvider({ children }: { children: React.ReactNode
         },
         signal: ctrl.current.signal,
         openWhenHidden: true,
-        onclose: () => setStreamClosed(true),
-        async onopen(response) {
-          if (response.status > 300) {
-            throw new Error(`Server responded with: ${response.status}`);
+        onclose: () => setStreamClosed( true ),
+        async onopen( response ) {
+          if ( response.status > 300 ) {
+            let body = await response.json();
+            throw new Error( body?.message ?? 'Unknown error' );
           }
         },
         onmessage(ev) {
@@ -100,9 +102,9 @@ export default function StreamProvider({ children }: { children: React.ReactNode
     await startStream(url, user_request_id);
   }
 
-  async function handleStreamError(e: any) {
-    console.error('Stream error', e);
-    addErrors(['Oops, something went wrong.']);
+  async function handleStreamError( e: any ) {
+    console.error( 'Stream error', e );
+    addErrors( [ e.message ] );
   }
 
   function resetStream() {

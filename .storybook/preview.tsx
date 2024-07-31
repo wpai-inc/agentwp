@@ -17,7 +17,7 @@ import { ErrorProvider } from '../client/Providers/ErrorProvider';
 
 const page = {
   home_url: 'http://localhost:8080',
-  plugin_url: 'http:e//localhost:8080/wp-content/plugins/agent-wp/',
+  plugin_url: 'http://localhost:8080/wp-content/plugins/agentwp/',
   nonce: '4424287981',
   wp_rest_nonce: 'b6548995e0',
   site_id: '9c088a0d-d543-4148-9e55-fe1d38eae2e4',
@@ -31,7 +31,7 @@ const page = {
     user_login: 'greg',
     user_nicename: 'greg',
     display_name: 'greg',
-    roles: [ 'administrator' ],
+    roles: ['administrator'],
     avatar_url: 'https://secure.gravatar.com/avatar/7b3f7b3f7b3f7b3f7b3f7b3f7b3f7b3f?s=96&d=mm&r=g',
   },
   is_admin: true,
@@ -71,9 +71,9 @@ const preview: Preview = {
     },
   },
   decorators: [
-    function ( Story, { parameters } ) {
+    function (Story, { parameters }) {
       return (
-        <PageProvider page={ page }>
+        <PageProvider page={page}>
           <NotificationsProvider>
             <App>
               <ErrorProvider>
@@ -81,10 +81,10 @@ const preview: Preview = {
                   <ClientProvider>
                     <ClientSettingsProvider>
                       <ScreenProvider>
-                        <UserRequestsProvider messages={ parameters.messages }>
+                        <UserRequestsProvider messages={parameters.messages}>
                           <StreamProvider>
                             <ActionListenerProvider>
-                              <ChatProvider defaultOpen={ parameters.open }>
+                              <ChatProvider defaultOpen={parameters.open}>
                                 <Story />
                               </ChatProvider>
                             </ActionListenerProvider>

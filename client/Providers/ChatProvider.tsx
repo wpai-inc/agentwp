@@ -1,5 +1,4 @@
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -18,16 +17,6 @@ type CreateUserRequestResponse = {
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 const ChatContext = createContext( {
-  open: false,
-  setOpen: ( _open: boolean ) => {},
-  toggle: () => {},
-  maximizeChatWindow: ( _element: HTMLElement ) => {},
-  reduceWindow: () => {},
-  isMaximized: false,
-  minimizing: false,
-  expanding: false,
-  maximizing: false,
-  reducing: false,
   conversation: [] as UserRequestType[],
   sendMessage: ( _message: string ) => {},
   cancelStreaming: () => {},
@@ -43,21 +32,8 @@ export function useChat() {
   return chat;
 }
 
-export default function ChatProvider( {
-  defaultOpen = false,
-  children,
-}: {
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-} ) {
+export default function ChatProvider( { children }: { children: React.ReactNode } ) {
   const { client } = useClient();
-  const { settings, setSettings } = useClientSettings();
-  const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
-  const [ minimizing, setMinimizing ] = useState( false );
-  const [ expanding, setExpanding ] = useState( false );
-  const [ maximizing, setMaximizing ] = useState( false );
-  const [ reducing, setReducing ] = useState( false );
-  const [ isMaximized, setIsMaximized ] = useState( settings.chatMaximized ?? false );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error } = useStream();
@@ -67,12 +43,10 @@ export default function ChatProvider( {
     userRequestId: '',
     liveAction: null as AgentAction | null,
   } );
-  //todo: use ref's ...
 
   const { selectedInput } = useInputSelect();
 
   useEffect( () => {
-    // console.log( 'liveAction && currentUserRequestId', liveAction, currentUserRequestId );
     if ( liveAction && currentUserRequestId ) {
       if ( startingStreaming.userRequestId !== currentUserRequestId ) {
         setStartingStreaming( {
@@ -113,7 +87,6 @@ export default function ChatProvider( {
   }, [ liveAction, currentUserRequestId ] );
 
   useEffect( () => {
-    console.info( 'Starting a new stream' );
     if ( startingStreaming.liveAction?.action.ability === 'write_to_editor' ) {
       // clear the editor content
       CleanGutenbergContent();
@@ -128,62 +101,6 @@ export default function ChatProvider( {
       console.error( 'Stream error:', error );
     }
   }, [ error ] );
-
-  function toggle() {
-    const newVal = ! open;
-    if ( newVal ) {
-      setExpanding( true );
-    } else {
-      setMinimizing( true );
-    }
-
-    setTimeout( () => {
-      setOpen( newVal );
-      setExpanding( false );
-      setMinimizing( false );
-      setIsMaximized( false );
-      setSettings( {
-        chatOpen: newVal,
-        chatMaximized: false,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
-      } );
-    }, 1400 );
-  }
-
-  function maximizeChatWindow( chatWindowElement: HTMLElement ) {
-    setMaximizing( true );
-    setTimeout( () => {
-      setMaximizing( false );
-      setIsMaximized( true );
-      chatWindowElement.removeAttribute( 'style' );
-      chatWindowElement.style.transform = 'translate(0px, 0px)';
-      setSettings( {
-        chatMaximized: true,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
-      } );
-    }, 1000 );
-  }
-
-  function reduceWindow() {
-    setReducing( true );
-    setTimeout( () => {
-      setReducing( false );
-      setIsMaximized( false );
-      setSettings( {
-        chatMaximized: false,
-        x: 0,
-        y: 0,
-        width: null,
-        height: null,
-      } );
-    }, 1000 );
-  }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
     const response = await client.storeConversation( { message, selected_input: selectedInput } );
@@ -244,16 +161,6 @@ export default function ChatProvider( {
   return (
     <ChatContext.Provider
       value={ {
-        open,
-        setOpen,
-        toggle,
-        maximizeChatWindow,
-        reduceWindow,
-        isMaximized,
-        maximizing,
-        reducing,
-        minimizing,
-        expanding,
         conversation,
         sendMessage,
         cancelStreaming,

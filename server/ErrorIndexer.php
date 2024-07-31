@@ -3,7 +3,6 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Services\AwpClient;
 
 /**
  * Temporary for demo, poor performance
@@ -11,9 +10,7 @@ use WpAi\AgentWp\Services\AwpClient;
  */
 class ErrorIndexer implements Registrable
 {
-    public function __construct(private Main $main)
-    {
-    }
+    public function __construct(private Main $main) {}
 
     public function register()
     {
@@ -37,8 +34,8 @@ class ErrorIndexer implements Registrable
         array $error_context = []
     ): bool {
         $siteId = $this->main->siteId();
-        $token  = $this->main->settings->getAccessToken();
-        if ( ! $siteId || ! $token) {
+        $token = $this->main->settings->getAccessToken();
+        if (! $siteId || ! $token) {
             return false;
         }
 
@@ -47,20 +44,20 @@ class ErrorIndexer implements Registrable
         }
 
         $error_data = [
-            'level'   => $error_level,
+            'level' => $error_level,
             'message' => $error_message,
-            'file'    => $error_file,
-            'line'    => $error_line,
+            'file' => $error_file,
+            'line' => $error_line,
             'context' => $error_context, // Be cautious with sensitive information
         ];
-        $hash       = md5(json_encode($error_data));
+        $hash = md5(json_encode($error_data));
 
         $logged_errors = get_transient('agentwp_errors');
         if ($logged_errors && isset($logged_errors[$hash])) {
             return false;
         }
 
-        if ( ! $logged_errors) {
+        if (! $logged_errors) {
             $logged_errors = [];
         }
 
@@ -76,8 +73,6 @@ class ErrorIndexer implements Registrable
 
     private function sendTheErrors($error_data): void
     {
-        $awpClient = new AwpClient($this->main, false);
-        // only make the request if a token is available
-        $awpClient->indexError(json_encode($error_data));
+        $this->main->client(false)->indexError(json_encode($error_data));
     }
 }
