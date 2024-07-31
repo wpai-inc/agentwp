@@ -46,7 +46,6 @@ export default function ChatProvider( { children }: { children: React.ReactNode 
   const { selectedInput } = useInputSelect();
 
   useEffect( () => {
-    // console.log( 'liveAction && currentUserRequestId', liveAction, currentUserRequestId );
     if ( liveAction && currentUserRequestId ) {
       if ( startingStreaming.userRequestId !== currentUserRequestId ) {
         setStartingStreaming( {
