@@ -16,8 +16,7 @@ type CreateUserRequestResponse = {
 
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
-
-const ChatContext = createContext( {
+const ChatContext = createContext({
   conversation: [] as UserRequestType[],
   sendMessage: (_message: string) => {},
   cancelStreaming: () => {},
@@ -33,10 +32,9 @@ export function useChat() {
   return chat;
 }
 
-
-export default function ChatProvider( { children }: { children: React.ReactNode } ) {
+export default function ChatProvider({ children }: { children: React.ReactNode }) {
   const { client } = useClient();
-  const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
+  const [chatSetting, setChatSetting] = useState<ChatSettingProps>(null);
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
   const { startStream, liveAction, error, streamsAbborted } = useStream();
   const { addErrors } = useError();
@@ -48,10 +46,10 @@ export default function ChatProvider( { children }: { children: React.ReactNode 
 
   const { selectedInput } = useInputSelect();
 
-  useEffect( () => {
-    if ( liveAction && currentUserRequestId ) {
-      if ( startingStreaming.userRequestId !== currentUserRequestId ) {
-        setStartingStreaming( {
+  useEffect(() => {
+    if (liveAction && currentUserRequestId) {
+      if (startingStreaming.userRequestId !== currentUserRequestId) {
+        setStartingStreaming({
           userRequestId: currentUserRequestId,
           liveAction,
         });
@@ -146,8 +144,8 @@ export default function ChatProvider( { children }: { children: React.ReactNode 
     }
   }, [streamsAbborted]);
 
-  async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
-    const response = await client.storeConversation( { message, selected_input: selectedInput } );
+  async function userRequest(message: string): Promise<CreateUserRequestResponse> {
+    const response = await client.storeConversation({ message, selected_input: selectedInput });
     return response.data;
   }
 
@@ -201,13 +199,9 @@ export default function ChatProvider( { children }: { children: React.ReactNode 
     }
   }
 
-  useEffect(() => {
-    console.log('conversation', conversation);
-  }, [conversation]);
-
   return (
     <ChatContext.Provider
-      value={ {
+      value={{
         conversation,
         sendMessage,
         cancelStreaming,
