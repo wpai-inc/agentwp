@@ -121,18 +121,35 @@ export default function ChatProvider({
       setConversation(prev =>
         prev.map(msg => {
           if (streamsAbborted.includes(msg.id)) {
-            console.log('streamsAbborted', streamsAbborted);
-            return {
-              ...msg,
-              agent_actions: msg.agent_actions.map(aa => {
-                return {
-                  ...aa,
-                  result: {
-                    status: 'aborted',
-                  },
-                };
-              }),
-            };
+            if (msg.agent_actions.length > 0) {
+              return {
+                ...msg,
+                agent_actions: msg.agent_actions.map(aa => {
+                  return {
+                    ...aa,
+                    result: {
+                      status: 'aborted',
+                    },
+                  };
+                }),
+              };
+            }
+
+            msg.agent_actions.push({
+              id: '',
+              created_at: new Date().toISOString(),
+              human_created_at: new Date().toISOString(),
+              action: {
+                ability: 'message',
+                text: '',
+              },
+              final: true,
+              recipe_idx: 0,
+              result: {
+                status: 'aborted',
+              },
+              hasExecuted: true,
+            });
           }
           return msg;
         }),

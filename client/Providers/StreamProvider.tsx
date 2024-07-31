@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useCallback, useEffect } from 'react';
+import { createContext, useContext, useState, useRef, useCallback } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
@@ -89,8 +89,8 @@ export default function StreamProvider({ children }: { children: React.ReactNode
 
   async function cancelStream() {
     ctrl.current.abort();
-    resetStream();
     setStreamClosed(true);
+    liveAction.current = null;
     setStreamsAbborted(prev => [...prev, currentUserRequestId]);
     client.abortUserRequest(currentUserRequestId);
   }
