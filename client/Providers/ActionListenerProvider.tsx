@@ -94,6 +94,8 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         } );
         break;
     }
+    //@ovi Prevent multiple executions of the same action
+    aa.hasExecuted = true;
   }
 
   return <>{ children }</>;
