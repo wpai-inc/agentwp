@@ -1,4 +1,10 @@
-export default function BigNumberCard( { data }: { data: any } ) {
+export default function BigNumberCard( {
+  data,
+}: {
+  data: {
+    [ key: string ]: number;
+  }[];
+} ) {
   const datum = data[ 0 ];
   const [ label, value ] = Object.values( datum );
   return (

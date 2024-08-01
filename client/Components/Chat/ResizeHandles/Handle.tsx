@@ -10,11 +10,11 @@ export default function Handle( {
 } ) {
   return (
     <div
-      className={ cn( 'absolute z-10', {
-        '-top-1 -left-1 -right-1 cursor-ns-resize h-2': position === 'top',
-        '-bottom-1 -left-1  -right-1 cursor-ns-resize h-2': position === 'bottom',
-        '-top-1 -bottom-1 -left-1 cursor-ew-resize w-2': position === 'left',
-        '-top-1  -bottom-1 -right-1 cursor-ew-resize w-2': position === 'right',
+      className={ cn( 'absolute z-10 hover:bg-brand-primary transition overflow-hidden', {
+        'top-0 left-5 right-5 cursor-ns-resize h-1.5': position === 'top',
+        'bottom-0 left-5  right-5 cursor-ns-resize h-1.5': position === 'bottom',
+        'top-5 bottom-5 left-0 cursor-ew-resize w-1.5': position === 'left',
+        'top-5  bottom-5 right-0 cursor-ew-resize w-1.5': position === 'right',
       } ) }
       onMouseDown={ e => resizeHandler( e.nativeEvent, position ) }></div>
   );
