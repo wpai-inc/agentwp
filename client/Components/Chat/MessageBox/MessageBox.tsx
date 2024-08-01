@@ -73,15 +73,14 @@ export default function MessageBox() {
             <TuneIcon className="h-6 w-6" />
           </Button>
         </AgentTooltip>
-        {streamClosed && (
+        {streamClosed ? (
           <Button
             type="submit"
             className={cn('rounded bg-brand-primary px-3')}
             disabled={!streamClosed || !page.onboarding_completed || !page.agentwp_access}>
             {streamClosed ? <UpArrowIcon className="h-5 w-5" /> : 'Pending...'}
           </Button>
-        )}
-        {!streamClosed && (
+        ) : (
           <Button
             type="button"
             className={cn('rounded bg-brand-primary px-3.5')}
