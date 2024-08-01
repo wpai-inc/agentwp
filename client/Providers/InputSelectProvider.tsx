@@ -45,6 +45,10 @@ export const InputSelectProvider = ( { children }: { children: ReactNode } ) => 
       } else {
         setScreen( theScreen );
       }
+    } else {
+      // remove selectedInput from screen
+      const { selectedInput, ...rest } = screen;
+      setScreen( rest );
     }
   }, [ selectedInput ] );
 
