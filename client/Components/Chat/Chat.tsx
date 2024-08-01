@@ -9,6 +9,13 @@ import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 import { useAnimate, ValueAnimationTransition } from 'framer-motion';
 import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
 import { Button } from '@/Components/ui/button';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/Components/ui/context-menu';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Components/ui/tooltip';
 import Logo from '../Logo';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
@@ -16,6 +23,7 @@ export default function Chat( defaultOpen = false ) {
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { settings, updateSetting } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
+  const [ turnedOff, setTurnedOff ] = useState( settings.turnedOff );
   const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
@@ -86,6 +94,8 @@ export default function Chat( defaultOpen = false ) {
     const isOpen = ! open;
     setOpen( isOpen );
     if ( isOpen ) {
+      setTurnedOff( false );
+      updateSetting( 'turnedOff', false );
       setIsOpening( true );
       animate( scope.current, openedStyles, transition ).then( () => setIsOpening( false ) );
     } else {
@@ -98,6 +108,15 @@ export default function Chat( defaultOpen = false ) {
     }
     updateSetting( 'chatOpen', isOpen );
   }, [ scope, openedStyles, closedStyles, updateSetting, animate, transition ] );
+
+  function handleTurnOff() {
+    setTurnedOff( true );
+    updateSetting( 'turnedOff', true );
+
+    if ( open ) {
+      toggle();
+    }
+  }
 
   /**
    * Animate on mount
@@ -153,15 +172,56 @@ export default function Chat( defaultOpen = false ) {
           <Conversation />
           <ResizeHandles resizeHandler={ onChatWindowResize } />
         </div>
-        <Button
-          ref={ chatTriggerRef }
-          onClick={ toggle }
-          variant="ghost"
-          className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
-          { open ? <ArrowRightIcon /> : <Logo className="w-full" /> }
-          <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
-          <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
-        </Button>
+        <ContextMenu>
+          <ContextMenuTrigger>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    ref={ chatTriggerRef }
+                    onClick={ toggle }
+                    variant="ghost"
+                    className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
+                    { open ? (
+                      <ArrowRightIcon />
+                    ) : (
+                      <Logo className={ cn( 'w-full', { grayscale: turnedOff } ) } />
+                    ) }
+                    <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
+                    <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" align="center">
+                  <p>
+                    { turnedOff ? (
+                      <>
+                        AgentWP is off.
+                        <br /> Click to reinitialize.
+                      </>
+                    ) : open ? (
+                      <>
+                        Click to minimize
+                        <br /> AgentWP.
+                      </>
+                    ) : (
+                      <>
+                        AgentWP is hidden.
+                        <br /> Click to show.
+                      </>
+                    ) }
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </ContextMenuTrigger>
+          { ! turnedOff && (
+            <ContextMenuContent>
+              <ContextMenuItem onClick={ () => handleTurnOff() } inset>
+                Turn off
+              </ContextMenuItem>
+            </ContextMenuContent>
+          ) }
+        </ContextMenu>
       </>
     )
   );
