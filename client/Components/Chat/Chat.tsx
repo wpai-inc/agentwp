@@ -109,15 +109,6 @@ export default function Chat( defaultOpen = false ) {
     updateSetting( 'chatOpen', isOpen );
   }, [ scope, openedStyles, closedStyles, updateSetting, animate, transition ] );
 
-  function handleTurnOff() {
-    setTurnedOff( true );
-    updateSetting( 'turnedOff', true );
-
-    if ( open ) {
-      toggle();
-    }
-  }
-
   /**
    * Animate on mount
    */
@@ -134,6 +125,15 @@ export default function Chat( defaultOpen = false ) {
       setShouldAnimate( false );
     }
   }, [ isMaximized ] );
+
+  function handleTurnOff() {
+    setTurnedOff( true );
+    updateSetting( 'turnedOff', true );
+
+    if ( open ) {
+      toggle();
+    }
+  }
 
   function handleMaximize() {
     setShouldAnimate( true );
@@ -212,13 +212,12 @@ export default function Chat( defaultOpen = false ) {
                   </p>
                 </TooltipContent>
               </Tooltip>
+              +
             </TooltipProvider>
           </ContextMenuTrigger>
           { ! turnedOff && (
             <ContextMenuContent>
-              <ContextMenuItem onClick={ () => handleTurnOff() } inset>
-                Turn off
-              </ContextMenuItem>
+              <ContextMenuItem onClick={ () => handleTurnOff() }>Turn off</ContextMenuItem>
             </ContextMenuContent>
           ) }
         </ContextMenu>

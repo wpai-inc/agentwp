@@ -27,7 +27,7 @@ function setLocalStorage( key: keyof ClientSettings, value: ClientSettingValue )
   setStorage( namespace + key, JSON.stringify( value ) );
 }
 
-function getLocalStorage(
+export function getLocalStorage(
   key: keyof ClientSettings,
   defaultValue: ClientSettingValue = null,
 ): ClientSettingValue {

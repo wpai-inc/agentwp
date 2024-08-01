@@ -3,6 +3,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { useNotifications } from '@/Providers/NotificationProvider';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
+import { getLocalStorage } from '@/Providers/ClientSettingsProvider';
 
 export default class AwpClient {
   private baseUrl: string = 'https://app.agentwp.com';
@@ -13,107 +14,121 @@ export default class AwpClient {
 
   private agentWpVersion = '0.1-alpha1';
 
-  constructor(token?: string) {
+  constructor( token?: string ) {
     const { page, setPageData } = usePage();
     const { addNotification } = useNotifications();
     this.token = token || page.access_token;
     this.baseUrl = page.api_host;
 
-    this.httpClient = axios.create({
+    this.httpClient = axios.create( {
       timeout: 15000,
       headers: {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${this.token}`,
+        'Authorization': `Bearer ${ this.token }`,
         'X-Wp-Agent-Version': this.agentWpVersion,
         'X-Wp-User-Id': page.user.ID,
         'X-Wp-Site-Id': page.site_id,
       },
-    });
+    } );
+
+    this.httpClient.interceptors.request.use( request => {
+      let turnedOff = getLocalStorage( 'turnedOff', false ) as boolean;
+      if ( turnedOff ) {
+        throw new Error( 'The requests to the API are disabled.' );
+      }
+
+      return request;
+    } );
 
     this.httpClient.interceptors.response.use(
       response => {
         return response;
       },
       error => {
-        if (error.response && error.response.status === 401) {
+        if ( error.response && error.response.status === 401 ) {
           // if there is a refresh token then refresh the token
-          if (page.refresh_token) {
+          if ( page.refresh_token ) {
             const newToken = this.refreshToken();
-            setPageData({ ...page, access_token: newToken });
+            setPageData( { ...page, access_token: newToken } );
           }
 
           // Logout user or redirect to login page
-          addNotification('Your API token is invalid or expired. Please login again.', 'error');
-          this.adminRequest.get('logout');
-          throw new Error('Your API token is invalid or expired. Please login again.');
+          addNotification( 'Your API token is invalid or expired. Please login again.', 'error' );
+          this.adminRequest.get( 'logout' );
+          throw new Error( 'Your API token is invalid or expired. Please login again.' );
         }
-        return Promise.reject(error);
+        return Promise.reject( error );
       },
     );
   }
 
   isAuthorized() {
-    if (!this.token) {
+    if ( ! this.token ) {
       return null;
     }
     return this;
   }
 
-  getStreamUrl(userRequestId: string) {
-    return `${this.baseUrl}/api/request/${userRequestId}/stream`;
+  getStreamUrl( userRequestId: string ) {
+    return `${ this.baseUrl }/api/request/${ userRequestId }/stream`;
   }
 
-  async getConversation(since?: string): Promise<AxiosResponse> {
-    return this.request('GET', `${this.baseUrl}/api/convo`, {
+  async getConversation( since?: string ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/convo`, {
       since,
-    });
+    } );
   }
 
-  async clearConversation(): Promise<AxiosResponse> {
-    return this.request('POST', `${this.baseUrl}/api/convo/clear`);
+  async clearConversation(): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/convo/clear` );
   }
 
-  async unclearConversation(since: string): Promise<AxiosResponse> {
-    return this.request('POST', `${this.baseUrl}/api/convo/unclear`, {}, { since });
+  async unclearConversation( since: string ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/convo/unclear`, {}, { since } );
   }
 
-  async getHistory(since?: string): Promise<AxiosResponse> {
-    return this.request('GET', `${this.baseUrl}/api/convo/history`, {
+  async getHistory( since?: string ): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/convo/history`, {
       since,
-    });
+    } );
   }
 
-  async storeAgentResult(actionId: string, data: object): Promise<AxiosResponse> {
+  async storeAgentResult( actionId: string, data: object ): Promise< AxiosResponse > {
     return this.request(
       'POST',
-      `${this.baseUrl}/api/action/${actionId}/result`,
+      `${ this.baseUrl }/api/action/${ actionId }/result`,
       {},
       { result: data },
     );
   }
 
-  async getSettings(): Promise<AxiosResponse> {
-    return this.request('GET', `${this.baseUrl}/api/site/settings`);
+  async getSettings(): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/site/settings` );
   }
 
-  async updateSetting(name: string, value: any): Promise<AxiosResponse> {
-    return this.request('PUT', `${this.baseUrl}/api/site/settings`, {}, { name, value });
+  async updateSetting( name: string, value: any ): Promise< AxiosResponse > {
+    return this.request( 'PUT', `${ this.baseUrl }/api/site/settings`, {}, { name, value } );
   }
 
-  async storeConversation(data: object): Promise<AxiosResponse> {
-    return this.request('POST', `${this.baseUrl}/api/convo`, {}, data);
+  async storeConversation( data: object ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/convo`, {}, data );
   }
 
-  async refreshToken(): Promise<AxiosResponse> {
-    return this.adminRequest(`refresh_token`);
+  async refreshToken(): Promise< AxiosResponse > {
+    return this.adminRequest( `refresh_token` );
   }
 
-  async postEscalation(escalationId: string): Promise<AxiosResponse> {
-    return this.request('POST', `${this.baseUrl}/api/escalation/${escalationId}`);
+  async postEscalation( escalationId: string ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/escalation/${ escalationId }` );
   }
 
-  async feedback(userRequestId: string, data: FeedbackType): Promise<AxiosResponse> {
-    return this.request('POST', `${this.baseUrl}/api/request/${userRequestId}/feedback`, {}, data);
+  async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {
+    return this.request(
+      'POST',
+      `${ this.baseUrl }/api/request/${ userRequestId }/feedback`,
+      {},
+      data,
+    );
   }
 
   request(
@@ -122,26 +137,26 @@ export default class AwpClient {
     params: object = {},
     data: object = {},
     additionalHeaders: object = {},
-  ): Promise<AxiosResponse> {
-    if (!this.token) {
-      return Promise.reject(new Error('Token is undefined or empty'));
+  ): Promise< AxiosResponse > {
+    if ( ! this.token ) {
+      return Promise.reject( new Error( 'Token is undefined or empty' ) );
     }
 
-    return this.httpClient.request({
+    return this.httpClient.request( {
       method,
       url,
       params,
       data,
       headers: additionalHeaders,
-    });
+    } );
   }
 
-  setBaseUrl(baseUrl: string) {
+  setBaseUrl( baseUrl: string ) {
     this.baseUrl = baseUrl;
     return this;
   }
 
-  setToken(token: string) {
+  setToken( token: string ) {
     this.token = token;
   }
 }
