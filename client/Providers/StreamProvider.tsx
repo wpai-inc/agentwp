@@ -30,7 +30,6 @@ export default function StreamProvider({ children }: { children: React.ReactNode
   const forceUpdate = useForceUpdate();
   const liveAction = useRef<AgentAction | null>(null);
   const [streamClosed, setStreamClosed] = useState(true);
-  const [streamsAbborted, setStreamsAbborted] = useState([]);
   const { setCurrentUserRequestId, addActionToCurrentRequest, currentUserRequestId } =
     useUserRequests();
   const { addErrors } = useError();
@@ -57,11 +56,11 @@ export default function StreamProvider({ children }: { children: React.ReactNode
         },
         signal: ctrl.current.signal,
         openWhenHidden: true,
-        onclose: () => setStreamClosed( true ),
-        async onopen( response ) {
-          if ( response.status > 300 ) {
+        onclose: () => setStreamClosed(true),
+        async onopen(response) {
+          if (response.status > 300) {
             let body = await response.json();
-            throw new Error( body?.message ?? 'Unknown error' );
+            throw new Error(body?.message ?? 'Unknown error');
           }
         },
         onmessage(ev) {
@@ -90,10 +89,12 @@ export default function StreamProvider({ children }: { children: React.ReactNode
   }
 
   async function cancelStream() {
+    // Abbort the connection
     ctrl.current.abort();
+
+    // Reset the controller
+    ctrl.current = new AbortController();
     setStreamClosed(true);
-    liveAction.current = null;
-    setStreamsAbborted(prev => [...prev, currentUserRequestId]);
     client.abortUserRequest(currentUserRequestId);
   }
 
@@ -102,9 +103,9 @@ export default function StreamProvider({ children }: { children: React.ReactNode
     await startStream(url, user_request_id);
   }
 
-  async function handleStreamError( e: any ) {
-    console.error( 'Stream error', e );
-    addErrors( [ e.message ] );
+  async function handleStreamError(e: any) {
+    console.error('Stream error', e);
+    addErrors([e.message]);
   }
 
   function resetStream() {
@@ -120,7 +121,6 @@ export default function StreamProvider({ children }: { children: React.ReactNode
         startStreamFromRequest,
         liveAction: liveAction.current,
         streamClosed,
-        streamsAbborted,
       }}>
       {children}
     </StreamContext.Provider>

@@ -13,8 +13,8 @@ export default function Message(userRequest: UserRequestType) {
   const { streamClosed } = useStream();
   const pending = sameUserRequest && !streamClosed;
   const isIncomplete =
-    userRequest.agent_actions?.length === 0 || userRequest.agent_actions?.some(aa => !aa.action);
-  const isAborted = userRequest.agent_actions?.some(aa => aa?.result?.status === 'aborted');
+    userRequest.agent_actions?.length === 0 ||
+    userRequest.agent_actions?.some(aa => !aa.action && !aa.result?.status);
 
   return (
     <FeedbackProvider userRequestId={userRequest.id} feedback={userRequest.feedback}>
@@ -26,7 +26,6 @@ export default function Message(userRequest: UserRequestType) {
           agentActions={userRequest.agent_actions}
           pending={pending}
           incomplete={isIncomplete}
-          aborted={isAborted}
         />
       </div>
     </FeedbackProvider>

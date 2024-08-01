@@ -36,7 +36,7 @@ export default function ChatProvider({ children }: { children: React.ReactNode }
   const { client } = useClient();
   const [chatSetting, setChatSetting] = useState<ChatSettingProps>(null);
   const { conversation, setConversation, currentUserRequestId } = useUserRequests();
-  const { startStream, liveAction, error, streamsAbborted } = useStream();
+  const { startStream, liveAction, error } = useStream();
   const { addErrors } = useError();
   const [editorContent, setEditorContent] = useState<BlockType[]>([]);
   const [startingStreaming, setStartingStreaming] = useState({
@@ -102,48 +102,6 @@ export default function ChatProvider({ children }: { children: React.ReactNode }
     }
   }, [error]);
 
-  useEffect(() => {
-    if (streamsAbborted.length > 0) {
-      // update conversations
-      setConversation(prev =>
-        prev.map(msg => {
-          if (streamsAbborted.includes(msg.id)) {
-            if (msg.agent_actions.length > 0) {
-              return {
-                ...msg,
-                agent_actions: msg.agent_actions.map(aa => {
-                  return {
-                    ...aa,
-                    result: {
-                      status: 'aborted',
-                    },
-                  };
-                }),
-              };
-            }
-
-            msg.agent_actions.push({
-              id: '',
-              created_at: new Date().toISOString(),
-              human_created_at: new Date().toISOString(),
-              action: {
-                ability: 'message',
-                text: '',
-              },
-              final: true,
-              recipe_idx: 0,
-              result: {
-                status: 'aborted',
-              },
-              hasExecuted: true,
-            });
-          }
-          return msg;
-        }),
-      );
-    }
-  }, [streamsAbborted]);
-
   async function userRequest(message: string): Promise<CreateUserRequestResponse> {
     const response = await client.storeConversation({ message, selected_input: selectedInput });
     return response.data;
@@ -190,12 +148,12 @@ export default function ChatProvider({ children }: { children: React.ReactNode }
 
   async function cancelStreaming() {
     try {
-      const { stream_url, user_request } = await userRequest( message );
-      addUserRequest( user_request );
-      startStream( stream_url, user_request.id );
-    } catch ( e: any ) {
-      addErrors( [ e.message ] );
-      console.error( e );
+      const { stream_url, user_request } = await userRequest(message);
+      addUserRequest(user_request);
+      startStream(stream_url, user_request.id);
+    } catch (e: any) {
+      addErrors([e.message]);
+      console.error(e);
     }
   }
 
