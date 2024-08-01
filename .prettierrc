@@ -1,12 +1,13 @@
 {
-    "arrowParens": "avoid",
-    "bracketSameLine": true,
-    "bracketSpacing": true,
-    "parenSpacing": true,
-    "printWidth": 100,
-    "quoteProps": "consistent",
-    "singleQuote": true,
-    "trailingComma": "all",
-    "useTabs": false,
-    "tabWidth": 2
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "bracketSpacing": true,
+  "parenSpacing": true,
+  "printWidth": 100,
+  "quoteProps": "consistent",
+  "singleQuote": true,
+  "trailingComma": "all",
+  "useTabs": false,
+  "tabWidth": 2,
+  "space-in-parens": true
 }
