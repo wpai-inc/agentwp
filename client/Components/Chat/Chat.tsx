@@ -12,7 +12,7 @@ import { Button } from '@/Components/ui/button';
 import Logo from '../Logo';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
-export default function Chat( defaultOpen = false ) {
+export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean } ) {
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { settings, updateSetting } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
