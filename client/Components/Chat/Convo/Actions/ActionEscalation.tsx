@@ -13,7 +13,6 @@ export default function ActionEscalation( props: AgentAction ) {
   const Component = escalation?.service ? EscalationComponent[ escalation?.service ] : null;
   return (
     <EscalationProvider escalation={ escalation }>
-      <ActionSimpleMessage { ...props } />
       { Component && <Component escalation={ escalation } /> }
     </EscalationProvider>
   );

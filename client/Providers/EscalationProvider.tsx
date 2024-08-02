@@ -41,7 +41,7 @@ export const EscalationProvider: FC< {
     try {
       await escalationRequest( escalation );
       setCreated( true );
-    } catch ( e ) {
+    } catch ( e: any ) {
       addErrors( [ e.message ] );
       console.error( e );
     }
