@@ -22,6 +22,7 @@ export default function Chat( defaultOpen = false ) {
   const [ isOpening, setIsOpening ] = useState( false );
   const [ isClosing, setIsClosing ] = useState( false );
   const [ shouldAnimate, setShouldAnimate ] = useState( false );
+  const restoringRef = useRef(false); // Ref to track restoring state
   const noTransition = { duration: 0 };
   const transition: ValueAnimationTransition = {
     type: 'spring',
@@ -111,8 +112,10 @@ export default function Chat( defaultOpen = false ) {
   }, [] );
 
   useEffect( () => {
-    if ( ! isMaximized ) {
+    if ( ! isMaximized && !restoringRef.current) {
       setShouldAnimate( false );
+    } else {
+      restoringRef.current = false;
     }
   }, [ isMaximized ] );
 
@@ -122,6 +125,7 @@ export default function Chat( defaultOpen = false ) {
   }
 
   function handleRestore() {
+    restoringRef.current = true;
     setShouldAnimate( true );
     restoreWindow();
   }
@@ -138,6 +142,7 @@ export default function Chat( defaultOpen = false ) {
             {
               'user-select-none': isDragging,
               'overflow-hidden': isOpening || isClosing,
+              'p-5': isMaximized,
             },
           ) }>
           <WindowActions

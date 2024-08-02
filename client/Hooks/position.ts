@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { animate } from 'framer-motion';
 
@@ -157,7 +157,10 @@ export const usePosition = ( {
     ( e: MouseEvent ) => {
       e.preventDefault();
       if ( maximization?.isMaximized ) {
-        setMaximization( undefined );
+        const windowActions = document.getElementById('windowActions');
+        if (e.target !== windowActions && !windowActions?.contains(e.target as Node)) {
+          setMaximization( undefined );
+        }
       }
       if ( isResizing && chatWindowContainer && mouseStartPos && elementStartPos ) {
         const parentRect = chatWindowContainer.getBoundingClientRect();
@@ -237,6 +240,7 @@ export const usePosition = ( {
       setMaximization( undefined );
     }
   }, [ maximization, position ] );
+  
 
   const isMaximized = maximization?.isMaximized ? true : false;
 

@@ -3,7 +3,6 @@ import Fullscreen from '@material-design-icons/svg/outlined/fullscreen.svg?react
 import ExitFullscreen from '@material-design-icons/svg/outlined/fullscreen_exit.svg?react';
 import DragIcon from '@material-design-icons/svg/outlined/drag_indicator.svg?react';
 import { cn } from '@/lib/utils';
-import { useChat } from '@/Providers/ChatProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 
 const Corners = () => {
@@ -43,7 +42,7 @@ export default function WindowActions({
       )}
       {...props}>
       <div>
-        <div className="relative z-0 mt-16 flex w-6 flex-col items-center justify-center gap-2 rounded-bl-lg rounded-tl-lg bg-brand-gray py-2 shadow-xl">
+        <div className="relative z-0 mt-16 flex w-6 flex-col items-center justify-center gap-2 rounded-bl-lg rounded-tl-lg bg-brand-gray py-2 shadow-xl" id="windowActions">
           {isMaximized ? (
             <AgentTooltip content="Return chat window to normal size" side="right">
               <ExitFullscreen
