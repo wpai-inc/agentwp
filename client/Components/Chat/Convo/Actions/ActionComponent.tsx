@@ -19,7 +19,7 @@ const ActionComponents: ActionComponentsType = {
 };
 
 export default function ActionComponent( props: AgentAction ) {
-  const ability: Abilities = props.action.ability;
+  const ability: Abilities = props.action.ability as Abilities;
   const DynamicComponent = ActionComponents[ ability ];
   if ( ! DynamicComponent ) {
     console.error( `No component found for ability: ${ ability }` );
