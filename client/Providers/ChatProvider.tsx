@@ -19,6 +19,7 @@ type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 const ChatContext = createContext( {
   conversation: [] as UserRequestType[],
   sendMessage: ( _message: string ) => {},
+  cancelStreaming: () => {},
   setChatSetting: ( _setting: ChatSettingProps ) => {},
   chatSetting: null as ChatSettingProps,
 } );
@@ -95,15 +96,8 @@ export default function ChatProvider( { children }: { children: React.ReactNode 
     }
   }, [ startingStreaming ] );
 
-  useEffect( () => {
-    if ( error ) {
-      console.error( 'Stream error:', error );
-    }
-  }, [ error ] );
-
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
     const response = await client.storeConversation( { message, selected_input: selectedInput } );
-
     return response.data;
   }
 
@@ -146,11 +140,23 @@ export default function ChatProvider( { children }: { children: React.ReactNode 
     }
   }
 
+  async function cancelStreaming() {
+    try {
+      const { stream_url, user_request } = await userRequest( message );
+      addUserRequest( user_request );
+      startStream( stream_url, user_request.id );
+    } catch ( e: any ) {
+      addErrors( [ e.message ] );
+      console.error( e );
+    }
+  }
+
   return (
     <ChatContext.Provider
       value={ {
         conversation,
         sendMessage,
+        cancelStreaming,
         setChatSetting,
         chatSetting,
       } }>
