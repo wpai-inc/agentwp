@@ -212,7 +212,6 @@ export default function Chat( defaultOpen = false ) {
                   </p>
                 </TooltipContent>
               </Tooltip>
-              +
             </TooltipProvider>
           </ContextMenuTrigger>
           { ! turnedOff && (
