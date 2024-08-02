@@ -1,7 +1,6 @@
 import { EscalationProvider } from '@/Providers/EscalationProvider';
 import CodeableEscalation from '@/Components/Chat/Convo/Actions/Escalations/CodeableEscalation';
 import type { AgentAction } from '@/Providers/UserRequestsProvider';
-import ActionSimpleMessage from './ActionSimpleMessage';
 import type { MessageActionEscalation } from '@wpai/schemas';
 
 const EscalationComponent = {
