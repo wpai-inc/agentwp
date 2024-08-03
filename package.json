@@ -13,7 +13,7 @@
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "storybook": "STORYBOOK_ENV=1 storybook dev -p 6006",
-    "build-storybook": "export NODE_OPTIONS=--max-old-space-size=4096 STORYBOOK_ENV=1 storybook build",
+    "build-storybook": "NODE_OPTIONS=--max-old-space-size=4096 STORYBOOK_ENV=1 storybook build",
     "build-plugin": "npm run clean && composer install && npm run build && npm run copy-files && npm run zip",
     "test": "jest"
   },
