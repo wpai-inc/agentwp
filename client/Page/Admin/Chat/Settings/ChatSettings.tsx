@@ -54,7 +54,8 @@ export default function ChatSettings() {
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 max-w-screen-sm mx-auto w-full">
+      <p>These settings will be applied for your user only. If they are disabled, please contact the administrator of this account.</p>
       { settings.map( setting => (
         <div className="flex items-center space-x-2" key={ setting.name }>
           <Switch
