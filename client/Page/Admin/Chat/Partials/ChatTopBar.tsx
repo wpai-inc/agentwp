@@ -10,9 +10,11 @@ import { useClient } from '@/Providers/ClientProvider';
 import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversationButton';
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import { usePage } from '@/Providers/PageProvider';
+import { useChatUI } from '@/Components/Chat/Chat';
 
 export default function ChatTopBar( { handleDrag }: { handleDrag: ( e: MouseEvent ) => void } ) {
   const { setChatSetting } = useChat();
+  const { toggle } = useChatUI();
   const { userProfileUrl } = useClient();
   const { page } = usePage();
 
@@ -45,7 +47,7 @@ export default function ChatTopBar( { handleDrag }: { handleDrag: ( e: MouseEven
           </button>
         </AgentTooltip>
         <AgentTooltip content="Settings">
-          <a href={ page.settings_page }>
+          <a href={ page.settings_page } onClick={ toggle }>
             <SettingsIcon className="h-5 w-5" />
           </a>
         </AgentTooltip>
