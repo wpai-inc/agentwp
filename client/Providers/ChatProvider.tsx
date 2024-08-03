@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, useEffect } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -53,7 +53,7 @@ export default function ChatProvider( {
     const response = await client.storeConversation( { message, selected_input: selectedInput } );
     return response.data;
   }
-
+  
   /**
    * Adds or updates a msg in the conversation
    * @returns void
