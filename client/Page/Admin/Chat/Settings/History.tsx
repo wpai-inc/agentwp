@@ -42,7 +42,7 @@ export default function History() {
               </button>
             </HistoryItem>
           ) }
-          { history?.items?.data.length && <HistoryList items={ history.items.data } /> }
+          { history?.items?.data.length > 0 && <HistoryList items={ history.items.data } /> }
         </div>
       ) }
     </div>
