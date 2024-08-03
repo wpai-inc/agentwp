@@ -15,11 +15,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from './button';
 
-const formSchema = z.object({
-  username: z.string().min(2).max(50),
+const formSchema = z.object( {
+  username: z.string().min( 2 ).max( 50 ),
   email: z.string().email(),
   description: z.string(),
-});
+} );
 
 const meta: Meta = {
   title: 'Components/Form',
@@ -30,73 +30,68 @@ export default meta;
 
 const Template: StoryObj = {
   render: () => {
-    const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
+    const form = useForm< z.infer< typeof formSchema > >( {
+      resolver: zodResolver( formSchema ),
       defaultValues: {
         username: '',
       },
-    });
+    } );
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log(values);
-      alert(JSON.stringify(values, null, 2));
+    function onSubmit( values: z.infer< typeof formSchema > ) {
+      alert( JSON.stringify( values, null, 2 ) );
     }
 
     return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Form { ...form }>
+        <form onSubmit={ form.handleSubmit( onSubmit ) }>
           <FormItem>
             <FormField
-              control={form.control}
+              control={ form.control }
               name="username"
-              render={({ field }) => (
+              render={ ( { field } ) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input placeholder="Username" { ...field } />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>This is your public display name.</FormDescription>
                   <FormMessage />
                 </FormItem>
-              )}
+              ) }
             />
           </FormItem>
 
           <FormItem>
             <FormField
               name="email"
-              control={form.control}
-              render={({ field }) => (
+              control={ form.control }
+              render={ ( { field } ) => (
                 <>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} type="email" />
+                    <Input { ...field } type="email" />
                   </FormControl>
                   <FormDescription>Enter your email address</FormDescription>
                   <FormMessage />
                 </>
-              )}
+              ) }
             />
           </FormItem>
 
           <FormItem>
             <FormField
-              control={form.control}
+              control={ form.control }
               name="description"
-              render={({ field }) => (
+              render={ ( { field } ) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input placeholder="Username" { ...field } />
                   </FormControl>
-                  <FormDescription>
-                    The description of the user.
-                  </FormDescription>
+                  <FormDescription>The description of the user.</FormDescription>
                   <FormMessage />
                 </FormItem>
-              )}
+              ) }
             />
           </FormItem>
 

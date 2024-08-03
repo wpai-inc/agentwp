@@ -29,7 +29,6 @@ export default function OpenPostEdit( {
       .then( res => {
         setFoundPosts( res.data );
         setSelectedPostIndex( 0 );
-        console.log( 'Search Post: ', res );
       } );
   }
 
@@ -57,12 +56,9 @@ export default function OpenPostEdit( {
       } else {
         setSelectedPostIndex( selectedPostIndex + 1 );
       }
-    } else if ( onMessageBoxKeyDown.key === 'Enter' ) {
-      console.log( 'Selected Post: ', foundPosts[ selectedPostIndex ] );
-      if ( selectedPostIndex ) {
-        onSetMessage( `/edit ${ foundPosts[ selectedPostIndex ]?.title }` );
-        document.location.href = `${ page.admin_route }post.php?post=${ foundPosts[ selectedPostIndex ].id }&action=edit`;
-      }
+    } else if ( onMessageBoxKeyDown.key === 'Enter' && selectedPostIndex ) {
+      onSetMessage( `/edit ${ foundPosts[ selectedPostIndex ]?.title }` );
+      document.location.href = `${ page.admin_route }post.php?post=${ foundPosts[ selectedPostIndex ].id }&action=edit`;
     }
   }, [ onMessageBoxKeyDown ] );
 

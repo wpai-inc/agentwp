@@ -18,43 +18,43 @@ const defaultSettings: Setting[] = [
 ];
 
 export default function ChatSettings() {
-  const [settings, setSettings] = useState<Setting[]>(defaultSettings);
+  const [ settings, setSettings ] = useState< Setting[] >( defaultSettings );
   const { updateSetting } = useClient();
   const { getSettings } = useClient();
 
-  async function handleChange(name: string, checked: boolean) {
-    const updated = await updateSetting(name, checked);
-    setSettings(prevSettings =>
-      prevSettings.map(setting => {
-        if (updated.name === name) {
+  async function handleChange( name: string, checked: boolean ) {
+    const updated = await updateSetting( name, checked );
+    setSettings( prevSettings =>
+      prevSettings.map( setting => {
+        if ( updated.name === name ) {
           return { ...setting, value: updated.value };
         }
         return setting;
-      }),
+      } ),
     );
   }
 
   async function fetchSettings() {
     const settings = await getSettings();
-    setSettings(settings);
+    setSettings( settings );
   }
 
-  useEffect(() => {
+  useEffect( () => {
     fetchSettings();
-  }, []);
+  }, [] );
 
   return (
     <div className="flex flex-col gap-3">
-      {settings.map(setting => (
-        <div className="flex items-center space-x-2" key={setting.name}>
+      { settings.map( setting => (
+        <div className="flex items-center space-x-2" key={ setting.name }>
           <Switch
-            id={setting.name}
-            checked={setting.value}
-            onCheckedChange={(checked: boolean) => handleChange(setting.name, checked)}
+            id={ setting.name }
+            checked={ setting.value }
+            onCheckedChange={ ( checked: boolean ) => handleChange( setting.name, checked ) }
           />
-          <Label htmlFor={setting.name}>{setting.label}</Label>
+          <Label htmlFor={ setting.name }>{ setting.label }</Label>
         </div>
-      ))}
+      ) ) }
     </div>
   );
 }

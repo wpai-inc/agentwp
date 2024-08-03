@@ -31,7 +31,6 @@ const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
         const newEditorContent = WriteToEditor( text, editorContent );
         if ( newEditorContent?.content ) {
-          console.log( 'newEditorContent', newEditorContent );
           setEditorContent( newEditorContent.content );
         }
 
@@ -47,10 +46,6 @@ const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
       ) {
         const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
         const newInputFieldContent = WriteToInputField( text, selectedInput );
-        if ( newInputFieldContent?.content ) {
-          console.log( 'newInputFieldContent', newInputFieldContent );
-          // setInputFieldContent(newInputFieldContent.content);
-        }
 
         if ( newInputFieldContent?.summary ) {
           liveAction.action.ability = 'message';

@@ -26,7 +26,6 @@ type VisualizationProps =
   | { visualization: 'table'; data: DataProps; chart?: Chart };
 
 export default function Component( props: VisualizationProps ) {
-  console.log( props );
   const Component = visualizationComponents[ props.visualization ];
 
   if ( ! Component ) return null;
