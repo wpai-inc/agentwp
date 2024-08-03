@@ -16,7 +16,7 @@ export default function Conversation() {
       ) : (
         <>
           <Dialog conversation={ conversation } />
-          <div className="relative">
+          <div className="relative mx-auto w-full max-w-screen-md">
             <div className="absolute -top-12 right-0 left-0 z-10 h-12 from-brand-gray to-transparent bg-gradient-to-t"></div>
             <div className="p-1.5">
               <MessageBox />

@@ -11,11 +11,12 @@ import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_
 import { Button } from '@/Components/ui/button';
 import Logo from '../Logo';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { useChat } from '@/Providers/ChatProvider';
 
-export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean } ) {
+export default function Chat() {
+  const { open, setOpen } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
-  const { settings, updateSetting } = useClientSettings();
-  const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
+  const { updateSetting } = useClientSettings();
   const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
