@@ -19,8 +19,7 @@ const defaultSettings: Setting[] = [
 
 export default function ChatSettings() {
   const [ settings, setSettings ] = useState< Setting[] >( defaultSettings );
-  const { updateSetting } = useClient();
-  const { getSettings } = useClient();
+  const { updateSetting, getSettings } = useClient();
 
   async function handleChange( name: string, checked: boolean ) {
     const updated = await updateSetting( name, checked );
@@ -36,12 +35,23 @@ export default function ChatSettings() {
 
   async function fetchSettings() {
     const settings = await getSettings();
+
+    defaultSettings.forEach( async setting => {
+      if ( ! settings.find( ( s: Setting ) => s.name === setting.name ) ) {
+        await updateSetting( setting.name, setting.value );
+      }
+    } );
+
     setSettings( settings );
   }
 
   useEffect( () => {
     fetchSettings();
   }, [] );
+
+  const settingLabel = ( name: string ) => {
+    return defaultSettings.find( setting => setting.name === name )?.label;
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -52,7 +62,7 @@ export default function ChatSettings() {
             checked={ setting.value }
             onCheckedChange={ ( checked: boolean ) => handleChange( setting.name, checked ) }
           />
-          <Label htmlFor={ setting.name }>{ setting.label }</Label>
+          <Label htmlFor={ setting.name }>{ settingLabel( setting.name ) }</Label>
         </div>
       ) ) }
     </div>
