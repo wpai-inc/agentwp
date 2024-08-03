@@ -4,7 +4,7 @@ import type { HistoryItem, HistoryType } from '@/Providers/ClientProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { cn } from '@/lib/utils';
-
+import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversationButton';
 export default function History() {
   const [ history, setHistory ] = useState< HistoryType >();
   const { getHistory, unclearConversation } = useClient();
@@ -49,10 +49,10 @@ export default function History() {
           { history?.items?.data.length > 0 && (
             <div>
               <div className="flex justify-between mb-3">
-                <h2 className="font-bold">
-                  Cleared Conversations
-                </h2>
-                <button className="underline">Clear Current Conversation</button>
+                <h2 className="font-bold">Cleared Conversations</h2>
+                <ClearConversationButton className="underline">
+                  Clear Current Conversation
+                </ClearConversationButton>
               </div>
               <HistoryList items={ history.items.data } />
             </div>
@@ -74,6 +74,6 @@ export default function History() {
   }
 }
 
-function HistoryItem( { children, className }: { children: React.ReactNode, className?: string } ) {
-  return <div className={cn("rounded bg-slate-100 px-4 py-2", className)}>{ children }</div>;
+function HistoryItem( { children, className }: { children: React.ReactNode; className?: string } ) {
+  return <div className={ cn( 'rounded bg-slate-100 px-4 py-2', className ) }>{ children }</div>;
 }
