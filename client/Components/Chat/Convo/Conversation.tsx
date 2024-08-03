@@ -6,7 +6,7 @@ import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 
 export default function Conversation() {
-  const { conversation, chatSetting } = useChat();
+  const { conversation } = useChat();
   const { loadingConversation } = useUserRequests();
 
   return (
@@ -22,9 +22,7 @@ export default function Conversation() {
               <MessageBox />
             </div>
           </div>
-          { chatSetting && (
-            <ChatOverlay header={ chatSetting?.header }>{ chatSetting?.component }</ChatOverlay>
-          ) }
+          <ChatOverlay />
         </>
       ) }
     </div>
