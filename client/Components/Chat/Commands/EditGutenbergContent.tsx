@@ -36,10 +36,6 @@ export default function EditGutenbergContent( {
     return () => unsubscribe();
   }, [] );
 
-  useEffect( () => {
-    console.log( 'Post Content: ', screen );
-  }, [ screen ] );
-
   // To unsubscribe from changes when no longer needed
   // unsubscribe();
 

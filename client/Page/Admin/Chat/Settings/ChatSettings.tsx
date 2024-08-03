@@ -18,43 +18,53 @@ const defaultSettings: Setting[] = [
 ];
 
 export default function ChatSettings() {
-  const [settings, setSettings] = useState<Setting[]>(defaultSettings);
-  const { updateSetting } = useClient();
-  const { getSettings } = useClient();
+  const [ settings, setSettings ] = useState< Setting[] >( defaultSettings );
+  const { updateSetting, getSettings } = useClient();
 
-  async function handleChange(name: string, checked: boolean) {
-    const updated = await updateSetting(name, checked);
-    setSettings(prevSettings =>
-      prevSettings.map(setting => {
-        if (updated.name === name) {
+  async function handleChange( name: string, checked: boolean ) {
+    const updated = await updateSetting( name, checked );
+    setSettings( prevSettings =>
+      prevSettings.map( setting => {
+        if ( updated.name === name ) {
           return { ...setting, value: updated.value };
         }
         return setting;
-      }),
+      } ),
     );
   }
 
   async function fetchSettings() {
     const settings = await getSettings();
-    setSettings(settings);
+
+    defaultSettings.forEach( async setting => {
+      if ( ! settings.find( ( s: Setting ) => s.name === setting.name ) ) {
+        await updateSetting( setting.name, setting.value );
+      }
+    } );
+
+    setSettings( settings );
   }
 
-  useEffect(() => {
+  useEffect( () => {
     fetchSettings();
-  }, []);
+  }, [] );
+
+  const settingLabel = ( name: string ) => {
+    return defaultSettings.find( setting => setting.name === name )?.label;
+  };
 
   return (
     <div className="flex flex-col gap-3">
-      {settings.map(setting => (
-        <div className="flex items-center space-x-2" key={setting.name}>
+      { settings.map( setting => (
+        <div className="flex items-center space-x-2" key={ setting.name }>
           <Switch
-            id={setting.name}
-            checked={setting.value}
-            onCheckedChange={(checked: boolean) => handleChange(setting.name, checked)}
+            id={ setting.name }
+            checked={ setting.value }
+            onCheckedChange={ ( checked: boolean ) => handleChange( setting.name, checked ) }
           />
-          <Label htmlFor={setting.name}>{setting.label}</Label>
+          <Label htmlFor={ setting.name }>{ settingLabel( setting.name ) }</Label>
         </div>
-      ))}
+      ) ) }
     </div>
   );
 }

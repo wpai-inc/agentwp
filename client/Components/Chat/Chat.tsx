@@ -1,5 +1,13 @@
 import { usePage } from '@/Providers/PageProvider';
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  createContext,
+  useContext,
+} from 'react';
 import { cn } from '@/lib/utils';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
@@ -11,11 +19,22 @@ import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_
 import { Button } from '@/Components/ui/button';
 import Logo from '../Logo';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { useChat } from '@/Providers/ChatProvider';
 
-export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean } ) {
+const ChatUIContext = createContext( {
+  toggle: () => {},
+  open: false,
+  setOpen: ( _open: boolean ) => {},
+} );
+
+export function useChatUI() {
+  return useContext( ChatUIContext );
+}
+
+export default function Chat() {
+  const { open, setOpen } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
-  const { settings, updateSetting } = useClientSettings();
-  const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
+  const { updateSetting } = useClientSettings();
   const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
@@ -128,7 +147,7 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
 
   return (
     canAccessAgent && (
-      <>
+      <ChatUIContext.Provider value={ { toggle, open, setOpen } }>
         <div
           ref={ scope }
           onMouseEnter={ () => setIsHovering( true ) }
@@ -162,7 +181,7 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
           <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
           <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
         </Button>
-      </>
+      </ChatUIContext.Provider>
     )
   );
 }
