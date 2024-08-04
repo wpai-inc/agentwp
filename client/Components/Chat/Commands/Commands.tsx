@@ -136,7 +136,7 @@ export default function Commands( {
       { filteredCommands.length > 0 && (
         <div
           className={ cn(
-            'absolute bottom-full left-0 rounded border border-gray-300 bg-gray-100 p-1',
+            'absolute bottom-full left-0 rounded border border-gray-300 bg-gray-100 p-1 z-50',
             {
               block: firstSlashDetected,
               hidden: ! firstSlashDetected,
