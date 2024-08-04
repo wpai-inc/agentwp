@@ -1,17 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useScreen } from '@/Providers/ScreenProvider';
 
 declare const wp: any;
 
-export default function EditGutenbergContent( {
-  message,
-  onSetMessage,
-  onMessageBoxKeyDown,
-}: {
-  message: string;
-  onSetMessage: ( message: string ) => void;
-  onMessageBoxKeyDown: React.KeyboardEvent< HTMLTextAreaElement > | undefined;
-} ) {
+export default function EditGutenbergContent() {
   // const adminRequest = useAdminRoute();
   const { screen, setScreen } = useScreen();
 

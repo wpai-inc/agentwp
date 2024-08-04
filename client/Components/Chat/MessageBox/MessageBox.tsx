@@ -16,9 +16,7 @@ export default function MessageBox() {
   const [ message, setMessage ] = useState( '' );
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
-
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
-  const commandMenuRef = useRef< HTMLDivElement | null >( null );
 
   const send = useCallback(
     ( msg: string ) => {
@@ -33,7 +31,15 @@ export default function MessageBox() {
     send( message );
   }
 
-  function handleKeyDown( e: React.KeyboardEvent< HTMLTextAreaElement > ) {
+  function handleKeyDown( e: React.KeyboardEvent< HTMLElement >, menuFocused: boolean ) {
+    if ( menuFocused ) {
+      handleMenuKeyDown( e.nativeEvent );
+    } else {
+      handleMessageKeyDown( e.nativeEvent );
+    }
+  }
+
+  function handleMessageKeyDown( e: KeyboardEvent ) {
     if ( e.key === 'ArrowUp' || e.key === 'ArrowDown' ) {
       e.preventDefault();
       setCommandMenuFocused( true );
@@ -44,12 +50,24 @@ export default function MessageBox() {
     }
   }
 
+  function handleMenuKeyDown( e: KeyboardEvent ) {
+    if ( e.key !== 'ArrowDown' && e.key !== 'ArrowUp' ) {
+      setCommandMenuFocused( false );
+      if ( textAreaRef.current ) {
+        textAreaRef.current.focus();
+      }
+    } else {
+      setCommandMenuFocused( true );
+    }
+  }
+
   return (
     <CommandMenu
       command={ message }
-      focus={ commandMenuFocused }
-      setMessage={ setMessage }
-      ref={ commandMenuRef }>
+      focused={ commandMenuFocused }
+      handleKeyDown={ handleKeyDown }
+      message={ message }
+      setMessage={ setMessage }>
       <form className="relative rounded-lg bg-white p-2" onSubmit={ submit }>
         <textarea
           onChange={ e => setMessage( e.target.value ) }
@@ -57,7 +75,7 @@ export default function MessageBox() {
           ref={ textAreaRef }
           className="h-24 w-full resize-none p-2 text-base"
           placeholder="Message..."
-          onKeyDown={ handleKeyDown }
+          onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
         />
         <div className="flex items-center justify-between">

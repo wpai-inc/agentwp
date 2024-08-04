@@ -1,13 +1,8 @@
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from '@/Components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
+import SelectCommand from './Popover/SelectCommand';
+import PostEdit from './Popover/PostEdit';
 
-type SlashCommand = {
+export type SlashCommand = {
   command: string;
   info: string;
   action?: () => void;
@@ -18,7 +13,7 @@ const commands: SlashCommand[] = [
   { command: 'goto', info: 'Go to a specific page' },
   { command: 'explain', info: 'Explain a specific topic' },
   { command: 'help', info: 'Get help' },
-  // TODO: Automatically add all CPT's and taxonomies
+  // @todo: Automatically add all CPT's and taxonomies
   {
     command: 'new post',
     info: 'Create a new post',
@@ -36,20 +31,42 @@ const commands: SlashCommand[] = [
   { command: 'dashboard', info: 'Go to Dashboard' },
 ];
 
+const popoverComponent: {
+  [ key: string ]: React.ComponentType< CommandPopoverProps >;
+} = {
+  select: SelectCommand,
+  edit: PostEdit,
+};
+
+export type CommandPopoverProps = {
+  commands: SlashCommand[];
+  handleKeyDown: ( e: React.KeyboardEvent< HTMLElement >, menuFocused: boolean ) => void;
+  message: string;
+  setMessage: ( message: string ) => void;
+  focused: boolean;
+};
+
 export default function CommandMenu( {
   children,
   command,
+  message,
   setMessage,
-  focus = false,
+  handleKeyDown,
+  focused = false,
 }: {
   children: React.ReactNode;
   command: string;
+  handleKeyDown: ( e: React.KeyboardEvent< HTMLElement >, menuFocused: boolean ) => void;
+  message: string;
   setMessage: ( message: string ) => void;
-  focus: boolean;
+  focused: boolean;
 } ) {
-  const isSelected = commands.find( cmd => cmd.command === command.slice( 1 ).trim() );
-  const open = command.startsWith( '/' ) && ! isSelected;
-  const filteredCommands = commands.filter( cmd => cmd.command.includes( command.slice( 1 ) ) );
+  const cmd = command.slice( 1 );
+  const isSelected = commands.find( c => c.command === cmd.trim() );
+  const open = command.startsWith( '/' );
+  const filteredCommands = commands.filter( c => c.command.includes( cmd ) );
+  const component = isSelected ? cmd : 'select';
+  const PopoverComponent = popoverComponent[ component ];
 
   return (
     <Popover open={ open }>
@@ -61,28 +78,13 @@ export default function CommandMenu( {
         onOpenAutoFocus={ ( event: any ) => {
           event.preventDefault();
         } }>
-        <Command shouldFilter={ false } loop>
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup>
-              { filteredCommands.map( ( cmd, idx ) => (
-                <CommandItem
-                  key={ cmd.command }
-                  value={ cmd.command }
-                  onSelect={ value => {
-                    setMessage( '/' + value + ' ' );
-                  } }>
-                  <div className="flex gap-2">
-                    <code className="font-mono font-semibold bg-brand-dark text-white rounded-full px-2 text-sm">
-                      { '/' + cmd.command }
-                    </code>
-                    <span>{ cmd.info }</span>
-                  </div>
-                </CommandItem>
-              ) ) }
-            </CommandGroup>
-          </CommandList>
-        </Command>
+        <PopoverComponent
+          message={ message }
+          commands={ filteredCommands }
+          handleKeyDown={ handleKeyDown }
+          setMessage={ setMessage }
+          focused={ focused }
+        />
       </PopoverContent>
     </Popover>
   );
