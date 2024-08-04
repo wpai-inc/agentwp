@@ -4,11 +4,13 @@ import type { HistoryItem, HistoryType } from '@/Providers/ClientProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { cn } from '@/lib/utils';
-import ClearConversationButton from '@/Components/Chat/Toolbar/ClearConversationButton';
+import { useChat } from '@/Providers/ChatProvider';
+
 export default function History() {
   const [ history, setHistory ] = useState< HistoryType >();
   const { getHistory, unclearConversation } = useClient();
   const { since, setSince, refreshConvo } = useUserRequests();
+  const { clearHistory, setChatSetting, isEmptyConversation } = useChat();
 
   useEffect( () => {
     fetchHistory( since );
@@ -25,6 +27,16 @@ export default function History() {
     refreshConvo();
   }
 
+  function handleClearConvo() {
+    clearHistory();
+    setChatSetting( null );
+  }
+
+  function handleResume( createdAt: string ) {
+    setSince( createdAt );
+    setChatSetting( null );
+  }
+
   return (
     <div className="space-y-4">
       { ! history ? (
@@ -37,7 +49,7 @@ export default function History() {
               <HistoryItem>
                 <button
                   className="flex w-full gap-4"
-                  onClick={ () => setSince( history.lastRequest.createdAt ) }>
+                  onClick={ () => handleResume( history.lastRequest.createdAt ) }>
                   <time className="block text-nowrap font-bold">
                     Resume { history.lastRequest.humanCreatedAt }
                   </time>
@@ -50,9 +62,11 @@ export default function History() {
             <div>
               <div className="flex justify-between mb-3">
                 <h2 className="font-bold">Cleared Conversations</h2>
-                <ClearConversationButton className="underline">
-                  Clear Current Conversation
-                </ClearConversationButton>
+                { ! isEmptyConversation && (
+                  <button className="underline" onClick={ handleClearConvo }>
+                    Clear Current Conversation
+                  </button>
+                ) }
               </div>
               <HistoryList items={ history.items.data } />
             </div>
