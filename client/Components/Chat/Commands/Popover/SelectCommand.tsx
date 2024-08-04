@@ -11,6 +11,7 @@ import type { CommandPopoverProps } from '../CommandMenu';
 export default function SelectCommand( {
   handleKeyDown,
   commands,
+  command,
   setMessage,
   focused,
 }: CommandPopoverProps ) {
@@ -22,6 +23,10 @@ export default function SelectCommand( {
   }, [ focused ] );
 
   function select( value: string ) {
+    if ( command?.action ) {
+      command.action();
+    }
+
     setMessage( '/' + value + ' ' );
   }
 

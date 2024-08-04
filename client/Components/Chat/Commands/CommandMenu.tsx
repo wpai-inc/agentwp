@@ -39,6 +39,7 @@ const popoverComponent: {
 };
 
 export type CommandPopoverProps = {
+  command: SlashCommand | undefined;
   commands: SlashCommand[];
   handleKeyDown: ( e: React.KeyboardEvent< HTMLElement >, menuFocused: boolean ) => void;
   message: string;
@@ -62,10 +63,10 @@ export default function CommandMenu( {
   focused: boolean;
 } ) {
   const cmd = command.slice( 1 );
-  const isSelected = commands.find( c => c.command === cmd.trim() );
+  const selectedCommand = commands.find( c => c.command === cmd.trim() );
   const open = command.startsWith( '/' );
   const filteredCommands = commands.filter( c => c.command.includes( cmd ) );
-  const component = isSelected ? cmd : 'select';
+  const component = selectedCommand ? cmd : 'select';
   const PopoverComponent = popoverComponent[ component ];
 
   return (
@@ -80,6 +81,7 @@ export default function CommandMenu( {
         } }>
         <PopoverComponent
           message={ message }
+          command={ selectedCommand }
           commands={ filteredCommands }
           handleKeyDown={ handleKeyDown }
           setMessage={ setMessage }
