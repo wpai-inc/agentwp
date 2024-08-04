@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useEffect } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -16,11 +16,13 @@ type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 const ChatContext = createContext( {
   conversation: [] as UserRequestType[],
+  isEmptyConversation: false,
   sendMessage: ( _message: string ) => {},
   updateAgentMessage: ( _urId: string, _updatedAa: AgentAction ) => {},
   cancelStreaming: () => {},
   setChatSetting: ( _setting: ChatSettingProps ) => {},
   chatSetting: null as ChatSettingProps,
+  clearHistory: () => {},
   open: false,
   setOpen: ( _open: boolean ) => {},
 } );
@@ -40,20 +42,25 @@ export default function ChatProvider( {
   children: React.ReactNode;
   defaultOpen?: boolean;
 } ) {
-  const { client } = useClient();
+  const { client, clearConversation } = useClient();
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
-  const { conversation, setConversation } = useUserRequests();
+  const { conversation, setConversation, fetchConvo } = useUserRequests();
   const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
+
+  async function clearHistory() {
+    await clearConversation();
+    fetchConvo( null );
+  }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
     const response = await client.storeConversation( { message, selected_input: selectedInput } );
     return response.data;
   }
-  
+
   /**
    * Adds or updates a msg in the conversation
    * @returns void
@@ -104,15 +111,19 @@ export default function ChatProvider( {
     }
   }
 
+  const isEmptyConversation = conversation.length === 0;
+
   return (
     <ChatContext.Provider
       value={ {
         conversation,
+        isEmptyConversation,
         sendMessage,
         updateAgentMessage,
         cancelStreaming,
         setChatSetting,
         chatSetting,
+        clearHistory,
         open,
         setOpen,
       } }>
