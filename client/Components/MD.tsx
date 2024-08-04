@@ -1,5 +1,6 @@
 import Markdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -11,7 +12,7 @@ export default function MD( { content }: { content: string } ) {
     <div className="prose w-full max-w-none overflow-hidden break-words dark:prose-invert prose-code:break-all prose-pre:relative prose-pre:max-w-full prose-pre:overflow-x-auto prose-pre:whitespace-pre-wrap prose-pre:rounded-none prose-pre:bg-transparent prose-pre:p-0">
       <Markdown
         children={ content }
-        remarkPlugins={ [ remarkBreaks, remarkRehype ] }
+        remarkPlugins={ [ remarkBreaks, remarkRehype, remarkGfm ] }
         rehypePlugins={ [ rehypeRaw ] }
         components={ {
           code( props ) {
