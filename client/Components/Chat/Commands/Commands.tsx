@@ -2,12 +2,7 @@ import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import OpenPostEdit from './OpenPostEdit';
 import EditGutenbergContent from '@/Components/Chat/Commands/EditGutenbergContent';
-
-type SlashCommand = {
-  command: string;
-  info: string;
-  action?: () => void;
-};
+import CommandMenu from './CommandMenu';
 
 export default function Commands( {
   onMessageBoxKeyUp,
@@ -18,29 +13,6 @@ export default function Commands( {
   onSetMessage: ( message: string ) => void;
   message: string;
 } ) {
-  const slashCommands = [
-    { command: 'gb', info: 'Edit gutenberg content' },
-    { command: 'goto', info: 'Go to a specific page' },
-    { command: 'explain', info: 'Explain a specific topic' },
-    { command: 'help', info: 'Get help' },
-    // TODO: Automatically add all CPT's and taxonomies
-    {
-      command: 'new post',
-      info: 'Create a new post',
-      action: () => {
-        document.location.href = '/wp-admin/post-new.php';
-      },
-    },
-    { command: 'new conversation', info: 'Create a new conversation' },
-    {
-      command: 'edit',
-      info: 'Edit a specific page',
-      action: () => {},
-    },
-    { command: 'settings', info: 'Open the settings page' },
-    { command: 'dashboard', info: 'Go to Dashboard' },
-  ];
-
   const [ firstSlashDetected, setFirstSlashDetected ] = useState( false );
   const [ selectedCommandIndex, setSelectedCommandIndex ] = useState( 0 );
   const [ selectedCommand, setSelectedCommand ] = useState< SlashCommand | null >( null );
