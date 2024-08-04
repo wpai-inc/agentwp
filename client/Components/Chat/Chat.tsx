@@ -122,11 +122,7 @@ export default function Chat() {
    * Animate on mount
    */
   useEffect( () => {
-    if ( open ) {
-      animate( scope.current, openedStyles );
-    } else {
-      animate( scope.current, closedStyles, { duration: 0 } );
-    }
+    animate( scope.current, open ? openedStyles : closedStyles, { duration: 0 } );
   }, [] );
 
   useEffect( () => {
