@@ -20,6 +20,8 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@material-design-icons/svg": "^0.14.13",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-form": "^0.0.3",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
@@ -31,6 +33,7 @@
     "@wordpress/i18n": "^4.52.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cmdk": "^1.0.0",
     "dotenv": "^16.4.5",
     "html-to-image": "^1.11.11",
     "lodash.debounce": "^4.0.8",
