@@ -133,24 +133,26 @@ export default function Commands( {
 
   return (
     <>
-      { filteredCommands.length && (
+      { filteredCommands.length > 0 && (
         <div
           className={ cn(
             'absolute bottom-full left-0 rounded border border-gray-300 bg-gray-100 p-1',
-            firstSlashDetected ? 'block' : 'hidden',
+            {
+              block: firstSlashDetected,
+              hidden: ! firstSlashDetected,
+            },
           ) }>
           <ul>
             { filteredCommands.map( ( cmd, index ) => (
               <li
                 key={ index }
-                className={ cn(
-                  'px-1',
-                  selectedCommandIndex === index ? 'bg-brand-primary text-white' : '',
-                ) }>
+                className={ cn( 'px-1', {
+                  'bg-brand-primary text-white': selectedCommandIndex === index,
+                } ) }>
                 <span
-                  className={ cn(
-                    selectedCommandIndex === index ? 'bg-brand-primary text-white' : '',
-                  ) }>
+                  className={ cn( {
+                    'bg-brand-primary text-white': selectedCommandIndex === index,
+                  } ) }>
                   /
                 </span>{ ' ' }
                 { cmd.command }
