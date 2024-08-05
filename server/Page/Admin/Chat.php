@@ -11,6 +11,11 @@ class Chat extends ReactClient
         add_action('admin_init', [$this, 'registerChat']);
     }
 
+    public function data(): array
+    {
+        return [];
+    }
+
     public function registerChat(): void
     {
         add_action('in_admin_header', [$this, 'appRoot'], 100);

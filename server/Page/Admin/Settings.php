@@ -21,8 +21,8 @@ class Settings extends ReactClient
     {
         parent::__construct($main);
 
-        $this->settings = new \WpAi\AgentWp\Settings();
-        $this->user = new UserAuth();
+        $this->settings = new \WpAi\AgentWp\Settings;
+        $this->user = new UserAuth;
 
         add_action('current_screen', [$this, 'maybe_get_token']);
     }
@@ -31,6 +31,11 @@ class Settings extends ReactClient
     {
         $this->hasFooter()->registerPage();
         $this->menuName('Agent WP Settings')->registerMenu();
+    }
+
+    public function data(): array
+    {
+        return [];
     }
 
     public function maybe_get_token(): void
