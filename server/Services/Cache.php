@@ -7,9 +7,14 @@ class Cache
     private string $hash;
 
     private string $key;
+    /**
+     * @var mixed
+     */
+    private $data;
 
-    public function __construct(string $id, private $data)
+    public function __construct(string $id, $data)
     {
+        $this->data = $data;
         $this->key = "agentwp_{$id}";
         $this->hash = md5(json_encode($data));
     }

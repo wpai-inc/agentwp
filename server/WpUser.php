@@ -6,7 +6,12 @@ use WpAi\AgentWp\Contracts\Registrable;
 
 class WpUser implements Registrable
 {
-    public function __construct(private Main $main) {}
+
+    private Main $main;
+    public function __construct(Main $main)
+    {
+        $this->main = $main;
+    }
 
     public function register(): void
     {

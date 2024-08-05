@@ -10,11 +10,11 @@ class AwpRestRoute
 
     private $callback;
 
-    private string|array $permission;
+    private $permission;
 
     private string $method = 'GET';
 
-    public function __construct(string $route, callable $callback, string|array $permission = 'all')
+    public function __construct(string $route, callable $callback, $permission = 'all')
     {
         $this->route = $route;
         $this->callback = $callback;

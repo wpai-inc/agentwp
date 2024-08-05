@@ -9,8 +9,11 @@ use WpAi\AgentWp\Traits\ScheduleEvent;
 class SiteIndexer implements Registrable
 {
     use ScheduleEvent;
-    public function __construct(private Main $main)
+
+    private Main $main;
+    public function __construct(Main $main)
     {
+        $this->main = $main;
     }
 
     public function register()
@@ -45,7 +48,7 @@ class SiteIndexer implements Registrable
         }
     }
 
-    public function add_plugin_slugs_to_debug_info($info)
+    public function add_plugin_slugs_to_debug_info($info): array
     {
         if (isset($info['wp-plugins-active']['fields'])) {
             // Get all active plugins
@@ -75,7 +78,7 @@ class SiteIndexer implements Registrable
         return $info;
     }
 
-    public function add_woocommerce_settings_to_debug_info($info)
+    public function add_woocommerce_settings_to_debug_info($info): array
     {
         $custom_orders_table_enabled = get_option('woocommerce_custom_orders_table_enabled', false);
         $info['woocommerce']['custom_orders_table_enabled'] = $custom_orders_table_enabled;
@@ -83,7 +86,7 @@ class SiteIndexer implements Registrable
         return $info;
     }
 
-    public function add_db_schema_to_debug_info($info)
+    public function add_db_schema_to_debug_info($info): array
     {
         global $wpdb;
         $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);

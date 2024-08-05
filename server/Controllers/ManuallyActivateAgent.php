@@ -2,13 +2,11 @@
 
 namespace WpAi\AgentWp\Controllers;
 
-use WpAi\AgentWp\Enums\RouteMethods;
-
 class ManuallyActivateAgent extends BaseController
 {
 
-    protected RouteMethods $method = RouteMethods::POST;
-    protected string|array $permission = 'canGenerateVerificationKey';
+    protected string $method = 'POST';
+    protected string $permission = 'canGenerateVerificationKey';
 
     public function activate()
     {

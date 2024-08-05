@@ -14,10 +14,13 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
     private Settings $settings;
 
-    public function __construct(protected Main $main)
+    protected Main $main;
+
+    public function __construct(Main $main)
     {
+        $this->main = $main;
         $this->pageName =
-        str_replace('\\', '/', str_replace(__NAMESPACE__.'\\Page\\', '', get_class($this)));
+            str_replace('\\', '/', str_replace(__NAMESPACE__ . '\\Page\\', '', get_class($this)));
         $this->settings = new Settings();
     }
 
@@ -38,7 +41,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
             add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
             add_filter('admin_body_class', [$this, 'bodyClass']);
-            add_action('wp_ajax_'.$this->slug('_'), [$this, 'registerControllers']);
+            add_action('wp_ajax_' . $this->slug('_'), [$this, 'registerControllers']);
         }
     }
 
@@ -54,23 +57,23 @@ abstract class ReactClient implements ClientAppInterface, Registrable
      */
     public function clientPage(): string
     {
-        return 'Page/'.$this->pageName.'/Index.tsx';
+        return 'Page/' . $this->pageName . '/Index.tsx';
     }
 
     /**
      * Unique page slug
      */
-    public function slug($sep = '-')
+    public function slug($sep = '-'): string
     {
-        return str_replace('-', $sep, $this->main::SLUG).$sep.str_replace('/', $sep, \strtolower($this->pageName));
+        return str_replace('-', $sep, $this->main::SLUG) . $sep . str_replace('/', $sep, \strtolower($this->pageName));
     }
 
     /**
      * Adds a class to the body tag
      */
-    public function bodyClass(string $classes)
+    public function bodyClass(string $classes): string
     {
-        $classes .= ' '.$this->slug();
+        $classes .= ' ' . $this->slug();
 
         return $classes;
     }
@@ -90,19 +93,19 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
     public function appRoot(): void
     {
-        ?>
+?>
         <noscript>
             <div class="no-js">
-            <?php
+                <?php
                 echo esc_html__(
                     'Warning: Agent WP will not work properly without JavaScript, please enable it.',
                     'agentwp'
                 );
-        ?>
+                ?>
             </div>
         </noscript>
         <div id="<?php echo $this->slug() ?>"></div>
-        <?php
+<?php
     }
 
     public function pageProps(): array
