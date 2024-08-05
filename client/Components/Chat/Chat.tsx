@@ -8,10 +8,12 @@ import { usePosition } from '@/Hooks/position';
 import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 import { useAnimate, ValueAnimationTransition } from 'framer-motion';
 import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
+import PowerOffIcon from '@material-design-icons/svg/outlined/power_settings_new.svg?react';
 import { Button } from '@/Components/ui/button';
 import {
   ContextMenu,
   ContextMenuContent,
+  ContextMenuIcon,
   ContextMenuItem,
   ContextMenuTrigger,
 } from '@/Components/ui/context-menu';
@@ -216,7 +218,12 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
           </ContextMenuTrigger>
           { ! turnedOff && (
             <ContextMenuContent>
-              <ContextMenuItem onClick={ () => handleTurnOff() }>Turn off</ContextMenuItem>
+              <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
+                <ContextMenuIcon>
+                  <PowerOffIcon />
+                </ContextMenuIcon>
+                Turn off
+              </ContextMenuItem>
             </ContextMenuContent>
           ) }
         </ContextMenu>
