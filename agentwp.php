@@ -45,6 +45,7 @@ function agentwp_bootstrap(): void
         \WpAi\AgentWp\Installer::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
+        \WpAi\AgentWp\Registry\PageData::class,
         \WpAi\AgentWp\Registry\SiteIndexer::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,
         \WpAi\AgentWp\Registry\ErrorIndexer::class,
