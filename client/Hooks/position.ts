@@ -249,9 +249,14 @@ export const usePosition = ( {
    * Mouse Handler Listeners
    */
   useEffect( () => {
-    if ( isDragging || isResizing ) {
+    if ( isResizing ) {
       document.addEventListener( 'mousemove', handleMove );
-      // document.addEventListener( 'mousemove', handleResize );
+      document.addEventListener( 'mousemove', handleResize );
+      document.addEventListener( 'mouseup', handleMouseUp );
+    }
+
+    if ( isDragging ) {
+      document.addEventListener( 'mousemove', handleMove );
       document.addEventListener( 'mouseup', handleMouseUp );
     }
 
