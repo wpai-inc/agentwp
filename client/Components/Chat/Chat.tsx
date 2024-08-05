@@ -15,11 +15,19 @@ import Conversation from './Convo/Conversation';
 import { usePosition } from '@/Hooks/position';
 import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 import { useAnimate, ValueAnimationTransition } from 'framer-motion';
-import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
-import { Button } from '@/Components/ui/button';
-import Logo from '../Logo';
+import PowerOffIcon from '@material-design-icons/svg/outlined/power_settings_new.svg?react';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuIcon,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/Components/ui/context-menu';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Components/ui/tooltip';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useChat } from '@/Providers/ChatProvider';
+import { useApp } from '@/Providers/AppProvider';
+import ToggleButton from '@/Components/Chat/ToggleButton/ToggleButton';
 
 const ChatUIContext = createContext( {
   toggle: () => {},
@@ -32,6 +40,7 @@ export function useChatUI() {
 }
 
 export default function Chat() {
+  const { setTurnedOff } = useApp();
   const { open, setOpen } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { updateSetting } = useClientSettings();
@@ -131,6 +140,14 @@ export default function Chat() {
     }
   }, [ isMaximized ] );
 
+  function handleTurnOff() {
+    setTurnedOff( true );
+
+    if ( open ) {
+      toggle();
+    }
+  }
+
   function handleMaximize() {
     setShouldAnimate( true );
     maximizeWindow();
@@ -168,15 +185,40 @@ export default function Chat() {
           <Conversation />
           <ResizeHandles resizeHandler={ onChatWindowResize } />
         </div>
-        <Button
-          ref={ chatTriggerRef }
-          onClick={ toggle }
-          variant="ghost"
-          className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
-          { open ? <ArrowRightIcon /> : <Logo className="w-full" /> }
-          <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
-          <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
-        </Button>
+        <ContextMenu>
+          <ContextMenuTrigger>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
+                </TooltipTrigger>
+                <TooltipContent side="right" align="center">
+                  <p>
+                    { open ? (
+                      <>
+                        Click to minimize
+                        <br /> AgentWP.
+                      </>
+                    ) : (
+                      <>
+                        AgentWP is hidden.
+                        <br /> Click to show.
+                      </>
+                    ) }
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
+              <ContextMenuIcon>
+                <PowerOffIcon />
+              </ContextMenuIcon>
+              Turn off
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
       </ChatUIContext.Provider>
     )
   );
