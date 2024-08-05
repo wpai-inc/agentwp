@@ -9,7 +9,15 @@ export function usePage() {
   return page;
 }
 
-export function PageProvider( { page, children }: { page: any; children: React.ReactNode } ) {
+export function PageProvider( {
+  page,
+  root,
+  children,
+}: {
+  page: any;
+  root: HTMLElement;
+  children: React.ReactNode;
+} ) {
   const [ pageData, setPageData ] = useState( page );
 
   const canAccessAgent = pageData.onboarding_completed && pageData.agentwp_access;
@@ -19,7 +27,7 @@ export function PageProvider( { page, children }: { page: any; children: React.R
   };
 
   return (
-    <PageContext.Provider value={ { page: pageData, setPageData, canAccessAgent, isPage } }>
+    <PageContext.Provider value={ { page: pageData, setPageData, canAccessAgent, isPage, root } }>
       { children }
     </PageContext.Provider>
   );
