@@ -7,7 +7,7 @@ use WpAi\AgentWp\UserAuth;
 class GetUsers extends BaseController
 {
 
-    protected string|array $permission = 'canGenerateVerificationKey';
+    protected string $permission = 'canGenerateVerificationKey';
 
     public function get_users(): void
     {

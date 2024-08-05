@@ -2,14 +2,13 @@
 
 namespace WpAi\AgentWp\Controllers;
 
-use WpAi\AgentWp\Enums\RouteMethods;
 use WpAi\AgentWp\UserAuth;
 
 class UpdateUserCapabilities extends BaseController
 {
-    protected string|array $permission = UserAuth::CAP_MANAGE_AGENTWP_USERS;
+    protected string $permission = UserAuth::CAP_MANAGE_AGENTWP_USERS;
 
-    protected RouteMethods $method = RouteMethods::POST;
+    protected string $method = 'POST';
 
     public function update_user_capabilities(): void
     {

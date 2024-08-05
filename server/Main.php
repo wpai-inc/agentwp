@@ -23,9 +23,9 @@ class Main
 
     const AGENTWP_CRON_THROTTLE = 300;
 
-    public $companyName = 'Agent WP';
+    public string $companyName = 'Agent WP';
 
-    public $attributionUrl = 'https://agentwp.com';
+    public string $attributionUrl = 'https://agentwp.com';
 
     public Settings $settings;
 
@@ -37,8 +37,11 @@ class Main
 
     public string $settingsPage;
 
-    public function __construct(private string $file)
+    private string $file;
+
+    public function __construct(string $file)
     {
+        $this->file = $file;
         $this->settings = new Settings();
         $this->auth = new UserAuth();
         $this->clientId = $this->settings->client_id;
@@ -64,7 +67,7 @@ class Main
 
     public function asset(?string $path = null): string
     {
-        return $this->url(self::BUILD_DIR.'/'.$path);
+        return $this->url(self::BUILD_DIR . '/' . $path);
     }
 
     public function pluginPath(): string
@@ -74,7 +77,7 @@ class Main
 
     public function path(?string $path = null): string
     {
-        return plugin_dir_path($this->file).ltrim($path, '/');
+        return plugin_dir_path($this->file) . ltrim($path, '/');
     }
 
     public function url(?string $path = null): string
@@ -100,7 +103,7 @@ class Main
     public function client($checkUserAccessRights = true): AwpClient
     {
         $client = new AwpClient();
-        if (! $checkUserAccessRights && $access_token = $this->settings->getAccessToken()) {
+        if (!$checkUserAccessRights && $access_token = $this->settings->getAccessToken()) {
             $client->setToken($access_token);
         } elseif ($access_token = $this->auth()->getAccessToken()) {
             $client->setToken($access_token);
@@ -147,7 +150,7 @@ class Main
             'user' => $current_user,
             'onboarding_completed' => $this->settings->onboarding_completed,
         ];
-        ?>
+?>
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>

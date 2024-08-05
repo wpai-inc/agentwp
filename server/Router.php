@@ -35,8 +35,11 @@ class Router implements Registrable
         'refresh_token' => [RefreshToken::class, 'refresh'],
     ];
 
-    public function __construct(private Main $main)
+    private Main $main;
+
+    public function __construct(Main $main)
     {
+        $this->main = $main;
     }
 
     public function register(): void
@@ -48,7 +51,7 @@ class Router implements Registrable
     {
         foreach ($this->routes as $route => $callback) {
             $controller = new $callback[0]($this->main);
-            register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
+            register_rest_route(self::REST_ROUTE_ENDPOINT, '/' . $route, [
                 'methods' => $controller->method(),
                 'callback' => [$controller, $callback[1]],
                 'permission_callback' => [$controller, 'check_permission'],

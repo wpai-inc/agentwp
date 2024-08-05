@@ -8,7 +8,7 @@ use WpAi\AgentWp\UserAuth;
 class Logout extends BaseController
 {
 
-    protected string|array $permission = UserAuth::CAP_MANAGE_AGENTWP_CONNECTION;
+    protected string $permission = UserAuth::CAP_MANAGE_AGENTWP_CONNECTION;
 
     public function logout(): void
     {

@@ -7,7 +7,7 @@ use WpAi\AgentWp\UserAuth;
 
 class DisconnectSite extends BaseController
 {
-    protected string|array $permission = UserAuth::CAP_MANAGE_AGENTWP_CONNECTION;
+    protected string $permission = UserAuth::CAP_MANAGE_AGENTWP_CONNECTION;
     public function disconnect_site(): void
     {
         $this->verifyNonce();

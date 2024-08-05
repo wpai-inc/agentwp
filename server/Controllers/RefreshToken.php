@@ -9,7 +9,7 @@ use WpAi\AgentWp\UserAuth;
 class RefreshToken extends BaseController
 {
 
-    protected string|array $permission = UserAuth::CAP_AGENTWP_ACCESS;
+    protected string $permission = UserAuth::CAP_AGENTWP_ACCESS;
 
     public function refresh(): void
     {

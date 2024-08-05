@@ -3,25 +3,27 @@
 namespace WpAi\AgentWp\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
-use WpAi\AgentWp\Enums\RouteMethods;
 use WpAi\AgentWp\Main;
 
 class BaseController
 {
-    protected RouteMethods $method = RouteMethods::GET;
+    protected string $method = 'GET';
 
-    protected string|array $permission = 'all';
+    protected string $permission = 'all';
 
     protected Request $request;
 
-    public function __construct(protected Main $main)
+    protected Main $main;
+
+    public function __construct(Main $main)
     {
+        $this->main = $main;
         $this->request = Request::createFromGlobals();
     }
 
     public function method(): string
     {
-        return $this->method->value;
+        return $this->method;
     }
 
     public function check_permission(): bool
@@ -47,12 +49,12 @@ class BaseController
         return current_user_can($this->permission);
     }
 
-    protected function respond(array|string|null $response = null): void
+    protected function respond($response = null): void
     {
         wp_send_json_success($response);
     }
 
-    protected function error(mixed $response, $status_code = null): void
+    protected function error($response, $status_code = null): void
     {
         $this->respond($response, $status_code);
     }

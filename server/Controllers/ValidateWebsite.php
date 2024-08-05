@@ -5,7 +5,7 @@ namespace WpAi\AgentWp\Controllers;
 class ValidateWebsite extends BaseController
 {
 
-    protected string|array $permission = 'hasValidVerificationKey';
+    protected string $permission = 'hasValidVerificationKey';
 
     public function validate_website(): void
     {
