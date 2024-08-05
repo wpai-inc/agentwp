@@ -64,11 +64,12 @@ export const usePosition = ( {
     if ( chatWindowContainer && chatWindowEl ) {
       const parentRect = chatWindowContainer.getBoundingClientRect();
       const { width, height } = chatWindowEl.getBoundingClientRect();
+      
       const maxHeight = window.innerHeight - parentRect.top;
       const maxRight = Math.max( parentRect.width - width, 0 );
       const maxBottom = Math.max( maxHeight - height, 0 );
 
-      return { maxRight, maxBottom, width: parentRect.width, height: maxHeight };
+      return { maxRight, maxBottom, width: parentRect.width - 40, height: maxHeight - 40 };
     } else {
       return {
         maxRight: window.innerWidth,
@@ -148,6 +149,7 @@ export const usePosition = ( {
           y: chatWindowEl.offsetHeight,
         } );
         setResizeSide( side );
+        setMaximization( undefined );
       }
     },
     [ chatWindowEl ],
@@ -157,10 +159,7 @@ export const usePosition = ( {
     ( e: MouseEvent ) => {
       e.preventDefault();
       if ( maximization?.isMaximized ) {
-        const windowActions = document.getElementById('windowActions');
-        if (e.target !== windowActions && !windowActions?.contains(e.target as Node)) {
-          setMaximization( undefined );
-        }
+        setMaximization( undefined );
       }
       if ( isResizing && chatWindowContainer && mouseStartPos && elementStartPos ) {
         const parentRect = chatWindowContainer.getBoundingClientRect();
@@ -202,6 +201,8 @@ export const usePosition = ( {
           height: newHeight,
           offset,
         } );
+
+        setMaximization( undefined );
       }
     },
     [
@@ -228,7 +229,7 @@ export const usePosition = ( {
       size,
     } );
     const { width, height } = calculateBoundaries();
-    setPosition( { right: 0, bottom: 0 } );
+    setPosition( { right: 20, bottom: 20 } );
     setSize( { width, height, offset: { x: 0, y: 0 } } );
   }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
 
@@ -250,7 +251,7 @@ export const usePosition = ( {
   useEffect( () => {
     if ( isDragging || isResizing ) {
       document.addEventListener( 'mousemove', handleMove );
-      document.addEventListener( 'mousemove', handleResize );
+      // document.addEventListener( 'mousemove', handleResize );
       document.addEventListener( 'mouseup', handleMouseUp );
     }
 

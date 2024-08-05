@@ -142,7 +142,6 @@ export default function Chat( defaultOpen = false ) {
             {
               'user-select-none': isDragging,
               'overflow-hidden': isOpening || isClosing,
-              'p-5': isMaximized,
             },
           ) }>
           <WindowActions
