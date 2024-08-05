@@ -4,7 +4,7 @@
  * Plugin Name: AgentWP
  * Plugin URI: https://codewp.ai
  * Description: Adds a AI Agent to your WordPress installation.
- * Version: 0.1.3
+ * Version: 0.1.4
  * Author: WP AI Inc.
  * Author URI: https://codewp.ai
  * License: GPL2
@@ -16,7 +16,7 @@
  */
 defined('ABSPATH') || exit;
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
