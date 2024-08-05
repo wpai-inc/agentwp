@@ -10,8 +10,9 @@ import { logoUrl } from '@/Components/Logo';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { useFeedback } from '@/Providers/FeedbackProvider';
 import Reason from '@/Components/Chat/Feedback/Reason';
+import MessageMeta from '@/Components/Chat/Convo/Message/MessageMeta';
 
-export default function AgentResponse( {
+export default function AgentResponse({
   agentActions,
   userRequestId,
   time,
@@ -23,56 +24,61 @@ export default function AgentResponse( {
   time: string;
   pending?: boolean;
   incomplete?: boolean;
-} ) {
-  const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
+}) {
+  const messageAction = agentActions?.find(aa => aa.action?.ability === 'message') as
     | AgentAction
     | undefined;
 
-  const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
+  const otherActions = agentActions?.filter(aa => aa.action?.ability !== 'message') ?? [];
 
   const { opened } = useFeedback();
 
   return (
-    <div className="text-black/60 py-4 border-t border-gray-25">
-      { otherActions.length > 0 ? (
+    <div className="border-gray-25 border-t py-4 text-black/60">
+      {otherActions.length > 0 ? (
         <div className="flex-1">
-          { otherActions.map( aa => {
-            if ( aa.action ) {
-              return <ActionComponent key={ aa.id } { ...aa } />;
+          {otherActions.map(aa => {
+            if (aa.action) {
+              return <ActionComponent key={aa.id} {...aa} />;
             }
-          } ) }
+          })}
         </div>
-      ) : null }
+      ) : null}
 
       <MessageHeader>
-        <Avatar name="AgentWP" time={ time } image={ logoUrl } />
+        <Avatar name="AgentWP" time={time} image={logoUrl} />
         <div className="flex items-center gap-4">
-          { ! incomplete && <Rate /> }
+          {!incomplete && <Rate />}
           <Popover>
             <PopoverTrigger>
               <IconMore className="text-brand-gray-15" />
             </PopoverTrigger>
             <PopoverContent>
-              <dl className="grid grid-cols-2 gap-4 text-sm">
-                <dt className="text-right font-bold">Responding Actions</dt>
-                <dd>{ agentActions?.length }</dd>
-              </dl>
+              <MessageMeta meta={[
+                {
+                  label: 'Responding Actions',
+                  value: agentActions?.length ?? 0,
+                },
+                {
+                  label: 'Message ID',
+                  value: userRequestId,
+                },
+              ]} />
             </PopoverContent>
           </Popover>
         </div>
       </MessageHeader>
 
-      { opened && <Reason /> }
+      {opened && <Reason />}
 
-      { messageAction ? (
-        <ActionComponent { ...messageAction } />
+      {messageAction ? (
+        <ActionComponent {...messageAction} />
       ) : (
         <>
-          { pending && <ActionPending /> }
-
-          { incomplete && ! pending && <ActionIncomplete userRequestId={ userRequestId } /> }
+          {pending && <ActionPending />}
+          {incomplete && !pending && <ActionIncomplete userRequestId={userRequestId} />}
         </>
-      ) }
+      )}
     </div>
   );
 }

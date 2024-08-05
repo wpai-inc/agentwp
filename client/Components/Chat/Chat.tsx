@@ -1,5 +1,13 @@
 import { usePage } from '@/Providers/PageProvider';
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  createContext,
+  useContext,
+} from 'react';
 import { cn } from '@/lib/utils';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
@@ -20,11 +28,22 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Components/ui/tooltip';
 import Logo from '../Logo';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { useChat } from '@/Providers/ChatProvider';
+
+const ChatUIContext = createContext( {
+  toggle: () => {},
+  open: false,
+  setOpen: ( _open: boolean ) => {},
+} );
+
+export function useChatUI() {
+  return useContext( ChatUIContext );
+}
 
 export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean } ) {
+  const { open, setOpen } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
-  const { settings, updateSetting } = useClientSettings();
-  const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
+  const { updateSetting } = useClientSettings();
   const [ turnedOff, setTurnedOff ] = useState( settings.turnedOff );
   const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
@@ -115,11 +134,7 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
    * Animate on mount
    */
   useEffect( () => {
-    if ( open ) {
-      animate( scope.current, openedStyles );
-    } else {
-      animate( scope.current, closedStyles, { duration: 0 } );
-    }
+    animate( scope.current, open ? openedStyles : closedStyles, { duration: 0 } );
   }, [] );
 
   useEffect( () => {
@@ -149,7 +164,7 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
 
   return (
     canAccessAgent && (
-      <>
+      <ChatUIContext.Provider value={ { toggle, open, setOpen } }>
         <div
           ref={ scope }
           onMouseEnter={ () => setIsHovering( true ) }
@@ -180,18 +195,14 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    ref={ chatTriggerRef }
-                    onClick={ toggle }
-                    variant="ghost"
-                    className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
-                    { open ? (
-                      <ArrowRightIcon />
-                    ) : (
-                      <Logo className={ cn( 'w-full', { grayscale: turnedOff } ) } />
-                    ) }
-                    <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
-                    <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
-                  </Button>
+          ref={ chatTriggerRef }
+          onClick={ toggle }
+          variant="ghost"
+          className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
+          { open ? <ArrowRightIcon /> : <Logo className="w-full" /> }
+          <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
+          <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
+        </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right" align="center">
                   <p>
@@ -228,6 +239,7 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
           ) }
         </ContextMenu>
       </>
+      </ChatUIContext.Provider>
     )
   );
 }

@@ -1,45 +1,70 @@
-/**
- * Docs for this component at https://recharts.org/en-US/api/PieChart
- */
-import { Pie as RootPie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { useMemo } from 'react';
+import { Chart } from '@wpai/schemas';
+import { makeChartConfig } from '@/Components/Charts/utils';
+import { PieChart, Pie, Label } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/Components/ui/chart';
 
-interface PieProps {
-  width?: number | string;
-  height?: number | string;
-  outerRadius?: number;
-  fillColor?: string;
-  data: object[];
-  dataKey: string;
-  valueDataKey: string;
-}
+const COLORS = [ '#4991F7', '#FF70A6', '#FFD76D', '#6DD7B9', '#FFA36C', '#A36CFF' ];
 
-const Pie = ( {
-  width = 730,
-  height = 250,
-  outerRadius = 50,
-  fillColor = '#4991f7',
+export default function Component( {
+  chart,
   data,
-}: PieProps ) => {
-  const dataKey = data[ 0 ] ? Object.keys( data[ 0 ] )[ 0 ] : 'label';
-  const valueDataKey = data[ 0 ] ? Object.keys( data[ 0 ] )[ 1 ] : 'value';
+}: {
+  chart: Chart;
+  data: {
+    [ key: string ]: number;
+  }[];
+} ) {
+  const { xAxisKey } = chart;
+  const chartConfig = makeChartConfig( chart );
+  const { key, label } = chart.dataKeys[ 0 ];
+  const total = useMemo( () => {
+    return data.reduce( ( acc, curr ) => acc + curr[ key ], 0 );
+  }, [] );
+
+  const pieData = data.map( ( item, index ) => ( {
+    ...item,
+    fill: COLORS[ index % COLORS.length ],
+  } ) );
 
   return (
-    <ResponsiveContainer width={ width } height={ height }>
+    <ChartContainer config={ chartConfig } className="mx-auto aspect-square max-h-[250px] w-full">
       <PieChart>
-        <Tooltip />
-        <RootPie
-          data={ data }
-          dataKey={ valueDataKey }
-          nameKey={ dataKey }
-          cx="50%"
-          cy="50%"
-          outerRadius={ outerRadius }
-          fill={ fillColor }
-          label
-        />
+        <ChartTooltip cursor={ false } content={ <ChartTooltipContent hideLabel /> } />
+        <Pie
+          data={ pieData }
+          dataKey={ key }
+          nameKey={ xAxisKey }
+          innerRadius={ 60 }
+          strokeWidth={ 5 }>
+          <Label
+            content={ ( { viewBox } ) => {
+              if ( viewBox && 'cx' in viewBox && 'cy' in viewBox ) {
+                return (
+                  <text
+                    x={ viewBox.cx }
+                    y={ viewBox.cy }
+                    textAnchor="middle"
+                    dominantBaseline="middle">
+                    <tspan
+                      x={ viewBox.cx }
+                      y={ viewBox.cy }
+                      className="fill-foreground text-3xl font-bold">
+                      { total.toLocaleString() }
+                    </tspan>
+                    <tspan
+                      x={ viewBox.cx }
+                      y={ ( viewBox.cy || 0 ) + 24 }
+                      className="fill-muted-foreground">
+                      { label }
+                    </tspan>
+                  </text>
+                );
+              }
+            } }
+          />
+        </Pie>
       </PieChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   );
-};
-
-export default Pie;
+}

@@ -11,9 +11,6 @@ use WpAi\AgentWp\Traits\ClientRequests;
 class AwpClient
 {
     use ClientRequests;
-
-    private Main $main;
-
     private ?string $token = null;
 
     private int $timeout = 15;
@@ -22,10 +19,12 @@ class AwpClient
 
     private ?\WP_User $wp_user;
 
+    private ?string $siteId;
+
+    private ?string $apiHost;
+
     public function __construct()
     {
-        $this->main = new Main(__FILE__);
-
         $this->wp_user = wp_get_current_user();
     }
 
@@ -37,7 +36,7 @@ class AwpClient
             'Content-Type' => 'application/json',
             'X-Wp-Agent-Version' => $this->agentWpVersion,
             'X-Wp-User-Id' => $this->wp_user->ID,
-            'X-Wp-Site-Id' => $this->main->siteId(),
+            'X-Wp-Site-Id' => $this->siteId,
         ];
         $authHeader = $this->token ? [
             'Authorization' => "Bearer $this->token",
@@ -47,6 +46,7 @@ class AwpClient
             $authHeader,
             $additionalHeaders,
         );
+
         $request = new Request($method, $url, $headers, $body);
 
         return $client->send($request);
@@ -76,6 +76,20 @@ class AwpClient
     public function setWpUser($wp_user): self
     {
         $this->wp_user = $wp_user;
+
+        return $this;
+    }
+
+    public function setSiteId(?string $siteId): self
+    {
+        $this->siteId = $siteId;
+
+        return $this;
+    }
+
+    public function setApiHost(?string $apiHost): self
+    {
+        $this->apiHost = $apiHost;
 
         return $this;
     }

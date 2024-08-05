@@ -1,13 +1,11 @@
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
-import { CleanGutenbergContent, WriteToEditor } from '@/Services/WriteToEditor';
-import { type BlockType } from '@/Types/types';
 import { useInputSelect } from './InputSelectProvider';
-import { CleanInputFieldContent, WriteToInputField } from '@/Services/WriteToInputField';
+import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -18,9 +16,15 @@ type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 const ChatContext = createContext( {
   conversation: [] as UserRequestType[],
+  isEmptyConversation: false,
   sendMessage: ( _message: string ) => {},
+  updateAgentMessage: ( _urId: string, _updatedAa: AgentAction ) => {},
+  cancelStreaming: () => {},
   setChatSetting: ( _setting: ChatSettingProps ) => {},
   chatSetting: null as ChatSettingProps,
+  clearHistory: () => {},
+  open: false,
+  setOpen: ( _open: boolean ) => {},
 } );
 
 export function useChat() {
@@ -31,79 +35,29 @@ export function useChat() {
   return chat;
 }
 
-export default function ChatProvider( { children }: { children: React.ReactNode } ) {
-  const { client } = useClient();
+export default function ChatProvider( {
+  children,
+  defaultOpen = false,
+}: {
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+} ) {
+  const { client, clearConversation } = useClient();
+  const { settings } = useClientSettings();
+  const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
-  const { conversation, setConversation, currentUserRequestId } = useUserRequests();
-  const { startStream, liveAction, error } = useStream();
-  const { addErrors } = useError();
-  const [ editorContent, setEditorContent ] = useState< BlockType[] >( [] );
-  const [ startingStreaming, setStartingStreaming ] = useState( {
-    userRequestId: '',
-    liveAction: null as AgentAction | null,
-  } );
-
+  const { conversation, setConversation, fetchConvo } = useUserRequests();
+  const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
+  const { addErrors } = useError();
 
-  useEffect( () => {
-    if ( liveAction && currentUserRequestId ) {
-      if ( startingStreaming.userRequestId !== currentUserRequestId ) {
-        setStartingStreaming( {
-          userRequestId: currentUserRequestId,
-          liveAction,
-        } );
-      }
-      if ( liveAction.action.ability === 'write_to_editor' && liveAction.action.text ) {
-        const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
-        const newEditorContent = WriteToEditor( text, editorContent );
-        if ( newEditorContent?.content ) {
-          console.log( 'newEditorContent', newEditorContent );
-          setEditorContent( newEditorContent.content );
-        }
-
-        if ( newEditorContent?.summary ) {
-          liveAction.action.ability = 'message';
-          liveAction.action.text = newEditorContent.summary;
-          updateAgentMessage( currentUserRequestId, liveAction );
-        }
-      } else if ( liveAction.action.ability === 'write_to_input' && liveAction.action.text ) {
-        const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
-        const newInputFieldContent = WriteToInputField( text, selectedInput );
-        if ( newInputFieldContent?.content ) {
-          console.log( 'newInputFieldContent', newInputFieldContent );
-          // setInputFieldContent(newInputFieldContent.content);
-        }
-
-        if ( newInputFieldContent?.summary ) {
-          liveAction.action.ability = 'message';
-          liveAction.action.text = newInputFieldContent.summary;
-          updateAgentMessage( currentUserRequestId, liveAction );
-        }
-      } else if ( liveAction.action.ability === 'message' ) {
-        updateAgentMessage( currentUserRequestId, liveAction );
-      }
-    }
-  }, [ liveAction, currentUserRequestId ] );
-
-  useEffect( () => {
-    if ( startingStreaming.liveAction?.action.ability === 'write_to_editor' ) {
-      // clear the editor content
-      CleanGutenbergContent();
-    } else if ( startingStreaming.liveAction?.action.ability === 'write_to_input' ) {
-      // clear the editor content
-      CleanInputFieldContent( selectedInput );
-    }
-  }, [ startingStreaming ] );
-
-  useEffect( () => {
-    if ( error ) {
-      console.error( 'Stream error:', error );
-    }
-  }, [ error ] );
+  async function clearHistory() {
+    await clearConversation();
+    fetchConvo( null );
+  }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
     const response = await client.storeConversation( { message, selected_input: selectedInput } );
-
     return response.data;
   }
 
@@ -146,13 +100,32 @@ export default function ChatProvider( { children }: { children: React.ReactNode 
     }
   }
 
+  async function cancelStreaming() {
+    try {
+      const { stream_url, user_request } = await userRequest( '' );
+      addUserRequest( user_request );
+      startStream( stream_url, user_request.id );
+    } catch ( e: any ) {
+      addErrors( [ e.message ] );
+      console.error( e );
+    }
+  }
+
+  const isEmptyConversation = conversation.length === 0;
+
   return (
     <ChatContext.Provider
       value={ {
         conversation,
+        isEmptyConversation,
         sendMessage,
+        updateAgentMessage,
+        cancelStreaming,
         setChatSetting,
         chatSetting,
+        clearHistory,
+        open,
+        setOpen,
       } }>
       { children }
     </ChatContext.Provider>

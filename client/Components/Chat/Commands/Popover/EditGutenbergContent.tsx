@@ -1,17 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useScreen } from '@/Providers/ScreenProvider';
 
 declare const wp: any;
 
-export default function EditGutenbergContent( {
-  message,
-  onSetMessage,
-  onMessageBoxKeyDown,
-}: {
-  message: string;
-  onSetMessage: ( message: string ) => void;
-  onMessageBoxKeyDown: React.KeyboardEvent< HTMLTextAreaElement > | undefined;
-} ) {
+export default function EditGutenbergContent() {
   // const adminRequest = useAdminRoute();
   const { screen, setScreen } = useScreen();
 
@@ -35,10 +27,6 @@ export default function EditGutenbergContent( {
     // Clean up the subscription
     return () => unsubscribe();
   }, [] );
-
-  useEffect( () => {
-    console.log( 'Post Content: ', screen );
-  }, [ screen ] );
 
   // To unsubscribe from changes when no longer needed
   // unsubscribe();

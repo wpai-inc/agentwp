@@ -15,6 +15,8 @@ import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { InputSelectProvider } from '@/Providers/InputSelectProvider';
+import StreamListenerProvider from '@/Providers/StreamListenerProvider';
+import HotKeyProvider from '@/Providers/HotKeyProvider';
 
 const rootElement = document.getElementById( 'agentwp-admin-chat' );
 
@@ -37,7 +39,11 @@ if ( rootElement ) {
                           <ActionListenerProvider>
                             <InputSelectProvider>
                               <ChatProvider>
-                                <Chat />
+                                <StreamListenerProvider>
+                                  <HotKeyProvider>
+                                    <Chat />
+                                  </HotKeyProvider>
+                                </StreamListenerProvider>
                               </ChatProvider>
                             </InputSelectProvider>
                           </ActionListenerProvider>

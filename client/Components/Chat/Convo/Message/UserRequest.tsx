@@ -5,6 +5,7 @@ import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { WpUser } from '@/Types/types';
+import MessageMeta from './MessageMeta';
 
 export default function UserRequest( {
   userRequest,
@@ -26,10 +27,16 @@ export default function UserRequest( {
             <IconMore className="text-brand-gray-15" />
           </PopoverTrigger>
           <PopoverContent>
-            <dl className="grid grid-cols-2 gap-4">
-              <dt className="text-right font-bold">Message ID</dt>
-              <dd>{ userRequest.id }</dd>
-            </dl>
+            <MessageMeta meta={[
+              {
+                label: 'Message ID',
+                value: userRequest.id,
+              },
+              {
+                label: 'User',
+                value: user.display_name,
+              },
+            ]}/>
           </PopoverContent>
         </Popover>
       </MessageHeader>
