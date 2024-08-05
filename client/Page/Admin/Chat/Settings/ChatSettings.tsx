@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Switch } from '@/Components/ui/switch';
 import { Label } from '@/Components/ui/label';
 import { useClient } from '@/Providers/ClientProvider';
+import { usePage } from '@/Providers/PageProvider';
+import type { AccountSetting } from '@/Types/types';
 
 type Setting = {
   name: string;
@@ -18,8 +20,22 @@ const defaultSettings: Setting[] = [
 ];
 
 export default function ChatSettings() {
-  const [ settings, setSettings ] = useState< Setting[] >( defaultSettings );
-  const { updateSetting, getSettings } = useClient();
+  const {
+    page: { account_settings },
+  } = usePage();
+
+  const initSettings: Setting[] = defaultSettings.map( setting => {
+    const accountSetting = account_settings.find(
+      ( s: AccountSetting ) => s.name === setting.name,
+    );
+    if ( accountSetting ) {
+      return { ...setting, value: accountSetting.value };
+    }
+    return setting;
+  } );
+
+  const [ settings, setSettings ] = useState< Setting[] >( initSettings );
+  const { updateSetting } = useClient();
 
   async function handleChange( name: string, checked: boolean ) {
     const updated = await updateSetting( name, checked );
@@ -33,29 +49,16 @@ export default function ChatSettings() {
     );
   }
 
-  async function fetchSettings() {
-    const settings = await getSettings();
-
-    defaultSettings.forEach( async setting => {
-      if ( ! settings.find( ( s: Setting ) => s.name === setting.name ) ) {
-        await updateSetting( setting.name, setting.value );
-      }
-    } );
-
-    setSettings( settings );
-  }
-
-  useEffect( () => {
-    fetchSettings();
-  }, [] );
-
   const settingLabel = ( name: string ) => {
     return defaultSettings.find( setting => setting.name === name )?.label;
   };
 
   return (
     <div className="flex flex-col gap-3 max-w-screen-sm mx-auto w-full">
-      <p>These settings will be applied for your user only. If they are disabled, please contact the administrator of this account.</p>
+      <p>
+        These settings will be applied for your user only. If they are disabled, please contact the
+        administrator of this account.
+      </p>
       { settings.map( setting => (
         <div className="flex items-center space-x-2" key={ setting.name }>
           <Switch
