@@ -46,7 +46,7 @@ export default function Chat() {
   const { open, setOpen, turnedOff, setTurnedOff } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { updateSetting } = useClientSettings();
-  const { canAccessAgent } = usePage();
+  const { reactRoot, canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
   const [ isOpening, setIsOpening ] = useState( false );
@@ -116,7 +116,6 @@ export default function Chat() {
     const isOpen = ! open;
     setOpen( isOpen );
     if ( isOpen ) {
-      setTurnedOff( false );
       updateSetting( 'turnedOff', false );
       setIsOpening( true );
       animate( scope.current, openedStyles, transition ).then( () => setIsOpening( false ) );
@@ -148,9 +147,7 @@ export default function Chat() {
     setTurnedOff( true );
     updateSetting( 'turnedOff', true );
 
-    if ( open ) {
-      toggle();
-    }
+    reactRoot.unmount();
   }
 
   function handleMaximize() {

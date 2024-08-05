@@ -47,6 +47,7 @@ export default function ChatProvider( {
   const { client, clearConversation } = useClient();
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
+  const [ turnedOff, setTurnedOff ] = useState( settings.turnedOff );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
   const { conversation, setConversation, fetchConvo } = useUserRequests();
   const { startStream } = useStream();
@@ -128,6 +129,8 @@ export default function ChatProvider( {
         clearHistory,
         open,
         setOpen,
+        turnedOff,
+        setTurnedOff,
       } }>
       { children }
     </ChatContext.Provider>

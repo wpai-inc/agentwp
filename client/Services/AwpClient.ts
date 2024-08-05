@@ -3,7 +3,6 @@ import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { useNotifications } from '@/Providers/NotificationProvider';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
-import { getLocalStorage } from '@/Providers/ClientSettingsProvider';
 
 export default class AwpClient {
   private baseUrl: string = 'https://app.agentwp.com';
@@ -29,15 +28,6 @@ export default class AwpClient {
         'X-Wp-User-Id': page.user.ID,
         'X-Wp-Site-Id': page.site_id,
       },
-    } );
-
-    this.httpClient.interceptors.request.use( request => {
-      let turnedOff = getLocalStorage( 'turnedOff', false ) as boolean;
-      if ( turnedOff ) {
-        throw new Error( 'The requests to the API are disabled.' );
-      }
-
-      return request;
     } );
 
     this.httpClient.interceptors.response.use(
@@ -101,8 +91,8 @@ export default class AwpClient {
       { result: data },
     );
   }
-  async abortUserRequest(userRequestId: string): Promise<AxiosResponse> {
-    return this.request('POST', `${this.baseUrl}/api/request/${userRequestId}/abort`, {}, {});
+  async abortUserRequest( userRequestId: string ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/request/${ userRequestId }/abort`, {}, {} );
   }
 
   async getSettings(): Promise< AxiosResponse > {

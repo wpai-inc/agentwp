@@ -12,10 +12,12 @@ export function usePage() {
 export function PageProvider( {
   page,
   root,
+  reactRoot,
   children,
 }: {
   page: any;
   root: HTMLElement;
+  reactRoot: any;
   children: React.ReactNode;
 } ) {
   const [ pageData, setPageData ] = useState( page );
@@ -27,7 +29,8 @@ export function PageProvider( {
   };
 
   return (
-    <PageContext.Provider value={ { page: pageData, setPageData, canAccessAgent, isPage, root } }>
+    <PageContext.Provider
+      value={ { page: pageData, setPageData, canAccessAgent, isPage, root, reactRoot } }>
       { children }
     </PageContext.Provider>
   );

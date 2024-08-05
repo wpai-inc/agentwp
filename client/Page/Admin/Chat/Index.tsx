@@ -24,41 +24,59 @@ declare const agentwp_settings: PageData;
 
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
-  root.render(
-    <React.StrictMode>
-      <NotificationsProvider>
-        <PageProvider page={ agentwp_settings } root={ rootElement }>
-          <App>
-            <ErrorProvider>
-              <AdminRouteProvider>
-                <ClientProvider>
-                  <ClientSettingsProvider>
-                    <ScreenProvider>
-                      <UserRequestsProvider>
-                        <StreamProvider>
-                          <ActionListenerProvider>
-                            <InputSelectProvider>
-                              <ChatProvider>
-                                <StreamListenerProvider>
-                                  <HotKeyProvider>
-                                    <Chat />
-                                  </HotKeyProvider>
-                                </StreamListenerProvider>
-                              </ChatProvider>
-                            </InputSelectProvider>
-                          </ActionListenerProvider>
-                        </StreamProvider>
-                      </UserRequestsProvider>
-                    </ScreenProvider>
-                  </ClientSettingsProvider>
-                </ClientProvider>
-              </AdminRouteProvider>
-            </ErrorProvider>
-          </App>
-        </PageProvider>
-      </NotificationsProvider>
-    </React.StrictMode>,
-  );
+
+  const APPS = {
+    default: () => {
+      root.render(
+        <React.StrictMode>
+          <NotificationsProvider>
+            <PageProvider page={ agentwp_settings } root={ rootElement } reactRoot={ root }>
+              <App>
+                <ErrorProvider>
+                  <AdminRouteProvider>
+                    <ClientProvider>
+                      <ClientSettingsProvider>
+                        <ScreenProvider>
+                          <UserRequestsProvider>
+                            <StreamProvider>
+                              <ActionListenerProvider>
+                                <InputSelectProvider>
+                                  <ChatProvider>
+                                    <StreamListenerProvider>
+                                      <HotKeyProvider>
+                                        <Chat />
+                                      </HotKeyProvider>
+                                    </StreamListenerProvider>
+                                  </ChatProvider>
+                                </InputSelectProvider>
+                              </ActionListenerProvider>
+                            </StreamProvider>
+                          </UserRequestsProvider>
+                        </ScreenProvider>
+                      </ClientSettingsProvider>
+                    </ClientProvider>
+                  </AdminRouteProvider>
+                </ErrorProvider>
+              </App>
+            </PageProvider>
+          </NotificationsProvider>
+        </React.StrictMode>,
+      );
+    },
+    turnedOff: () => {
+      root.render(
+        <React.StrictMode>
+          <NotificationsProvider>
+            <PageProvider page={ agentwp_settings } root={ rootElement } reactRoot={ root }>
+              <div>turned off</div>
+            </PageProvider>
+          </NotificationsProvider>
+        </React.StrictMode>,
+      );
+    },
+  };
+
+  APPS.default();
 } else {
   // Handle the case where the root element is not found
   console.error( 'Root element not found' );
