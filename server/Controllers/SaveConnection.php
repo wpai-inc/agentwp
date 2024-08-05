@@ -2,14 +2,13 @@
 
 namespace WpAi\AgentWp\Controllers;
 
-use WpAi\AgentWp\Enums\RouteMethods;
 use WpAi\AgentWp\UserAuth;
 
 class SaveConnection extends BaseController
 {
 
-    protected string|array $permission = 'hasValidVerificationKey';
-    protected RouteMethods $method = RouteMethods::POST;
+    protected string $permission = 'hasValidVerificationKey';
+    protected string $method = 'POST';
 
     public function save_connection(): void
     {

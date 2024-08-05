@@ -6,7 +6,7 @@ import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 
 export default function Conversation() {
-  const { conversation, chatSetting } = useChat();
+  const { conversation } = useChat();
   const { loadingConversation } = useUserRequests();
 
   return (
@@ -16,15 +16,13 @@ export default function Conversation() {
       ) : (
         <>
           <Dialog conversation={ conversation } />
-          <div className="relative">
+          <div className="relative mx-auto w-full max-w-screen-md">
             <div className="absolute -top-12 right-0 left-0 z-10 h-12 from-brand-gray to-transparent bg-gradient-to-t"></div>
             <div className="p-1.5">
               <MessageBox />
             </div>
           </div>
-          { chatSetting && (
-            <ChatOverlay header={ chatSetting?.header }>{ chatSetting?.component }</ChatOverlay>
-          ) }
+          <ChatOverlay />
         </>
       ) }
     </div>

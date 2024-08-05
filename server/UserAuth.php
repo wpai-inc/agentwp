@@ -13,11 +13,11 @@ class UserAuth
 
     private Settings $settings;
 
-    public function __construct(private WP_User|null $user = null)
+    private WP_User $user;
+
+    public function __construct($user = null)
     {
-        if (!$user) {
-            $this->user = wp_get_current_user();
-        }
+        $this->user = $user ?? wp_get_current_user();
         $this->settings = new Settings();
     }
 

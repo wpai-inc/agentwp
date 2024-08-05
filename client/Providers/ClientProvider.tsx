@@ -1,17 +1,20 @@
 import { createContext, useContext } from 'react';
-export const ClientContext = createContext<any | undefined>(undefined);
+export const ClientContext = createContext< any | undefined >( undefined );
 import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
-
-// Todo:
+import { useError } from '@/Providers/ErrorProvider';
 
 export function useClient() {
-  const client = useContext(ClientContext);
-  if (client === undefined) {
-    throw new Error('useClient must be used within a ClientProvider');
+  const client = useContext( ClientContext );
+  if ( client === undefined ) {
+    throw new Error( 'useClient must be used within a ClientProvider' );
   }
   return client;
 }
+
+type ErrorType = {
+  message: string;
+};
 
 export type HistoryType = {
   items: {
@@ -30,43 +33,76 @@ export type HistoryItem = {
   humanCreatedAt: string;
 };
 
-export function ClientProvider({ children }: { children: React.ReactNode }) {
+export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
+  const { addErrors } = useError();
 
   const userProfileUrl = page.api_host + '/dashboard';
 
-  async function getHistory(since?: string): Promise<HistoryType[]> {
-    const response = await client.getHistory(since);
-    return response.data as HistoryType[];
+  async function getHistory( since?: string ): Promise< HistoryType[] > {
+    return tryRequest( async () => {
+      const response = await client.getHistory( since );
+      return response.data as HistoryType[];
+    } );
   }
 
   async function clearConversation() {
-    await client.clearConversation();
+    return tryRequest( async () => {
+      await client.clearConversation();
+    } );
   }
 
-  async function unclearConversation(since: string) {
-    await client.unclearConversation(since);
+  async function unclearConversation( since: string ) {
+    return tryRequest( async () => {
+      await client.unclearConversation( since );
+    } );
   }
 
-  async function updateSetting(name: string, value: any) {
-    const response = await client.updateSetting(name, value);
-    return response.data;
+  async function updateSetting( name: string, value: any ) {
+    return tryRequest( async () => {
+      const response = await client.updateSetting( name, value );
+      return response.data;
+    } );
   }
 
-  async function getSettings(): Promise<any[]> {
-    const response = await client.getSettings();
-    return response.data;
+  async function getSettings() {
+    return tryRequest( async () => {
+      const response = await client.getSettings();
+      return response.data;
+    } );
   }
 
-  async function getConversation(since?: string) {
-    const res = await client.isAuthorized()?.getConversation(since);
-    return res?.data?.data;
+  async function getConversation( since?: string ) {
+    return tryRequest( async () => {
+      const res = await client.isAuthorized()?.getConversation( since );
+      return res?.data?.data;
+    } );
   }
 
-  const client = new AwpClient(page.access_token).setBaseUrl(page.api_host);
+  async function tryRequest(
+    fn: () => Promise< any >,
+    defaultValue: any = [],
+    failureMsg?: string,
+  ) {
+    try {
+      return await fn();
+    } catch ( e: any ) {
+      const msg = failureMsg || "We're having trouble connecting to your account.";
+      displayError( e, msg );
+      return defaultValue;
+    }
+  }
+
+  function displayError( e: ErrorType, msg: string ): [] {
+    addErrors( [ msg ] );
+    console.error( e );
+    return [];
+  }
+
+  const client = new AwpClient( page.access_token ).setBaseUrl( page.api_host );
   return (
     <ClientContext.Provider
-      value={{
+      value={ {
         client,
         getHistory,
         getConversation,
@@ -75,8 +111,8 @@ export function ClientProvider({ children }: { children: React.ReactNode }) {
         userProfileUrl,
         getSettings,
         updateSetting,
-      }}>
-      {children}
+      } }>
+      { children }
     </ClientContext.Provider>
   );
 }

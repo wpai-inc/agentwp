@@ -2,14 +2,13 @@
 
 namespace WpAi\AgentWp\Controllers;
 
-use WpAi\AgentWp\Enums\RouteMethods;
 use WpAi\AgentWp\UserAuth;
 
 class MakeOnboardingAsCompleted extends BaseController
 {
 
-    protected string|array $permission = UserAuth::CAP_MANAGE_AGENTWP_USERS;
-    protected RouteMethods $method = RouteMethods::POST;
+    protected string $permission = UserAuth::CAP_MANAGE_AGENTWP_USERS;
+    protected string $method = 'POST';
     public function onboarding_completed(): void
     {
         $this->verifyNonce();

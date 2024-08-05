@@ -1,47 +1,44 @@
-/**
- * Docs for this component at https://recharts.org/en-US/api/BarChart
- */
-
+import { Bar, BarChart, XAxis, CartesianGrid } from 'recharts';
+import { Chart } from '@wpai/schemas';
+import { makeChartConfig, getDataKeys } from '@/Components/Charts/utils';
 import {
-  ResponsiveContainer,
-  Bar as RootBar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/Components/ui/chart';
 
-interface BarProps {
-  width?: number | string;
-  height?: number | string;
-  xDataKey?: string;
-  valueDataKey: string;
-  data: object[];
-  fillColor?: string;
-}
-
-const Bar = ( { width = 730, height = 250, data, fillColor = '#4991f7' }: BarProps ) => {
-  const xDataKey = data[ 0 ] ? Object.keys( data[ 0 ] )[ 0 ] : 'label';
-  const valueDataKey = data[ 0 ] ? Object.keys( data[ 0 ] )[ 1 ] : 'value';
+export default function Component( {
+  chart,
+  data,
+}: {
+  chart: Chart;
+  data: {
+    [ key: string ]: number;
+  }[];
+} ) {
+  const { xAxisKey, xAxisTickAbbr } = chart;
+  const chartConfig = makeChartConfig( chart );
+  const keys = getDataKeys( chart );
 
   return (
-    <ResponsiveContainer width={ width } height={ height }>
-      <BarChart data={ data }>
-        <CartesianGrid strokeDasharray="2 2" />
-        { /* TODO: causing error: chunk-5OZJXOSV.js?v=528fe26e:521 Warning: YAxis:
-        Support for defaultProps will be removed from function components in a
-        future major release. Use JavaScript default parameters instead.
-        https://github.com/recharts/recharts/issues/3615 */ }
-        <XAxis dataKey={ xDataKey } />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <RootBar dataKey={ valueDataKey } fill={ fillColor } />
+    <ChartContainer config={ chartConfig } className="h-[200px] w-full">
+      <BarChart accessibilityLayer data={ data }>
+        <CartesianGrid vertical={ false } />
+        <XAxis
+          dataKey={ xAxisKey }
+          tickLine={ false }
+          tickMargin={ 10 }
+          axisLine={ false }
+          tickFormatter={ value => value.slice( 0, xAxisTickAbbr ) }
+        />
+        <ChartTooltip content={ <ChartTooltipContent /> } />
+        <ChartLegend content={ <ChartLegendContent /> } />
+        { keys.map( key => (
+          <Bar key={ key } dataKey={ key } fill={ `var(--color-${ key })` } radius={ 4 } />
+        ) ) }
       </BarChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   );
-};
-
-export default Bar;
+}

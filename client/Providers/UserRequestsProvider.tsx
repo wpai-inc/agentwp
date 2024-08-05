@@ -1,9 +1,22 @@
-import React, { useState, createContext, useContext, useEffect, useMemo, useCallback } from 'react';
+import { useState, createContext, useContext, useEffect, useMemo, useCallback } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
-import { MessageAction, NavigateAction, QueryAction, WriteToEditorAction } from '@wpai/schemas';
+import {
+  Graph,
+  MessageAction,
+  MessageActionEscalation,
+  NavigateAction,
+  QueryAction,
+  WriteToEditorAction,
+} from '@wpai/schemas';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
 
-export type ActionType = NavigateAction | MessageAction | QueryAction | WriteToEditorAction;
+export type ActionType =
+  | NavigateAction
+  | MessageAction
+  | QueryAction
+  | WriteToEditorAction
+  | Graph
+  | MessageActionEscalation;
 
 export type AgentAction = {
   id: string;

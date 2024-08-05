@@ -39,7 +39,7 @@ class SiteData
      *
      * @return array
      */
-    public static function getGeneralSettings()
+    public static function getGeneralSettings(): array
     {
         return [
             'blogname' => get_option('blogname'),
@@ -52,7 +52,7 @@ class SiteData
      *
      * @return array
      */
-    public static function getCpts()
+    public static function getCpts(): array
     {
         $args = [
             'public' => true,
@@ -76,7 +76,7 @@ class SiteData
      *
      * @return array
      */
-    public static function getTaxonomies()
+    public static function getTaxonomies(): array
     {
         $args = [
             'public' => true,

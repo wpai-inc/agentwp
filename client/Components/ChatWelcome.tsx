@@ -3,6 +3,7 @@ import ChatOption from '@/Components/Chat/Convo/Actions/ChatOption/ChatOption';
 import OpenNewIcon from '@material-design-icons/svg/outlined/open_in_new.svg?react';
 import { WpUser } from '@/Types/types';
 import { useChat } from '@/Providers/ChatProvider';
+import { motion } from 'framer-motion';
 
 type Option = {
   id: number;
@@ -41,7 +42,12 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
   }
 
   return (
-    <div className="flex flex-col h-full justify-center items-center mb-8">
+    <motion.div
+      key="chat-welcome"
+      initial={ { opacity: 0, scale: 0 } }
+      animate={ { opacity: 1, scale: 1 } }
+      exit={ { opacity: 0, scale: 0 } }
+      className="flex flex-col h-full justify-center items-center mb-8">
       <p className="text-3xl font-semibold text-black">Hi { name },</p>
       <p className="text-xl text-center text-black">Here are some things I can help you with.</p>
       <div className={ cn( 'grid grid-cols-2 gap-3 mt-3' ) }>
@@ -62,6 +68,6 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
           <OpenNewIcon className="h-4 w-4" />
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 }

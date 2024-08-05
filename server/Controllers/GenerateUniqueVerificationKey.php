@@ -5,7 +5,7 @@ namespace WpAi\AgentWp\Controllers;
 class GenerateUniqueVerificationKey extends BaseController
 {
 
-    protected string|array $permission = 'canGenerateVerificationKey';
+    protected string $permission = 'canGenerateVerificationKey';
     public function generate_unique_verification_key(): void
     {
         $this->verifyNonce();
