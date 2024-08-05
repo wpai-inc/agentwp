@@ -25,6 +25,8 @@ const ChatContext = createContext( {
   clearHistory: () => {},
   open: false,
   setOpen: ( _open: boolean ) => {},
+  turnedOff: false,
+  setTurnedOff: ( _turnedOff: boolean ) => {},
 } );
 
 export function useChat() {

@@ -33,18 +33,19 @@ import { useChat } from '@/Providers/ChatProvider';
 const ChatUIContext = createContext( {
   toggle: () => {},
   open: false,
+  turnedOff: false,
   setOpen: ( _open: boolean ) => {},
+  setTurnedOff: ( _turnedOff: boolean ) => {},
 } );
 
 export function useChatUI() {
   return useContext( ChatUIContext );
 }
 
-export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean } ) {
-  const { open, setOpen } = useChat();
+export default function Chat() {
+  const { open, setOpen, turnedOff, setTurnedOff } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { updateSetting } = useClientSettings();
-  const [ turnedOff, setTurnedOff ] = useState( settings.turnedOff );
   const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
@@ -164,7 +165,7 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
 
   return (
     canAccessAgent && (
-      <ChatUIContext.Provider value={ { toggle, open, setOpen } }>
+      <ChatUIContext.Provider value={ { toggle, open, setOpen, turnedOff, setTurnedOff } }>
         <div
           ref={ scope }
           onMouseEnter={ () => setIsHovering( true ) }
@@ -195,14 +196,14 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-          ref={ chatTriggerRef }
-          onClick={ toggle }
-          variant="ghost"
-          className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
-          { open ? <ArrowRightIcon /> : <Logo className="w-full" /> }
-          <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
-          <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
-        </Button>
+                    ref={ chatTriggerRef }
+                    onClick={ toggle }
+                    variant="ghost"
+                    className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
+                    { open ? <ArrowRightIcon /> : <Logo className="w-full" /> }
+                    <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
+                    <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right" align="center">
                   <p>
@@ -238,7 +239,6 @@ export default function Chat( { defaultOpen = false }: { defaultOpen?: boolean }
             </ContextMenuContent>
           ) }
         </ContextMenu>
-      </>
       </ChatUIContext.Provider>
     )
   );
