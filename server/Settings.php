@@ -15,7 +15,7 @@ use WpAi\AgentWp\Services\RevokeApiToken;
 class Settings
 {
 
-    public array $data;
+    public $data;
 
     public function __construct()
     {
