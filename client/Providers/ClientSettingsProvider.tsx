@@ -5,6 +5,7 @@ import { TwoDCoord } from '@/Hooks/position';
 export type ClientSettings = {
   chatOpen: boolean;
   chatMaximized: boolean;
+  turnedOff: boolean;
   right: number;
   bottom: number;
   width: number;
@@ -26,7 +27,7 @@ function setLocalStorage( key: keyof ClientSettings, value: ClientSettingValue )
   setStorage( namespace + key, JSON.stringify( value ) );
 }
 
-function getLocalStorage(
+export function getLocalStorage(
   key: keyof ClientSettings,
   defaultValue: ClientSettingValue = null,
 ): ClientSettingValue {
@@ -52,6 +53,7 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
   const [ settings, setSettings ] = useState< ClientSettings >( {
     chatOpen: getLocalStorage( 'chatOpen', false ) as boolean,
     chatMaximized: getLocalStorage( 'chatMaximized', false ) as boolean,
+    turnedOff: getLocalStorage( 'turnedOff', false ) as boolean,
     right: getLocalStorage( 'right', 16 ) as number,
     bottom: getLocalStorage( 'bottom', 16 ) as number,
     width: getLocalStorage( 'width', 400 ) as number,
