@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Factories\ClientFactory;
+use WpAi\AgentWp\Services\AccountSettings;
 use WpAi\AgentWp\Services\AwpClient;
 
 /**
@@ -99,6 +100,11 @@ class Main
     public function client($checkUserAccessRights = true): AwpClient
     {
         return ClientFactory::make($this, $checkUserAccessRights);
+    }
+
+    public function accountSettings(): AccountSettings
+    {
+        return new AccountSettings($this->client());
     }
 
     private function runtimeApiHost()

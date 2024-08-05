@@ -5,12 +5,12 @@ namespace WpAi\AgentWp\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
-use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Traits\ClientRequests;
 
 class AwpClient
 {
     use ClientRequests;
+
     private ?string $token = null;
 
     private int $timeout = 15;

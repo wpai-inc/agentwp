@@ -57,6 +57,7 @@ class PageData implements Registrable
             'api_host' => $this->main->apiClientHost(),
             'user' => $current_user,
             'onboarding_completed' => $this->main->settings->onboarding_completed,
+            'account_settings' => $this->main->accountSettings()->get(),
         ];
         ?>
         <script>

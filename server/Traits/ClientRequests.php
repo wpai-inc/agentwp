@@ -6,6 +6,22 @@ use Psr\Http\Message\ResponseInterface;
 
 trait ClientRequests
 {
+    public function getSiteSettings(): ?ResponseInterface
+    {
+        try {
+            return $this->request(
+                'GET',
+                "{$this->apiHost}/api/site/settings",
+                [],
+            );
+        } catch (\Exception $e) {
+            // Handle the exception
+            error_log($e->getMessage());
+
+            return null;
+        }
+    }
+
     public function indexSite(string $data): ?ResponseInterface
     {
         try {

@@ -19,6 +19,12 @@ export type PageData = {
   agentwp_access: boolean;
   access_token: string;
   onboarding_completed: boolean;
+  account_settings: AccountSetting[];
+};
+
+export type AccountSetting = {
+  name: string;
+  value: any;
 };
 
 export type WpUser = {
