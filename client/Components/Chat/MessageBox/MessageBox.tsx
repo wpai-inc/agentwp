@@ -63,6 +63,7 @@ export default function MessageBox() {
 
   return (
     <CommandMenu
+      deactivate={ true }
       command={ message }
       focused={ commandMenuFocused }
       handleKeyDown={ handleKeyDown }
