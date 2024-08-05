@@ -45,10 +45,10 @@ function agentwp_bootstrap(): void
         \WpAi\AgentWp\Installer::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
-        \WpAi\AgentWp\SiteIndexer::class,
-        \WpAi\AgentWp\IndexSiteSummary::class,
-        \WpAi\AgentWp\ErrorIndexer::class,
-        \WpAi\AgentWp\Router::class,
-        \WpAi\AgentWp\WpUser::class,
+        \WpAi\AgentWp\Registry\SiteIndexer::class,
+        \WpAi\AgentWp\Registry\IndexSiteSummary::class,
+        \WpAi\AgentWp\Registry\ErrorIndexer::class,
+        \WpAi\AgentWp\Registry\Router::class,
+        \WpAi\AgentWp\Registry\WpUser::class,
     ]);
 }

@@ -1,13 +1,15 @@
 <?php
 
-namespace WpAi\AgentWp;
+namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Main;
+use WpAi\AgentWp\UserAuth;
 
 class WpUser implements Registrable
 {
-
     private Main $main;
+
     public function __construct(Main $main)
     {
         $this->main = $main;

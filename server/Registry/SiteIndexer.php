@@ -1,9 +1,11 @@
 <?php
 
-namespace WpAi\AgentWp;
+namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Services\Cache;
+use WpAi\AgentWp\SiteData;
 use WpAi\AgentWp\Traits\ScheduleEvent;
 
 class SiteIndexer implements Registrable
@@ -11,6 +13,7 @@ class SiteIndexer implements Registrable
     use ScheduleEvent;
 
     private Main $main;
+
     public function __construct(Main $main)
     {
         $this->main = $main;
@@ -61,7 +64,7 @@ class SiteIndexer implements Registrable
                 if ($plugin_slug === '.') {
                     $plugin_slug = basename($plugin, '.php');
                 }
-                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+                $plugin_data[$plugin_slug] = get_plugin_data(WP_PLUGIN_DIR.'/'.$plugin);
             }
 
             foreach ($info['wp-plugins-active']['fields'] as $plugin_name => $plugin_info) {
@@ -92,7 +95,7 @@ class SiteIndexer implements Registrable
         $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
         $tables = array_map('current', $tables);
         foreach ($tables as $table) {
-            $rows = $wpdb->get_results('DESCRIBE ' . $table, ARRAY_A);
+            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
             $info['db-schema']['tables'][$table] = array_map(function ($row) {

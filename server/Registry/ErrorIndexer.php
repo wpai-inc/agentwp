@@ -1,8 +1,9 @@
 <?php
 
-namespace WpAi\AgentWp;
+namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Main;
 
 /**
  * Temporary for demo, poor performance
@@ -11,6 +12,7 @@ use WpAi\AgentWp\Contracts\Registrable;
 class ErrorIndexer implements Registrable
 {
     private Main $main;
+
     public function __construct(Main $main)
     {
         $this->main = $main;
@@ -39,7 +41,7 @@ class ErrorIndexer implements Registrable
     ): bool {
         $siteId = $this->main->siteId();
         $token = $this->main->settings->getAccessToken();
-        if (!$siteId || !$token) {
+        if (! $siteId || ! $token) {
             return false;
         }
 
@@ -61,7 +63,7 @@ class ErrorIndexer implements Registrable
             return false;
         }
 
-        if (!$logged_errors) {
+        if (! $logged_errors) {
             $logged_errors = [];
         }
 

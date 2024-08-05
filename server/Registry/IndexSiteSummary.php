@@ -1,14 +1,14 @@
 <?php
 
-namespace WpAi\AgentWp;
+namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Traits\ScheduleEvent;
 
 class IndexSiteSummary implements Registrable
 {
-
     use ScheduleEvent;
 
     private Main $main;
@@ -38,7 +38,7 @@ class IndexSiteSummary implements Registrable
             if (defined('DOING_AJAX') && DOING_AJAX) {
                 return;
             }
-            $summarizer = new SiteSummarizer();
+            $summarizer = new SiteSummarizer;
             // var_dump($summarizer->data());
 
             if ($summarizer->hasUpdated()) {
