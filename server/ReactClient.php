@@ -19,7 +19,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         $this->main = $main;
         $this->pageName =
             str_replace('\\', '/', str_replace(__NAMESPACE__.'\\Page\\', '', get_class($this)));
-        $this->settings = new Settings;
     }
 
     /**
