@@ -1,4 +1,4 @@
-import React, { useRef, createContext, FC, useContext, useEffect, useState } from 'react';
+import React, { createContext, FC, useContext, useState } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 
 export type FeedbackType = {

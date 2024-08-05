@@ -15,9 +15,7 @@ import Conversation from './Convo/Conversation';
 import { usePosition } from '@/Hooks/position';
 import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 import { useAnimate, ValueAnimationTransition } from 'framer-motion';
-import ArrowRightIcon from '@material-design-icons/svg/outlined/keyboard_double_arrow_right.svg?react';
 import PowerOffIcon from '@material-design-icons/svg/outlined/power_settings_new.svg?react';
-import { Button } from '@/Components/ui/button';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -26,16 +24,15 @@ import {
   ContextMenuTrigger,
 } from '@/Components/ui/context-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Components/ui/tooltip';
-import Logo from '../Logo';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useChat } from '@/Providers/ChatProvider';
+import { useApp } from '@/Providers/AppProvider';
+import ToggleButton from '@/Components/Chat/ToggleButton/ToggleButton';
 
 const ChatUIContext = createContext( {
   toggle: () => {},
   open: false,
-  turnedOff: false,
   setOpen: ( _open: boolean ) => {},
-  setTurnedOff: ( _turnedOff: boolean ) => {},
 } );
 
 export function useChatUI() {
@@ -43,10 +40,11 @@ export function useChatUI() {
 }
 
 export default function Chat() {
-  const { open, setOpen, turnedOff, setTurnedOff } = useChat();
+  const { setTurnedOff } = useApp();
+  const { open, setOpen } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { updateSetting } = useClientSettings();
-  const { reactRoot, canAccessAgent } = usePage();
+  const { canAccessAgent } = usePage();
   const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
   const [ isOpening, setIsOpening ] = useState( false );
@@ -116,7 +114,6 @@ export default function Chat() {
     const isOpen = ! open;
     setOpen( isOpen );
     if ( isOpen ) {
-      updateSetting( 'turnedOff', false );
       setIsOpening( true );
       animate( scope.current, openedStyles, transition ).then( () => setIsOpening( false ) );
     } else {
@@ -145,9 +142,10 @@ export default function Chat() {
 
   function handleTurnOff() {
     setTurnedOff( true );
-    updateSetting( 'turnedOff', true );
 
-    reactRoot.unmount();
+    if ( open ) {
+      toggle();
+    }
   }
 
   function handleMaximize() {
@@ -162,7 +160,7 @@ export default function Chat() {
 
   return (
     canAccessAgent && (
-      <ChatUIContext.Provider value={ { toggle, open, setOpen, turnedOff, setTurnedOff } }>
+      <ChatUIContext.Provider value={ { toggle, open, setOpen } }>
         <div
           ref={ scope }
           onMouseEnter={ () => setIsHovering( true ) }
@@ -192,24 +190,11 @@ export default function Chat() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    ref={ chatTriggerRef }
-                    onClick={ toggle }
-                    variant="ghost"
-                    className="fixed bottom-12 w-9 h-9 right-0 py-1 px-2 rounded-none rounded-l-lg transition bg-white justify-center items-center shadow-lg z-[10000]">
-                    { open ? <ArrowRightIcon /> : <Logo className="w-full" /> }
-                    <div className="absolute -top-4 -right-1 h-5 w-5 rounded-full border-b-4 border-white -rotate-45"></div>
-                    <div className="absolute -bottom-4 -right-1 h-5 w-5 rounded-full border-t-4 border-white rotate-45"></div>
-                  </Button>
+                  <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
                 </TooltipTrigger>
                 <TooltipContent side="right" align="center">
                   <p>
-                    { turnedOff ? (
-                      <>
-                        AgentWP is off.
-                        <br /> Click to reinitialize.
-                      </>
-                    ) : open ? (
+                    { open ? (
                       <>
                         Click to minimize
                         <br /> AgentWP.
@@ -225,16 +210,14 @@ export default function Chat() {
               </Tooltip>
             </TooltipProvider>
           </ContextMenuTrigger>
-          { ! turnedOff && (
-            <ContextMenuContent>
-              <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
-                <ContextMenuIcon>
-                  <PowerOffIcon />
-                </ContextMenuIcon>
-                Turn off
-              </ContextMenuItem>
-            </ContextMenuContent>
-          ) }
+          <ContextMenuContent>
+            <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
+              <ContextMenuIcon>
+                <PowerOffIcon />
+              </ContextMenuIcon>
+              Turn off
+            </ContextMenuItem>
+          </ContextMenuContent>
         </ContextMenu>
       </ChatUIContext.Provider>
     )
