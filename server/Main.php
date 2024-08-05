@@ -23,7 +23,7 @@ class Main
 
     const AGENTWP_CRON_THROTTLE = 300;
 
-    public string $companyName = 'Agent WP';
+    public string $companyName = 'AgentWP';
 
     public string $attributionUrl = 'https://agentwp.com';
 
