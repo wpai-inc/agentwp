@@ -10,7 +10,11 @@ use WpAi\AgentWp\Contracts\Registrable;
  */
 class ErrorIndexer implements Registrable
 {
-    public function __construct(private Main $main) {}
+    private Main $main;
+    public function __construct(Main $main)
+    {
+        $this->main = $main;
+    }
 
     public function register()
     {
@@ -35,7 +39,7 @@ class ErrorIndexer implements Registrable
     ): bool {
         $siteId = $this->main->siteId();
         $token = $this->main->settings->getAccessToken();
-        if (! $siteId || ! $token) {
+        if (!$siteId || !$token) {
             return false;
         }
 
@@ -57,7 +61,7 @@ class ErrorIndexer implements Registrable
             return false;
         }
 
-        if (! $logged_errors) {
+        if (!$logged_errors) {
             $logged_errors = [];
         }
 

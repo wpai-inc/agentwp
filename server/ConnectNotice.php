@@ -6,8 +6,10 @@ use WpAi\AgentWp\Contracts\Registrable;
 
 class ConnectNotice implements Registrable
 {
-    public function __construct(private Main $main)
+    private Main $main;
+    public function __construct(Main $main)
     {
+        $this->main = $main;
     }
 
     public function register()
@@ -18,14 +20,14 @@ class ConnectNotice implements Registrable
     private function maybeAddInstallNotice()
     {
         $current_page = $_SERVER['REQUEST_URI'];
-        if (! $this->main->settings->isConnectedToAwp() && strpos($current_page, 'options-general.php?page=agentwp-admin-settings') === false) {
+        if (!$this->main->settings->isConnectedToAwp() && strpos($current_page, 'options-general.php?page=agentwp-admin-settings') === false) {
             add_action('admin_notices', [$this, 'admin_notice_install']);
         }
     }
 
     public function admin_notice_install()
     {
-        ?>
+?>
         <div class="notice notice-info is-dismissible agentwp-notice">
             <p><?php _e('To use AgentWP, please complete the onboarding and configuration!', 'agentwp'); ?></p>
             <a href="<?php echo $this->main->settingsPage; ?>" class="button button-primary button-large"><?php _e('Set Up AgentWP', 'agentwp'); ?></a>
@@ -42,6 +44,6 @@ class ConnectNotice implements Registrable
                 color: #495057;
             }
         </style>
-        <?php
+<?php
     }
 }

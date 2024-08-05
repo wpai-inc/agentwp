@@ -10,9 +10,10 @@ trait ClientRequests
     {
         try {
             return $this->request(
-                method: 'POST',
-                url: "{$this->apiHost}/api/site/health",
-                body: $data
+                'POST',
+                "{$this->apiHost}/api/site/health",
+                [],
+                $data
             );
         } catch (\Exception $e) {
             // Handle the exception
@@ -26,9 +27,10 @@ trait ClientRequests
     {
         try {
             return $this->request(
-                method: 'POST',
-                url: "{$this->apiHost}/api/site/summarize",
-                body: $data
+                'POST',
+                "{$this->apiHost}/api/site/summarize",
+                [],
+                $data
             );
         } catch (\Exception $e) {
             // Handle the exception
@@ -42,9 +44,10 @@ trait ClientRequests
     {
         try {
             return $this->request(
-                method: 'POST',
-                url: "{$this->apiHost}/api/site/errors",
-                body: $data
+                'POST',
+                "{$this->apiHost}/api/site/errors",
+                [],
+                $data
             );
         } catch (\Exception $e) {
             // Handle the exception
@@ -70,9 +73,10 @@ trait ClientRequests
 
         try {
             return $this->request(
-                method: 'PUT',
-                url: "{$this->apiHost}/api/user/wp-user",
-                body: json_encode($data)
+                'PUT',
+                "{$this->apiHost}/api/user/wp-user",
+                [],
+                json_encode($data)
             );
         } catch (\Exception $e) {
             // Handle the exception

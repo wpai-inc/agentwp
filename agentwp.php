@@ -12,11 +12,11 @@
  * Text Domain: agentwp
  * Domain Path: /languages
  * Requires at least: 6.4
- * Requires PHP: 7.0
+ * Requires PHP: 7.4
  */
 defined('ABSPATH') || exit;
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
