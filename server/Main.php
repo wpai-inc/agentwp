@@ -11,7 +11,7 @@ use WpAi\AgentWp\Services\AwpClient;
  * Contains a lot of the configuration and common functionality for the plugin.
  * All providers depend on this class.
  *
- * @since 0.1.0
+ * @since 0.1.5
  */
 class Main
 {
