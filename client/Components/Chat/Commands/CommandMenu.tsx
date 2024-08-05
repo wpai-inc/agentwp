@@ -54,6 +54,7 @@ export default function CommandMenu( {
   setMessage,
   handleKeyDown,
   focused = false,
+  deactivate = false,
 }: {
   children: React.ReactNode;
   command: string;
@@ -61,6 +62,7 @@ export default function CommandMenu( {
   message: string;
   setMessage: ( message: string ) => void;
   focused: boolean;
+  deactivate: boolean;
 } ) {
   const cmd = command.slice( 1 );
   const selectedCommand = commands.find( c => c.command === cmd.trim() );
@@ -68,6 +70,10 @@ export default function CommandMenu( {
   const filteredCommands = commands.filter( c => c.command.includes( cmd ) );
   const component = selectedCommand ? cmd : 'select';
   const PopoverComponent = popoverComponent[ component ];
+
+  if ( deactivate ) {
+    return children;
+  }
 
   return (
     <Popover open={ open }>
