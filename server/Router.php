@@ -4,6 +4,7 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Controllers\DisconnectSite;
+use WpAi\AgentWp\Controllers\GetGeneralSettings;
 use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
 use WpAi\AgentWp\Controllers\GetUsers;
 use WpAi\AgentWp\Controllers\Logout;
@@ -13,6 +14,7 @@ use WpAi\AgentWp\Controllers\QueryActionController;
 use WpAi\AgentWp\Controllers\RefreshToken;
 use WpAi\AgentWp\Controllers\SaveConnection;
 use WpAi\AgentWp\Controllers\TestResponse;
+use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
 use WpAi\AgentWp\Controllers\ValidateWebsite;
 
@@ -33,6 +35,7 @@ class Router implements Registrable
         'disconnect_site' => [DisconnectSite::class, 'disconnect_site'],
         'manual_activation' => [ManuallyActivateAgent::class, 'activate'],
         'refresh_token' => [RefreshToken::class, 'refresh'],
+        'update_general_settings' => [UpdateGeneralSettings::class, 'update_settings'],
     ];
 
     private Main $main;

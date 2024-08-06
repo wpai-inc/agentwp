@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Services\RevokeApiToken;
+use WpAi\AgentWp\Traits\GeneralSettingsData;
 
 /**
  * @property string|null $client_id The AWP client ID.
@@ -11,9 +12,12 @@ use WpAi\AgentWp\Services\RevokeApiToken;
  * @property string|null $onboarding_completed The AWP site ID.
  * @property string|null $verification_key The verification key of the site. This is a unique key that is used to verify the site. This key should have a short lifespan.
  * @property array|null $token [ access_token: string, refresh_token: string, expires_in: int, token_type: string] The token data
+ * @property array $general [ ] General settings
  */
 class Settings
 {
+
+    use GeneralSettingsData;
 
     public $data;
 
@@ -121,5 +125,24 @@ class Settings
     {
         (new RevokeApiToken($main))->revoke();
         $this->delete(['site_id', 'client_id', 'client_secret', 'token', 'verification_key', 'onboarding_completed']);
+    }
+
+    public function getGeneralSettings(): array
+    {
+        return $this->sanitize_settings($this->data['general'] ?? []);
+    }
+
+    public function get(string $key)
+    {
+        $key = explode('.', $key);
+        $value = $this->data;
+        foreach ($key as $k) {
+            if (isset($value[$k])) {
+                $value = $value[$k];
+            } else {
+                return null;
+            }
+        }
+        return $value;
     }
 }

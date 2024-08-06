@@ -19,6 +19,7 @@ export type PageData = {
   agentwp_access: boolean;
   access_token: string;
   onboarding_completed: boolean;
+  general_settings: AgentWpGeneralSettings;
 };
 
 export type WpUser = {
@@ -69,4 +70,8 @@ type selectedInputType = {
 type streamableFieldType = {
   type: string;
   data: selectedInputType | null;
+};
+
+type AgentWpGeneralSettings = {
+  cleanup_after_deactivate: boolean;
 };

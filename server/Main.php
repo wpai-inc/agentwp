@@ -21,7 +21,7 @@ class Main
 
     const BUILD_DIR = 'build';
 
-    const AGENTWP_CRON_THROTTLE = 300;
+    const AGENTWP_CRON_THROTTLE = 30;
 
     public string $companyName = 'Agent WP';
 
@@ -48,6 +48,7 @@ class Main
         add_action('admin_head', [$this, 'pageData']);
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
+        @error_log(json_encode($this->settings->get('general_settings.cleanup_after_deactivate')));
     }
 
     public function buildPath(): string
@@ -149,6 +150,7 @@ class Main
             'api_host' => $this->apiClientHost(),
             'user' => $current_user,
             'onboarding_completed' => $this->settings->onboarding_completed,
+            'general_settings' => $this->settings->getGeneralSettings(),
         ];
 ?>
         <script>

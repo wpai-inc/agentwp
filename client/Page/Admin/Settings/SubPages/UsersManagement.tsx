@@ -42,7 +42,7 @@ export default function UsersManagement() {
   }
 
   return (
-    <div className="mt-12 max-w-[720px] text-base">
+    <div className="mt-6 max-w-[720px] text-base">
       <SearchUser searchUsers={ searchUsers } searching={ searching } />
       <div>
         { users.map( user => (
