@@ -2,6 +2,7 @@ import ConnectToAwp from './SubPages/ConnectToAwp';
 import * as Tabs from '@radix-ui/react-tabs';
 import UsersManagement from '@/Page/Admin/Settings/SubPages/UsersManagement';
 import Info from '@/Page/Admin/Settings/SubPages/Info';
+import GeneralSettings from './SubPages/GeneralSettings';
 import { usePage } from '@/Providers/PageProvider';
 
 export default function Settings() {
@@ -44,6 +45,13 @@ export default function Settings() {
               Users
             </Tabs.Trigger>
           ) }
+          { page.agentwp_manager && (
+            <Tabs.Trigger
+              className="bg-white px-5 h-[45px] flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current outline-none cursor-pointer"
+              value="general_settings">
+              General Settings
+            </Tabs.Trigger>
+          ) }
         </Tabs.List>
         <Tabs.Content className="grow p-5 bg-white rounded-b-md outline-none" value="info">
           <Info />
@@ -53,6 +61,11 @@ export default function Settings() {
         </Tabs.Content>
         <Tabs.Content className="grow p-5 bg-white rounded-b-md outline-none" value="users">
           <UsersManagement />
+        </Tabs.Content>
+        <Tabs.Content
+          className="grow p-5 bg-white rounded-b-md outline-none"
+          value="general_settings">
+          <GeneralSettings />
         </Tabs.Content>
       </Tabs.Root>
     </div>

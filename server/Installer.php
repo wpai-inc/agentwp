@@ -38,7 +38,20 @@ class Installer implements Registrable
 
     public function deactivate(): void
     {
-        $this->main->settings->disconnectSite($this->main);
+        if($this->main->settings->get('general_settings.cleanup_after_deactivate')) {
+            $this->main->settings->disconnectSite($this->main);
+           $this->cleanup_plugin_data();
+        };
+    }
+
+    public function cleanup_plugin_data()
+    {
+        $this->main->settings->delete('general_settings');
+        delete_option('agentwp_summary');
+        delete_option('agentwp_site_data');
+        // delete all transients that contains in the name agentwp
+        global $wpdb;
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '%agentwp%' option_name LIKE '%_transient%'");
     }
 
     public function redirect(): void
