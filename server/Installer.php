@@ -20,10 +20,10 @@ class Installer implements Registrable
     public function register()
     {
         $plugin_file = plugin_basename($this->main->pluginPath());
-        if (doing_action('activate_' . $plugin_file)) {
+        if (doing_action('activate_'.$plugin_file)) {
             $this->activate();
         }
-        if (doing_action('deactivate_' . $plugin_file)) {
+        if (doing_action('deactivate_'.$plugin_file)) {
             $this->deactivate();
         }
     }
@@ -31,16 +31,16 @@ class Installer implements Registrable
     public function activate()
     {
         set_transient('agentwp_installing', 'yes', MINUTE_IN_SECONDS * 10);
-        if (!defined('WP_CLI') || !WP_CLI) {
+        if ( ! defined('WP_CLI') || ! WP_CLI) {
             add_action('shutdown', [$this, 'redirect']);
         }
     }
 
     public function deactivate(): void
     {
-        if($this->main->settings->get('general_settings.cleanup_after_deactivate')) {
+        if ($this->main->settings->get('general_settings.cleanup_after_deactivate')) {
             $this->main->settings->disconnectSite($this->main);
-           $this->cleanup_plugin_data();
+            $this->cleanup_plugin_data();
         };
     }
 
