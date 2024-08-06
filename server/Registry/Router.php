@@ -4,7 +4,6 @@ namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Controllers\DisconnectSite;
-use WpAi\AgentWp\Controllers\GetGeneralSettings;
 use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
 use WpAi\AgentWp\Controllers\GetUsers;
 use WpAi\AgentWp\Controllers\Logout;

@@ -45,7 +45,6 @@ class Main
         $this->auth = new UserAuth;
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
-        @error_log(json_encode($this->settings->get('general_settings.cleanup_after_deactivate')));
     }
 
     public function buildPath(): string
