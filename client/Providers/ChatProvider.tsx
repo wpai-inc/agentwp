@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, useRef } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
@@ -6,6 +6,7 @@ import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -25,6 +26,7 @@ const ChatContext = createContext( {
   clearHistory: () => {},
   open: false,
   setOpen: ( _open: boolean ) => {},
+  maybeSendSiteData: () => {},
 } );
 
 export function useChat() {
@@ -50,6 +52,9 @@ export default function ChatProvider( {
   const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
+  const adminRequest = useAdminRoute();
+
+  const focusPromiseRef = useRef( null );
 
   async function clearHistory() {
     await clearConversation();
@@ -89,8 +94,16 @@ export default function ChatProvider( {
     setConversation( [ msg, ...conversation ] );
   }
 
+  async function maybeSendSiteData() {
+    if ( ! focusPromiseRef.current ) {
+      focusPromiseRef.current = adminRequest.get( 'site_data' );
+    }
+    return focusPromiseRef.current;
+  }
+
   async function sendMessage( message: string ) {
     try {
+      await maybeSendSiteData();
       const { stream_url, user_request } = await userRequest( message );
       addUserRequest( user_request );
       startStream( stream_url, user_request.id );
@@ -126,6 +139,7 @@ export default function ChatProvider( {
         clearHistory,
         open,
         setOpen,
+        maybeSendSiteData,
       } }>
       { children }
     </ChatContext.Provider>

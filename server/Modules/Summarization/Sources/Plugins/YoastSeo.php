@@ -17,6 +17,10 @@ class YoastSeo implements SourceInterface
 
     public function isActive(): bool
     {
+        if( !function_exists('is_plugin_active')){
+            require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        }
+
         return is_plugin_active('wordpress-seo/wp-seo.php')
             || is_plugin_active('wordpress-seo-premium/wp-seo-premium.php');
     }
@@ -47,14 +51,14 @@ class YoastSeo implements SourceInterface
         if ( is_wp_error( $data ) ) {
             return [];
         }
-    
+
         $data = json_decode( wp_remote_retrieve_body( $data ), true );
         if ( empty( $data ) ) {
             return [];
         }
 
         $schema = isset( $data['yoast_head_json'] ) && isset( $data['yoast_head_json']['schema'] ) ? $data['yoast_head_json']['schema'] : [];
-        
+
         return $schema;
     }
 }

@@ -11,7 +11,7 @@ import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
 
 export default function MessageBox() {
-  const { sendMessage, setChatSetting } = useChat();
+  const { sendMessage, setChatSetting, maybeSendSiteData } = useChat();
   const { streamClosed, cancelStream } = useStream();
   const [ message, setMessage ] = useState( '' );
   const { page } = usePage();
@@ -72,6 +72,7 @@ export default function MessageBox() {
       <form className="relative rounded-lg bg-white p-2" onSubmit={ submit }>
         <textarea
           onChange={ e => setMessage( e.target.value ) }
+          onFocus={ () => maybeSendSiteData() }
           value={ message }
           ref={ textAreaRef }
           className="h-24 w-full resize-none p-2 text-base"

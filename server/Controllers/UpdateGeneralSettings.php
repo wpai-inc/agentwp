@@ -2,13 +2,8 @@
 
 namespace WpAi\AgentWp\Controllers;
 
-use WpAi\AgentWp\Traits\GeneralSettingsData;
-
 class UpdateGeneralSettings extends BaseController
 {
-
-    use GeneralSettingsData;
-
     protected string $permission = 'canGenerateVerificationKey';
 
     protected string $method = 'POST';

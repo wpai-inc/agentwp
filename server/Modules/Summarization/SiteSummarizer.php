@@ -27,7 +27,12 @@ class SiteSummarizer
         return $this->cache->miss();
     }
 
-    public function data(): array
+    public function getData()
+    {
+        return $this->cache->getData();
+    }
+
+    private function data(): array
     {
         $data = [];
 

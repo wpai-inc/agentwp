@@ -1,10 +1,39 @@
 <?php
 
-namespace WpAi\AgentWp;
+namespace WpAi\AgentWp\Modules\SiteData;
+
+use WpAi\AgentWp\Modules\Summarization\Sources\Core;
+use WpAi\AgentWp\Modules\Summarization\Sources\Plugins\RankMath;
+use WpAi\AgentWp\Modules\Summarization\Sources\Plugins\YoastSeo;
+use WpAi\AgentWp\Services\Cache;
 
 class SiteData
 {
-    public static function getDebugData(): array
+    private Cache $cache;
+
+    public function __construct()
+    {
+        add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
+        add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
+        add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
+
+        $this->cache = new Cache('site_data', $this->data());
+    }
+
+    public function hasUpdated(): bool
+    {
+        return $this->cache->miss();
+    }
+
+    /**
+     * @return Cache
+     */
+    public function getData(): Cache
+    {
+        return $this->cache->getData();
+    }
+
+    private function data(): array
     {
         if (! class_exists('\WP_Debug_Data')) {
             require_once ABSPATH.'wp-admin/includes/class-wp-debug-data.php';
@@ -27,9 +56,9 @@ class SiteData
 
         $debug_data = \WP_Debug_Data::debug_data();
 
-        $debug_data['cpts'] = self::getCpts();
-        $debug_data['taxonomies'] = self::getTaxonomies();
-        $debug_data['general_settings'] = self::getGeneralSettings();
+        $debug_data['cpts'] = $this->getCpts();
+        $debug_data['taxonomies'] = $this->getTaxonomies();
+        $debug_data['general_settings'] = $this->getGeneralSettings();
 
         return $debug_data;
     }
@@ -39,7 +68,7 @@ class SiteData
      *
      * @return array
      */
-    public static function getGeneralSettings(): array
+    private function getGeneralSettings(): array
     {
         return [
             'blogname' => get_option('blogname'),
@@ -52,7 +81,7 @@ class SiteData
      *
      * @return array
      */
-    public static function getCpts(): array
+    private function getCpts(): array
     {
         $args = [
             'public' => true,
@@ -76,7 +105,7 @@ class SiteData
      *
      * @return array
      */
-    public static function getTaxonomies(): array
+    private function getTaxonomies(): array
     {
         $args = [
             'public' => true,

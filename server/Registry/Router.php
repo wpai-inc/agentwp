@@ -12,6 +12,7 @@ use WpAi\AgentWp\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Controllers\QueryActionController;
 use WpAi\AgentWp\Controllers\RefreshToken;
 use WpAi\AgentWp\Controllers\SaveConnection;
+use WpAi\AgentWp\Controllers\SiteDataController;
 use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
@@ -36,6 +37,7 @@ class Router implements Registrable
         'manual_activation' => [ManuallyActivateAgent::class, 'activate'],
         'refresh_token' => [RefreshToken::class, 'refresh'],
         'update_general_settings' => [UpdateGeneralSettings::class, 'update_settings'],
+        'site_data' => [SiteDataController::class, 'maybe_send_site_data'],
     ];
 
     private Main $main;

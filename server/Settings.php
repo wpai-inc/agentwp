@@ -3,7 +3,6 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Services\RevokeApiToken;
-use WpAi\AgentWp\Traits\GeneralSettingsData;
 
 /**
  * @property string|null $client_id The AWP client ID.
@@ -16,9 +15,6 @@ use WpAi\AgentWp\Traits\GeneralSettingsData;
  */
 class Settings
 {
-
-    use GeneralSettingsData;
-
     const SLUG = 'agentwp';
 
     public $data;

@@ -36,20 +36,22 @@ add_action('plugins_loaded', 'agentwp_bootstrap');
 /**
  * Registers all the service providers
  * with a Main dependency.
+ * @throws Exception
  */
 function agentwp_bootstrap(): void
 {
     (new \WpAi\AgentWp\ProviderRegistry(
         new \WpAi\AgentWp\Main(__FILE__)
     ))->register([
+        \WpAi\AgentWp\Registry\ErrorIndexer::class,
         \WpAi\AgentWp\Installer::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
         \WpAi\AgentWp\Registry\PageData::class,
-        \WpAi\AgentWp\Registry\SiteIndexer::class,
-        \WpAi\AgentWp\Registry\IndexSiteSummary::class,
-        \WpAi\AgentWp\Registry\ErrorIndexer::class,
         \WpAi\AgentWp\Registry\Router::class,
         \WpAi\AgentWp\Registry\WpUser::class,
+//        \WpAi\AgentWp\Jobs\SiteIndexer::class,
+//        \WpAi\AgentWp\Jobs\IndexSiteSummary::class,
     ]);
 }
+

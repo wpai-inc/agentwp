@@ -13,6 +13,10 @@ class RankMath implements SourceInterface
 
     public function isActive(): bool
     {
+        if( !function_exists('is_plugin_active')){
+            require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        }
+
         return (
             is_plugin_active('seo-by-rank-math/rank-math.php') ||
             is_plugin_active('seo-by-rank-math-pro/rank-math-pro.php')
