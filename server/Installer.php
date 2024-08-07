@@ -50,7 +50,6 @@ class Installer implements Registrable
         $this->main->settings->delete('general_settings');
         delete_option($key . '_summary');
         delete_option($key . '_site_data');
-        // delete all transients that contains in the name agentwp
         global $wpdb;
         $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '%{$key}%' option_name LIKE '%_transient%'");
     }
