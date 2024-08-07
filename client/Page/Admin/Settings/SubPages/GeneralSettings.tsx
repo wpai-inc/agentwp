@@ -1,18 +1,14 @@
 import { useState } from 'react';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
-import { PageData } from '@/Types/types';
 import { Switch } from '@/Components/ui/switch';
-
-declare const agentwp_settings: PageData;
+import { usePage } from '@/Providers/PageProvider';
 
 export default function GeneralSettings() {
   const adminRequest = useAdminRoute();
-  const [ generalSettings, setGeneralSettings ] = useState( agentwp_settings.general_settings );
-
-  console.log( generalSettings );
+  const { page } = usePage();
+  const [ generalSettings, setGeneralSettings ] = useState( page.general_settings );
 
   function updateSetting( key: string, newValue: any ) {
-    console.log( [ key, newValue ] );
     const new_general_settings = { ...generalSettings, [ key ]: newValue };
 
     setGeneralSettings( new_general_settings );

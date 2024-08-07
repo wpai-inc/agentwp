@@ -16,9 +16,8 @@ class UpdateGeneralSettings extends BaseController
     public function update_settings(): void
     {
         $this->verifyNonce();
-        $data             = json_decode(file_get_contents('php://input'));
-        $general_settings = $this->sanitize_settings($data);
-        $this->main->settings->set('general_settings', $general_settings);
-        wp_send_json($general_settings);
+        $data             = $this->getContent();
+        $general_settings = $this->main->settings->updateGeneralSettings($data);
+        $this->respond($general_settings);
     }
 }
