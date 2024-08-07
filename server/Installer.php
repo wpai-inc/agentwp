@@ -40,12 +40,13 @@ class Installer implements Registrable
     {
         if ($this->main->settings->get('general_settings.cleanup_after_deactivate')) {
             $this->main->settings->disconnectSite($this->main);
-            $this->cleanup_plugin_data('agentwp');
+            $this->cleanup_plugin_data();
         };
     }
 
-    public function cleanup_plugin_data($key)
+    public function cleanup_plugin_data()
     {
+        $key = $this->main->settings::SLUG;
         $this->main->settings->delete('general_settings');
         delete_option($key . '_summary');
         delete_option($key . '_site_data');
