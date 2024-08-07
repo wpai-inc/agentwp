@@ -58,6 +58,7 @@ class PageData implements Registrable
             'user' => $current_user,
             'onboarding_completed' => $this->main->settings->onboarding_completed,
             'account_settings' => $this->main->accountSettings()->get(),
+            'general_settings' => $this->main->settings->getGeneralSettings(),
         ];
         ?>
         <script>

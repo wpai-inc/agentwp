@@ -13,6 +13,7 @@ use WpAi\AgentWp\Controllers\QueryActionController;
 use WpAi\AgentWp\Controllers\RefreshToken;
 use WpAi\AgentWp\Controllers\SaveConnection;
 use WpAi\AgentWp\Controllers\TestResponse;
+use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
 use WpAi\AgentWp\Controllers\ValidateWebsite;
 use WpAi\AgentWp\Main;
@@ -34,6 +35,7 @@ class Router implements Registrable
         'disconnect_site' => [DisconnectSite::class, 'disconnect_site'],
         'manual_activation' => [ManuallyActivateAgent::class, 'activate'],
         'refresh_token' => [RefreshToken::class, 'refresh'],
+        'update_general_settings' => [UpdateGeneralSettings::class, 'update_settings'],
     ];
 
     private Main $main;

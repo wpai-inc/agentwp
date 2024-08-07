@@ -22,7 +22,7 @@ class Main
 
     const BUILD_DIR = 'build';
 
-    const AGENTWP_CRON_THROTTLE = 300;
+    const AGENTWP_CRON_THROTTLE = 30;
 
     public string $companyName = 'AgentWP';
 

@@ -70,4 +70,13 @@ class BaseController
             $this->error('Invalid nonce', 403);
         }
     }
+
+    protected function getContent():array
+    {
+        $data = json_decode($this->request->getContent(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->error('Invalid JSON data', 400);
+        }
+        return $data;
+    }
 }
