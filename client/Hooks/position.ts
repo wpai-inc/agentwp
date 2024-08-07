@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { animate } from 'framer-motion';
 
@@ -68,7 +68,7 @@ export const usePosition = ( {
       const maxRight = Math.max( parentRect.width - width, 0 );
       const maxBottom = Math.max( maxHeight - height, 0 );
 
-      return { maxRight, maxBottom, width: parentRect.width, height: maxHeight };
+      return { maxRight, maxBottom, width: parentRect.width - 40, height: maxHeight - 40 };
     } else {
       return {
         maxRight: window.innerWidth,
@@ -148,6 +148,7 @@ export const usePosition = ( {
           y: chatWindowEl.offsetHeight,
         } );
         setResizeSide( side );
+        setMaximization( undefined );
       }
     },
     [ chatWindowEl ],
@@ -199,6 +200,7 @@ export const usePosition = ( {
           height: newHeight,
           offset,
         } );
+        setMaximization( undefined );
       }
     },
     [
@@ -225,7 +227,7 @@ export const usePosition = ( {
       size,
     } );
     const { width, height } = calculateBoundaries();
-    setPosition( { right: 0, bottom: 0 } );
+    setPosition( { right: 20, bottom: 20 } );
     setSize( { width, height, offset: { x: 0, y: 0 } } );
   }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
 
@@ -244,7 +246,12 @@ export const usePosition = ( {
    * Mouse Handler Listeners
    */
   useEffect( () => {
-    if ( isDragging || isResizing ) {
+    if ( isDragging ) {
+      document.addEventListener( 'mousemove', handleMove );
+      document.addEventListener( 'mouseup', handleMouseUp );
+    }
+
+    if ( isResizing ) {
       document.addEventListener( 'mousemove', handleMove );
       document.addEventListener( 'mousemove', handleResize );
       document.addEventListener( 'mouseup', handleMouseUp );
