@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toJpeg } from 'html-to-image';
+import { useClient } from '@/Providers/ClientProvider';
 import type { streamableFieldType } from '@/Types/types';
 
 type postContentType = {
@@ -54,13 +55,29 @@ async function getScreenshot(): Promise< string > {
   }
 }
 
-export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
+export default function ScreenProvider( { children }: { children: React.ReactNode } ) { 
+  const { getSettings } = useClient();
+  const [ enabled, setEnabled ] = useState< boolean | undefined >( undefined );
   const [ screen, setScreen ] = useState< ScreenType >( {
     url: '',
     title: '',
     links: [],
     screenshot: '',
   } );
+
+  const screenshotSetting = async () => {
+    const settings = await getSettings();
+    const enabled = settings.find( ( setting: any ) => setting.name === 'screenshotsEnabled' );
+    if (enabled === undefined || typeof enabled.value !== 'boolean') {
+      setEnabled( false );
+    }
+
+    setEnabled( enabled.value );
+  }
+
+  useEffect( () => {
+    screenshotSetting();
+  }, [] );
 
   useEffect( () => {
     const fetchData = async () => {
@@ -76,8 +93,11 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
         screenshot,
       } );
     };
-    fetchData();
-  }, [] );
+
+    if (enabled) {
+      fetchData();
+    }
+  }, [enabled] );
 
   return (
     <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>
