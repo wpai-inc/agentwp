@@ -80,11 +80,11 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
   }, [] );
 
   useEffect( () => {
-    const fetchData = async () => {
+    const fetchData = async ( enabled: boolean ) => {
       const url = window.location.href;
       const title = document.title;
       const links = Array.from( document.links ).map( link => link.href );
-      const screenshot = await getScreenshot();
+      const screenshot = enabled ? await getScreenshot() : '';
 
       setScreen( {
         url,
@@ -94,8 +94,8 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
       } );
     };
 
-    if (enabled) {
-      fetchData();
+    if ( enabled !== undefined ) {
+      fetchData( enabled );
     }
   }, [enabled] );
 
