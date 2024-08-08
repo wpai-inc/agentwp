@@ -172,7 +172,7 @@ class Settings
 
     public function getGeneralSettings(): array
     {
-        return $this->sanitize_settings($this->data['general'] ?? []);
+        return $this->sanitize_settings($this->data['general_settings'] ?? []);
     }
 
     public function updateGeneralSettings($data): array
