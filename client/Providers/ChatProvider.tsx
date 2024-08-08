@@ -27,6 +27,7 @@ const ChatContext = createContext( {
   open: false,
   setOpen: ( _open: boolean ) => {},
   maybeSendSiteData: () => {},
+  pendingSendMessage: false,
 } );
 
 export function useChat() {
@@ -53,6 +54,7 @@ export default function ChatProvider( {
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const adminRequest = useAdminRoute();
+  const [ pendingSendMessage, setPendingSendMessage ] = useState( false );
 
   const focusPromiseRef = useRef( null );
 
@@ -103,6 +105,7 @@ export default function ChatProvider( {
 
   async function sendMessage( message: string ) {
     try {
+      setPendingSendMessage( true );
       await maybeSendSiteData();
       const { stream_url, user_request } = await userRequest( message );
       addUserRequest( user_request );
@@ -111,6 +114,7 @@ export default function ChatProvider( {
       addErrors( [ e.message ] );
       console.error( e );
     }
+    setPendingSendMessage( false );
   }
 
   async function cancelStreaming() {
@@ -140,6 +144,7 @@ export default function ChatProvider( {
         open,
         setOpen,
         maybeSendSiteData,
+        pendingSendMessage,
       } }>
       { children }
     </ChatContext.Provider>
