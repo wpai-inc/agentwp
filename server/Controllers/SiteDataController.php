@@ -13,7 +13,6 @@ class SiteDataController extends BaseController
 
     public function maybe_send_site_data()
     {
-        sleep(10);
         $this->verifyNonce();
         if ( ! $this->main->siteId()) {
             $this->error('You do not have permission to perform this action');
