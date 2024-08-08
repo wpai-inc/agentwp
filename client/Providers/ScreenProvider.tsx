@@ -94,7 +94,7 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
       } );
     };
 
-    if ( enabled !== undefined ) {
+    if ( typeof enabled === 'boolean' ) {
       fetchData( enabled );
     }
   }, [enabled] );
