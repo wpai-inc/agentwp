@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toJpeg } from 'html-to-image';
+import { useClient } from '@/Providers/ClientProvider';
 import type { streamableFieldType } from '@/Types/types';
 
 type postContentType = {
@@ -54,7 +55,9 @@ async function getScreenshot(): Promise< string > {
   }
 }
 
-export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
+export default function ScreenProvider( { children }: { children: React.ReactNode } ) { 
+  const { getSettings } = useClient();
+  const [ enabled, setEnabled ] = useState< boolean | undefined >( undefined );
   const [ screen, setScreen ] = useState< ScreenType >( {
     url: '',
     title: '',
@@ -62,12 +65,26 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
     screenshot: '',
   } );
 
+  const screenshotSetting = async () => {
+    const settings = await getSettings();
+    const enabled = settings.find( ( setting: any ) => setting.name === 'screenshotsEnabled' );
+    if (enabled === undefined || typeof enabled.value !== 'boolean') {
+      setEnabled( false );
+    }
+
+    setEnabled( enabled.value );
+  }
+
   useEffect( () => {
-    const fetchData = async () => {
+    screenshotSetting();
+  }, [] );
+
+  useEffect( () => {
+    const fetchData = async ( enabled: boolean ) => {
       const url = window.location.href;
       const title = document.title;
       const links = Array.from( document.links ).map( link => link.href );
-      const screenshot = await getScreenshot();
+      const screenshot = enabled ? await getScreenshot() : '';
 
       setScreen( {
         url,
@@ -76,8 +93,11 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
         screenshot,
       } );
     };
-    fetchData();
-  }, [] );
+
+    if ( typeof enabled === 'boolean' ) {
+      fetchData( enabled );
+    }
+  }, [enabled] );
 
   return (
     <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>

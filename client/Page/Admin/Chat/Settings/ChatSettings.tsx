@@ -17,6 +17,11 @@ const defaultSettings: Setting[] = [
     label: 'Web Enabled',
     value: false,
   },
+  {
+    name: 'screenshotsEnabled',
+    label: 'Screenshots Enabled',
+    value: false,
+  }
 ];
 
 export default function ChatSettings() {
@@ -41,9 +46,11 @@ export default function ChatSettings() {
     const updated = await updateSetting( name, checked );
     setSettings( prevSettings =>
       prevSettings.map( setting => {
-        if ( updated.name === name ) {
+        
+        if ( updated.name === setting.name ) {
           return { ...setting, value: updated.value };
         }
+        
         return setting;
       } ),
     );
