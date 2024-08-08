@@ -9,9 +9,10 @@ import CommandMenu from '../Commands/CommandMenu';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
+import { Spinner } from '@/Components/Spinner';
 
 export default function MessageBox() {
-  const { sendMessage, setChatSetting, maybeSendSiteData } = useChat();
+  const { sendMessage, setChatSetting, maybeSendSiteData, pendingSendMessage } = useChat();
   const { streamClosed, cancelStream } = useStream();
   const [ message, setMessage ] = useState( '' );
   const { page } = usePage();
@@ -43,7 +44,7 @@ export default function MessageBox() {
     if ( e.key === 'ArrowUp' || e.key === 'ArrowDown' ) {
       e.preventDefault();
       setCommandMenuFocused( true );
-    } else if ( e.key === 'Enter' && ( e.metaKey || e.ctrlKey ) ) {
+    } else if ( e.key === 'Enter' && ! e.metaKey && ! e.ctrlKey && ! e.shiftKey && ! e.altKey ) {
       send( message );
     } else {
       setCommandMenuFocused( false );
@@ -78,7 +79,9 @@ export default function MessageBox() {
           className="h-24 w-full resize-none p-2 text-base"
           placeholder="Message..."
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
-          disabled={ ! page.onboarding_completed && ! page.agentwp_access }
+          disabled={
+            ( ! page.onboarding_completed && ! page.agentwp_access ) || pendingSendMessage
+          }
         />
         <div className="flex items-center justify-between">
           <AgentTooltip content="Conversation Settings">
@@ -98,8 +101,17 @@ export default function MessageBox() {
             <Button
               type="submit"
               className={ cn( 'rounded bg-brand-primary px-3' ) }
-              disabled={ ! streamClosed || ! page.onboarding_completed || ! page.agentwp_access }>
-              { streamClosed ? <UpArrowIcon className="h-5 w-5" /> : 'Pending...' }
+              disabled={
+                ! streamClosed ||
+                ! page.onboarding_completed ||
+                ! page.agentwp_access ||
+                pendingSendMessage
+              }>
+              { streamClosed && ! pendingSendMessage ? (
+                <UpArrowIcon className="h-5 w-5" />
+              ) : (
+                <Spinner className="mx-1 text-white" show={ true } />
+              ) }
             </Button>
           ) : (
             <Button
