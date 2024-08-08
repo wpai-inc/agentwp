@@ -18,16 +18,21 @@ class SiteDataController extends BaseController
             $this->error('You do not have permission to perform this action');
         }
 
+        $ts = microtime(true);
         $summarizer = new SiteSummarizer();
-        if ($summarizer->hasUpdated()) {
+        error_log('SiteSummarizer: '.(microtime(true) - $ts));
+//        if ($summarizer->hasUpdated()) {
             $this->main->client(false)->summarizeSite(json_encode($summarizer->getData()));
-        }
+//        }
 
+        $ts2 = microtime(true);
         $site_data = new SiteData();
-        if ($site_data->hasUpdated()) {
+        error_log('SiteData: '.(microtime(true) - $ts2));
+//        if ($site_data->hasUpdated()) {
             $this->main->client(false)->indexSite(json_encode($site_data->getData()));
-        }
+//        }
 
+        error_log('Total: '.(microtime(true) - $ts));
         $this->respond([]);
     }
 }
