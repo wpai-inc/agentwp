@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useCallback } from 'react';
+import { createContext, useCallback, useContext, useRef, useState } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
@@ -19,10 +19,9 @@ export function useStream() {
 
 const useForceUpdate = () => {
   const [ , setTick ] = useState( 0 );
-  const update = useCallback( () => {
+  return useCallback( () => {
     setTick( tick => tick + 1 );
   }, [] );
-  return update;
 };
 
 export default function StreamProvider( { children }: { children: React.ReactNode } ) {
@@ -74,8 +73,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             return;
           }
 
-          let aa = JSON.parse( ev.data ) as AgentAction;
-          liveAction.current = aa;
+          liveAction.current = JSON.parse( ev.data ) as AgentAction;
           forceUpdate();
         },
         onerror( err ) {
