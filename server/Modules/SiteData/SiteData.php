@@ -28,7 +28,7 @@ class SiteData
     /**
      * @return Cache
      */
-    public function getData(): Cache
+    public function getData()
     {
         return $this->cache->getData();
     }
