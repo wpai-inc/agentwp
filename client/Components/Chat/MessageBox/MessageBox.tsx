@@ -79,10 +79,9 @@ export default function MessageBox() {
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
         />
-        <div className="flex items-center justify-between">
+        <div className="relative flex items-center justify-between">
           <AgentTooltip content="Conversation Settings">
             <Button
-              asChild
               onClick={ () =>
                 setChatSetting( { component: <ChatSettings />, header: 'Settings' } )
               }
