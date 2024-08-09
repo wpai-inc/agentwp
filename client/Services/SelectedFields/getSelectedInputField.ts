@@ -1,20 +1,18 @@
 import { generateUniqueSelector } from '@/lib/utils';
-
-type InputElementType = {
-  element: Element;
-  inputPath: string;
-  inputLabel: string;
-};
+import { Dispatch, MutableRefObject } from 'react';
 
 export default function getSelectedInputField(
-  setSelectedInput: React.Dispatch< React.SetStateAction< any > >,
+  setSelectedInput: Dispatch< React.SetStateAction< any > >,
+  selectedInputRef: MutableRefObject< null | HTMLInputElement | HTMLTextAreaElement | HTMLElement >,
 ) {
   const excludeKeywords = [ 'search' ];
 
   document.body.addEventListener( 'focusin', function ( event ) {
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLElement;
     if (
-      ( ( inputElement.tagName === 'INPUT' && inputElement.type === 'text' ) ||
+      ( ( inputElement.tagName === 'INPUT' &&
+        'type' in inputElement &&
+        inputElement.type === 'text' ) ||
         inputElement.tagName === 'TEXTAREA' ||
         ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
       ! inputElement.closest( '#agentwp-admin-chat' )
@@ -42,6 +40,11 @@ export default function getSelectedInputField(
         inputLabel = document.querySelector( `label[for="${ inputName }"]` )?.textContent || '';
       }
 
+      selectedInputRef.current = inputElement;
+      const inputValue =
+        ( inputElement as HTMLInputElement | HTMLTextAreaElement ).value ||
+        inputElement.innerText ||
+        '';
       setSelectedInput( {
         type: 'input',
         data: {
@@ -49,15 +52,32 @@ export default function getSelectedInputField(
           inputLabel,
           inputName,
           inputId,
-          inputValue: inputElement.value || inputElement.innerText || '',
+          inputValue,
         },
       } );
     }
+
+    selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
+      const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
+      if ( inputElement === selectedInputRef.current ) {
+        setSelectedInput( ( prev: any ) => ( {
+          ...prev,
+          data: {
+            ...prev.data,
+            inputValue: inputElement.value,
+          },
+        } ) );
+      }
+    } );
   } );
 
   document.addEventListener( 'mousedown', event => {
     const clickedElement = event.target as HTMLElement;
-    if ( ! clickedElement.closest( '#agentwp-admin-chat' ) ) {
+    if (
+      clickedElement !== selectedInputRef.current &&
+      ! clickedElement.closest( '#agentwp-admin-chat' )
+    ) {
+      selectedInputRef.current = null;
       setSelectedInput( null );
     }
   } );

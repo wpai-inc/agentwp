@@ -82,7 +82,6 @@ export default function MessageBox() {
         <div className="flex items-center justify-between">
           <AgentTooltip content="Conversation Settings">
             <Button
-              asChild
               onClick={ () =>
                 setChatSetting( { component: <ChatSettings />, header: 'Settings' } )
               }
