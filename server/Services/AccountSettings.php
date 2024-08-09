@@ -13,8 +13,13 @@ class AccountSettings
 
     public function get(): array
     {
-        $response = $this->client->getSiteSettings()->getBody()->getContents();
+        $response = $this->client->getSiteSettings();
 
-        return json_decode($response, true);
+        if($response){
+            return json_decode($response->getBody()->getContents(), true);
+        }
+
+        return [];
+
     }
 }
