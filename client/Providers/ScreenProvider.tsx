@@ -55,7 +55,7 @@ async function getScreenshot(): Promise< string > {
   }
 }
 
-export default function ScreenProvider( { children }: { children: React.ReactNode } ) { 
+export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
   const { getSettings } = useClient();
   const [ enabled, setEnabled ] = useState< boolean | undefined >( undefined );
   const [ screen, setScreen ] = useState< ScreenType >( {
@@ -68,12 +68,12 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
   const screenshotSetting = async () => {
     const settings = await getSettings();
     const enabled = settings.find( ( setting: any ) => setting.name === 'screenshotsEnabled' );
-    if (enabled === undefined || typeof enabled.value !== 'boolean') {
+    if ( enabled === undefined || typeof enabled.value !== 'boolean' ) {
       setEnabled( false );
     }
 
-    setEnabled( enabled.value );
-  }
+    setEnabled( enabled?.value || false );
+  };
 
   useEffect( () => {
     screenshotSetting();
@@ -97,7 +97,7 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
     if ( typeof enabled === 'boolean' ) {
       fetchData( enabled );
     }
-  }, [enabled] );
+  }, [ enabled ] );
 
   return (
     <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>
