@@ -23,3 +23,14 @@ svg {
     background-position: 200px 0;
   }
 }
+
+.external-border-bottom-left {
+    width: 12px; /* Adjust as needed */
+    height: 12px;
+    background: radial-gradient(circle at bottom left, transparent 12px, rgb(246, 247, 247) 0);
+}
+.external-border-top-left {
+    width: 12px; /* Adjust as needed */
+    height: 12px;
+    background: radial-gradient(circle at top left, transparent 12px, rgb(246, 247, 247) 0);
+}
