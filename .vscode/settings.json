@@ -3,5 +3,6 @@
   "editor.formatOnSave": true,
   "[php]": {
     "editor.defaultFormatter": "open-southeners.laravel-pint"
-  }
+  },
+  "prettier.configPath": ".prettierrc"
 }
