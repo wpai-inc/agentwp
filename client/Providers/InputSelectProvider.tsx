@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import {
   getSelectedGutenbergBlock,
   getSelectedInputField,
@@ -27,10 +27,13 @@ export const useInputSelect = () => {
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
   const [ selectedInput, setSelectedInput ] = useState< streamableFieldType | null >( null );
+  const selectedInputRef = useRef< null | HTMLInputElement | HTMLTextAreaElement | HTMLElement >(
+    null,
+  );
   const { screen, setScreen } = useScreen();
 
   useEffect( () => {
-    getSelectedInputField( setSelectedInput );
+    getSelectedInputField( setSelectedInput, selectedInputRef );
     getSelectedGutenbergBlock( setSelectedInput );
     getSelectedPostTitle( setSelectedInput );
   }, [] );
