@@ -56,6 +56,19 @@ export default function getSelectedInputField(
         },
       } );
     }
+
+    selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
+      const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
+      if ( inputElement === selectedInputRef.current ) {
+        setSelectedInput( ( prev: any ) => ( {
+          ...prev,
+          data: {
+            ...prev.data,
+            inputValue: inputElement.value,
+          },
+        } ) );
+      }
+    } );
   } );
 
   document.addEventListener( 'mousedown', event => {
@@ -66,19 +79,6 @@ export default function getSelectedInputField(
     ) {
       selectedInputRef.current = null;
       setSelectedInput( null );
-    }
-  } );
-
-  selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
-    const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
-    if ( inputElement === selectedInputRef.current ) {
-      setSelectedInput( ( prev: any ) => ( {
-        ...prev,
-        data: {
-          ...prev.data,
-          inputValue: inputElement.value,
-        },
-      } ) );
     }
   } );
 }
