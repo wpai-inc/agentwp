@@ -42,8 +42,8 @@ export default function WindowActions( {
         },
       ) }
       { ...props }>
-      <div>
-        <div className="relative z-0 mt-16 flex w-6 flex-col items-center justify-center gap-2 rounded-bl-lg rounded-tl-lg bg-brand-gray py-2 shadow-left-sm">
+      <div className="overflow-hidden pl-3">
+        <div className="relative z-0 mt-16 flex w-6 flex-col items-center justify-center gap-2 rounded-bl-lg rounded-tl-lg bg-brand-gray py-2 shadow-lg">
           { isMaximized ? (
             <AgentTooltip content="Return chat window to normal size" side="right">
               <Button
@@ -78,7 +78,7 @@ export default function WindowActions( {
           <Corners />
         </div>
       </div>
-      <div>
+      <div className="pl-3">
         <AgentTooltip content="Drag or double-click to reset window position" side="right">
           <button
             id="dragHandle"

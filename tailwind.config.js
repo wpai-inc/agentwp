@@ -25,7 +25,6 @@ module.exports = {
     extend: {
       boxShadow: {
         '3xl': '0 0 150px 30px rgb(0, 0, 0, 0.5)',
-        'left-sm': '-4px 0px 6px 1px #0000001f',
       },
       keyframes: {
         'accordion-down': {
