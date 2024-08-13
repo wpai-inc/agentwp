@@ -2,14 +2,15 @@
 
 namespace WpAi\AgentWp\Modules\Summarization;
 
+use WpAi\AgentWp\Contracts\Cacheable;
 use WpAi\AgentWp\Modules\Summarization\Sources\Core;
 use WpAi\AgentWp\Modules\Summarization\Sources\Plugins\RankMath;
 use WpAi\AgentWp\Modules\Summarization\Sources\Plugins\YoastSeo;
-use WpAi\AgentWp\Services\Cache;
+use WpAi\AgentWp\Traits\HasCache;
 
-class SiteSummarizer
+class SiteSummarizer implements Cacheable
 {
-    private Cache $cache;
+    use HasCache;
 
     private array $sources = [
         YoastSeo::class,
@@ -17,14 +18,16 @@ class SiteSummarizer
         Core::class,
     ];
 
-    public function __construct()
+    public static function cacheId(): string
     {
-        $this->cache = new Cache('summary', $this->data());
+        return 'summary';
     }
 
     public function hasUpdated(): bool
     {
-        return $this->cache->miss();
+        $cache = $this->cache($this->data());
+
+        return $cache->miss();
     }
 
     public function data(): array

@@ -2,21 +2,27 @@
 
 namespace WpAi\AgentWp\Registry;
 
+use WpAi\AgentWp\Contracts\Cacheable;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
-use WpAi\AgentWp\Services\Cache;
 use WpAi\AgentWp\SiteData;
+use WpAi\AgentWp\Traits\HasCache;
 use WpAi\AgentWp\Traits\ScheduleEvent;
 
-class SiteIndexer implements Registrable
+class SiteIndexer implements Cacheable, Registrable
 {
-    use ScheduleEvent;
+    use HasCache, ScheduleEvent;
 
     private Main $main;
 
     public function __construct(Main $main)
     {
         $this->main = $main;
+    }
+
+    public static function cacheId(): string
+    {
+        return 'site_data';
     }
 
     public function register()
@@ -43,7 +49,7 @@ class SiteIndexer implements Registrable
                 return;
             }
 
-            $cache = new Cache('site_data', SiteData::getDebugData());
+            $cache = $this->cache(SiteData::getDebugData());
 
             if ($cache->miss()) {
                 $this->main->client(false)->indexSite(json_encode($cache->getData()));
