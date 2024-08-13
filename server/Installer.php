@@ -4,6 +4,7 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
+use WpAi\AgentWp\Registry\IndexSiteSummary;
 use WpAi\AgentWp\Registry\SiteIndexer;
 
 /**
@@ -22,6 +23,9 @@ class Installer implements Registrable
 
     public function register()
     {
+        (new IndexSiteSummary($this->main))->sendByCron();
+        (new SiteIndexer($this->main))->sendByCron();
+
         $plugin_file = plugin_basename($this->main->pluginPath());
         if (doing_action('activate_'.$plugin_file)) {
             $this->activate();
@@ -33,6 +37,9 @@ class Installer implements Registrable
 
     public function activate()
     {
+        SiteIndexer::invalidate();
+        SiteSummarizer::invalidate();
+
         set_transient('agentwp_installing', 'yes', MINUTE_IN_SECONDS * 10);
         if (! defined('WP_CLI') || ! WP_CLI) {
             add_action('shutdown', [$this, 'redirect']);

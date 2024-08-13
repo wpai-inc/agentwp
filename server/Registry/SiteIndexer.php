@@ -28,7 +28,7 @@ class SiteIndexer implements Cacheable, Registrable
     public function register()
     {
         add_action('admin_init', [$this, 'sendByCron']);
-        add_action('agentwp_send_site_index', [$this, 'send']);
+        add_action('agentwp_send_site_index', [$this, 'autoUpdate']);
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
         add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
@@ -42,19 +42,26 @@ class SiteIndexer implements Cacheable, Registrable
         );
     }
 
-    public function send()
+    public function autoUpdate(): void
     {
-        if ($this->main->siteId()) {
-            if (defined('DOING_AJAX') && DOING_AJAX) {
-                return;
-            }
-
-            $cache = $this->cache(SiteData::getDebugData());
-
-            if ($cache->miss()) {
-                $this->main->client(false)->indexSite(json_encode($cache->getData()));
-            }
+        if (! $this->main->siteId() || (defined('DOING_AJAX') && DOING_AJAX)) {
+            return;
         }
+
+        $cache = $this->cache(SiteData::getDebugData());
+
+        if ($cache->miss()) {
+            $this->send($cache);
+        }
+    }
+
+    public function send($data = null): void
+    {
+        if (is_null($data)) {
+            $data = SiteData::getDebugData();
+        }
+
+        $this->main->client(false)->indexSite(json_encode($data));
     }
 
     public function add_plugin_slugs_to_debug_info($info): array

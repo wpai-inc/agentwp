@@ -13,15 +13,18 @@ class IndexSiteSummary implements Registrable
 
     private Main $main;
 
+    private SiteSummarizer $summarizer;
+
     public function __construct(Main $main)
     {
         $this->main = $main;
+        $this->summarizer = new SiteSummarizer;
     }
 
     public function register(): void
     {
         add_action('admin_init', [$this, 'sendByCron']);
-        add_action('agentwp_send_site_summary', [$this, 'send']);
+        add_action('agentwp_send_site_summary', [$this, 'autoUpdate']);
     }
 
     public function sendByCron(): void
@@ -32,23 +35,19 @@ class IndexSiteSummary implements Registrable
         );
     }
 
-    public function send(): void
+    public function autoUpdate(): void
     {
-        if ($this->main->siteId()) {
-            if (defined('DOING_AJAX') && DOING_AJAX) {
-                return;
-            }
-            $summarizer = new SiteSummarizer;
-            // var_dump($summarizer->data());
+        if ($this->main->siteId() || (defined('DOING_AJAX') && DOING_AJAX)) {
+            return;
+        }
 
-            if ($summarizer->hasUpdated()) {
-                $this->main->client(false)->summarizeSite(json_encode($summarizer->data()));
-            }
+        if ($this->summarizer->hasUpdated()) {
+            $this->send();
         }
     }
 
-    private function getDataForSummarization(): array
+    public function send(): void
     {
-        return ['some sample data'];
+        $this->main->client(false)->summarizeSite(json_encode($this->summarizer->data()));
     }
 }
