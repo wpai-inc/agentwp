@@ -23,9 +23,6 @@ class Installer implements Registrable
 
     public function register()
     {
-        (new IndexSiteSummary($this->main))->sendByCron();
-        (new SiteIndexer($this->main))->sendByCron();
-
         $plugin_file = plugin_basename($this->main->pluginPath());
         if (doing_action('activate_'.$plugin_file)) {
             $this->activate();
@@ -37,8 +34,11 @@ class Installer implements Registrable
 
     public function activate()
     {
-        SiteIndexer::invalidate();
-        SiteSummarizer::invalidate();
+        $summarizer = (new IndexSiteSummary($this->main));
+        $summarizer->sendByCron();
+        $summarizer->schedule();
+
+        (new SiteIndexer($this->main))->sendByCron();
 
         set_transient('agentwp_installing', 'yes', MINUTE_IN_SECONDS * 10);
         if (! defined('WP_CLI') || ! WP_CLI) {
@@ -50,6 +50,7 @@ class Installer implements Registrable
     {
         SiteIndexer::invalidate();
         SiteSummarizer::invalidate();
+        IndexSiteSummary::cleanUpSchedule();
 
         if ($this->main->settings->get('general_settings.cleanup_after_deactivate')) {
             $this->main->settings->disconnectSite($this->main);

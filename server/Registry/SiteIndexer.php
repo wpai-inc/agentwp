@@ -13,6 +13,8 @@ class SiteIndexer implements Cacheable, Registrable
 {
     use HasCache, ScheduleEvent;
 
+    const CRON_THROTTLE = 30;
+
     private Main $main;
 
     public function __construct(Main $main)
@@ -38,7 +40,7 @@ class SiteIndexer implements Cacheable, Registrable
     {
         $this->scheduleSingleCronEvent(
             'agentwp_send_site_index',
-            $this->main::AGENTWP_CRON_THROTTLE
+            self::CRON_THROTTLE
         );
     }
 

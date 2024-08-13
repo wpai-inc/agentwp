@@ -11,6 +11,10 @@ class IndexSiteSummary implements Registrable
 {
     use ScheduleEvent;
 
+    const CRON_THROTTLE = 30;
+
+    const CRON_INTERVAL = 'perminute';
+
     private Main $main;
 
     private SiteSummarizer $summarizer;
@@ -31,8 +35,25 @@ class IndexSiteSummary implements Registrable
     {
         $this->scheduleSingleCronEvent(
             'agentwp_send_site_summary',
-            $this->main::AGENTWP_CRON_THROTTLE
+            self::CRON_THROTTLE
         );
+    }
+
+    public function schedule(): void
+    {
+        $intervalJob = 'agentwp_send_site_summary_everyminute';
+        if (! wp_next_scheduled($intervalJob)) {
+            wp_schedule_event(time(), 'every_minute', $intervalJob);
+        }
+        add_action($intervalJob, [$this, 'autoUpdate']);
+    }
+
+    public static function cleanUpSchedule(): void
+    {
+        $timestamp = wp_next_scheduled('agentwp_send_site_summary_everyminute');
+        if ($timestamp) {
+            wp_unschedule_event($timestamp, 'agentwp_send_site_summary_everyminute');
+        }
     }
 
     public function autoUpdate(): void
@@ -41,9 +62,7 @@ class IndexSiteSummary implements Registrable
             return;
         }
 
-        if ($this->summarizer->hasUpdated()) {
-            $this->send();
-        }
+        $this->send();
     }
 
     public function send(): void
