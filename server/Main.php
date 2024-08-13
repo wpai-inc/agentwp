@@ -22,8 +22,6 @@ class Main
 
     const BUILD_DIR = 'build';
 
-    const AGENTWP_CRON_THROTTLE = 30;
-
     public string $companyName = 'AgentWP';
 
     public string $attributionUrl = 'https://agentwp.com';
@@ -45,6 +43,15 @@ class Main
         $this->auth = new UserAuth;
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
+
+        add_filter('cron_schedules', function ($schedules) {
+            $schedules['every_minute'] = [
+                'interval' => 60,
+                'display' => __('Every minute'),
+            ];
+
+            return $schedules;
+        });
     }
 
     public function buildPath(): string

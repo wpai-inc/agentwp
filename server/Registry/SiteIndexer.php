@@ -2,15 +2,18 @@
 
 namespace WpAi\AgentWp\Registry;
 
+use WpAi\AgentWp\Contracts\Cacheable;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
-use WpAi\AgentWp\Services\Cache;
 use WpAi\AgentWp\SiteData;
+use WpAi\AgentWp\Traits\HasCache;
 use WpAi\AgentWp\Traits\ScheduleEvent;
 
-class SiteIndexer implements Registrable
+class SiteIndexer implements Cacheable, Registrable
 {
-    use ScheduleEvent;
+    use HasCache, ScheduleEvent;
+
+    const CRON_THROTTLE = 30;
 
     private Main $main;
 
@@ -19,10 +22,15 @@ class SiteIndexer implements Registrable
         $this->main = $main;
     }
 
+    public static function cacheId(): string
+    {
+        return 'site_data';
+    }
+
     public function register()
     {
         add_action('admin_init', [$this, 'sendByCron']);
-        add_action('agentwp_send_site_index', [$this, 'send']);
+        add_action('agentwp_send_site_index', [$this, 'autoUpdate']);
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
         add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
@@ -32,23 +40,30 @@ class SiteIndexer implements Registrable
     {
         $this->scheduleSingleCronEvent(
             'agentwp_send_site_index',
-            $this->main::AGENTWP_CRON_THROTTLE
+            self::CRON_THROTTLE
         );
     }
 
-    public function send()
+    public function autoUpdate(): void
     {
-        if ($this->main->siteId()) {
-            if (defined('DOING_AJAX') && DOING_AJAX) {
-                return;
-            }
-
-            $cache = new Cache('site_data', SiteData::getDebugData());
-
-            if ($cache->miss()) {
-                $this->main->client(false)->indexSite(json_encode($cache->getData()));
-            }
+        if (! $this->main->siteId() || (defined('DOING_AJAX') && DOING_AJAX)) {
+            return;
         }
+
+        $cache = $this->cache(SiteData::getDebugData());
+
+        if ($cache->miss()) {
+            $this->send($cache);
+        }
+    }
+
+    public function send($data = null): void
+    {
+        if (is_null($data)) {
+            $data = SiteData::getDebugData();
+        }
+
+        $this->main->client(false)->indexSite(json_encode($data));
     }
 
     public function add_plugin_slugs_to_debug_info($info): array
