@@ -9,6 +9,7 @@ import LatestConvos from './Partials/LatestConvos';
 import '@/assets/styles/app.css';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
+import Footer from './Partials/Footer';
 
 const rootElement = document.getElementById( 'agentwp-admin-dashboardwidget' );
 
@@ -16,6 +17,7 @@ declare const agentwp_settings: PageData;
 
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
+  const wpWidgetStyleReset = { margin: '-11px -12px -12px -12px' };
   root.render(
     <StrictMode>
       <PageProvider page={ agentwp_settings } root={ rootElement }>
@@ -24,7 +26,10 @@ if ( rootElement ) {
             <AdminRouteProvider>
               <ClientProvider>
                 <ClientSettingsProvider>
-                  <LatestConvos />
+                  <div style={ wpWidgetStyleReset }>
+                    <LatestConvos />
+                    <Footer />
+                  </div>
                 </ClientSettingsProvider>
               </ClientProvider>
             </AdminRouteProvider>
