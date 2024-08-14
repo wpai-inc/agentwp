@@ -30,7 +30,7 @@ class Settings extends ReactClient
     public function registrations(): void
     {
         $this->hasFooter()->registerPage();
-        $this->menuName('Agent WP Settings')->registerMenu();
+        $this->menuName('AgentWP Settings')->registerMenu();
     }
 
     public function data(): array
