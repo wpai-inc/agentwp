@@ -28,6 +28,7 @@ class Cache
     public function miss(): bool
     {
         if ($this->hit()) {
+
             return false;
         }
 
@@ -54,6 +55,10 @@ class Cache
     private function hit(): bool
     {
         $last_hash = get_option($this->key);
+
+        if (! $last_hash) {
+            update_option($this->key, $this->hash);
+        }
 
         return $last_hash === $this->hash;
     }

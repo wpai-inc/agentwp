@@ -29,8 +29,9 @@ class SiteIndexer implements Cacheable, Registrable
 
     public function register()
     {
-        add_action('admin_init', [$this, 'sendByCron']);
+        add_action('admin_init', [$this, 'autoUpdate']);
         add_action('agentwp_send_site_index', [$this, 'autoUpdate']);
+
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
         add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
@@ -53,7 +54,7 @@ class SiteIndexer implements Cacheable, Registrable
         $cache = $this->cache(SiteData::getDebugData());
 
         if ($cache->miss()) {
-            $this->send($cache);
+            $this->send($cache->getData());
         }
     }
 
