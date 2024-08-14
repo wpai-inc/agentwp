@@ -69,6 +69,12 @@ export default class AwpClient {
     } );
   }
 
+  async getSuggestions( pageCtx?: any ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/convo/suggestions`, {
+      context: pageCtx,
+    } );
+  }
+
   async clearConversation(): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/convo/clear` );
   }
