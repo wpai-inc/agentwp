@@ -79,6 +79,13 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
+  async function getSuggestions( pageCtx?: any ) {
+    return tryRequest( async () => {
+      const res = await client.isAuthorized()?.getSuggestions( pageCtx );
+      return res?.data;
+    } );
+  }
+
   async function tryRequest(
     fn: () => Promise< any >,
     defaultValue: any = [],
@@ -106,6 +113,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         client,
         getHistory,
         getConversation,
+        getSuggestions,
         clearConversation,
         unclearConversation,
         userProfileUrl,
