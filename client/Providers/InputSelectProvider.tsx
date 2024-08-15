@@ -35,6 +35,7 @@ export const InputSelectProvider = ( { children }: { children: ReactNode } ) => 
   useEffect( () => {
     getSelectedInputField( setSelectedInput, selectedInputRef );
     getSelectedGutenbergBlock( setSelectedInput );
+    getSelectedElementorBlock( setSelectedInput );
     getSelectedPostTitle( setSelectedInput );
   }, [] );
 
