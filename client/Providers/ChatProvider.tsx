@@ -95,7 +95,7 @@ export default function ChatProvider( {
       addUserRequest( user_request );
       startStream( stream_url, user_request.id );
     } catch ( e: any ) {
-      addErrors( [ e.message ] );
+      addErrors( [ e ] );
       console.error( e );
     }
   }
@@ -106,7 +106,7 @@ export default function ChatProvider( {
       addUserRequest( user_request );
       startStream( stream_url, user_request.id );
     } catch ( e: any ) {
-      addErrors( [ e.message ] );
+      addErrors( [ e ] );
       console.error( e );
     }
   }

@@ -1,4 +1,5 @@
 import React, { createContext, FC, useContext, useState } from 'react';
+import { TokenUsageStatus } from '@/Types/types';
 
 interface ContextProps {
   errors: string[];
@@ -23,10 +24,28 @@ export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children }
     setErrors( prev => {
       return [
         ...prev,
-        ...errors.map( ( err: any ) => ( {
-          id: err.id ?? crypto.randomUUID(),
-          message: err.message ?? err,
-        } ) ),
+        ...errors.map( ( err: any ) => {
+          const message = err.response?.data?.message ?? err.message ?? err;
+          const usageStatus = err.response?.data?.usage_status;
+          const usageCooldownTime = err.response?.data?.usage_cooldown_time;
+
+          let fullMessage = message;
+
+          if ( usageStatus === TokenUsageStatus.ThrottledSite && usageCooldownTime ) {
+            const date = new Date( usageCooldownTime );
+            const formattedTime = new Intl.DateTimeFormat( 'en-US', {
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            } ).format( date );
+            fullMessage = `${ message } Please get back at ${ formattedTime }.`;
+          }
+
+          return {
+            id: err.id ?? crypto.randomUUID(),
+            message: fullMessage,
+          };
+        } ),
       ];
     } );
     setTimeout( () => {
