@@ -1,9 +1,7 @@
 import * as React from 'react';
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu';
 import { Check, ChevronRight, Circle } from 'lucide-react';
-
 import { cn } from '@/lib/utils';
-import { usePage } from '@/Providers/PageProvider';
 
 const ContextMenu = ContextMenuPrimitive.Root;
 
@@ -56,9 +54,8 @@ const ContextMenuContent = React.forwardRef<
   React.ElementRef< typeof ContextMenuPrimitive.Content >,
   React.ComponentPropsWithoutRef< typeof ContextMenuPrimitive.Content >
 >( ( { className, ...props }, ref ) => {
-  const { root } = usePage();
   return (
-    <ContextMenuPrimitive.Portal container={ root }>
+    <ContextMenuPrimitive.Portal container={ window.agentwp }>
       <ContextMenuPrimitive.Content
         ref={ ref }
         className={ cn(

@@ -20,7 +20,7 @@ if ( rootElement ) {
   const wpWidgetStyleReset = { margin: '-11px -12px -12px -12px' };
   root.render(
     <StrictMode>
-      <PageProvider page={ agentwp_settings } root={ rootElement }>
+      <PageProvider page={ agentwp_settings }>
         <NotificationsProvider>
           <ErrorProvider>
             <AdminRouteProvider>

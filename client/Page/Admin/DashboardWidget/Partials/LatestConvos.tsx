@@ -26,7 +26,7 @@ export default function LatestConvos() {
           <Spinner show={ true } />
         </div>
       ) : convos.length > 0 ? (
-        convos.map( ( convo: HistoryItem ) => <ConvoItem { ...convo } /> )
+        convos.map( ( convo: HistoryItem ) => <ConvoItem key={ convo.createdAt } { ...convo } /> )
       ) : (
         <p>No recent conversations.</p>
       ) }
@@ -34,10 +34,16 @@ export default function LatestConvos() {
   );
 }
 
+function openConvo( since: string ) {
+  window.agentwp.dispatchEvent( new CustomEvent( 'awp:chat:since', { detail: { since } } ) );
+}
+
 function ConvoItem( convo: HistoryItem ) {
   return (
-    <div className="p-2 odd:bg-gray-100">
+    <button
+      className="p-2 block w-full text-left odd:bg-gray-100"
+      onClick={ () => openConvo( convo.createdAt ) }>
       <time>{ convo.humanCreatedAt }</time>
-    </div>
+    </button>
   );
 }

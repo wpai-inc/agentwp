@@ -17,20 +17,24 @@ import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { InputSelectProvider } from '@/Providers/InputSelectProvider';
 import StreamListenerProvider from '@/Providers/StreamListenerProvider';
-import HotKeyProvider from '@/Providers/HotKeyProvider';
-
+import { AWPRootType } from '@/Types/types';
 import '@/assets/styles/app.css';
+declare global {
+  interface Window {
+    agentwp: AWPRootType;
+  }
+}
 
 const rootElement = document.getElementById( 'agentwp-admin-chat' );
-
 declare const agentwp_settings: PageData;
 
 if ( rootElement ) {
+  window.agentwp = rootElement as AWPRootType;
   const root = ReactDOM.createRoot( rootElement );
   root.render(
     <React.StrictMode>
       <NotificationsProvider>
-        <PageProvider page={ agentwp_settings } root={ rootElement }>
+        <PageProvider page={ agentwp_settings }>
           <AppProvider>
             <AppWrapper>
               <ErrorProvider>
@@ -44,9 +48,7 @@ if ( rootElement ) {
                               <InputSelectProvider>
                                 <ChatProvider>
                                   <StreamListenerProvider>
-                                    <HotKeyProvider>
-                                      <Chat />
-                                    </HotKeyProvider>
+                                    <Chat />
                                   </StreamListenerProvider>
                                 </ChatProvider>
                               </InputSelectProvider>
