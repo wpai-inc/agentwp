@@ -43,6 +43,7 @@ class Main
         $this->auth = new UserAuth;
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
+        $this->registerSchedules();
     }
 
     public function buildPath(): string
@@ -108,5 +109,17 @@ class Main
     private function runtimeApiHost()
     {
         return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://app.agentwp.com';
+    }
+
+    public function registerSchedules(): void
+    {
+        add_filter('cron_schedules', function ($schedules) {
+            $schedules['every_minute'] = [
+                'interval' => 60,
+                'display' => __('Every minute', 'agentwp'),
+            ];
+
+            return $schedules;
+        });
     }
 }
