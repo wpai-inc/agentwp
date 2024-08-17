@@ -65,7 +65,7 @@ trait HasMenu
                 $page['name'],
                 $page['name'],
                 'manage_options',
-                $this->slug().'&'.$page['slug'],
+                $this->slug().'&tab='.$page['slug'],
                 [$this, 'appRoot']
             );
         }

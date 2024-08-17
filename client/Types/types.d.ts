@@ -1,6 +1,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 export type AWPEventChatSinceType = CustomEvent< { since: string } >;
+export type AWPEventChatOpenType = CustomEvent;
 export type AWPRootType = HTMLElement & {
   listener: ( this: Window, ev: AWPEventChatSinceType ) => any;
   dispatchEvent: ( event: Event ) => boolean;

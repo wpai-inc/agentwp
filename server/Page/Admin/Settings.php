@@ -30,6 +30,8 @@ class Settings extends ReactClient
 
     public function registrations(): void
     {
+        add_action('admin_enqueue_scripts', [$this, 'openChatListener']);
+
         $this->hasFooter()->registerPage();
         $this
             ->icon($this->main->staticAsset('icon.svg'))
@@ -51,8 +53,18 @@ class Settings extends ReactClient
                     'slug' => 'settings',
                     'data' => [],
                 ],
+                [
+                    'name' => 'Open Chat',
+                    'slug' => 'open',
+                    'data' => [],
+                ],
             ])
             ->registerMenu();
+    }
+
+    public function openChatListener(): void
+    {
+        wp_enqueue_script('agentwp-admin', $this->main->staticAsset('/admin.js'), [], $this->main::PLUGIN_VERSION, true);
     }
 
     public function data(): array

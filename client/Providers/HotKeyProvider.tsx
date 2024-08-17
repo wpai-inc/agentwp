@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useChat } from '@/Providers/ChatProvider';
 import { useUserRequests } from './UserRequestsProvider';
-import { AWPEventChatSinceType } from '@/Types/types';
+import { AWPEventChatSinceType, AWPEventChatOpenType } from '@/Types/types';
 import { useChatUI } from '@/Components/Chat/Chat';
 
 const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
@@ -30,11 +30,15 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
    * @returns {void}
    */
   useEffect( () => {
-    window.agentwp.addEventListener( 'awp:chat:since', ( e: AWPEventChatSinceType ) => {
+    window.agentwp.addEventListener( 'awp:chat:since', ( e: AWPEventChatOpenType ) => {
       if ( e.detail?.since ) {
         toggle();
         setSince( e.detail.since );
       }
+    } );
+
+    window.agentwp.addEventListener( 'awp:chat:toggle', ( e: AWPEventChatSinceType ) => {
+      toggle();
     } );
   }, [ window.agentwp, setSince, toggle ] );
 
