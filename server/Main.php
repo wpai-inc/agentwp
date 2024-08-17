@@ -3,7 +3,6 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Factories\ClientFactory;
-use WpAi\AgentWp\Registry\IndexSiteSummary;
 use WpAi\AgentWp\Services\AccountSettings;
 use WpAi\AgentWp\Services\AwpClient;
 
@@ -45,10 +44,6 @@ class Main
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
         $this->registerSchedules();
-
-        // $summarizer = (new IndexSiteSummary($this));
-        // $summarizer->scheduleNow('autoUpdate');
-        // $summarizer->schedule('autoUpdate');
     }
 
     public function buildPath(): string
