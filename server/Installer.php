@@ -4,8 +4,8 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
+use WpAi\AgentWp\Registry\IndexSiteData;
 use WpAi\AgentWp\Registry\IndexSiteSummary;
-use WpAi\AgentWp\Registry\SiteIndexer;
 
 /**
  * Handles the plugin activation, deactivation, and uninstallation.
@@ -35,10 +35,10 @@ class Installer implements Registrable
     public function activate()
     {
         $summarizer = (new IndexSiteSummary($this->main));
-        $summarizer->sendByCron();
-        $summarizer->schedule();
+        $summarizer->scheduleNow('autoUpdate');
+        $summarizer->schedule('autoUpdate');
 
-        (new SiteIndexer($this->main))->sendByCron();
+        (new IndexSiteData($this->main))->scheduleNow('autoUpdate');
 
         set_transient('agentwp_installing', 'yes', MINUTE_IN_SECONDS * 10);
         if (! defined('WP_CLI') || ! WP_CLI) {
@@ -48,9 +48,9 @@ class Installer implements Registrable
 
     public function deactivate(): void
     {
-        SiteIndexer::invalidate();
+        IndexSiteData::invalidate();
         SiteSummarizer::invalidate();
-        IndexSiteSummary::cleanUpSchedule();
+        IndexSiteSummary::clearSchedules(['autoUpdate']);
 
         if ($this->main->settings->get('general_settings.cleanup_after_deactivate')) {
             $this->main->settings->disconnectSite($this->main);

@@ -25,14 +25,15 @@ class Cache
         return $this->key;
     }
 
-    public function miss(): bool
+    public function hit(): bool
     {
-        if ($this->hit()) {
+        $last_hash = get_option($this->key);
+
+        if ($last_hash !== $this->hash) {
+            update_option($this->key, $this->hash);
 
             return false;
         }
-
-        $this->invalidate();
 
         return true;
     }
@@ -47,19 +48,8 @@ class Cache
         return (new Cache($id))->invalidate();
     }
 
-    private function invalidate(): bool
+    public function invalidate(): bool
     {
         return delete_option($this->key);
-    }
-
-    private function hit(): bool
-    {
-        $last_hash = get_option($this->key);
-
-        if (! $last_hash) {
-            update_option($this->key, $this->hash);
-        }
-
-        return $last_hash === $this->hash;
     }
 }
