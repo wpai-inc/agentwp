@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
+use WpAi\AgentWp\Main;
 use WpAi\AgentWp\ReactClient;
 use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
@@ -17,7 +18,7 @@ class Settings extends ReactClient
 
     private UserAuth $user;
 
-    public function __construct(\WpAi\AgentWp\Main $main)
+    public function __construct(Main $main)
     {
         parent::__construct($main);
 
@@ -30,7 +31,28 @@ class Settings extends ReactClient
     public function registrations(): void
     {
         $this->hasFooter()->registerPage();
-        $this->menuName('AgentWP Settings')->registerMenu();
+        $this
+            ->icon($this->main->staticAsset('icon.svg'))
+            ->position(76)
+            ->menuName('AgentWP')
+            ->subPages([
+                [
+                    'name' => 'AI Connection Manager',
+                    'slug' => 'connection',
+                    'data' => [],
+                ],
+                [
+                    'name' => 'Users',
+                    'slug' => 'users',
+                    'data' => [],
+                ],
+                [
+                    'name' => 'Settings',
+                    'slug' => 'settings',
+                    'data' => [],
+                ],
+            ])
+            ->registerMenu();
     }
 
     public function data(): array

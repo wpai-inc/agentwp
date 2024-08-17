@@ -8,7 +8,7 @@
     "build": "vite build",
     "clean": "rimraf agentwp agentwp.zip",
     "preview": "vite preview",
-    "copy-files": "copyfiles \"build/**/*\" \"assets/**/*\" \"server/**/*\" \"vendor/**/*\" *.php *.txt agentwp/",
+    "copy-files": "copyfiles \"build/**/*\" \"static/**/*\" \"server/**/*\" \"vendor/**/*\" *.php *.txt agentwp/",
     "zip": "zip -r agentwp.zip agentwp",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",

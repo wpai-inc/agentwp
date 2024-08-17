@@ -22,6 +22,8 @@ class Main
 
     const BUILD_DIR = 'build';
 
+    const ASSET_DIR = 'static';
+
     public string $companyName = 'AgentWP';
 
     public string $attributionUrl = 'https://agentwp.com';
@@ -64,6 +66,11 @@ class Main
     public function asset(?string $path = null): string
     {
         return $this->url(self::BUILD_DIR.'/'.$path);
+    }
+
+    public function staticAsset(?string $path = null): string
+    {
+        return $this->pluginUrl.self::ASSET_DIR.'/'.$path;
     }
 
     public function pluginPath(): string

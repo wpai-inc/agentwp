@@ -6,11 +6,38 @@ trait HasMenu
 {
     protected string $menuName;
 
+    protected string $icon;
+
+    protected array $subPages = [];
+
     protected string $pageHook = '';
+
+    protected int $position = 2;
+
+    public function position(int $position): self
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    public function icon(string $icon): self
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
 
     public function menuName(string $name): self
     {
         $this->menuName = $name;
+
+        return $this;
+    }
+
+    public function subPages(array $pages): self
+    {
+        $this->subPages = $pages;
 
         return $this;
     }
@@ -22,14 +49,27 @@ trait HasMenu
 
     public function addMenuHandler()
     {
-        $this->pageHook = add_submenu_page(
-            'options-general.php',
-            __($this->menuName, 'agent_wp'),
-            __($this->menuName, 'agent_wp'),
+        $this->pageHook = add_menu_page(
+            $this->menuName,
+            $this->menuName,
             'manage_options',
             $this->slug(),
-            [$this, 'appRoot']
+            [$this, 'appRoot'],
+            $this->icon ?? null,
+            $this->position
         );
+
+        foreach ($this->subPages as $page) {
+            add_submenu_page(
+                $this->slug(),
+                $page['name'],
+                $page['name'],
+                'manage_options',
+                $this->slug().'&'.$page['slug'],
+                [$this, 'appRoot']
+            );
+        }
+
         add_action("load-{$this->pageHook}", [$this, 'onMenuLoad']);
     }
 
