@@ -36,8 +36,6 @@ class IndexSiteData implements Cacheable, Registrable
 
     public function autoUpdate(): void
     {
-        error_log('IndexSiteData:autoUpdate');
-
         if (! $this->main->siteId() || (defined('DOING_AJAX') && DOING_AJAX)) {
             return;
         }

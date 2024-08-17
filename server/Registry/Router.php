@@ -12,6 +12,7 @@ use WpAi\AgentWp\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Controllers\QueryActionController;
 use WpAi\AgentWp\Controllers\RefreshToken;
 use WpAi\AgentWp\Controllers\SaveConnection;
+use WpAi\AgentWp\Controllers\SiteDataController;
 use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
@@ -26,6 +27,7 @@ class Router implements Registrable
         'test_route' => [TestResponse::class, 'test_response'],
         'run_action_query' => [QueryActionController::class, 'query'],
         'agentwp_users' => [GetUsers::class, 'get_users'],
+        'site_data' => [SiteDataController::class, 'maybe_send_site_data'],
         'update_user' => [UpdateUserCapabilities::class, 'update_user_capabilities'],
         'onboarding_completed' => [MakeOnboardingAsCompleted::class, 'onboarding_completed'],
         'get_unique_verification_key' => [GenerateUniqueVerificationKey::class, 'generate_unique_verification_key'],
