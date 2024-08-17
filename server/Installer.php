@@ -36,7 +36,7 @@ class Installer implements Registrable
     {
         $summarizer = (new IndexSiteSummary($this->main));
         $summarizer->scheduleNow('autoUpdate');
-        $summarizer->schedule('autoUpdate');
+        $summarizer->schedule('autoUpdate', 'weekly');
 
         (new IndexSiteData($this->main))->scheduleNow('autoUpdate');
 
