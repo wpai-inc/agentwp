@@ -1,7 +1,7 @@
 import ConnectToAwp from './SubPages/ConnectToAwp';
 import * as Tabs from '@radix-ui/react-tabs';
 import UsersManagement from '@/Page/Admin/Settings/SubPages/UsersManagement';
-import Info from '@/Page/Admin/Settings/SubPages/Info';
+import Dashboard from '@/Page/Admin/Settings/SubPages/Dashboard';
 import GeneralSettings from './SubPages/GeneralSettings';
 import { usePage } from '@/Providers/PageProvider';
 import { ReactNode } from 'react';
@@ -73,7 +73,7 @@ export default function Settings() {
           </div>
         </div>
         <SettingsTabContent value="info">
-          <Info />
+          <Dashboard />
         </SettingsTabContent>
         <SettingsTabContent value="connect">
           <ConnectToAwp />
