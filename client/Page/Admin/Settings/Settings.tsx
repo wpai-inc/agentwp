@@ -5,12 +5,15 @@ import Info from '@/Page/Admin/Settings/SubPages/Info';
 import GeneralSettings from './SubPages/GeneralSettings';
 import { usePage } from '@/Providers/PageProvider';
 import { ReactNode } from 'react';
+import LogoImg from '@/assets/awp.webp';
+import { Button } from '@/Components/ui/button';
+
+const tabClasses =
+  'px-5 py-4 flex items-center justify-center text-base leading-none select-none hover:text-brand-primary data-[state=active]:text-brand-dark  data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-brand-primary outline-none cursor-pointer';
 
 function SettingsTab( { value, title }: { value: string; title: string } ) {
   return (
-    <Tabs.Trigger
-      className="bg-white px-5 h-[45px] flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current outline-none cursor-pointer"
-      value={ value }>
+    <Tabs.Trigger className={ tabClasses } value={ value }>
       { title }
     </Tabs.Trigger>
   );
@@ -18,7 +21,7 @@ function SettingsTab( { value, title }: { value: string; title: string } ) {
 
 function SettingsTabContent( { value, children }: { value: string; children: ReactNode } ) {
   return (
-    <Tabs.Content className="grow p-5 bg-white rounded-b-md outline-none" value={ value }>
+    <Tabs.Content className="grow p-5 rounded-b-md outline-none" value={ value }>
       { children }
     </Tabs.Content>
   );
@@ -36,22 +39,39 @@ export default function Settings() {
   }
 
   return (
-    <div className="m-4">
-      <div>
-        <h1 className="text-2xl font-bold">AgentWP Settings</h1>
-      </div>
-      <Tabs.Root
-        className="flex flex-col shadow-blackA2 mt-4"
-        defaultValue={ initialTab }
-        onValueChange={ value => handleTabChange( value ) }>
-        <Tabs.List className="flex border-b border-mauve6" aria-label="Manage your account">
-          <SettingsTab value="info" title="About" />
-          { page.agentwp_manager && <SettingsTab value="connect" title="AI Connection Manager" /> }
-          { page.agentwp_users_manager && <SettingsTab value="users" title="Users" /> }
-          { page.agentwp_manager && (
-            <SettingsTab value="general_settings" title="General Settings" />
-          ) }
-        </Tabs.List>
+    <div className="-ml-5">
+      <Tabs.Root defaultValue={ initialTab } onValueChange={ value => handleTabChange( value ) }>
+        <div className="bg-white p-6 pb-0">
+          <div className="grid grid-cols-2">
+            <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
+            <div className="text-right">
+              <Button variant="brand" pill={ true }>
+                Upgrade to Pro
+              </Button>
+            </div>
+            <Tabs.List className="flex mt-5" aria-label="Manage your account">
+              <SettingsTab value="info" title="About" />
+              { page.agentwp_manager && (
+                <SettingsTab value="connect" title="AI Connection Manager" />
+              ) }
+              { page.agentwp_users_manager && <SettingsTab value="users" title="Users" /> }
+              { page.agentwp_manager && (
+                <SettingsTab value="general_settings" title="General Settings" />
+              ) }
+            </Tabs.List>
+            <Tabs.List className="flex mt-5 justify-end" aria-label="Manage your account">
+              <a className={ tabClasses } href="https://app.agentwp.com/support">
+                Support
+              </a>
+              <a className={ tabClasses } href="https://agentwp.com/blog">
+                What's New?
+              </a>
+              <a className={ tabClasses } href="https://app.agentwp.com/dashboard">
+                Account
+              </a>
+            </Tabs.List>
+          </div>
+        </div>
         <SettingsTabContent value="info">
           <Info />
         </SettingsTabContent>
