@@ -7,13 +7,11 @@ use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
 use WpAi\AgentWp\SiteData;
 use WpAi\AgentWp\Traits\HasCache;
-use WpAi\AgentWp\Traits\ScheduleEvent;
+use WpAi\AgentWp\Traits\HasScheduler;
 
-class SiteIndexer implements Cacheable, Registrable
+class IndexSiteData implements Cacheable, Registrable
 {
-    use HasCache, ScheduleEvent;
-
-    const CRON_THROTTLE = 30;
+    use HasCache, HasScheduler;
 
     private Main $main;
 
@@ -29,30 +27,24 @@ class SiteIndexer implements Cacheable, Registrable
 
     public function register()
     {
-        add_action('agentwp_send_site_index', [$this, 'autoUpdate']);
+        $this->registerActionSchedules(['autoUpdate']);
 
         add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
         add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
         add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
     }
 
-    public function sendByCron(): void
-    {
-        $this->scheduleSingleCronEvent(
-            'agentwp_send_site_index',
-            self::CRON_THROTTLE
-        );
-    }
-
     public function autoUpdate(): void
     {
+        error_log('IndexSiteData:autoUpdate');
+
         if (! $this->main->siteId() || (defined('DOING_AJAX') && DOING_AJAX)) {
             return;
         }
 
         $cache = $this->cache(SiteData::getDebugData());
 
-        if ($cache->miss()) {
+        if (! $cache->hit()) {
             $this->send($cache->getData());
         }
     }

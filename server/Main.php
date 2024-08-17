@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Factories\ClientFactory;
+use WpAi\AgentWp\Registry\IndexSiteSummary;
 use WpAi\AgentWp\Services\AccountSettings;
 use WpAi\AgentWp\Services\AwpClient;
 
@@ -43,15 +44,11 @@ class Main
         $this->auth = new UserAuth;
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
+        $this->registerSchedules();
 
-        add_filter('cron_schedules', function ($schedules) {
-            $schedules['every_minute'] = [
-                'interval' => 60,
-                'display' => __('Every minute', 'agentwp'),
-            ];
-
-            return $schedules;
-        });
+        // $summarizer = (new IndexSiteSummary($this));
+        // $summarizer->scheduleNow('autoUpdate');
+        // $summarizer->schedule('autoUpdate');
     }
 
     public function buildPath(): string
@@ -117,5 +114,17 @@ class Main
     private function runtimeApiHost()
     {
         return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://app.agentwp.com';
+    }
+
+    public function registerSchedules(): void
+    {
+        add_filter('cron_schedules', function ($schedules) {
+            $schedules['every_minute'] = [
+                'interval' => 60,
+                'display' => __('Every minute', 'agentwp'),
+            ];
+
+            return $schedules;
+        });
     }
 }
