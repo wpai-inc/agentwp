@@ -1,6 +1,7 @@
 import AppProvider from '@/Providers/AppProvider';
 import AppWrapper from '@/Page/Admin/Chat/Partials/AppWrapper';
 import Chat from '@/Components/Chat/Chat';
+import StaticChat from '@/Components/Chat/StaticChat';
 import ChatProvider from '@/Providers/ChatProvider';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import ScreenProvider from '@/Providers/ScreenProvider';
@@ -13,7 +14,7 @@ import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { InputSelectProvider } from '@/Providers/InputSelectProvider';
 import StreamListenerProvider from '@/Providers/StreamListenerProvider';
 
-export default function ChatApp() {
+export default function ChatApp( { inline = false }: { inline?: boolean } ) {
   return (
     <AppProvider>
       <AppWrapper>
@@ -28,7 +29,7 @@ export default function ChatApp() {
                         <InputSelectProvider>
                           <ChatProvider>
                             <StreamListenerProvider>
-                              <Chat />
+                              { inline ? <StaticChat /> : <Chat /> }
                             </StreamListenerProvider>
                           </ChatProvider>
                         </InputSelectProvider>

@@ -6,6 +6,7 @@ import '@/assets/styles/app.css';
 import ChatApp from '@/Components/Chat';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { PageProvider } from '@/Providers/PageProvider';
+
 declare global {
   interface Window {
     agentwp: AWPRootType;
@@ -25,7 +26,6 @@ if ( rootElement ) {
           <ChatApp />
         </PageProvider>
       </NotificationsProvider>
-      ;
     </React.StrictMode>,
   );
 } else {

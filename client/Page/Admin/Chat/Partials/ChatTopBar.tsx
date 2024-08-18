@@ -11,7 +11,7 @@ import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import { usePage } from '@/Providers/PageProvider';
 import { useChatUI } from '@/Components/Chat/Chat';
 
-export default function ChatTopBar( { handleDrag }: { handleDrag: ( e: MouseEvent ) => void } ) {
+export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEvent ) => void } ) {
   const { setChatSetting, clearHistory, isEmptyConversation } = useChat();
   const { toggle } = useChatUI();
   const { userProfileUrl } = useClient();
@@ -26,7 +26,11 @@ export default function ChatTopBar( { handleDrag }: { handleDrag: ( e: MouseEven
 
   return (
     <div
-      onMouseDown={ e => handleDrag( e.nativeEvent ) }
+      onMouseDown={ e => {
+        if ( handleDrag ) {
+          handleDrag( e.nativeEvent );
+        }
+      } }
       className={ cn(
         'py-2 px-2 cursor-move border-b border-b-brand-gray-25',
         'flex justify-between',

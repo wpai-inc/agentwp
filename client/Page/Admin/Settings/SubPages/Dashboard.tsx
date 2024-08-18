@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-// import ChatApp from '@/Components/Chat';
+import ChatApp from '@/Components/Chat';
 
 function Card( {
   children,
@@ -37,7 +37,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      { /* <ChatApp /> */ }
+      <ChatApp inline={ true } />
     </div>
   );
 }
