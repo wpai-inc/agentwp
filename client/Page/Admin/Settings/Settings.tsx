@@ -31,7 +31,7 @@ export default function Settings() {
   const { page } = usePage();
 
   const url = new URL( window.location.href );
-  const initialTab = url.searchParams.get( 'tab' ) || 'info';
+  const initialTab = url.searchParams.get( 'tab' ) || 'dashboard';
 
   function handleTabChange( value: string ) {
     url.searchParams.set( 'tab', value );
@@ -43,14 +43,19 @@ export default function Settings() {
       <Tabs.Root defaultValue={ initialTab } onValueChange={ value => handleTabChange( value ) }>
         <div className="bg-white p-6 pb-0">
           <div className="grid grid-cols-2">
-            <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
+            <div>
+              <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
+              <span className="ml-3 inline-flex rounded-full items-center justify-center bg-brand-dark text-white px-3 py-2 text-sm font-bold uppercase">
+                Free
+              </span>
+            </div>
             <div className="text-right">
               <Button variant="brand" pill={ true }>
                 Upgrade to Pro
               </Button>
             </div>
             <Tabs.List className="flex mt-5" aria-label="Manage your account">
-              <SettingsTab value="info" title="About" />
+              <SettingsTab value="dashboard" title="About" />
               { page.agentwp_manager && (
                 <SettingsTab value="connect" title="AI Connection Manager" />
               ) }
@@ -72,7 +77,7 @@ export default function Settings() {
             </Tabs.List>
           </div>
         </div>
-        <SettingsTabContent value="info">
+        <SettingsTabContent value="dashboard">
           <Dashboard />
         </SettingsTabContent>
         <SettingsTabContent value="connect">

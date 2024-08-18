@@ -28,37 +28,42 @@ class Settings extends ReactClient
         add_action('current_screen', [$this, 'maybe_get_token']);
     }
 
+    public function active(): bool
+    {
+        return is_admin() && in_array($_GET['page'], ['agentwp-admin-settings']);
+    }
+
     public function registrations(): void
     {
-        add_action('admin_enqueue_scripts', [$this, 'openChatListener']);
+        $subpages = [
+            [
+                'name' => 'AI Connection Manager',
+                'slug' => 'connection',
+                'data' => [],
+            ],
+            [
+                'name' => 'Users',
+                'slug' => 'users',
+                'data' => [],
+            ],
+            [
+                'name' => 'Settings',
+                'slug' => 'settings',
+                'data' => [],
+            ],
+            [
+                'name' => 'Open Chat',
+                'slug' => 'dashboard',
+                'data' => [],
+            ],
+        ];
 
         $this->hasFooter()->registerPage();
         $this
             ->icon($this->main->staticAsset('icon.svg'))
             ->position(76)
             ->menuName('AgentWP')
-            ->subPages([
-                [
-                    'name' => 'AI Connection Manager',
-                    'slug' => 'connection',
-                    'data' => [],
-                ],
-                [
-                    'name' => 'Users',
-                    'slug' => 'users',
-                    'data' => [],
-                ],
-                [
-                    'name' => 'Settings',
-                    'slug' => 'settings',
-                    'data' => [],
-                ],
-                [
-                    'name' => 'Open Chat',
-                    'slug' => 'open',
-                    'data' => [],
-                ],
-            ])
+            ->subPages($subpages)
             ->registerMenu();
     }
 

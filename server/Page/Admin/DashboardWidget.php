@@ -18,6 +18,17 @@ class DashboardWidget extends ReactClient
         add_action('wp_dashboard_setup', [$this, 'widget_position'], 20);
     }
 
+    public function active(): bool
+    {
+        if (! is_admin() || ! function_exists('get_current_screen')) {
+            return false;
+        }
+
+        $screen = get_current_screen();
+
+        return $screen->id == 'dashboard';
+    }
+
     public function dashboard_widget()
     {
         wp_add_dashboard_widget(
