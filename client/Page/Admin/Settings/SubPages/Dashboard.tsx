@@ -18,10 +18,10 @@ function Card( {
 export default function Dashboard() {
   return (
     <div className="grid grid-cols-4 gap-5">
-      <div className="col-span-3">
+      <div className="col-span-full md:col-span-2 xl:col-span-3">
         <div className="grid grid-cols-3 gap-5">
           <Card className="col-span-3">Dismissable admin alert</Card>
-          <div className="col-span-2">
+          <div className="col-span-full lg:col-span-2">
             <iframe
               className="w-full aspect-video"
               src="https://www.youtube.com/embed/Ur3LOqwD7ZA?si=IKM3WBy12oy42LnX"
@@ -31,13 +31,14 @@ export default function Dashboard() {
               allowFullScreen
             />
           </div>
-          <Card className="col-span-1 row-span-2">Recent conversations</Card>
-          <Card className="col-span-1">Changelog</Card>
-          <Card className="col-span-1">Quicklinks</Card>
+          <Card className="col-span-full lg:col-span-1 row-span-2">Recent conversations</Card>
+          <Card className="col-span-full lg:col-span-1">Changelog</Card>
+          <Card className="col-span-full lg:col-span-1">Quicklinks</Card>
         </div>
       </div>
-
-      <ChatApp inline={ true } />
+      <div className="col-span-full md:col-span-2 xl:col-span-1">
+        <ChatApp inline={ true } />
+      </div>
     </div>
   );
 }

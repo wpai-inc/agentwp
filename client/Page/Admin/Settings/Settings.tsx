@@ -42,7 +42,7 @@ export default function Settings() {
     <div className="-ml-5">
       <Tabs.Root defaultValue={ initialTab } onValueChange={ value => handleTabChange( value ) }>
         <div className="bg-white p-6 pb-0">
-          <div className="grid grid-cols-2">
+          <div className="flex justify-between">
             <div>
               <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
               <span className="ml-3 inline-flex rounded-full items-center justify-center bg-brand-dark text-white px-3 py-2 text-sm font-bold uppercase">
@@ -54,6 +54,8 @@ export default function Settings() {
                 Upgrade to Pro
               </Button>
             </div>
+          </div>
+          <div className="flex flex-col-reverse md:flex-row items-center md:items-end justify-center md:justify-between">
             <Tabs.List className="flex mt-5" aria-label="Manage your account">
               <SettingsTab value="dashboard" title="About" />
               { page.agentwp_manager && (
