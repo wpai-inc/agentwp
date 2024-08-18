@@ -1,20 +1,9 @@
-import { cn } from '@/lib/utils';
 import ChatApp from '@/Components/Chat';
+import LatestConvos from '../../DashboardWidget/Partials/LatestConvos';
+import { Card } from '@/Components/Admin/Card';
+import BlogFeed from '@/Components/Admin/BlogFeed';
+import QuickLinks from '../Partials/QuickLinks';
 
-function Card( {
-  children,
-  className,
-  ...rest
-}: {
-  children: React.ReactNode;
-  className?: string;
-} ) {
-  return (
-    <div className={ cn( 'bg-white rounded-md p-4', className ) } { ...rest }>
-      { children }
-    </div>
-  );
-}
 export default function Dashboard() {
   return (
     <div className="grid grid-cols-4 gap-5">
@@ -31,9 +20,15 @@ export default function Dashboard() {
               allowFullScreen
             />
           </div>
-          <Card className="col-span-full lg:col-span-1 row-span-2">Recent conversations</Card>
-          <Card className="col-span-full lg:col-span-1">Changelog</Card>
-          <Card className="col-span-full lg:col-span-1">Quicklinks</Card>
+          <Card title="Recent conversations" className="col-span-full lg:col-span-1 row-span-2">
+            <LatestConvos />
+          </Card>
+          <Card title="Changelog" className="col-span-full lg:col-span-1">
+            <BlogFeed />
+          </Card>
+          <Card title="Quicklinks" className="col-span-full lg:col-span-1">
+            <QuickLinks />
+          </Card>
         </div>
       </div>
       <div className="col-span-full md:col-span-2 xl:col-span-1">
