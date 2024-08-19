@@ -3,7 +3,7 @@ import { Button } from '@/Components/ui/button';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { usePage } from '@/Providers/PageProvider';
 import GeneralSettings from '../Partials/GeneralSettings';
-
+import DataList, { DataListItem } from '@/Components/ui/dl';
 export default function SettingsTab() {
   const adminRequest = useAdminRoute();
   const { page } = usePage();
@@ -49,17 +49,27 @@ export default function SettingsTab() {
 
   return (
     <div>
-      <GeneralSettings />
       { ! page.site_id && (
         <Button onClick={ connect } variant="brand" disabled={ connecting } isBusy={ connecting }>
           { connecting ? 'Connecting to awp. Please wait...' : 'Connect To AWP' }
         </Button>
       ) }
-      { page.site_id && (
-        <div>Your site is connected to agentwp. Your site ID is { page.site_id }</div>
-      ) }
+      <DataList>
+        <GeneralSettings />
+        { page.site_id && loggedIn && (
+          <DataListItem
+            label={ <p>Your site is connected to agentwp. Your site ID is { page.site_id }</p> }>
+            <Button
+              onClick={ disconnect }
+              variant="brand"
+              disabled={ disconnecting }
+              isBusy={ disconnecting }>
+              Disconnect your website from AWP
+            </Button>
+          </DataListItem>
+        ) }
+      </DataList>
 
-      <br />
       { page.site_id && ! loggedIn && (
         <div className="flex gap-4">
           <Button
@@ -69,17 +79,6 @@ export default function SettingsTab() {
             isBusy={ authorizing }>
             Login to AWP
           </Button>
-          <Button
-            onClick={ disconnect }
-            variant="brand"
-            disabled={ disconnecting }
-            isBusy={ disconnecting }>
-            Disconnect your website from AWP
-          </Button>
-        </div>
-      ) }
-      { page.site_id && loggedIn && (
-        <div className="flex gap-4">
           <Button
             onClick={ disconnect }
             variant="brand"
