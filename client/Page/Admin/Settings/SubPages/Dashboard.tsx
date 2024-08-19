@@ -8,11 +8,10 @@ export default function Dashboard() {
   return (
     <div className="grid grid-cols-4 gap-5">
       <div className="col-span-full md:col-span-2 xl:col-span-3">
-        <div className="grid grid-cols-3 gap-5">
-          <Card className="col-span-3">Dismissable admin alert</Card>
+        <div className="grid grid-cols-3 gap-5 h-full">
           <div className="col-span-full lg:col-span-2">
             <iframe
-              className="w-full aspect-video"
+              className="w-full h-full aspect-video"
               src="https://www.youtube.com/embed/Ur3LOqwD7ZA?si=IKM3WBy12oy42LnX"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
