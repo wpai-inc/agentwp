@@ -81,10 +81,3 @@ type streamableFieldType = {
 type AgentWpGeneralSettings = {
   cleanup_after_deactivate: boolean;
 };
-
-export enum TokenUsageStatus {
-  Normal = 0,
-  ThrottledTenant = 1,
-  ThrottledSite = 2,
-  ThrottledUser = 3,
-}

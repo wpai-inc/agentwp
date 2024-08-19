@@ -1,8 +1,13 @@
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, useEffect } from 'react';
+import { TokenUsageStatus } from '@/Types/enums';
 
 const AppContext = createContext( {
+  cooldownTime: null,
   turnedOff: false,
+  tokenUsageStatus: TokenUsageStatus.Normal,
+  setCooldownTime: ( _cooldownTime: Date ) => {},
   setTurnedOff: ( _turnedOff: boolean ) => {},
+  setTokenUsageStatus: ( _usageStatus: TokenUsageStatus ) => {},
 } );
 
 export function useApp() {
@@ -14,13 +19,33 @@ export function useApp() {
 }
 
 export default function AppProvider( { children }: { children: React.ReactNode } ) {
-  const [ turnedOff, setTurnedOff ] = useAppStorage( 'turnedOff', null );
+  const [ cooldownTime, setCooldownTime ] = useAppStorage( 'cooldownTime', null );
+  const [ turnedOff, setTurnedOff ] = useAppStorage( 'turnedOff', false );
+  const [ tokenUsageStatus, setTokenUsageStatus ] = useAppStorage(
+    'tokenUsageStatus',
+    TokenUsageStatus.Normal,
+  );
+
+  const checkCooldownTime = () => {
+    if ( cooldownTime && new Date( cooldownTime ) < new Date() ) {
+      setCooldownTime( null );
+      setTokenUsageStatus( TokenUsageStatus.Normal );
+    }
+  };
+
+  useEffect( () => {
+    checkCooldownTime();
+  }, [ cooldownTime ] );
 
   return (
     <AppContext.Provider
       value={ {
+        cooldownTime,
         turnedOff,
+        tokenUsageStatus,
+        setCooldownTime,
         setTurnedOff,
+        setTokenUsageStatus,
       } }>
       { children }
     </AppContext.Provider>

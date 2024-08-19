@@ -1,5 +1,6 @@
 import React, { createContext, FC, useContext, useState } from 'react';
-import { TokenUsageStatus } from '@/Types/types';
+import { useApp } from '@/Providers/AppProvider';
+import { TokenUsageStatus } from '@/Types/enums';
 
 interface ContextProps {
   errors: string[];
@@ -19,6 +20,7 @@ export function useError() {
 
 export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
   const [ errors, setErrors ] = useState< any[] >( [] );
+  const { setCooldownTime, setTokenUsageStatus } = useApp();
 
   const addErrors = ( errors: string[] ) => {
     setErrors( prev => {
@@ -26,24 +28,17 @@ export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children }
         ...prev,
         ...errors.map( ( err: any ) => {
           const message = err.response?.data?.message ?? err.message ?? err;
-          const usageStatus = err.response?.data?.usage_status;
           const usageCooldownTime = err.response?.data?.usage_cooldown_time;
+          const usageStatus = err.response?.data?.usage_status as TokenUsageStatus;
 
-          let fullMessage = message;
-
-          if ( usageStatus === TokenUsageStatus.ThrottledSite && usageCooldownTime ) {
-            const date = new Date( usageCooldownTime );
-            const formattedTime = new Intl.DateTimeFormat( 'en-US', {
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true,
-            } ).format( date );
-            fullMessage = `${ message } Please get back at ${ formattedTime }.`;
+          if ( usageCooldownTime && usageStatus ) {
+            setCooldownTime( new Date( usageCooldownTime ) );
+            setTokenUsageStatus( usageStatus );
           }
 
           return {
             id: err.id ?? crypto.randomUUID(),
-            message: fullMessage,
+            message: message,
           };
         } ),
       ];
