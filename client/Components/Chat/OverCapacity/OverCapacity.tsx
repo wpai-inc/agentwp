@@ -1,6 +1,6 @@
 import { Alert, AlertTitle, AlertDescription } from '@/Components/ui/alert';
-import { Button } from '@/Components/ui/button';
 import { TokenUsageStatus } from '@/Types/enums';
+import { buttonVariants } from '@/Components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface OverCapacityProps {
@@ -29,10 +29,16 @@ export default function OverCapacity( props: OverCapacityProps ) {
           </AlertDescription>
         ) }
       </div>
-      <Button type="submit" className={ cn( 'rounded-full bg-brand-primary px-3' ) }>
+      <a
+        className={ cn(
+          buttonVariants( {
+            variant: 'default',
+            className: 'rounded-full bg-brand-primary px-3',
+          } ),
+        ) }
+        href="https://app.agentwp.com/enroll/pro">
         Upgrade now
-      </Button>
+      </a>
     </Alert>
   );
 }
-0;
