@@ -25,6 +25,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Build plugin
         run: npm run build-plugin
