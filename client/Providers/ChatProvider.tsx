@@ -6,6 +6,8 @@ import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { useAdminRoute } from './AdminRouteProvider';
+import { streamableFieldType } from '@/Types/types';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -13,6 +15,12 @@ type CreateUserRequestResponse = {
 };
 
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
+
+type StoreRequestType = {
+  message: string;
+  selected_input: streamableFieldType | null;
+  site_data?: any[];
+};
 
 const ChatContext = createContext( {
   conversation: [] as UserRequestType[],
@@ -50,6 +58,7 @@ export default function ChatProvider( {
   const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
+  const adminRequest = useAdminRoute();
 
   async function clearHistory() {
     await clearConversation();
@@ -57,7 +66,16 @@ export default function ChatProvider( {
   }
 
   async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
-    const response = await client.storeConversation( { message, selected_input: selectedInput } );
+    let req: StoreRequestType = {
+      message,
+      selected_input: selectedInput,
+    };
+    const siteData = await adminRequest.get( 'site_data' );
+    if ( siteData.data?.data ) {
+      req.site_data = siteData.data.data;
+    }
+
+    const response = await client.storeConversation( req );
     return response.data;
   }
 

@@ -27,6 +27,11 @@ abstract class ReactClient implements ClientAppInterface, Registrable
      */
     abstract public function registrations(): void;
 
+    public function active(): bool
+    {
+        return true;
+    }
+
     /**
      * Register the client and anything else.
      */
@@ -34,7 +39,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     {
         $this->registrations();
 
-        if ($this->active) {
+        if ($this->active()) {
             add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
             add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
             add_filter('admin_body_class', [$this, 'bodyClass']);

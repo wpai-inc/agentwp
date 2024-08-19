@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
+use WpAi\AgentWp\Main;
 use WpAi\AgentWp\ReactClient;
 use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
@@ -17,7 +18,7 @@ class Settings extends ReactClient
 
     private UserAuth $user;
 
-    public function __construct(\WpAi\AgentWp\Main $main)
+    public function __construct(Main $main)
     {
         parent::__construct($main);
 
@@ -27,10 +28,48 @@ class Settings extends ReactClient
         add_action('current_screen', [$this, 'maybe_get_token']);
     }
 
+    public function active(): bool
+    {
+        return is_admin() && in_array($_GET['page'], ['agentwp-admin-settings']);
+    }
+
     public function registrations(): void
     {
+        $subpages = [
+            [
+                'name' => 'AI Connection Manager',
+                'slug' => 'connection',
+                'data' => [],
+            ],
+            [
+                'name' => 'Users',
+                'slug' => 'users',
+                'data' => [],
+            ],
+            [
+                'name' => 'Settings',
+                'slug' => 'settings',
+                'data' => [],
+            ],
+            [
+                'name' => 'Open Chat',
+                'slug' => 'dashboard',
+                'data' => [],
+            ],
+        ];
+
         $this->hasFooter()->registerPage();
-        $this->menuName('Agent WP Settings')->registerMenu();
+        $this
+            ->icon($this->main->staticAsset('icon.svg'))
+            ->position(76)
+            ->menuName('AgentWP')
+            ->subPages($subpages)
+            ->registerMenu();
+    }
+
+    public function openChatListener(): void
+    {
+        wp_enqueue_script('agentwp-admin', $this->main->staticAsset('/admin.js'), [], $this->main::PLUGIN_VERSION, true);
     }
 
     public function data(): array
