@@ -8,7 +8,7 @@
     "build": "vite build",
     "clean": "rimraf agentwp agentwp.zip",
     "preview": "vite preview",
-    "copy-files": "copyfiles \"build/**/*\" \"assets/**/*\" \"server/**/*\" \"vendor/**/*\" *.php *.txt agentwp/",
+    "copy-files": "copyfiles \"build/**/*\" \"static/**/*\" \"server/**/*\" \"vendor/**/*\" *.php *.txt agentwp/",
     "zip": "zip -r agentwp.zip agentwp",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
@@ -20,6 +20,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@material-design-icons/svg": "^0.14.13",
+    "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-context-menu": "^2.2.1",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",

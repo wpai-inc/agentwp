@@ -6,6 +6,11 @@ use WpAi\AgentWp\ReactClient;
 
 class Chat extends ReactClient
 {
+    public function active(): bool
+    {
+        return ! in_array($_GET['page'], ['agentwp-admin-settings']);
+    }
+
     public function registrations(): void
     {
         add_action('admin_init', [$this, 'registerChat']);

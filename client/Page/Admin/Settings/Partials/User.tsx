@@ -5,37 +5,30 @@ import { useState } from 'react';
 
 export function User( { user }: { user: AgentWpUser } ) {
   const adminRequest = useAdminRoute();
+  const [ checked, setChecked ] = useState( user.agentwp_access );
 
-  const [ theUser, setTheUser ] = useState< AgentWpUser >( user );
-  // function setManageAgentWpUsers() {
-  //     setTheUser({ ...theUser, manage_agentwp_users: !theUser.manage_agentwp_users });
-  //     adminRequest.post("/agentwp/v1/update_user", { user: theUser.id, manage_agentwp_users: !theUser.manage_agentwp_users });
-  // }
-
-  function setAgentwpAccess() {
-    setTheUser( { ...theUser, agentwp_access: ! theUser.agentwp_access } );
+  function setAgentwpAccess( value: boolean ) {
+    setChecked( value );
     adminRequest.post( 'update_user', {
-      user: theUser.id,
-      agentwp_access: ! theUser.agentwp_access,
+      user: user.id,
+      agentwp_access: value,
     } );
   }
 
   return (
-    <div
-      key={ theUser.id }
-      className="flex justify-start gap-4 items-center p-2 bg-gray-100 rounded-xl mt-4">
-      <img src={ theUser.image } alt={ theUser.name } className={ 'w-8 h-8 rounded-full' } />
-      <div>{ theUser.name }</div>
-      { theUser.is_current_user && <Tag>YOU</Tag> }
-      <Tag>{ theUser.role }</Tag>
-      <div className={ 'flex-grow flex justify-end' }>
-        <input
-          disabled={ theUser.is_current_user }
-          type="checkbox"
-          checked={ theUser.agentwp_access }
-          onChange={ () => setAgentwpAccess() }
-        />
+    <div className="flex justify-between items-center p-2 odd:bg-gray-100">
+      <div className="flex items-center gap-4">
+        <img src={ user.image } alt={ user.name } className={ 'w-8 h-8 rounded-full' } />
+        <div>{ user.name }</div>
+        { user.is_current_user && <Tag>YOU</Tag> }
+        <Tag>{ user.role }</Tag>
       </div>
+      <input
+        type="checkbox"
+        disabled={ user.is_current_user }
+        checked={ checked }
+        onChange={ e => setAgentwpAccess( e.target.checked ) }
+      />
     </div>
   );
 }

@@ -8,8 +8,14 @@ import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ClientProvider } from '@/Providers/ClientProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
-
 import '@/assets/styles/app.css';
+import { AWPRootType } from '@/Types/types';
+
+declare global {
+  interface Window {
+    agentwp: AWPRootType;
+  }
+}
 
 const rootElement = document.getElementById( 'agentwp-admin-settings' );
 
@@ -17,10 +23,11 @@ declare const agentwp_settings: PageData;
 
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
+  window.agentwp = rootElement as AWPRootType;
 
   root.render(
     <React.StrictMode>
-      <PageProvider page={ agentwp_settings } root={ rootElement }>
+      <PageProvider page={ agentwp_settings }>
         <NotificationsProvider>
           <ErrorProvider>
             <AdminRouteProvider>

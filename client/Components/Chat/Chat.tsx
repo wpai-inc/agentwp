@@ -11,6 +11,7 @@ import {
 import { cn } from '@/lib/utils';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
+import HotKeyProvider from '@/Providers/HotKeyProvider';
 import Conversation from './Convo/Conversation';
 import { usePosition } from '@/Hooks/position';
 import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
@@ -50,7 +51,7 @@ export default function Chat() {
   const [ isOpening, setIsOpening ] = useState( false );
   const [ isClosing, setIsClosing ] = useState( false );
   const [ shouldAnimate, setShouldAnimate ] = useState( false );
-  const restoringRef = useRef(false);
+  const restoringRef = useRef( false );
   const noTransition = { duration: 0 };
   const transition: ValueAnimationTransition = {
     type: 'spring',
@@ -155,83 +156,85 @@ export default function Chat() {
     setShouldAnimate( true );
     maximizeWindow();
 
-    setTimeout(() => {
+    setTimeout( () => {
       setShouldAnimate( false );
-    }, 500);
+    }, 500 );
   }
 
   function handleRestore() {
     restoringRef.current = true;
     setShouldAnimate( true );
     restoreWindow();
-    
-    setTimeout(() => {
+
+    setTimeout( () => {
       restoringRef.current = false;
       setShouldAnimate( false );
-    }, 500);
+    }, 500 );
   }
 
   return (
     canAccessAgent && (
       <ChatUIContext.Provider value={ { toggle, open, setOpen } }>
-        <div
-          ref={ scope }
-          onMouseEnter={ () => setIsHovering( true ) }
-          onMouseLeave={ () => setIsHovering( false ) }
-          className={ cn(
-            'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000] origin-bottom-right',
-            {
-              'user-select-none': isDragging,
-              'overflow-hidden': isOpening || isClosing,
-            },
-          ) }>
-          <WindowActions
-            toggle={ toggle }
-            handleDrag={ onDrag }
+        <HotKeyProvider>
+          <div
+            ref={ scope }
             onMouseEnter={ () => setIsHovering( true ) }
-            show={ isHovering || isDragging }
-            isMaximized={ isMaximized }
-            maximizeWindow={ handleMaximize }
-            restoreWindow={ handleRestore }
-          />
-          <ChatTopBar handleDrag={ onDrag } />
-          <Conversation />
-          <ResizeHandles resizeHandler={ onChatWindowResize } />
-        </div>
-        <ContextMenu>
-          <ContextMenuTrigger>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
-                </TooltipTrigger>
-                <TooltipContent side="right" align="center">
-                  <p>
-                    { open ? (
-                      <>
-                        Click to minimize
-                        <br /> AgentWP.
-                      </>
-                    ) : (
-                      <>
-                        AgentWP is hidden.
-                        <br /> Click to show.
-                      </>
-                    ) }
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </ContextMenuTrigger>
-          <ContextMenuContent>
-            <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
-              <ContextMenuIcon>
-                <PowerOffIcon />
-              </ContextMenuIcon>
-              Turn off
-            </ContextMenuItem>
-          </ContextMenuContent>
-        </ContextMenu>
+            onMouseLeave={ () => setIsHovering( false ) }
+            className={ cn(
+              'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000] origin-bottom-right',
+              {
+                'user-select-none': isDragging,
+                'overflow-hidden': isOpening || isClosing,
+              },
+            ) }>
+            <WindowActions
+              toggle={ toggle }
+              handleDrag={ onDrag }
+              onMouseEnter={ () => setIsHovering( true ) }
+              show={ isHovering || isDragging }
+              isMaximized={ isMaximized }
+              maximizeWindow={ handleMaximize }
+              restoreWindow={ handleRestore }
+            />
+            <ChatTopBar handleDrag={ onDrag } />
+            <Conversation />
+            <ResizeHandles resizeHandler={ onChatWindowResize } />
+          </div>
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
+                  </TooltipTrigger>
+                  <TooltipContent side="right" align="center">
+                    <p>
+                      { open ? (
+                        <>
+                          Click to minimize
+                          <br /> AgentWP.
+                        </>
+                      ) : (
+                        <>
+                          AgentWP is hidden.
+                          <br /> Click to show.
+                        </>
+                      ) }
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </ContextMenuTrigger>
+            <ContextMenuContent>
+              <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
+                <ContextMenuIcon>
+                  <PowerOffIcon />
+                </ContextMenuIcon>
+                Turn off
+              </ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
+        </HotKeyProvider>
       </ChatUIContext.Provider>
     )
   );

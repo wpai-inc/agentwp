@@ -64,42 +64,6 @@ class PageData implements Registrable
         <script>
             const agentwp_settings = <?php echo json_encode($agentwp_settings); ?>;
         </script>
-        <style>
-            body.agentwp-admin-settings {
-                background-color: #ffffff;
-            }
-
-            .agentwp-components-snackbar-list {
-                position: fixed;
-                top: 38px;
-                right: 32px;
-                display: flex;
-                flex-direction: column-reverse;
-                align-items: flex-end;
-            }
-
-            .agentwp-components-snackbar-list-left {
-                left: 32px;
-                right: unset;
-            }
-
-            .components-snackbar {
-                padding: 10px 40px;
-                color: #fff;
-            }
-
-            .agentwp-error-notification {
-                background: #ab0909;
-            }
-
-            .agentwp-info-notification {
-                background: #646464;
-            }
-
-            .agentwp-default-notification {
-                background: #0e876a;
-            }
-        </style>
 <?php
     }
 }

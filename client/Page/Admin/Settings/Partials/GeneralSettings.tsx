@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { Switch } from '@/Components/ui/switch';
 import { usePage } from '@/Providers/PageProvider';
+import { DataListItem } from '@/Components/ui/dl';
 
 export default function GeneralSettings() {
   const adminRequest = useAdminRoute();
@@ -24,17 +25,14 @@ export default function GeneralSettings() {
   }
 
   return (
-    <div className=" max-w-[720px] text-base">
-      <label className="flex gap-2 items-center">
-        <Switch
-          id="cleanup_after_deactivate"
-          checked={ generalSettings?.cleanup_after_deactivate }
-          onCheckedChange={ ( checked: boolean ) =>
-            updateSetting( 'cleanup_after_deactivate', checked )
-          }
-        />
-        Clean up agentwp plugin data after deactivation
-      </label>
-    </div>
+    <DataListItem label={ <label>Clean up agentwp plugin data after deactivation</label> }>
+      <Switch
+        id="cleanup_after_deactivate"
+        checked={ generalSettings?.cleanup_after_deactivate }
+        onCheckedChange={ ( checked: boolean ) =>
+          updateSetting( 'cleanup_after_deactivate', checked )
+        }
+      />
+    </DataListItem>
   );
 }

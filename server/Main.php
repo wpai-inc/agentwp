@@ -22,6 +22,8 @@ class Main
 
     const BUILD_DIR = 'build';
 
+    const ASSET_DIR = 'static';
+
     public string $companyName = 'AgentWP';
 
     public string $attributionUrl = 'https://agentwp.com';
@@ -44,6 +46,7 @@ class Main
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
         $this->registerSchedules();
+        $this->registerAdminStyles();
     }
 
     public function buildPath(): string
@@ -64,6 +67,11 @@ class Main
     public function asset(?string $path = null): string
     {
         return $this->url(self::BUILD_DIR.'/'.$path);
+    }
+
+    public function staticAsset(?string $path = null): string
+    {
+        return $this->pluginUrl.self::ASSET_DIR.'/'.$path;
     }
 
     public function pluginPath(): string
@@ -109,6 +117,15 @@ class Main
     private function runtimeApiHost()
     {
         return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://app.agentwp.com';
+    }
+
+    public function registerAdminStyles(): void
+    {
+        if (is_admin()) {
+            add_action('admin_enqueue_scripts', function () {
+                wp_enqueue_style('agentwp-admin', $this->staticAsset('admin.css'), [], self::PLUGIN_VERSION);
+            });
+        }
     }
 
     public function registerSchedules(): void

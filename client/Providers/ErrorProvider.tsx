@@ -24,7 +24,7 @@ export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children }
       return [
         ...prev,
         ...errors.map( ( err: any ) => ( {
-          id: err.id ?? crypto.randomUUID(),
+          id: err.id ?? window.crypto.randomUUID(),
           message: err.message ?? err,
         } ) ),
       ];
