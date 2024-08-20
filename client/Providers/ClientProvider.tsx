@@ -3,6 +3,7 @@ export const ClientContext = createContext< any | undefined >( undefined );
 import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
 import { useError } from '@/Providers/ErrorProvider';
+import { HistoryData } from '@/Types/types';
 
 export function useClient() {
   const client = useContext( ClientContext );
@@ -16,33 +17,16 @@ type ErrorType = {
   message: string;
 };
 
-export type HistoryType = {
-  items: {
-    data: HistoryItem[];
-  };
-  lastRequest?: {
-    id: string;
-    createdAt: string;
-    humanCreatedAt: string;
-    message: string;
-  };
-};
-
-export type HistoryItem = {
-  createdAt: string;
-  humanCreatedAt: string;
-};
-
 export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
   const { addErrors } = useError();
 
   const userProfileUrl = page.api_host + '/dashboard';
 
-  async function getHistory( since?: string ): Promise< HistoryType[] > {
+  async function getHistory( since?: string ): Promise< HistoryData[] > {
     return tryRequest( async () => {
       const response = await client.getHistory( since );
-      return response.data as HistoryType[];
+      return response.data as HistoryData[];
     } );
   }
 

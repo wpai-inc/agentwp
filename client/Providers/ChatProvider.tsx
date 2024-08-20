@@ -7,7 +7,7 @@ import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useAdminRoute } from './AdminRouteProvider';
-import { streamableFieldType } from '@/Types/types';
+import { StreamableFieldType } from '@/Types/types';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -18,7 +18,7 @@ type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 type StoreRequestType = {
   message: string;
-  selected_input: streamableFieldType | null;
+  selected_input: StreamableFieldType | null;
   site_data?: any[];
 };
 

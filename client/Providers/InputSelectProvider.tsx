@@ -4,14 +4,14 @@ import {
   getSelectedInputField,
   getSelectedPostTitle,
 } from '@/Services/SelectedFields';
-import type { streamableFieldType } from '@/Types/types';
+import type { StreamableFieldType } from '@/Types/types';
 import { useScreen } from '@/Providers/ScreenProvider';
 
 declare const wp: any;
 
 type ContextProps = {
-  selectedInput: streamableFieldType | null;
-  setSelectedInput: React.Dispatch< React.SetStateAction< streamableFieldType | null > >;
+  selectedInput: StreamableFieldType | null;
+  setSelectedInput: React.Dispatch< React.SetStateAction< StreamableFieldType | null > >;
 };
 export const InputSelectContext = createContext< ContextProps | undefined >( undefined );
 
@@ -26,7 +26,7 @@ export const useInputSelect = () => {
 };
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
-  const [ selectedInput, setSelectedInput ] = useState< streamableFieldType | null >( null );
+  const [ selectedInput, setSelectedInput ] = useState< StreamableFieldType | null >( null );
   const selectedInputRef = useRef< null | HTMLInputElement | HTMLTextAreaElement | HTMLElement >(
     null,
   );

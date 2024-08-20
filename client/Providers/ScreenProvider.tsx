@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toJpeg } from 'html-to-image';
 import { useClient } from '@/Providers/ClientProvider';
-import type { streamableFieldType } from '@/Types/types';
+import type { StreamableFieldType } from '@/Types/types';
 
 type postContentType = {
   post_content: string;
@@ -14,7 +14,7 @@ type ScreenType = {
   links: string[];
   screenshot?: string;
   post?: postContentType;
-  selectedInput?: streamableFieldType;
+  selectedInput?: StreamableFieldType;
 };
 
 type ScreenContextType = {
