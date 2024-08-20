@@ -76,7 +76,7 @@ export type GutenbergStreamType = {
   summary: string;
 };
 
-type selectedInputType = {
+type SelectedInputType = {
   inputPath: string;
   inputLabel: string;
   inputName: string | null;
@@ -84,11 +84,23 @@ type selectedInputType = {
   inputValue: string | null;
 };
 
-type streamableFieldType = {
+type StreamableFieldType = {
   type: string;
-  data: selectedInputType | null;
+  data: SelectedInputType | null;
 };
 
 type AgentWpGeneralSettings = {
   cleanup_after_deactivate: boolean;
+};
+
+export type HistoryData = {
+  conversationId: number;
+  userRequestId: number;
+  siteId: string;
+  userId: number;
+  wpUserId: number;
+  message: string;
+  conversationCreatedAt: string;
+  userRequestCreatedAt: string;
+  humanCreatedAt: string;
 };

@@ -1,12 +1,12 @@
 import { useInputSelect } from '@/Providers/InputSelectProvider';
 import { ChatNotice } from '../Alerts/Notice';
-import type { streamableFieldType } from '@/Types/types';
+import type { StreamableFieldType } from '@/Types/types';
 import CloseIcon from '@material-design-icons/svg/outlined/close.svg?react';
 
 export default function ContentContext( {
   selectedInput,
 }: {
-  selectedInput: streamableFieldType;
+  selectedInput: StreamableFieldType;
 } ) {
   const { setSelectedInput } = useInputSelect();
 
