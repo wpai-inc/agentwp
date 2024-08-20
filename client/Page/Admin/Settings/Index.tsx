@@ -42,5 +42,5 @@ if ( rootElement ) {
   );
 } else {
   // Handle the case where the root element is not found
-  console.error( 'Root element agentwp-admin-settings not found' );
+  console.error( 'Root element not found' );
 }

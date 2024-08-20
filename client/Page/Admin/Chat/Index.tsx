@@ -30,5 +30,5 @@ if ( rootElement ) {
   );
 } else {
   // Handle the case where the root element is not found
-  console.error( 'Root element agentwp-admin-chat not found' );
+  console.error( 'Root element not found' );
 }
