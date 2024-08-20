@@ -74,6 +74,7 @@
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@types/tinymce": "^4.6.9",
     "@vitejs/plugin-react": "^4.2.1",
     "@wpai/schemas": "git+https://github.com/wpai-inc/schemas.git#main",
     "ajv": "^8.12.0",

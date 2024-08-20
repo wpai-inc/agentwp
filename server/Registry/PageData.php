@@ -21,6 +21,7 @@ class PageData implements Registrable
     public function register(): void
     {
         add_action('admin_head', [$this, 'pageData']);
+        add_action('elementor/editor/before_enqueue_scripts', [$this, 'pageData']);
     }
 
     public function pageData()

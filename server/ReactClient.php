@@ -41,7 +41,11 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
         if ($this->active()) {
             add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
+            add_action('elementor/editor/after_enqueue_scripts', [$this, 'enqueue_client_assets'], 100);
+
             add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
+            add_action('elementor/editor/after_enqueue_scripts', [$this, 'registerPageProps'], 101);
+
             add_filter('admin_body_class', [$this, 'bodyClass']);
             add_action('wp_ajax_'.$this->slug('_'), [$this, 'registerControllers']);
         }
@@ -96,6 +100,10 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     public function appRoot(): void
     {
         ?>
+        <script>
+            // add body classes
+            document.body.classList.add('<?php echo $this->slug() ?>');
+        </script>
         <noscript>
             <div class="no-js">
                 <?php

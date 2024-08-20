@@ -1,14 +1,25 @@
 import { generateUniqueSelector } from '@/lib/utils';
 import { Dispatch, MutableRefObject } from 'react';
+import { Editor } from 'tinymce';
 
 export default function getSelectedInputField(
   setSelectedInput: Dispatch< React.SetStateAction< any > >,
-  selectedInputRef: MutableRefObject< null | HTMLInputElement | HTMLTextAreaElement | HTMLElement >,
+  selectedInputRef: MutableRefObject<
+    null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
+  >,
 ) {
   const excludeKeywords = [ 'search' ];
 
-  document.body.addEventListener( 'focusin', function ( event ) {
+  const iframe = document.querySelector( 'iframe#elementor-preview-iframe' ) as HTMLIFrameElement;
+  if ( iframe ) {
+    iframe.contentWindow?.addEventListener( 'focusin', function ( event ) {
+      handleElementFocus( event );
+    } );
+  }
+
+  function handleElementFocus( event: Event ) {
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLElement;
+    console.log( 'focusin', inputElement );
     if (
       ( ( inputElement.tagName === 'INPUT' &&
         'type' in inputElement &&
@@ -36,8 +47,11 @@ export default function getSelectedInputField(
       let inputLabel = '';
       if ( inputId ) {
         inputLabel = document.querySelector( `label[for="${ inputId }"]` )?.textContent || '';
-      } else if ( inputName ) {
+      } else if ( inputElement ) {
         inputLabel = document.querySelector( `label[for="${ inputName }"]` )?.textContent || '';
+      }
+      if ( ! inputLabel ) {
+        inputLabel = inputElement.type || '';
       }
 
       selectedInputRef.current = inputElement;
@@ -55,21 +69,22 @@ export default function getSelectedInputField(
           inputValue,
         },
       } );
-    }
+      console.log( 'inputElement', inputElement );
 
-    selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
-      const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
-      if ( inputElement === selectedInputRef.current ) {
-        setSelectedInput( ( prev: any ) => ( {
-          ...prev,
-          data: {
-            ...prev.data,
-            inputValue: inputElement.value,
-          },
-        } ) );
-      }
-    } );
-  } );
+      selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
+        const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
+        if ( inputElement === selectedInputRef.current ) {
+          setSelectedInput( ( prev: any ) => ( {
+            ...prev,
+            data: {
+              ...prev.data,
+              inputValue: inputElement.value,
+            },
+          } ) );
+        }
+      } );
+    }
+  }
 
   document.addEventListener( 'mousedown', event => {
     const clickedElement = event.target as HTMLElement;

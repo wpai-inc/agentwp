@@ -28,13 +28,15 @@ export function WriteToInputField( content: string, selectedInput: StreamableFie
         return;
       }
 
-      console.log( 'inputElement', inputElement.tagName );
-
       if ( inputElement.tagName === 'INPUT' || inputElement.tagName === 'TEXTAREA' ) {
         inputElement.value = updatedInputField.content;
       } else {
         inputElement.innerText = updatedInputField.content;
       }
+
+      // trigger chnage event
+      inputElement.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+      inputElement.dispatchEvent( new Event( 'keyup', { bubbles: true } ) );
 
       return updatedInputField;
     }

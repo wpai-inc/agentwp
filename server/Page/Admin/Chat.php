@@ -14,6 +14,7 @@ class Chat extends ReactClient
     public function registrations(): void
     {
         add_action('admin_init', [$this, 'registerChat']);
+        add_action('elementor/app/init', [$this, 'registerChat']);
     }
 
     public function data(): array
@@ -24,5 +25,6 @@ class Chat extends ReactClient
     public function registerChat(): void
     {
         add_action('in_admin_header', [$this, 'appRoot'], 100);
+        add_action('elementor/editor/wp_head', [$this, 'appRoot'], 100);
     }
 }
