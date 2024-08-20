@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import {
+  getSelectedElementorField,
   getSelectedGutenbergBlock,
   getSelectedInputField,
   getSelectedPostTitle,
@@ -39,6 +40,7 @@ export const InputSelectProvider = ( { children }: { children: ReactNode } ) => 
     getSelectedGutenbergBlock( setSelectedInput );
     getSelectedWysiwyg( setSelectedInput, selectedInputRef );
     getSelectedPostTitle( setSelectedInput );
+    getSelectedElementorField( setSelectedInput, selectedInputRef );
   }, [] );
 
   useEffect( () => {

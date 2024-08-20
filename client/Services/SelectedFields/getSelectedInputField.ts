@@ -2,20 +2,17 @@ import { generateUniqueSelector } from '@/lib/utils';
 import { Dispatch, MutableRefObject } from 'react';
 import { Editor } from 'tinymce';
 
+const excludeKeywords = [ 'search' ];
+
 export default function getSelectedInputField(
   setSelectedInput: Dispatch< React.SetStateAction< any > >,
   selectedInputRef: MutableRefObject<
     null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
   >,
 ) {
-  const excludeKeywords = [ 'search' ];
-
-  const iframe = document.querySelector( 'iframe#elementor-preview-iframe' ) as HTMLIFrameElement;
-  if ( iframe ) {
-    iframe.contentWindow?.addEventListener( 'focusin', function ( event ) {
-      handleElementFocus( event );
-    } );
-  }
+  window.addEventListener( 'focusin', function ( event ) {
+    handleElementFocus( event );
+  } );
 
   function handleElementFocus( event: Event ) {
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLElement;
@@ -28,61 +25,7 @@ export default function getSelectedInputField(
         ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
       ! inputElement.closest( '#agentwp-admin-chat' )
     ) {
-      const inputName = inputElement.getAttribute( 'name' );
-      const inputId = inputElement.getAttribute( 'id' );
-      if (
-        excludeKeywords.some( keyword => {
-          return (
-            inputName?.includes( keyword ) ||
-            inputId?.includes( keyword ) ||
-            inputElement.getAttribute( 'class' )?.includes( keyword ) ||
-            inputElement.getAttribute( 'placeholder' )?.includes( keyword )
-          );
-        } )
-      ) {
-        return;
-      }
-
-      const inputPath = generateUniqueSelector( inputElement );
-      let inputLabel = '';
-      if ( inputId ) {
-        inputLabel = document.querySelector( `label[for="${ inputId }"]` )?.textContent || '';
-      } else if ( inputElement ) {
-        inputLabel = document.querySelector( `label[for="${ inputName }"]` )?.textContent || '';
-      }
-      if ( ! inputLabel ) {
-        inputLabel = inputElement.type || '';
-      }
-
-      selectedInputRef.current = inputElement;
-      const inputValue =
-        ( inputElement as HTMLInputElement | HTMLTextAreaElement ).value ||
-        inputElement.innerText ||
-        '';
-      setSelectedInput( {
-        type: 'input',
-        data: {
-          inputPath,
-          inputLabel,
-          inputName,
-          inputId,
-          inputValue,
-        },
-      } );
-      console.log( 'inputElement', inputElement );
-
-      selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
-        const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
-        if ( inputElement === selectedInputRef.current ) {
-          setSelectedInput( ( prev: any ) => ( {
-            ...prev,
-            data: {
-              ...prev.data,
-              inputValue: inputElement.value,
-            },
-          } ) );
-        }
-      } );
+      handleSelectedElement( inputElement, setSelectedInput, selectedInputRef );
     }
   }
 
@@ -94,6 +37,70 @@ export default function getSelectedInputField(
     ) {
       selectedInputRef.current = null;
       setSelectedInput( null );
+    }
+  } );
+}
+
+export function handleSelectedElement(
+  inputElement: HTMLInputElement | HTMLTextAreaElement | HTMLElement,
+  setSelectedInput: Dispatch< React.SetStateAction< any > >,
+  selectedInputRef: MutableRefObject<
+    null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
+  >,
+) {
+  const inputName = inputElement.getAttribute( 'name' );
+  const inputId = inputElement.getAttribute( 'id' );
+  if (
+    excludeKeywords.some( keyword => {
+      return (
+        inputName?.includes( keyword ) ||
+        inputId?.includes( keyword ) ||
+        inputElement.getAttribute( 'class' )?.includes( keyword ) ||
+        inputElement.getAttribute( 'placeholder' )?.includes( keyword )
+      );
+    } )
+  ) {
+    return;
+  }
+
+  const inputPath = generateUniqueSelector( inputElement );
+  let inputLabel = '';
+  if ( inputId ) {
+    inputLabel = document.querySelector( `label[for="${ inputId }"]` )?.textContent || '';
+  } else if ( inputElement ) {
+    inputLabel = document.querySelector( `label[for="${ inputName }"]` )?.textContent || '';
+  }
+  if ( ! inputLabel ) {
+    inputLabel = inputElement.type || '';
+  }
+
+  selectedInputRef.current = inputElement;
+  const inputValue =
+    ( inputElement as HTMLInputElement | HTMLTextAreaElement ).value ||
+    inputElement.innerText ||
+    '';
+  setSelectedInput( {
+    type: 'input',
+    data: {
+      inputPath,
+      inputLabel,
+      inputName,
+      inputId,
+      inputValue,
+    },
+  } );
+  console.log( 'inputElement', inputElement );
+
+  selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
+    const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
+    if ( inputElement === selectedInputRef.current ) {
+      setSelectedInput( ( prev: any ) => ( {
+        ...prev,
+        data: {
+          ...prev.data,
+          inputValue: inputElement.value,
+        },
+      } ) );
     }
   } );
 }
