@@ -39,25 +39,23 @@ export default function Wizard() {
 
   useEffect( () => {
     if ( isConnected() ) {
-      setSteps(
-        steps.map( ( step, index ) => {
-          if ( index === 1 ) {
-            return {
-              ...step,
-              checked: true,
-              active: false,
-            };
-          }
-          if ( index === 2 ) {
-            return {
-              ...step,
-              checked: false,
-              active: true,
-            };
-          }
-          return step;
-        } ),
-      );
+      setSteps( [
+        {
+          text: 'Install Plugin',
+          checked: true,
+          active: false,
+        },
+        {
+          text: 'Connect AI',
+          checked: true,
+          active: false,
+        },
+        {
+          text: 'User Access',
+          checked: false,
+          active: true,
+        },
+      ] );
     }
   }, [] );
 
