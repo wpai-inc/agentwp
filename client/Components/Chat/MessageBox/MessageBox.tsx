@@ -43,7 +43,7 @@ export default function MessageBox() {
     if ( e.key === 'ArrowUp' || e.key === 'ArrowDown' ) {
       e.preventDefault();
       setCommandMenuFocused( true );
-    } else if ( e.key === 'Enter' && ( e.metaKey || e.ctrlKey ) ) {
+    } else if ( e.key === 'Enter' && ! e.metaKey && ! e.ctrlKey && ! e.shiftKey && ! e.altKey ) {
       send( message );
     } else {
       setCommandMenuFocused( false );
