@@ -9,6 +9,10 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
   const { toggle } = useChatUI();
   const { setSince } = useUserRequests();
 
+  /**
+   * Close the chat setting with
+   * the escape key
+   */
   useEffect( () => {
     if ( chatSetting ) {
       const handleEscape = ( e: KeyboardEvent ) => {
@@ -22,6 +26,23 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
       };
     }
   }, [ chatSetting ] );
+
+  /**
+   * Toggle the chat with the
+   * CMD + L key
+   */
+  useEffect( () => {
+    const handleToggle = ( e: KeyboardEvent ) => {
+      e.preventDefault();
+      if ( ( e.metaKey || e.ctrlKey ) && e.key === 'l' ) {
+        toggle();
+      }
+    };
+    window.addEventListener( 'keydown', handleToggle );
+    return () => {
+      window.removeEventListener( 'keydown', handleToggle );
+    };
+  }, [ toggle ] );
 
   /**
    * Custom Event Listener for Chat Since
