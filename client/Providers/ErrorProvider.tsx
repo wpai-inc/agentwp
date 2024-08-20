@@ -1,4 +1,6 @@
 import React, { createContext, FC, useContext, useState } from 'react';
+import { useApp } from '@/Providers/AppProvider';
+import { TokenUsageStatus } from '@/Types/enums';
 
 interface ContextProps {
   errors: string[];
@@ -18,15 +20,27 @@ export function useError() {
 
 export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
   const [ errors, setErrors ] = useState< any[] >( [] );
+  const { setCooldownTime, setTokenUsageStatus } = useApp();
 
   const addErrors = ( errors: string[] ) => {
     setErrors( prev => {
       return [
         ...prev,
-        ...errors.map( ( err: any ) => ( {
-          id: err.id ?? window.crypto.randomUUID(),
-          message: err.message ?? err,
-        } ) ),
+        ...errors.map( ( err: any ) => {
+          const message = err.response?.data?.message ?? err.message ?? err;
+          const usageCooldownTime = err.response?.data?.usage_cooldown_time;
+          const usageStatus = err.response?.data?.usage_status as TokenUsageStatus;
+
+          if ( usageCooldownTime && usageStatus ) {
+            setCooldownTime( new Date( usageCooldownTime ) );
+            setTokenUsageStatus( usageStatus );
+          }
+
+          return {
+            id: err.id ?? crypto.randomUUID(),
+            message: message,
+          };
+        } ),
       ];
     } );
     setTimeout( () => {
