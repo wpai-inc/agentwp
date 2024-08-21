@@ -5,23 +5,20 @@ import { usePage } from '@/Providers/PageProvider';
 import { DataListItem } from '@/Components/ui/dl';
 
 export default function GeneralSettings() {
-  const { adminRequest } = useAdminRoute();
+  const { tryRequest } = useAdminRoute();
   const { page } = usePage();
   const [ generalSettings, setGeneralSettings ] = useState( page.general_settings );
 
-  function updateSetting( key: string, newValue: any ) {
-    const new_general_settings = { ...generalSettings, [ key ]: newValue };
-
-    setGeneralSettings( new_general_settings );
-
-    adminRequest
-      .post( 'update_general_settings', new_general_settings )
-      .then( () => {
-        console.log( 'Settings saved' );
-      } )
-      .catch( ( error: any ) => {
-        console.error( error );
-      } );
+  async function updateSetting( key: string, newValue: any ) {
+    const old_general_settings = generalSettings;
+    const new_general_settings = { ...old_general_settings, [ key ]: newValue };
+    await tryRequest(
+      'post',
+      'update_general_settings',
+      new_general_settings,
+      () => setGeneralSettings( new_general_settings ),
+      () => setGeneralSettings( old_general_settings ),
+    );
   }
 
   return (

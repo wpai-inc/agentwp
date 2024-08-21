@@ -7,7 +7,6 @@ export default function ConnectButton() {
   const { page } = usePage();
 
   const { adminRequest } = useAdminRoute();
-
   const [ connecting, setConnecting ] = useState( false );
 
   function connect() {

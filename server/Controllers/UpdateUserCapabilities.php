@@ -12,7 +12,6 @@ class UpdateUserCapabilities extends BaseController
 
     public function update_user_capabilities(): void
     {
-        $this->respondWithError("something happened", 500);
         $this->verifyNonce();
 
         $data = json_decode(file_get_contents('php://input'), true);
