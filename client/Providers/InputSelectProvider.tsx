@@ -29,7 +29,7 @@ export const useInputSelect = () => {
 };
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
-  const [ selectedInput, setSelectedInput ] = useState< streamableFieldType | null >( null );
+  const [ selectedInput, setSelectedInput ] = useState< StreamableFieldType | null >( null );
   const selectedInputRef = useRef<
     null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
   >( null );
