@@ -2,22 +2,24 @@
 
 namespace WpAi\AgentWp\Registry;
 
-use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Controllers\DisconnectSite;
-use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
-use WpAi\AgentWp\Controllers\GetUsers;
+use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Controllers\Logout;
-use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
+use WpAi\AgentWp\Controllers\GetUsers;
+use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Controllers\RefreshToken;
+use WpAi\AgentWp\Controllers\TestResponse;
+use WpAi\AgentWp\Controllers\AddCodeSnippet;
+use WpAi\AgentWp\Controllers\DisconnectSite;
+use WpAi\AgentWp\Controllers\SaveConnection;
+use WpAi\AgentWp\Controllers\ValidateWebsite;
+use WpAi\AgentWp\Controllers\SiteDataController;
+use WpAi\AgentWp\Controllers\GetCodeSnippetPlugin;
 use WpAi\AgentWp\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Controllers\QueryActionController;
-use WpAi\AgentWp\Controllers\RefreshToken;
-use WpAi\AgentWp\Controllers\SaveConnection;
-use WpAi\AgentWp\Controllers\SiteDataController;
-use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
-use WpAi\AgentWp\Controllers\ValidateWebsite;
-use WpAi\AgentWp\Main;
+use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
+use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
 
 class Router implements Registrable
 {
@@ -38,6 +40,8 @@ class Router implements Registrable
         'manual_activation' => [ManuallyActivateAgent::class, 'activate'],
         'refresh_token' => [RefreshToken::class, 'refresh'],
         'update_general_settings' => [UpdateGeneralSettings::class, 'update_settings'],
+        'code_snippet_plugin' => [GetCodeSnippetPlugin::class, 'code_snippet_plugin'],
+        'add_snippet' => [AddCodeSnippet::class, 'add_snippet'],
     ];
 
     private Main $main;
