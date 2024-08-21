@@ -51,6 +51,7 @@ export function AdminRouteProvider( { children }: { children: React.ReactNode } 
       }
     } catch ( error ) {
       if ( onFailure ) {
+        // @todo: Needs some typing that corresponse with our controllers and the wp_send_json_error function
         const msg = error.response.data.data;
         notify.error( msg );
         onFailure( msg );
