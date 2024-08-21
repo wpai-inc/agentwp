@@ -61,7 +61,7 @@ class Settings extends ReactClient
         $this->hasFooter()->registerPage();
         $this
             ->icon($this->main->staticAsset('icon.svg'))
-            ->position(76)
+            ->position(4)
             ->menuName('AgentWP')
             ->subPages($subpages)
             ->registerMenu();
@@ -80,7 +80,7 @@ class Settings extends ReactClient
     public function maybe_get_token(): void
     {
         $screen = get_current_screen();
-        if ($screen->id === 'settings_page_agentwp-admin-settings' && isset($_GET['code'])) {
+        if ($screen->id === 'toplevel_page_agentwp-admin-settings' && isset($_GET['code'])) {
             $code = sanitize_text_field($_GET['code']);
             $response_raw = wp_remote_post($this->main->apiHost().'/oauth/token', [
                 'body' => [
