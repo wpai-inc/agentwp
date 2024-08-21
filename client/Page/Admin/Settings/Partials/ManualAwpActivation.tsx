@@ -6,7 +6,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 
 export function ManualAwpActivation() {
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest, tryRequest } = useAdminRoute();
   const { page } = usePage();
 
   const [ fieldsVisible, setFieldsVisible ] = useState( false );
@@ -20,32 +20,35 @@ export function ManualAwpActivation() {
     setFieldsVisible( ! fieldsVisible );
   }
 
-  function saveManualToken( event: FormEvent< HTMLFormElement > ) {
+  async function saveManualToken( event: FormEvent< HTMLFormElement > ) {
     event.preventDefault();
-    setSaving( true );
-    adminRequest
-      .post( 'manual_activation', { apiKey } )
-      .then( ( response: any ) => {
-        const data = response.data;
-        if ( ! data.success ) {
-          setServerErrors( { ...serverErrors, apiKey: data.data.message } );
-          console.error( data.data.message );
-        } else {
-          setServerErrors( { ...serverErrors, apiKey: '' } );
-          //todo: Go to users management page
-          // TODO: Improve this
-          document.location.reload();
-        }
-        setSaving( false );
-      } )
-      .catch( ( err: any ) => {
-        console.error( err );
+
+    const data = await tryRequest(
+      'post',
+      'manual_activation',
+      { apiKey },
+      () => setSaving( true ),
+      ( msg: string ) => {
         setSaving( false );
         setServerErrors( {
           ...serverErrors,
-          apiKey: err.response?.data.message || 'Error',
+          apiKey: msg || 'Error',
         } );
-      } );
+      },
+    );
+
+    if ( ! data.success ) {
+      setServerErrors( { ...serverErrors, apiKey: data.data.message } );
+      console.error( data.data.message );
+    } else {
+      setServerErrors( { ...serverErrors, apiKey: '' } );
+      /**
+       * @todo:
+       * - Go to users management page
+       * - Improve this
+       */
+      document.location.reload();
+    }
   }
 
   return (
