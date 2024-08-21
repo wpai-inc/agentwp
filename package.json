@@ -42,6 +42,7 @@
     "html-to-image": "^1.11.11",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.428.0",
+    "next-themes": "^0.3.0",
     "partial-json": "^0.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -50,6 +51,7 @@
     "rehype-raw": "^7.0.0",
     "remark-breaks": "^4.0.0",
     "remark-rehype": "^11.1.0",
+    "sonner": "^1.5.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "vite-plugin-svgr": "^4.2.0"

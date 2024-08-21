@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 export const ClientContext = createContext< any | undefined >( undefined );
 import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
@@ -20,6 +20,8 @@ type ErrorType = {
 export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
   const { addErrors } = useError();
+  const [ tryingRequest, setTryingRequest ] = useState< boolean >( false );
+  const [ requestError, setRequestError ] = useState< boolean >( false );
 
   const userProfileUrl = page.api_host + '/dashboard';
 
@@ -75,11 +77,18 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     defaultValue: any = [],
     failureMsg?: string,
   ) {
+    setRequestError( false );
+    setTryingRequest( true );
+
     try {
-      return await fn();
+      const req = await fn();
+      setTryingRequest( false );
+      return req;
     } catch ( e: any ) {
       const msg = failureMsg || "We're having trouble connecting to your account.";
       displayError( e, msg );
+      setTryingRequest( false );
+      setRequestError( true );
       return defaultValue;
     }
   }
@@ -103,6 +112,8 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         userProfileUrl,
         getSettings,
         updateSetting,
+        tryingRequest,
+        requestError,
       } }>
       { children }
     </ClientContext.Provider>
