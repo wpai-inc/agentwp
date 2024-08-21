@@ -1,36 +1,47 @@
 <?php
 
-namespace WpAi\AgentWp;
+namespace WpAi\AgentWp\Client;
 
 use Kucrut\Vite;
 use WpAi\AgentWp\Contracts\ClientAppInterface;
+use WpAi\AgentWp\Contracts\ClientSetupLocationInterface;
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Main;
 
 abstract class ReactClient implements ClientAppInterface, Registrable
 {
     protected string $pageName;
 
-    protected bool $active = true;
-
     protected Main $main;
+
+    protected array $locations = [];
+
+    protected ?ClientSetupLocationInterface $location = null;
 
     public function __construct(Main $main)
     {
         $this->main = $main;
         $this->pageName =
-            str_replace('\\', '/', str_replace(__NAMESPACE__.'\\Page\\', '', get_class($this)));
+            str_replace('\\', '/', str_replace('WpAi\\AgentWp\\Page\\', '', get_class($this)));
+        $this->setLocation();
     }
 
-    /**
-     * Extra things to register after client assets
-     * have been enqueued
-     */
-    abstract public function registrations(): void;
-
-    public function active(): bool
+    public function setLocation(): void
     {
-        return true;
+        foreach ($this->locations as $location) {
+            if (! class_exists($location)) {
+                throw new \Error('Location class does not exist: '.$location);
+            }
+            $setup = new $location($this);
+            if ($setup && $setup->active()) {
+                $this->location = $setup;
+
+                return;
+            }
+        }
     }
+
+    public function registrations(): void {}
 
     /**
      * Register the client and anything else.
@@ -39,15 +50,8 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     {
         $this->registrations();
 
-        if ($this->active()) {
-            add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
-            add_action('elementor/editor/after_enqueue_scripts', [$this, 'enqueue_client_assets'], 100);
-
-            add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
-            add_action('elementor/editor/after_enqueue_scripts', [$this, 'registerPageProps'], 101);
-
-            add_filter('admin_body_class', [$this, 'bodyClass']);
-            add_action('wp_ajax_'.$this->slug('_'), [$this, 'registerControllers']);
+        if ($this->location) {
+            $this->location->setup();
         }
     }
 
@@ -100,10 +104,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     public function appRoot(): void
     {
         ?>
-        <script>
-            // add body classes
-            document.body.classList.add('<?php echo $this->slug() ?>');
-        </script>
         <noscript>
             <div class="no-js">
                 <?php

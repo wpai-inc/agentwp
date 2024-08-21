@@ -2,8 +2,8 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
+use WpAi\AgentWp\Client\ReactClient;
 use WpAi\AgentWp\Main;
-use WpAi\AgentWp\ReactClient;
 use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
 use WpAi\AgentWp\UserAuth;
@@ -13,6 +13,10 @@ class Settings extends ReactClient
     use HasMenu, HasPage;
 
     public array $pageData = [];
+
+    protected array $locations = [
+        \WpAi\AgentWp\Client\Locations\Settings::class,
+    ];
 
     private \WpAi\AgentWp\Settings $settings;
 
@@ -28,17 +32,12 @@ class Settings extends ReactClient
         add_action('current_screen', [$this, 'maybe_get_token']);
     }
 
-    public function active(): bool
-    {
-        return is_admin() && in_array($_GET['page'], ['agentwp-admin-settings']);
-    }
-
     public function registrations(): void
     {
         $subpages = [
             [
                 'name' => 'AI Connection Manager',
-                'slug' => 'connection',
+                'slug' => 'settings',
                 'data' => [],
             ],
             [
