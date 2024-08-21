@@ -6,7 +6,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 
 export function ManualAwpActivation() {
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
   const { page } = usePage();
 
   const [ fieldsVisible, setFieldsVisible ] = useState( false );

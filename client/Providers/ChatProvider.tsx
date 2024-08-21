@@ -58,7 +58,7 @@ export default function ChatProvider( {
   const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
 
   async function clearHistory() {
     await clearConversation();

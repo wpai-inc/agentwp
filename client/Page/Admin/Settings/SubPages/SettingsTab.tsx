@@ -5,7 +5,7 @@ import { usePage } from '@/Providers/PageProvider';
 import GeneralSettings from '../Partials/GeneralSettings';
 import DataList, { DataListItem } from '@/Components/ui/dl';
 export default function SettingsTab() {
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
   const { page } = usePage();
 
   function isLoggedIn() {

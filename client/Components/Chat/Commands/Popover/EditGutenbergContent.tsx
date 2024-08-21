@@ -4,7 +4,7 @@ import { useScreen } from '@/Providers/ScreenProvider';
 declare const wp: any;
 
 export default function EditGutenbergContent() {
-  // const adminRequest = useAdminRoute();
+  // const { adminRequest } = useAdminRoute();
   const { screen, setScreen } = useScreen();
 
   const { select } = wp.data;

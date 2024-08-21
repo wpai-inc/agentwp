@@ -9,7 +9,7 @@ import WoodySnippets from '@/assets/woodysnippets.png';
 import { useError } from '@/Providers/ErrorProvider';
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
   const { copy, copied } = useCopy();
   const [ plugin, setPlugin ] = useState< string | null >( null );
   const [ pluginIcon, setPluginIcon ] = useState< string | null >( null );

@@ -5,7 +5,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { DataListItem } from '@/Components/ui/dl';
 
 export default function GeneralSettings() {
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
   const { page } = usePage();
   const [ generalSettings, setGeneralSettings ] = useState( page.general_settings );
 

@@ -7,7 +7,7 @@ import UserList from '../Partials/UserList';
 import { Card } from '@/Components/Admin/Card';
 
 export default function UsersManagement() {
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
 
   const [ users, setUsers ] = useState< AgentWpUser[] >( [] );
   const [ searching, setSearching ] = useState( false );

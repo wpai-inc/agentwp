@@ -1,27 +1,23 @@
 import { Tag } from '@/Components/Tag';
 import { useAdminRoute } from '@/Providers/AdminRouteProvider';
-import { useNotifications } from '@/Providers/NotificationProvider';
 import type { AgentWpUser } from '@/Types/types';
 import { useState } from 'react';
 
 export function User( { user }: { user: AgentWpUser } ) {
-  const adminRequest = useAdminRoute();
-  const { notify } = useNotifications();
+  const { tryRequest } = useAdminRoute();
   const [ checked, setChecked ] = useState( user.agentwp_access );
 
   async function setAgentwpAccess( value: boolean ) {
-    setChecked( value );
-    try {
-      await adminRequest.post( 'update_user', {
+    await tryRequest(
+      'post',
+      'update_user',
+      {
         user: user.id,
         agentwp_access: value,
-      } );
-    } catch ( error ) {
-      const msg = error.response.data.data;
-      console.error( 'caught error: ', msg );
-      notify.error( msg );
-      setChecked( ! value );
-    }
+      },
+      () => setChecked( value ),
+      () => setChecked( ! value ),
+    );
   }
 
   return (
