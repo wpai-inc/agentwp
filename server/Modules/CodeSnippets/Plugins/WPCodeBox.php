@@ -127,6 +127,6 @@ class WPCodeBox implements SnippetInterface
             throw new Exception('Failed to add WPCodeBox snippet: ' . $this->wpdb->last_error);
         }
 
-        return $this->wpdb->insert_id;
+        return admin_url('admin.php?page=wpcb_snippets&snippet_id=' . $this->wpdb->insert_id);
     }
 }

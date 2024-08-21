@@ -10,6 +10,7 @@ namespace WpAi\AgentWp\Modules\CodeSnippets;
 use WpAi\AgentWp\Modules\CodeSnippets\Plugins\WPCode;
 use WpAi\AgentWp\Modules\CodeSnippets\Plugins\WPCodeBox;
 use WpAi\AgentWp\Modules\CodeSnippets\Plugins\CodeSnippets;
+use WpAi\AgentWp\Modules\CodeSnippets\Plugins\WoodySnippets;
 
 /**
  * Snippet handler.
@@ -73,6 +74,9 @@ class SnippetHandler
             
             case CodeSnippets::isActive():
                 return new CodeSnippets();
+
+            case WoodySnippets::isActive():
+                return new WoodySnippets();
             
             default:
                 return null;

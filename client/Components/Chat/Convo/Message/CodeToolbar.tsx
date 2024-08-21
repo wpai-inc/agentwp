@@ -5,6 +5,7 @@ import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import WPCode from '@/assets/wpcode.png';
 import WPCodeBox from '@/assets/wpcodebox.png';
 import CodeSnippets from '@/assets/codesnippets.png';
+import WoodySnippets from '@/assets/woodysnippets.png';
 import { useError } from '@/Providers/ErrorProvider';
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
@@ -28,6 +29,9 @@ export default function CodeToolbar( { code, language }: { code: string; languag
         break;
       case 'CodeSnippets':
         setPluginIcon( CodeSnippets );
+        break;
+      case 'WoodySnippets':
+        setPluginIcon( WoodySnippets );
         break;
       default:
         setPluginIcon( null );

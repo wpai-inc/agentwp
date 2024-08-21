@@ -67,7 +67,7 @@ class CodeSnippets implements SnippetInterface
      */
     public static function isActive(): bool
     {
-        return class_exists('Code_Snippets');
+        return class_exists('Code_Snippets\Plugin');
     }
 
     /**
@@ -101,6 +101,6 @@ class CodeSnippets implements SnippetInterface
             throw new Exception('Failed to add CodeSnippets snippet: ' . $this->wpdb->last_error);
         }
 
-        return $this->wpdb->insert_id;
+        return admin_url('admin.php?page=edit-snippet&id=' . $this->wpdb->insert_id);
     }
 }
