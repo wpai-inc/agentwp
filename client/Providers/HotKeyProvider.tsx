@@ -33,8 +33,8 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
    */
   useEffect( () => {
     const handleToggle = ( e: KeyboardEvent ) => {
-      e.preventDefault();
       if ( ( e.metaKey || e.ctrlKey ) && e.key === 'l' ) {
+        e.preventDefault();
         toggle();
       }
     };
