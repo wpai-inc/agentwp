@@ -81,39 +81,40 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
-  async function getSuggestions(
-    pageCtx?: any,
-    onBefore?: () => void,
-    onFailure?: ( msg: string ) => void,
-  ) {
-    return tryRequest(
-      async () => {
-        const res = await client.isAuthorized()?.getSuggestions( pageCtx );
-        return res?.data;
-      },
-      [],
-      onBefore,
-      onFailure,
-    );
+  async function getSuggestions( pageCtx?: any ) {
+    return tryRequest( async () => {
+      const res = await client.isAuthorized()?.getSuggestions( pageCtx );
+      return res?.data;
+    } );
   }
 
-  async function tryRequest(
+  async function optimisitc(
     fn: () => Promise< any >,
-    defaultValue: any = [],
-    onBefore?: () => void,
-    onFailure?: ( msg: string ) => void,
+    onSuccess?: () => void,
+    onFailure?: ( e: any, msg: string ) => void,
   ) {
-    onBefore && onBefore();
+    onSuccess && onSuccess();
 
     try {
       return await fn();
     } catch ( e: any ) {
-      const msg = e.message || "We're having trouble connecting to your account.";
+      const msg = e.msg || 'An error occurred';
+      onFailure && onFailure( e, msg );
+    }
+  }
+
+  async function tryRequest(
+    fn: () => Promise< any >,
+    onSuccess?: () => void,
+    onFailure?: ( e: any, msg: string ) => void,
+  ) {
+    const catchFailures = ( e: any, msg: string ) => {
       notify.error( msg );
       displayError( e, msg );
-      onFailure && onFailure( msg );
-      return defaultValue;
-    }
+      onFailure && onFailure( e, msg );
+    };
+
+    return await optimisitc( fn, onSuccess, catchFailures );
   }
 
   function displayError( e: ErrorType, msg: string ): [] {
