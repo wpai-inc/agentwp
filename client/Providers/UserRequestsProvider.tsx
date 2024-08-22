@@ -47,6 +47,7 @@ type UserRequestsContextType = {
   setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
   currentUserRequestId: string | null;
   currentUserRequest?: UserRequestType;
+  initUserRequest: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
   fetchConvo: ( since: string | null ) => Promise< void >;
@@ -57,11 +58,24 @@ type UserRequestsContextType = {
   addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
 };
 
+const initUserRequest: UserRequestType = {
+  id: '',
+  message: '',
+  user: {
+    name: '',
+    email: '',
+  },
+  created_at: new Date().toISOString(),
+  human_created_at: new Date().toLocaleString(),
+  agent_actions: [],
+};
+
 const UserRequestsContext = createContext< UserRequestsContextType >( {
   conversation: [],
   setConversation: () => {},
   currentUserRequestId: null,
   currentUserRequest: undefined,
+  initUserRequest,
   setCurrentUserRequestId: () => {},
   currentAction: null,
   fetchConvo: async () => {},
@@ -165,6 +179,7 @@ export default function UserRequestsProvider( {
         setConversation,
         currentUserRequestId,
         currentUserRequest,
+        initUserRequest,
         setCurrentUserRequestId,
         currentAction,
         fetchConvo,

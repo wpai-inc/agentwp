@@ -8,6 +8,8 @@ import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { StreamableFieldType } from '@/Types/types';
+import { optimistic } from '@/lib/utils';
+import { useNotifications } from '@/Providers/NotificationProvider';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -26,6 +28,7 @@ const ChatContext = createContext( {
   conversation: [] as UserRequestType[],
   isEmptyConversation: false,
   sendMessage: ( _message: string ) => {},
+  messageSubmitted: false,
   updateAgentMessage: ( _urId: string, _updatedAa: AgentAction ) => {},
   cancelStreaming: () => {},
   setChatSetting: ( _setting: ChatSettingProps ) => {},
@@ -54,11 +57,13 @@ export default function ChatProvider( {
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
-  const { conversation, setConversation, fetchConvo } = useUserRequests();
+  const { conversation, setConversation, fetchConvo, initUserRequest } = useUserRequests();
   const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const { adminRequest } = useAdminRoute();
+  const [ messageSubmitted, setMessageSubmitted ] = useState( false );
+  const { notify } = useNotifications();
 
   async function clearHistory() {
     await clearConversation();
@@ -107,15 +112,27 @@ export default function ChatProvider( {
     setConversation( [ msg, ...conversation ] );
   }
 
+  function removeUserRequest( urId: string ) {
+    setConversation( conversation.filter( msg => msg.id !== urId ) );
+  }
+
   async function sendMessage( message: string ) {
-    try {
-      const { stream_url, user_request } = await userRequest( message );
-      addUserRequest( user_request );
-      startStream( stream_url, user_request.id );
-    } catch ( e: any ) {
-      addErrors( [ e ] );
-      console.error( e );
-    }
+    const { stream_url, user_request } = await optimistic(
+      async () => {
+        return await userRequest( message );
+      },
+      () => {
+        addUserRequest( initUserRequest );
+      },
+      ( e: any, msg: string ) => {
+        addErrors( [ e ] );
+        notify.error( msg );
+      },
+    );
+
+    removeUserRequest( initUserRequest.id );
+    addUserRequest( user_request );
+    startStream( stream_url, user_request.id );
   }
 
   async function cancelStreaming() {
@@ -137,6 +154,7 @@ export default function ChatProvider( {
         conversation,
         isEmptyConversation,
         sendMessage,
+        messageSubmitted,
         updateAgentMessage,
         cancelStreaming,
         setChatSetting,

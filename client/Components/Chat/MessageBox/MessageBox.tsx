@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import { useStream } from '@/Providers/StreamProvider';
@@ -18,13 +18,10 @@ export default function MessageBox() {
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
 
-  const send = useCallback(
-    ( msg: string ) => {
-      sendMessage( msg );
-      setMessage( '' );
-    },
-    [ sendMessage ],
-  );
+  function send( msg: string ) {
+    setMessage( '' );
+    sendMessage( msg );
+  }
 
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
