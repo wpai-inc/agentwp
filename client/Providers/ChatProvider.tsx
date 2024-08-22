@@ -33,6 +33,8 @@ const ChatContext = createContext( {
   clearHistory: () => {},
   open: false,
   setOpen: ( _open: boolean ) => {},
+  snippetPlugin: null as string | null,
+  setSnippetPlugin: ( _plugin: string | null ) => {},
 } );
 
 export function useChat() {
@@ -59,6 +61,7 @@ export default function ChatProvider( {
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const adminRequest = useAdminRoute();
+  const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
 
   async function clearHistory() {
     await clearConversation();
@@ -144,6 +147,8 @@ export default function ChatProvider( {
         clearHistory,
         open,
         setOpen,
+        snippetPlugin,
+        setSnippetPlugin,
       } }>
       { children }
     </ChatContext.Provider>

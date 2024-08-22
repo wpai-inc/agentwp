@@ -7,20 +7,23 @@ import WPCodeBox from '@/assets/wpcodebox.png';
 import CodeSnippets from '@/assets/codesnippets.png';
 import WoodySnippets from '@/assets/woodysnippets.png';
 import { useError } from '@/Providers/ErrorProvider';
+import { useChat } from '@/Providers/ChatProvider';
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
   const adminRequest = useAdminRoute();
   const { copy, copied } = useCopy();
-  const [ plugin, setPlugin ] = useState< string | null >( null );
   const [ pluginIcon, setPluginIcon ] = useState< string | null >( null );
   const { addErrors } = useError();
+  const { snippetPlugin, setSnippetPlugin } = useChat();
 
   useEffect( () => {
-    getActiveCodeSnippetPlugin();
+    if ( ! snippetPlugin ) {
+      getActiveCodeSnippetPlugin();
+    }
   }, [] );
 
   useEffect( () => {
-    switch ( plugin ) {
+    switch ( snippetPlugin ) {
       case 'WPCode':
         setPluginIcon( WPCode );
         break;
@@ -36,11 +39,15 @@ export default function CodeToolbar( { code, language }: { code: string; languag
       default:
         setPluginIcon( null );
     }
-  }, [ plugin ] );
+  }, [ snippetPlugin ] );
 
   const getActiveCodeSnippetPlugin = async () => {
-    const result = await adminRequest.get( 'code_snippet_plugin' );
-    setPlugin( result.data.data );
+    try {
+      const result = await adminRequest.get( 'code_snippet_plugin' );
+      setSnippetPlugin( result.data.data );
+    } catch ( e ) {
+      // Do nothing
+    }
   };
 
   const addSnippet = async () => {
