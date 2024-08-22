@@ -18,7 +18,7 @@ export default function PostEdit( { handleKeyDown, message, focused }: CommandPo
     }
   }, [ focused ] );
 
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
   const searchQuery = message.replace( /\/edit /g, '' );
   const [ foundPosts, setFoundPosts ] = useState< any[] >( [] );
 

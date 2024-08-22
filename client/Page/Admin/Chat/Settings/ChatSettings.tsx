@@ -5,7 +5,7 @@ import { useClient } from '@/Providers/ClientProvider';
 import { usePage } from '@/Providers/PageProvider';
 import type { AccountSetting } from '@/Types/types';
 
-type Setting = {
+export type Setting = {
   name: string;
   label: string;
   value: any;
@@ -43,16 +43,7 @@ export default function ChatSettings() {
   const { updateSetting } = useClient();
 
   async function handleChange( name: string, checked: boolean ) {
-    const updated = await updateSetting( name, checked );
-    setSettings( prevSettings =>
-      prevSettings.map( setting => {
-        if ( updated.name === setting.name ) {
-          return { ...setting, value: updated.value };
-        }
-
-        return setting;
-      } ),
-    );
+    await updateSetting( name, checked, settings, setSettings );
   }
 
   const settingLabel = ( name: string ) => {

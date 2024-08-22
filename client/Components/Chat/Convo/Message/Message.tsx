@@ -5,27 +5,29 @@ import type { UserRequestType } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { FeedbackProvider } from '@/Providers/FeedbackProvider';
 import { useStream } from '@/Providers/StreamProvider';
+import { useChat } from '@/Providers/ChatProvider';
 
-export default function Message(userRequest: UserRequestType) {
+export default function Message( userRequest: UserRequestType ) {
   const { page } = usePage();
+  const { messageSubmitted } = useChat();
   const { currentUserRequestId } = useUserRequests();
   const sameUserRequest = userRequest.id === currentUserRequestId;
   const { streamClosed } = useStream();
-  const pending = sameUserRequest && !streamClosed;
+  const pending = ( sameUserRequest && ! streamClosed ) || messageSubmitted;
   const isIncomplete =
     userRequest.agent_actions?.length === 0 ||
-    userRequest.agent_actions?.some(aa => !aa.action && !aa.result?.status);
+    userRequest.agent_actions?.some( aa => ! aa.action && ! aa.result?.status );
 
   return (
-    <FeedbackProvider userRequestId={userRequest.id} feedback={userRequest.feedback}>
-      <div id={userRequest.id} className="mb-4 border-b border-brand-gray-25">
-        <UserRequest userRequest={userRequest} user={page.user} />
+    <FeedbackProvider userRequestId={ userRequest.id } feedback={ userRequest.feedback }>
+      <div id={ userRequest.id } className="mb-4 border-b border-brand-gray-25">
+        <UserRequest userRequest={ userRequest } user={ page.user } />
         <AgentResponse
-          userRequestId={userRequest.id}
-          time={userRequest.human_created_at}
-          agentActions={userRequest.agent_actions}
-          pending={pending}
-          incomplete={isIncomplete}
+          userRequestId={ userRequest.id }
+          time={ userRequest.human_created_at }
+          agentActions={ userRequest.agent_actions }
+          pending={ pending }
+          incomplete={ isIncomplete }
         />
       </div>
     </FeedbackProvider>

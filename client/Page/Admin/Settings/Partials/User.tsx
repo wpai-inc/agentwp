@@ -4,15 +4,20 @@ import type { AgentWpUser } from '@/Types/types';
 import { useState } from 'react';
 
 export function User( { user }: { user: AgentWpUser } ) {
-  const adminRequest = useAdminRoute();
+  const { tryRequest } = useAdminRoute();
   const [ checked, setChecked ] = useState( user.agentwp_access );
 
-  function setAgentwpAccess( value: boolean ) {
-    setChecked( value );
-    adminRequest.post( 'update_user', {
-      user: user.id,
-      agentwp_access: value,
-    } );
+  async function setAgentwpAccess( value: boolean ) {
+    await tryRequest(
+      'post',
+      'update_user',
+      {
+        user: user.id,
+        agentwp_access: value,
+      },
+      () => setChecked( value ),
+      () => setChecked( ! value ),
+    );
   }
 
   return (

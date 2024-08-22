@@ -6,8 +6,7 @@ import { usePage } from '@/Providers/PageProvider';
 export default function ConnectButton() {
   const { page } = usePage();
 
-  const adminRequest = useAdminRoute();
-
+  const { adminRequest } = useAdminRoute();
   const [ connecting, setConnecting ] = useState( false );
 
   function connect() {
