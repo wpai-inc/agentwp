@@ -4,25 +4,31 @@ import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 import { usePage } from '@/Providers/PageProvider';
 import GeneralSettings from '../Partials/GeneralSettings';
 import DataList, { DataListItem } from '@/Components/ui/dl';
+
 export default function SettingsTab() {
-  const adminRequest = useAdminRoute();
+  /**
+   * Variables
+   */
+  const { adminRequest } = useAdminRoute();
   const { page } = usePage();
+  const isLoggedIn = !! page.access_token;
 
-  function isLoggedIn() {
-    return !! page.access_token;
-  }
-
-  const [ loggedIn, setLoggedIn ] = useState( isLoggedIn() );
-
+  /**
+   * States
+   */
+  const [ loggedIn, setLoggedIn ] = useState( isLoggedIn );
   const [ authorizing, setAuthorizing ] = useState( false );
+  const [ connecting, setConnecting ] = useState( false );
+  const [ disconnecting, setDisconnecting ] = useState( false );
 
+  /**
+   * Methods
+   */
   function authorize() {
     setAuthorizing( true );
     document.location = `${ page.api_host }/oauth/authorize?client_id=${ page.client_id }&redirect_uri=https%3A%2F%2Fawpwp.ovi.work%2Fwp-admin%2Foptions-general.php%3Fpage%3Dagentwp-admin-settings&response_type=code&scope=site_connection`;
     setAuthorizing( false );
   }
-
-  const [ connecting, setConnecting ] = useState( false );
 
   function connect() {
     setConnecting( true );
@@ -33,8 +39,6 @@ export default function SettingsTab() {
       document.location = `${page.api_host}/connect_site?website=${encodeURIComponent(response.data.data.home_url)}&user_email=${page.user.user_email}&verification_key=${response.data.data.key}`;
     } );
   }
-
-  const [ disconnecting, setDisconnecting ] = useState( false );
 
   function disconnect() {
     setDisconnecting( true );

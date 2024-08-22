@@ -1,19 +1,9 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
-import { nextId } from '@/lib/utils';
-import { Notifications } from '@/Components/Notifications';
-
-type Notification = {
-  id: string;
-  content: string;
-  className: string;
-};
-
-type Notifications = Notification[];
+import { createContext, ReactNode, useContext } from 'react';
+import { Toaster } from '@/Components/ui/sonner';
+import { toast } from 'sonner';
 
 type NotificationContext = {
-  notifications: Notifications;
-  addNotification: ( notification: string, type?: string ) => void;
-  removeNotification: ( id: string ) => void;
+  notify: typeof toast;
 };
 
 export const NotificationsContext = createContext< NotificationContext | undefined >( undefined );
@@ -27,35 +17,10 @@ export const useNotifications = () => {
 };
 
 export const NotificationsProvider = ( { children }: { children: ReactNode } ) => {
-  const [ notifications, setNotifications ] = useState< Notifications >( [] );
-
-  const addNotification = ( notification: string, type: string = 'default' ) => {
-    const className = `agentwp-${ type }-notification`;
-
-    if ( notifications ) {
-    }
-    setNotifications( [
-      ...notifications,
-      {
-        id: nextId(),
-        content: notification,
-        className: className,
-      },
-    ] );
-  };
-
-  const removeNotification = ( id: string ) =>
-    setNotifications( notifications.filter( notification => notification.id !== id ) );
-
   return (
-    <NotificationsContext.Provider
-      value={ {
-        notifications,
-        addNotification,
-        removeNotification,
-      } }>
+    <NotificationsContext.Provider value={ { notify: toast } }>
       { children }
-      <Notifications />
+      <Toaster position="bottom-right" richColors closeButton />
     </NotificationsContext.Provider>
   );
 };

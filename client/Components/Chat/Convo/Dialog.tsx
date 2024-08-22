@@ -24,6 +24,11 @@ export default function Dialog( { conversation }: { conversation: UserRequestTyp
               key={ msg.id }
               initial={ { opacity: 0, scale: 0 } }
               animate={ { opacity: 1, scale: 1 } }
+              transition={ {
+                type: 'spring',
+                duration: 0.3,
+                bounce: 0.25,
+              } }
               exit={ { opacity: 0, scale: 0 } }>
               <Message key={ msg.id } { ...msg } />
             </motion.div>

@@ -9,6 +9,8 @@ import {
   WriteToEditorAction,
 } from '@wpai/schemas';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
+import { usePage } from './PageProvider';
+import { v4 as uuid } from 'uuid';
 
 export type ActionType =
   | NavigateAction
@@ -45,6 +47,8 @@ export type UserRequestType = {
 type UserRequestsContextType = {
   conversation: UserRequestType[];
   setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
+  clearConversation: () => void;
+  createUserRequest: ( message: string ) => UserRequestType;
   currentUserRequestId: string | null;
   currentUserRequest?: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
@@ -57,20 +61,9 @@ type UserRequestsContextType = {
   addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
 };
 
-const UserRequestsContext = createContext< UserRequestsContextType >( {
-  conversation: [],
-  setConversation: () => {},
-  currentUserRequestId: null,
-  currentUserRequest: undefined,
-  setCurrentUserRequestId: () => {},
-  currentAction: null,
-  fetchConvo: async () => {},
-  refreshConvo: () => {},
-  loadingConversation: false,
-  since: null,
-  setSince: () => {},
-  addActionToCurrentRequest: () => {},
-} );
+const UserRequestsContext = createContext< UserRequestsContextType >(
+  {} as UserRequestsContextType,
+);
 
 export function useUserRequests() {
   const chat = useContext( UserRequestsContext );
@@ -87,6 +80,7 @@ export default function UserRequestsProvider( {
   messages?: UserRequestType[];
   children: React.ReactNode;
 } ) {
+  const { page } = usePage();
   const { getConversation } = useClient();
   const [ since, setSince ] = useState< string | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
@@ -145,6 +139,24 @@ export default function UserRequestsProvider( {
     [ conversation, currentUserRequestId ],
   );
 
+  function createUserRequest( message: string ): UserRequestType {
+    return {
+      id: uuid(),
+      message,
+      user: {
+        name: page.user.name,
+        email: page.user.email,
+      },
+      created_at: new Date().toISOString(),
+      human_created_at: 'just now',
+      agent_actions: [],
+    };
+  }
+
+  function clearConversation() {
+    setConversation( [] );
+  }
+
   async function fetchConvo( since: string | null ) {
     const items = await getConversation( since );
     if ( items && items.length > 0 ) {
@@ -152,7 +164,7 @@ export default function UserRequestsProvider( {
       setConversation( items );
     } else {
       setCurrentUserRequestId( null );
-      setConversation( [] );
+      clearConversation();
     }
 
     setLoadingConversation( false );
@@ -163,6 +175,8 @@ export default function UserRequestsProvider( {
       value={ {
         conversation,
         setConversation,
+        clearConversation,
+        createUserRequest,
         currentUserRequestId,
         currentUserRequest,
         setCurrentUserRequestId,
