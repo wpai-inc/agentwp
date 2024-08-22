@@ -21,8 +21,8 @@ export default function History() {
   }
 
   function handleClearConvo() {
-    clearHistory();
     setChatSetting( null );
+    clearHistory();
   }
 
   function handleResume( createdAt: string ) {

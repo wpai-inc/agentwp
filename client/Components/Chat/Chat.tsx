@@ -39,7 +39,12 @@ type ChatUIContextType = {
 const ChatUIContext = createContext< ChatUIContextType | undefined >( undefined );
 
 export function useChatUI() {
-  return useContext( ChatUIContext );
+  const ctx = useContext( ChatUIContext );
+  if ( ctx === undefined ) {
+    throw new Error( 'useChatUI must be used within the Chat component' );
+  }
+
+  return ctx;
 }
 
 export default function Chat() {
