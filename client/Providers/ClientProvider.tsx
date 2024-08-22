@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react';
-export const ClientContext = createContext< any | undefined >( undefined );
 import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
 import { useError } from '@/Providers/ErrorProvider';
@@ -7,6 +6,8 @@ import { HistoryData } from '@/Types/types';
 import type { Setting } from '@/Page/Admin/Chat/Settings/ChatSettings';
 import { useNotifications } from './NotificationProvider';
 import { optimistic, OptimisticFn } from '@/lib/utils';
+
+export const ClientContext = createContext< any | undefined >( undefined );
 
 export function useClient() {
   const client = useContext( ClientContext );
@@ -24,8 +25,12 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
   const { addErrors } = useError();
   const { notify } = useNotifications();
-
+  const client = new AwpClient( page.access_token ).setBaseUrl( page.api_host );
   const userProfileUrl = page.api_host + '/dashboard';
+
+  function getStreamUrl( user_request_id: string ): string {
+    return client.getStreamUrl( user_request_id );
+  }
 
   async function getHistory( since?: string ): Promise< HistoryData[] > {
     return tryRequest( async () => {
@@ -102,7 +107,6 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     return [];
   }
 
-  const client = new AwpClient( page.access_token ).setBaseUrl( page.api_host );
   return (
     <ClientContext.Provider
       value={ {
@@ -115,6 +119,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         userProfileUrl,
         getSettings,
         updateSetting,
+        getStreamUrl,
       } }>
       { children }
     </ClientContext.Provider>

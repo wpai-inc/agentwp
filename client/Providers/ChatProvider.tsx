@@ -19,24 +19,29 @@ type CreateUserRequestResponse = {
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 type StoreRequestType = {
+  id: string | null;
   message: string;
   selected_input: StreamableFieldType | null;
   site_data?: any[];
 };
 
-const ChatContext = createContext( {
-  conversation: [] as UserRequestType[],
-  isEmptyConversation: false,
-  sendMessage: ( _message: string ) => {},
-  messageSubmitted: false,
-  updateAgentMessage: ( _urId: string, _updatedAa: AgentAction ) => {},
-  cancelStreaming: () => {},
-  setChatSetting: ( _setting: ChatSettingProps ) => {},
-  chatSetting: null as ChatSettingProps,
-  clearHistory: () => {},
-  open: false,
-  setOpen: ( _open: boolean ) => {},
-} );
+type ChatContextType = {
+  conversation: UserRequestType[];
+  isEmptyConversation: boolean;
+  sendMessage: ( message: string ) => void;
+  updateAgentMessage: ( urId: string, updatedAa: AgentAction ) => void;
+  cancelStreaming: () => void;
+  setChatSetting: ( setting: ChatSettingProps ) => void;
+  chatSetting: ChatSettingProps;
+  clearHistory: () => void;
+  open: boolean;
+  setOpen: ( open: boolean ) => void;
+  message: string;
+  setMessage: ( message: string ) => void;
+  messageSubmitted: boolean;
+};
+
+const ChatContext = createContext< ChatContextType | undefined >( undefined );
 
 export function useChat() {
   const chat = useContext( ChatContext );
@@ -56,13 +61,14 @@ export default function ChatProvider( {
   const { client, clearConversation } = useClient();
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
+  const [ message, setMessage ] = useState( '' );
+  const [ messageSubmitted, setMessageSubmitted ] = useState< boolean >( false );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
-  const { conversation, setConversation, fetchConvo, initUserRequest } = useUserRequests();
+  const { conversation, setConversation, fetchConvo, createUserRequest } = useUserRequests();
   const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const { adminRequest } = useAdminRoute();
-  const [ messageSubmitted, setMessageSubmitted ] = useState( false );
   const { notify } = useNotifications();
 
   async function clearHistory() {
@@ -70,8 +76,12 @@ export default function ChatProvider( {
     fetchConvo( null );
   }
 
-  async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
+  async function userRequest(
+    message: string,
+    id: string | null = null,
+  ): Promise< CreateUserRequestResponse > {
     let req: StoreRequestType = {
+      id,
       message,
       selected_input: selectedInput,
     };
@@ -112,27 +122,26 @@ export default function ChatProvider( {
     setConversation( [ msg, ...conversation ] );
   }
 
-  function removeUserRequest( urId: string ) {
-    setConversation( conversation.filter( msg => msg.id !== urId ) );
-  }
-
   async function sendMessage( message: string ) {
-    const { stream_url, user_request } = await optimistic(
+    const ur = createUserRequest( message );
+    setMessageSubmitted( true );
+
+    await optimistic(
       async () => {
-        return await userRequest( message );
+        const { user_request } = await userRequest( ur.message, ur.id );
+        startStream( user_request.id );
       },
       () => {
-        addUserRequest( initUserRequest );
+        setMessage( '' );
+        addUserRequest( ur );
       },
-      ( e: any, msg: string ) => {
+      ( e: any ) => {
         addErrors( [ e ] );
-        notify.error( msg );
+        setMessage( message );
       },
     );
 
-    removeUserRequest( initUserRequest.id );
-    addUserRequest( user_request );
-    startStream( stream_url, user_request.id );
+    setMessageSubmitted( false );
   }
 
   async function cancelStreaming() {
@@ -154,7 +163,6 @@ export default function ChatProvider( {
         conversation,
         isEmptyConversation,
         sendMessage,
-        messageSubmitted,
         updateAgentMessage,
         cancelStreaming,
         setChatSetting,
@@ -162,6 +170,9 @@ export default function ChatProvider( {
         clearHistory,
         open,
         setOpen,
+        message,
+        setMessage,
+        messageSubmitted,
       } }>
       { children }
     </ChatContext.Provider>

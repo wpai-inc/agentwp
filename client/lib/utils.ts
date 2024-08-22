@@ -40,23 +40,25 @@ export const generateUniqueSelector = ( element: Element ): string => {
       const sibling = element?.parentNode?.childNodes;
       let nodeIndex = 0;
       let hasSameNodeType = false;
-      for ( let i = 0; i < sibling.length; i++ ) {
-        if (
-          sibling[ i ].nodeType === Node.ELEMENT_NODE &&
-          sibling[ i ].nodeName === element.nodeName
-        ) {
-          if ( sibling[ i ] === element ) {
-            nodeIndex = hasSameNodeType ? nodeIndex + 1 : 1;
-            break;
+      if ( sibling ) {
+        for ( let i = 0; i < sibling.length; i++ ) {
+          if (
+            sibling[ i ].nodeType === Node.ELEMENT_NODE &&
+            sibling[ i ].nodeName === element.nodeName
+          ) {
+            if ( sibling[ i ] === element ) {
+              nodeIndex = hasSameNodeType ? nodeIndex + 1 : 1;
+              break;
+            }
+            hasSameNodeType = true;
           }
-          hasSameNodeType = true;
         }
       }
       if ( hasSameNodeType ) {
         selector += ':nth-of-type(' + nodeIndex + ')';
       }
       path = selector + ( path ? ' > ' + path : '' );
-      element = element.parentNode;
+      element = element.parentNode as Element;
     }
   }
   return path;

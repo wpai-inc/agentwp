@@ -13,7 +13,7 @@ export type StoreAgentResponse = {
 };
 
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
-  const { streamClosed, startStreamFromRequest } = useStream();
+  const { streamClosed, startStream } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
   const { adminRequest } = useAdminRoute();
   const { client } = useClient();
@@ -35,7 +35,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         currentAction.action &&
         errors.length < 2
       ) {
-        startStreamFromRequest( currentUserRequestId );
+        startStream( currentUserRequestId );
       }
     }
   }, [ currentAction, streamClosed, currentUserRequestId ] );
@@ -51,7 +51,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
     if ( reqId && ! aa.final && aa.hasExecuted ) {
-      await startStreamFromRequest( reqId );
+      await startStream( reqId );
     }
   }
 
@@ -84,7 +84,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         await client.storeAgentResult( aa.id, {
           status: 'success',
         } );
-        window.location.href = aa.action.url;
+        window.location.href = aa.action.url as string;
         return new Promise( () => {
           /* never resolve to stop further execution */
         } );

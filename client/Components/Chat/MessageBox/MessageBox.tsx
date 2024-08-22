@@ -11,21 +11,15 @@ import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
 
 export default function MessageBox() {
-  const { sendMessage, setChatSetting } = useChat();
+  const { sendMessage, setChatSetting, message, setMessage } = useChat();
   const { streamClosed, cancelStream } = useStream();
-  const [ message, setMessage ] = useState( '' );
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
 
-  function send( msg: string ) {
-    setMessage( '' );
-    sendMessage( msg );
-  }
-
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
-    send( message );
+    sendMessage( message );
   }
 
   function handleKeyDown( e: React.KeyboardEvent< HTMLElement >, menuFocused: boolean ) {
@@ -41,7 +35,7 @@ export default function MessageBox() {
       e.preventDefault();
       setCommandMenuFocused( true );
     } else if ( e.key === 'Enter' && ( e.metaKey || e.ctrlKey ) ) {
-      send( message );
+      sendMessage( message );
     } else {
       setCommandMenuFocused( false );
     }

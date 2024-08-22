@@ -5,13 +5,15 @@ import type { UserRequestType } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { FeedbackProvider } from '@/Providers/FeedbackProvider';
 import { useStream } from '@/Providers/StreamProvider';
+import { useChat } from '@/Providers/ChatProvider';
 
 export default function Message( userRequest: UserRequestType ) {
   const { page } = usePage();
+  const { messageSubmitted } = useChat();
   const { currentUserRequestId } = useUserRequests();
   const sameUserRequest = userRequest.id === currentUserRequestId;
   const { streamClosed } = useStream();
-  const pending = ( sameUserRequest && ! streamClosed ) || userRequest.id === '';
+  const pending = ( sameUserRequest && ! streamClosed ) || messageSubmitted;
   const isIncomplete =
     userRequest.agent_actions?.length === 0 ||
     userRequest.agent_actions?.some( aa => ! aa.action && ! aa.result?.status );
