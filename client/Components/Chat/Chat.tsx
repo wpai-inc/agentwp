@@ -30,11 +30,13 @@ import { useChat } from '@/Providers/ChatProvider';
 import { useApp } from '@/Providers/AppProvider';
 import ToggleButton from '@/Components/Chat/ToggleButton/ToggleButton';
 
-const ChatUIContext = createContext( {
-  toggle: () => {},
-  open: false,
-  setOpen: ( _open: boolean ) => {},
-} );
+type ChatUIContextType = {
+  toggle: () => void;
+  open: boolean;
+  setOpen: ( open: boolean ) => void;
+};
+
+const ChatUIContext = createContext< ChatUIContextType | undefined >( undefined );
 
 export function useChatUI() {
   return useContext( ChatUIContext );
@@ -55,7 +57,7 @@ export default function Chat() {
   const noTransition = { duration: 0 };
   const transition: ValueAnimationTransition = {
     type: 'spring',
-    duration: 0.5,
+    duration: 0.3,
     bounce: 0.25,
   };
 
@@ -100,7 +102,7 @@ export default function Chat() {
   const closedStyles = useMemo(
     () => ( {
       scale: 0,
-      borderRadius: '100%',
+      borderRadius: '12px',
       width: 0,
       height: 0,
       transform: `translate(0, 0)`,
@@ -120,11 +122,7 @@ export default function Chat() {
       animate( scope.current, openedStyles, transition ).then( () => setIsOpening( false ) );
     } else {
       setIsClosing( true );
-      animate( scope.current, closedStyles, {
-        type: 'tween',
-        ease: 'anticipate',
-        duration: 0.5,
-      } ).then( () => setIsClosing( false ) );
+      animate( scope.current, closedStyles, transition ).then( () => setIsClosing( false ) );
     }
     updateSetting( 'chatOpen', isOpen );
   }, [ scope, openedStyles, closedStyles, updateSetting, animate, transition ] );

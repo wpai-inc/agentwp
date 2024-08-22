@@ -24,6 +24,11 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
       key="chat-welcome"
       initial={ { opacity: 0, scale: 0 } }
       animate={ { opacity: 1, scale: 1 } }
+      transition={ {
+        type: 'spring',
+        duration: 0.3,
+        bounce: 0.25,
+      } }
       exit={ { opacity: 0, scale: 0 } }
       className="flex flex-col h-full justify-center items-center mb-8">
       <p className="text-3xl font-semibold text-black">Hi { name },</p>
