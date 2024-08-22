@@ -9,7 +9,6 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { StreamableFieldType } from '@/Types/types';
 import { optimistic } from '@/lib/utils';
-import { useNotifications } from '@/Providers/NotificationProvider';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -64,16 +63,22 @@ export default function ChatProvider( {
   const [ message, setMessage ] = useState( '' );
   const [ messageSubmitted, setMessageSubmitted ] = useState< boolean >( false );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
-  const { conversation, setConversation, fetchConvo, createUserRequest } = useUserRequests();
+  const {
+    conversation,
+    setConversation,
+    clearConversation: clear,
+    createUserRequest,
+  } = useUserRequests();
   const { startStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const { adminRequest } = useAdminRoute();
-  const { notify } = useNotifications();
 
   async function clearHistory() {
-    await clearConversation();
-    fetchConvo( null );
+    optimistic( clearConversation, clear, ( e: any ) => {
+      setConversation( conversation );
+      addErrors( [ e ] );
+    } );
   }
 
   async function userRequest(

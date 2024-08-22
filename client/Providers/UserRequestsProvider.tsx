@@ -47,6 +47,7 @@ export type UserRequestType = {
 type UserRequestsContextType = {
   conversation: UserRequestType[];
   setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
+  clearConversation: () => void;
   createUserRequest: ( message: string ) => UserRequestType;
   currentUserRequestId: string | null;
   currentUserRequest?: UserRequestType;
@@ -152,6 +153,10 @@ export default function UserRequestsProvider( {
     };
   }
 
+  function clearConversation() {
+    setConversation( [] );
+  }
+
   async function fetchConvo( since: string | null ) {
     const items = await getConversation( since );
     if ( items && items.length > 0 ) {
@@ -159,7 +164,7 @@ export default function UserRequestsProvider( {
       setConversation( items );
     } else {
       setCurrentUserRequestId( null );
-      setConversation( [] );
+      clearConversation();
     }
 
     setLoadingConversation( false );
@@ -170,6 +175,7 @@ export default function UserRequestsProvider( {
       value={ {
         conversation,
         setConversation,
+        clearConversation,
         createUserRequest,
         currentUserRequestId,
         currentUserRequest,
