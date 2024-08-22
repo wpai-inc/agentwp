@@ -43,13 +43,7 @@ export default function ChatSettings() {
   const { updateSetting } = useClient();
 
   async function handleChange( name: string, checked: boolean ) {
-    await updateSetting(
-      name,
-      checked,
-      settings,
-      ( updatedSettings: Setting[] ) => setSettings( updatedSettings ),
-      () => setSettings( settings ),
-    );
+    await updateSetting( name, checked, settings, setSettings );
   }
 
   const settingLabel = ( name: string ) => {

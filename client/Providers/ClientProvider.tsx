@@ -1,12 +1,12 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 export const ClientContext = createContext< any | undefined >( undefined );
 import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { HistoryData } from '@/Types/types';
 import type { Setting } from '@/Page/Admin/Chat/Settings/ChatSettings';
-import type { AccountSetting } from '@/Types/types';
 import { useNotifications } from './NotificationProvider';
+import { optimistic, OptimisticFn } from '@/lib/utils';
 
 export function useClient() {
   const client = useContext( ClientContext );
@@ -50,8 +50,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     name: string,
     value: any,
     settings: Setting[],
-    onBefore: ( settings: Setting[] ) => void,
-    onFailure: ( settings: Setting[] ) => void,
+    update: ( settings: Setting[] ) => void,
   ) {
     const updatedSettings = settings.map( setting =>
       name === setting.name ? { ...setting, value } : setting,
@@ -61,9 +60,8 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
       async () => {
         return await client.updateSetting( name, value );
       },
-      settings,
-      () => onBefore( updatedSettings ),
-      () => onFailure( settings ),
+      () => update( updatedSettings ),
+      () => update( settings ),
     );
   }
 
@@ -88,34 +86,15 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
-  async function optimisitc(
-    fn: () => Promise< any >,
-    onSuccess?: () => void,
-    onFailure?: ( e: any, msg: string ) => void,
-  ) {
-    onSuccess && onSuccess();
-
-    try {
-      return await fn();
-    } catch ( e: any ) {
-      const msg = e.msg || 'An error occurred';
-      onFailure && onFailure( e, msg );
-    }
-  }
-
-  async function tryRequest(
-    fn: () => Promise< any >,
-    onSuccess?: () => void,
-    onFailure?: ( e: any, msg: string ) => void,
-  ) {
+  const tryRequest: OptimisticFn = async ( fn, onSuccess, onFailure ) => {
     const catchFailures = ( e: any, msg: string ) => {
       notify.error( msg );
       displayError( e, msg );
       onFailure && onFailure( e, msg );
     };
 
-    return await optimisitc( fn, onSuccess, catchFailures );
-  }
+    return await optimistic( fn, onSuccess, catchFailures );
+  };
 
   function displayError( e: ErrorType, msg: string ): [] {
     addErrors( [ msg ] );
