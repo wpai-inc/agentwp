@@ -10,7 +10,7 @@ import { useError } from '@/Providers/ErrorProvider';
 import { useChat } from '@/Providers/ChatProvider';
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
   const { copy, copied } = useCopy();
   const [ pluginIcon, setPluginIcon ] = useState< string | null >( null );
   const { addErrors } = useError();

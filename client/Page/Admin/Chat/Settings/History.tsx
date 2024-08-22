@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import { HistoryData } from '@/Types/types';
 
 export default function History() {
   const [ history, setHistory ] = useState< HistoryData[] >();
-  const { getHistory, unclearConversation } = useClient();
-  const { since, setSince, refreshConvo } = useUserRequests();
+  const { getHistory } = useClient();
+  const { since, setSince } = useUserRequests();
   const { clearHistory, setChatSetting, isEmptyConversation } = useChat();
 
   useEffect( () => {
@@ -18,19 +17,12 @@ export default function History() {
 
   async function fetchHistory( since: string | null ) {
     const history = await getHistory( since );
-    console.log( history );
     setHistory( history );
   }
 
-  async function handleUnclear( since: string | null ) {
-    await unclearConversation( since );
-    fetchHistory( null );
-    refreshConvo();
-  }
-
   function handleClearConvo() {
-    clearHistory();
     setChatSetting( null );
+    clearHistory();
   }
 
   function handleResume( createdAt: string ) {
@@ -75,12 +67,5 @@ export default function History() {
         <blockquote className="truncate">{ convo.message }</blockquote>
       </button>
     );
-    {
-      /* <button
-          className="underline"
-          onClick={ () => handleUnclear( convo.conversationCreatedAt ) }>
-          Unclear
-        </button> */
-    }
   }
 }

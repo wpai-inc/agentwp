@@ -1,6 +1,8 @@
 import { createContext, useContext } from 'react';
 import { usePage } from '@/Providers/PageProvider';
 import axios from 'axios';
+import { useNotifications } from '@/Providers/NotificationProvider';
+import { optimistic } from '@/lib/utils';
 
 export const AdminRouteContext = createContext< any | undefined >( undefined );
 
@@ -14,6 +16,7 @@ export function useAdminRoute() {
 
 export function AdminRouteProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
+  const { notify } = useNotifications();
 
   const adminRequest = axios.create( {
     baseURL: page.rest_route + page.rest_endpoint + '/',
@@ -33,8 +36,32 @@ export function AdminRouteProvider( { children }: { children: React.ReactNode } 
     return config;
   } );
 
+  const tryRequest = async (
+    method: 'post' | 'get',
+    url: string,
+    dataOrParams?: any,
+    onBefore?: () => void,
+    onFailure?: ( error: any ) => void,
+  ) => {
+    const req =
+      method === 'post'
+        ? adminRequest.post( url, dataOrParams )
+        : adminRequest.get( url, { params: dataOrParams } );
+    onBefore && onBefore();
+
+    const catchFailure = ( e: any ) => {
+      const msg = e.response.data.data;
+      notify.error( msg );
+      onFailure && onFailure( msg );
+    };
+
+    return optimistic( async () => req, onBefore, catchFailure );
+  };
+
   return (
-    <AdminRouteContext.Provider value={ adminRequest }>{ children }</AdminRouteContext.Provider>
+    <AdminRouteContext.Provider value={ { adminRequest, tryRequest } }>
+      { children }
+    </AdminRouteContext.Provider>
   );
 }
 
