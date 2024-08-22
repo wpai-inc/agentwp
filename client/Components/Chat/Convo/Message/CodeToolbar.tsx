@@ -64,19 +64,28 @@ export default function CodeToolbar( { code, language }: { code: string; languag
   };
 
   return (
-    <div className="flex justify-between p-2 bg-brand-gray-25 text-brand-gray-70 rounded-t-xl">
-      <span className="text-sm uppercase">{ language }</span>
-      <div className="flex items-center justify-end gap-3">
-        <button className="ml-2 text-xs hover:text-brand-gray-100" onClick={ () => copy( code ) }>
-          { copied ? 'Copied!' : <IconCopy className="w-4 h-4" /> }
-        </button>
-
-        { pluginIcon && (
-          <button onClick={ addSnippet }>
-            <img src={ pluginIcon } alt="WordPress Code Snippet" className="w-6 m-0" />
-          </button>
-        ) }
+    <>
+      <div className="flex justify-between p-2 bg-[#f9dabb] text-[#f3ae6a] rounded-xl mb-3 font-sans">
+        <span>Test code before using</span>
+        <a href="/" target="_blank" rel="noreferrer" className="text-[#ee8131]">
+          LEARN HOW
+        </a>
       </div>
-    </div>
+
+      <div className="flex justify-between p-2 bg-brand-gray-25 text-brand-gray-70 rounded-t-xl">
+        <span className="text-sm uppercase">{ language }</span>
+        <div className="flex items-center justify-end gap-3">
+          <button className="ml-2 text-xs hover:text-brand-gray-100" onClick={ () => copy( code ) }>
+            { copied ? 'Copied!' : <IconCopy className="w-4 h-4" /> }
+          </button>
+
+          { pluginIcon && (
+            <button onClick={ addSnippet }>
+              <img src={ pluginIcon } alt="WordPress Code Snippet" className="w-6 m-0" />
+            </button>
+          ) }
+        </div>
+      </div>
+    </>
   );
 }
