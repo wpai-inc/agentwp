@@ -35,6 +35,8 @@ type ChatContextType = {
   clearHistory: () => void;
   open: boolean;
   setOpen: ( open: boolean ) => void;
+  snippetPlugin: string | null,
+  setSnippetPlugin: ( plugin: string | null ) => void,
   message: string;
   setMessage: ( message: string ) => void;
   messageSubmitted: boolean;
@@ -73,6 +75,7 @@ export default function ChatProvider( {
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const { adminRequest } = useAdminRoute();
+  const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
 
   async function clearHistory() {
     optimistic( clearConversation, clear, ( e: any ) => {
@@ -178,6 +181,8 @@ export default function ChatProvider( {
         message,
         setMessage,
         messageSubmitted,
+        snippetPlugin,
+        setSnippetPlugin,
       } }>
       { children }
     </ChatContext.Provider>
