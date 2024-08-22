@@ -4,6 +4,9 @@ import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { HistoryData } from '@/Types/types';
+import type { Setting } from '@/Page/Admin/Chat/Settings/ChatSettings';
+import type { AccountSetting } from '@/Types/types';
+import { useNotifications } from './NotificationProvider';
 
 export function useClient() {
   const client = useContext( ClientContext );
@@ -20,8 +23,7 @@ type ErrorType = {
 export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
   const { addErrors } = useError();
-  const [ tryingRequest, setTryingRequest ] = useState< boolean >( false );
-  const [ requestError, setRequestError ] = useState< boolean >( false );
+  const { notify } = useNotifications();
 
   const userProfileUrl = page.api_host + '/dashboard';
 
@@ -44,11 +46,25 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
-  async function updateSetting( name: string, value: any ) {
-    return tryRequest( async () => {
-      const response = await client.updateSetting( name, value );
-      return response.data;
-    } );
+  async function updateSetting(
+    name: string,
+    value: any,
+    settings: Setting[],
+    onBefore: ( settings: Setting[] ) => void,
+    onFailure: ( settings: Setting[] ) => void,
+  ) {
+    const updatedSettings = settings.map( setting =>
+      name === setting.name ? { ...setting, value } : setting,
+    );
+
+    await tryRequest(
+      async () => {
+        return await client.updateSetting( name, value );
+      },
+      settings,
+      () => onBefore( updatedSettings ),
+      () => onFailure( settings ),
+    );
   }
 
   async function getSettings() {
@@ -65,30 +81,37 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
-  async function getSuggestions( pageCtx?: any ) {
-    return tryRequest( async () => {
-      const res = await client.isAuthorized()?.getSuggestions( pageCtx );
-      return res?.data;
-    } );
+  async function getSuggestions(
+    pageCtx?: any,
+    onBefore?: () => void,
+    onFailure?: ( msg: string ) => void,
+  ) {
+    return tryRequest(
+      async () => {
+        const res = await client.isAuthorized()?.getSuggestions( pageCtx );
+        return res?.data;
+      },
+      [],
+      onBefore,
+      onFailure,
+    );
   }
 
   async function tryRequest(
     fn: () => Promise< any >,
     defaultValue: any = [],
-    failureMsg?: string,
+    onBefore?: () => void,
+    onFailure?: ( msg: string ) => void,
   ) {
-    setRequestError( false );
-    setTryingRequest( true );
+    onBefore && onBefore();
 
     try {
-      const req = await fn();
-      setTryingRequest( false );
-      return req;
+      return await fn();
     } catch ( e: any ) {
-      const msg = failureMsg || "We're having trouble connecting to your account.";
+      const msg = e.message || "We're having trouble connecting to your account.";
+      notify.error( msg );
       displayError( e, msg );
-      setTryingRequest( false );
-      setRequestError( true );
+      onFailure && onFailure( msg );
       return defaultValue;
     }
   }
@@ -112,8 +135,6 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         userProfileUrl,
         getSettings,
         updateSetting,
-        tryingRequest,
-        requestError,
       } }>
       { children }
     </ClientContext.Provider>
