@@ -121,6 +121,10 @@ export default class AwpClient {
     return this.request( 'POST', `${ this.baseUrl }/api/escalation/${ escalationId }` );
   }
 
+  async removeUserRequest( userRequestId: string ): Promise< AxiosResponse > {
+    return this.request( 'DELETE', `${ this.baseUrl }/api/request/${ userRequestId }` );
+  }
+
   async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {
     return this.request(
       'POST',
