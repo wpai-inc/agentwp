@@ -2,7 +2,7 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
-use WpAi\AgentWp\ReactClient;
+use WpAi\AgentWp\Client\ReactClient;
 use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
 
@@ -12,22 +12,9 @@ class DashboardWidget extends ReactClient
 
     public array $pageData = [];
 
-    public function registrations(): void
-    {
-        add_action('wp_dashboard_setup', [$this, 'dashboard_widget']);
-        add_action('wp_dashboard_setup', [$this, 'widget_position'], 20);
-    }
-
-    public function active(): bool
-    {
-        if (! is_admin() || ! function_exists('get_current_screen')) {
-            return false;
-        }
-
-        $screen = get_current_screen();
-
-        return $screen->id == 'dashboard';
-    }
+    protected array $locations = [
+        \WpAi\AgentWp\Client\Locations\Dashboard::class,
+    ];
 
     public function dashboard_widget()
     {

@@ -1,11 +1,15 @@
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import {
+  getSelectedBricksBuilderFields,
+  getSelectedElementorField,
   getSelectedGutenbergBlock,
   getSelectedInputField,
   getSelectedPostTitle,
+  getSelectedWysiwyg,
 } from '@/Services/SelectedFields';
 import type { StreamableFieldType } from '@/Types/types';
 import { useScreen } from '@/Providers/ScreenProvider';
+import type { Editor } from 'tinymce';
 
 declare const wp: any;
 
@@ -27,15 +31,18 @@ export const useInputSelect = () => {
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
   const [ selectedInput, setSelectedInput ] = useState< StreamableFieldType | null >( null );
-  const selectedInputRef = useRef< null | HTMLInputElement | HTMLTextAreaElement | HTMLElement >(
-    null,
-  );
+  const selectedInputRef = useRef<
+    null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
+  >( null );
   const { screen, setScreen } = useScreen();
 
   useEffect( () => {
     getSelectedInputField( setSelectedInput, selectedInputRef );
     getSelectedGutenbergBlock( setSelectedInput );
+    getSelectedWysiwyg( setSelectedInput, selectedInputRef );
     getSelectedPostTitle( setSelectedInput );
+    getSelectedElementorField( setSelectedInput, selectedInputRef );
+    getSelectedBricksBuilderFields( setSelectedInput, selectedInputRef );
   }, [] );
 
   useEffect( () => {
