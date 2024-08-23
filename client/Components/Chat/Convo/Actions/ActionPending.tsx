@@ -1,9 +1,5 @@
-import { Spinner } from '@/Components/Spinner';
+import ActionContainer from '@/Components/Chat/Convo/Actions/ActionContainer';
 
 export default function ActionPending() {
-  return (
-    <div className="p-4 rounded-lg border border-gray-25 flex gap-2 items-center">
-      <Spinner show={ true } /> Thinking...
-    </div>
-  );
+  return <ActionContainer title={ 'Thinking...' } pending={ true } className={ 'bg-white' } />;
 }
