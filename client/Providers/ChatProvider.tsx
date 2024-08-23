@@ -72,7 +72,7 @@ export default function ChatProvider( {
     setConversation,
     clearConversation: clear,
     createUserRequest,
-    currentUserRequest,
+    currentUserRequestId,
   } = useUserRequests();
   const { startStream, cancelStream } = useStream();
   const { selectedInput } = useInputSelect();
@@ -159,15 +159,10 @@ export default function ChatProvider( {
     setMessageSubmitted( false );
   }
 
-  async function cancelMessage() {
-    if ( currentUserRequest ) {
-      optimistic(
-        () => cancelStream( currentUserRequest.id ),
-        () => {
-          setMessageSubmitted( false );
-          // removeUserRequest( currentUserRequest );
-        },
-      );
+  function cancelMessage() {
+    if ( currentUserRequestId ) {
+      setMessageSubmitted( false );
+      cancelStream( currentUserRequestId );
     }
   }
 
