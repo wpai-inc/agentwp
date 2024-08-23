@@ -89,14 +89,17 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     }
   }
 
-  async function cancelStream() {
-    // Abbort the connection
-    ctrl.current.abort();
+  async function cancelStream( userRequestId: string ) {
+    if ( currentUserRequestId === userRequestId ) {
+      console.log( 'canceling stream' );
+      // Abbort the connection
+      ctrl.current.abort();
 
-    // Reset the controller
-    ctrl.current = new AbortController();
-    setStreamClosed( true );
-    client.abortUserRequest( currentUserRequestId );
+      // Reset the controller
+      ctrl.current = new AbortController();
+      setStreamClosed( true );
+      client.abortUserRequest( userRequestId );
+    }
   }
 
   async function handleStreamError( e: any ) {

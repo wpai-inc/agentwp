@@ -107,11 +107,17 @@ export default function UserRequestsProvider( {
     };
   }, [] );
 
+  /**
+   * The currentUserRequest is always the last request in the conversation.
+   */
   const currentUserRequest = useMemo(
     () => conversation.find( request => request.id === currentUserRequestId ),
     [ conversation, currentUserRequestId ],
   );
 
+  /**
+   * The currentAction is always the last action in the currentUserRequest.
+   */
   const currentAction = useMemo(
     () =>
       currentUserRequest?.agent_actions
@@ -157,8 +163,8 @@ export default function UserRequestsProvider( {
     setConversation( [] );
   }
 
-  async function fetchConvo( since: string | null ) {
-    const items = await getConversation( since );
+  async function fetchConvo( since?: string | null ) {
+    const items = await getConversation( since ?? undefined );
     if ( items && items.length > 0 ) {
       setCurrentUserRequestId( items[ 0 ]?.id );
       setConversation( items );

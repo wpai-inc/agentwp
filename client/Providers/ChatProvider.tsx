@@ -29,7 +29,7 @@ type ChatContextType = {
   isEmptyConversation: boolean;
   sendMessage: ( message: string ) => void;
   updateAgentMessage: ( urId: string, updatedAa: AgentAction ) => void;
-  cancelStreaming: () => void;
+  cancelMessage: () => void;
   setChatSetting: ( setting: ChatSettingProps ) => void;
   chatSetting: ChatSettingProps;
   clearHistory: () => void;
@@ -72,8 +72,9 @@ export default function ChatProvider( {
     setConversation,
     clearConversation: clear,
     createUserRequest,
+    currentUserRequest,
   } = useUserRequests();
-  const { startStream } = useStream();
+  const { startStream, cancelStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const { adminRequest } = useAdminRoute();
@@ -143,7 +144,7 @@ export default function ChatProvider( {
     await optimistic(
       async () => {
         const { user_request } = await userRequest( ur.message, ur.id );
-        startStream( user_request.id );
+        await startStream( user_request.id );
       },
       () => {
         setMessage( '' );
@@ -158,14 +159,15 @@ export default function ChatProvider( {
     setMessageSubmitted( false );
   }
 
-  async function cancelStreaming() {
-    try {
-      const { stream_url, user_request } = await userRequest( '' );
-      addUserRequest( user_request );
-      startStream( stream_url, user_request.id );
-    } catch ( e: any ) {
-      addErrors( [ e ] );
-      console.error( e );
+  async function cancelMessage() {
+    if ( currentUserRequest ) {
+      optimistic(
+        () => cancelStream( currentUserRequest.id ),
+        () => {
+          setMessageSubmitted( false );
+          // removeUserRequest( currentUserRequest );
+        },
+      );
     }
   }
 
@@ -178,7 +180,7 @@ export default function ChatProvider( {
         isEmptyConversation,
         sendMessage,
         updateAgentMessage,
-        cancelStreaming,
+        cancelMessage,
         setChatSetting,
         chatSetting,
         clearHistory,

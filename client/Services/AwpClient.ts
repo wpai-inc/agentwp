@@ -5,13 +5,12 @@ import { useNotifications } from '@/Providers/NotificationProvider';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
 
 export default class AwpClient {
-  private baseUrl: string = 'https://app.agentwp.com';
-  private token?: string;
+  public token?: string;
+  public agentWpVersion = '0.1-alpha1';
+
   private httpClient: AxiosInstance;
-
+  private baseUrl: string = 'https://app.agentwp.com';
   private adminRequest = useAdminRoute();
-
-  private agentWpVersion = '0.1-alpha1';
 
   constructor( token?: string ) {
     const { page, setPageData } = usePage();

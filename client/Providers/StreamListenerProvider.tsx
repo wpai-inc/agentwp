@@ -49,7 +49,6 @@ const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
         let newInputFieldContent;
 
-        console.log( 'selectedInput.type', selectedInput.type );
         if ( selectedInput.type === 'WYSIWYG' ) {
           newInputFieldContent = WriteToWysiwyg( text, selectedInput );
         } else {
