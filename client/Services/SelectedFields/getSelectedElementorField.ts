@@ -2,19 +2,19 @@ import { log } from 'console';
 import { Dispatch, MutableRefObject } from 'react';
 import type { Editor } from 'tinymce';
 import { handleSelectedElement } from './getSelectedInputField';
-import { handleSelectedWisiwygEditor } from './getSelectedWysiwyg';
+import { handleSelectedWysiwygEditor } from './getSelectedWysiwyg';
 
 declare const elementor: any;
+declare const tinymce: Editor;
 
-export default function getSelectedElementorField(
+export function getSelectedElementorField(
   setSelectedInput: Dispatch< React.SetStateAction< any > >,
   selectedInputRef: MutableRefObject<
     null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
   >,
 ) {
   if ( typeof elementor !== 'undefined' ) {
-    elementor.hooks.addAction( 'panel/open_editor/widget', function ( manager, model, view ) {
-      console.log( 'open editor', { manager, model, view } );
+    elementor.hooks.addAction( 'panel/open_editor/widget', function () {
       const elementorEditor = document.getElementById( 'elementor-panel-content-wrapper' );
       if ( elementorEditor ) {
         console.log( 'elementorEditor', elementorEditor );
@@ -25,7 +25,7 @@ export default function getSelectedElementorField(
           'textarea.elementor-control-tag-area',
         );
         if ( texareaInputElement ) {
-          console.log( 'texareaInputElement', texareaInputElement );
+          console.log( '(AWP) TEXTAREA ELEMENTOR', texareaInputElement );
           handleSelectedElement(
             texareaInputElement as HTMLTextAreaElement,
             setSelectedInput,
@@ -36,7 +36,7 @@ export default function getSelectedElementorField(
         const wysiwygInputElement = elementorEditor.querySelector( 'textarea.elementor-wp-editor' );
 
         if ( wysiwygInputElement ) {
-          console.log( 'wysiwygInputElement', wysiwygInputElement );
+          console.log( '(AWP) WYSIWYG ELEMENTOR', wysiwygInputElement );
           const tinymceId = wysiwygInputElement.getAttribute( 'id' );
           if ( tinymceId ) {
             console.log( 'wysiwyg', tinymceId );
@@ -44,7 +44,7 @@ export default function getSelectedElementorField(
             tinymce.on( 'addeditor', function ( e ) {
               const editor = e.editor;
               if ( editor.id === tinymceId ) {
-                handleSelectedWisiwygEditor( editor, setSelectedInput, selectedInputRef );
+                handleSelectedWysiwygEditor( editor, setSelectedInput, selectedInputRef );
               }
             } );
           }
