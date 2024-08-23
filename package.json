@@ -38,6 +38,7 @@
     "cmdk": "^1.0.0",
     "copyfiles": "github:taylorreece/copyfiles#update-glob",
     "dotenv": "^16.4.5",
+    "get-xpath": "^3.1.0",
     "glob": "11.0.0",
     "html-to-image": "^1.11.11",
     "lodash.debounce": "^4.0.8",
