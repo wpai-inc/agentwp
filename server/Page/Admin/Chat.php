@@ -11,6 +11,8 @@ class Chat extends ReactClient
      */
     protected array $locations = [
         \WpAi\AgentWp\Client\Locations\ElementorChat::class,
+        \WpAi\AgentWp\Client\Locations\BeaverBuilder::class,
+        \WpAi\AgentWp\Client\Locations\BricksBuilder::class,
         \WpAi\AgentWp\Client\Locations\CoreChat::class,
     ];
 
