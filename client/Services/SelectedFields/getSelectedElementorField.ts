@@ -17,7 +17,6 @@ export function getSelectedElementorField(
     elementor.hooks.addAction( 'panel/open_editor/widget', function () {
       const elementorEditor = document.getElementById( 'elementor-panel-content-wrapper' );
       if ( elementorEditor ) {
-        console.log( 'elementorEditor', elementorEditor );
         selectedInputRef.current = null;
         setSelectedInput( null );
 
@@ -25,7 +24,6 @@ export function getSelectedElementorField(
           'textarea.elementor-control-tag-area',
         );
         if ( texareaInputElement ) {
-          console.log( '(AWP) TEXTAREA ELEMENTOR', texareaInputElement );
           handleSelectedElement(
             texareaInputElement as HTMLTextAreaElement,
             setSelectedInput,
@@ -36,11 +34,8 @@ export function getSelectedElementorField(
         const wysiwygInputElement = elementorEditor.querySelector( 'textarea.elementor-wp-editor' );
 
         if ( wysiwygInputElement ) {
-          console.log( '(AWP) WYSIWYG ELEMENTOR', wysiwygInputElement );
           const tinymceId = wysiwygInputElement.getAttribute( 'id' );
           if ( tinymceId ) {
-            console.log( 'wysiwyg', tinymceId );
-
             tinymce.on( 'addeditor', function ( e ) {
               const editor = e.editor;
               if ( editor.id === tinymceId ) {

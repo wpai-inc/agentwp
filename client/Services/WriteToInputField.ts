@@ -7,7 +7,6 @@ import { StreamableFieldType } from '@/Types/types';
 export function WriteToInputField( content: string, selectedInput: StreamableFieldType ) {
   try {
     if ( content ) {
-      console.log( 'Writing to input' );
       const updatedInputField = parse( content ) as { content: string; summary: string };
       if ( ! updatedInputField.content ) {
         console.info( 'No content to write...' );

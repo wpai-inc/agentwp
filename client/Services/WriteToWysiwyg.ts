@@ -5,7 +5,6 @@ import { streamableFieldType } from '@/Types/types';
 export function WriteToWysiwyg( content: string, selectedInput: streamableFieldType ) {
   try {
     if ( content ) {
-      console.log( 'Writing to wysiwyg', selectedInput );
       const updatedInputField = parse( content ) as { content: string; summary: string };
       if ( ! updatedInputField.content ) {
         console.info( 'No content to write...' );

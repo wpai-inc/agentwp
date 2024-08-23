@@ -6,6 +6,7 @@ import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { usePage } from '@/Providers/PageProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
+import { optimistic } from '@/lib/utils';
 
 export const StreamContext = createContext< any | undefined >( undefined );
 
@@ -89,14 +90,28 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     }
   }
 
-  async function cancelStream() {
-    // Abbort the connection
-    ctrl.current.abort();
+  function cancelStream( userRequestId: string ) {
+    if ( currentUserRequestId === userRequestId ) {
+      optimistic(
+        () => abortRequest( userRequestId ),
+        () => {
+          console.log( 'Stream canceled' );
+          // Abort the connection
+          ctrl.current.abort();
 
-    // Reset the controller
-    ctrl.current = new AbortController();
-    setStreamClosed( true );
-    client.abortUserRequest( currentUserRequestId );
+          // Reset the controller
+          ctrl.current = new AbortController();
+          setStreamClosed( true );
+        },
+      );
+    }
+  }
+
+  async function abortRequest( userRequestId: string ) {
+    if ( currentUserRequestId === userRequestId ) {
+      console.log( 'aborting request' );
+      client.abortUserRequest( userRequestId );
+    }
   }
 
   async function handleStreamError( e: any ) {
@@ -114,6 +129,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       value={ {
         startStream,
         cancelStream,
+        abortRequest,
         liveAction: liveAction.current,
         streamClosed,
       } }>

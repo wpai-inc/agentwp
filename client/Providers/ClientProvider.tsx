@@ -6,11 +6,12 @@ import { HistoryData } from '@/Types/types';
 import type { Setting } from '@/Page/Admin/Chat/Settings/ChatSettings';
 import { useNotifications } from './NotificationProvider';
 import { optimistic, OptimisticFn } from '@/lib/utils';
+import { UserRequestType } from './UserRequestsProvider';
 
 type ClientContextType = {
   client: AwpClient;
   getHistory: ( since?: string ) => Promise< HistoryData[] >;
-  getConversation: ( since?: string ) => Promise< [] >;
+  getConversation: ( since?: string ) => Promise< UserRequestType[] >;
   getSuggestions: ( pageCtx?: any ) => Promise< [] >;
   clearConversation: () => Promise< [] >;
   unclearConversation: ( since: string ) => Promise< [] >;

@@ -8,7 +8,6 @@ export function getSelectedPostTitle(
     const postTitleContainer = document.querySelector( 'h1.wp-block-post-title' );
     if ( postTitleContainer ) {
       postTitleContainer.addEventListener( 'click', () => {
-        console.log( '(AWP) POST TITLE SELECTED' );
         setSelectedInput( {
           type: 'post_title',
           data: {

@@ -5,7 +5,7 @@ import { AWPEventChatSinceType, AWPEventChatOpenType } from '@/Types/types';
 import { useChatUI } from '@/Components/Chat/Chat';
 
 const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
-  const { chatSetting, setChatSetting } = useChat();
+  const { chatSetting, setChatSetting, cancelMessage } = useChat();
   const { toggle } = useChatUI();
   const { setSince } = useUserRequests();
 
@@ -43,6 +43,23 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
       window.removeEventListener( 'keydown', handleToggle );
     };
   }, [ toggle ] );
+
+  /**
+   * Cancel the chat with the
+   * CMD + X key
+   */
+  useEffect( () => {
+    const handleCxl = ( e: KeyboardEvent ) => {
+      if ( ( e.metaKey || e.ctrlKey ) && e.key === 'x' ) {
+        e.preventDefault();
+        cancelMessage();
+      }
+    };
+    window.addEventListener( 'keydown', handleCxl );
+    return () => {
+      window.removeEventListener( 'keydown', handleCxl );
+    };
+  }, [ cancelMessage ] );
 
   /**
    * Custom Event Listener for Chat Since
