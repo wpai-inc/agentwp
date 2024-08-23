@@ -7,7 +7,26 @@ import type { Setting } from '@/Page/Admin/Chat/Settings/ChatSettings';
 import { useNotifications } from './NotificationProvider';
 import { optimistic, OptimisticFn } from '@/lib/utils';
 
-export const ClientContext = createContext< any | undefined >( undefined );
+type ClientContextType = {
+  client: AwpClient;
+  getHistory: ( since?: string ) => Promise< HistoryData[] >;
+  getConversation: ( since?: string ) => Promise< [] >;
+  getSuggestions: ( pageCtx?: any ) => Promise< [] >;
+  clearConversation: () => Promise< [] >;
+  unclearConversation: ( since: string ) => Promise< [] >;
+  userProfileUrl: string;
+  getSettings: () => Promise< [] >;
+  updateSetting: (
+    name: string,
+    value: any,
+    settings: Setting[],
+    update: ( settings: Setting[] ) => void,
+  ) => void;
+  getStreamUrl: ( user_request_id: string ) => string;
+  removeRequest: ( userRequestId: string ) => Promise< [] >;
+};
+
+export const ClientContext = createContext< ClientContextType | undefined >( undefined );
 
 export function useClient() {
   const client = useContext( ClientContext );
@@ -91,6 +110,12 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
+  async function removeRequest( userRequestId: string ) {
+    return tryRequest( async () => {
+      await client.removeUserRequest( userRequestId );
+    } );
+  }
+
   const tryRequest: OptimisticFn = async ( fn, onSuccess, onFailure ) => {
     const catchFailures = ( e: any, msg: string ) => {
       notify.error( msg );
@@ -120,6 +145,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         getSettings,
         updateSetting,
         getStreamUrl,
+        removeRequest,
       } }>
       { children }
     </ClientContext.Provider>

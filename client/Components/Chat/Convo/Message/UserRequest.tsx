@@ -6,6 +6,7 @@ import { UserRequestType } from '@/Providers/UserRequestsProvider';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { WpUser } from '@/Types/types';
 import MessageMeta from './MessageMeta';
+import DeleteRequest from '../Partials/DeleteRequest';
 
 export default function UserRequest( {
   userRequest,
@@ -27,16 +28,22 @@ export default function UserRequest( {
             <IconMore className="text-brand-gray-15" />
           </PopoverTrigger>
           <PopoverContent>
-            <MessageMeta meta={[
-              {
-                label: 'Message ID',
-                value: userRequest.id,
-              },
-              {
-                label: 'User',
-                value: user.display_name,
-              },
-            ]}/>
+            <MessageMeta
+              meta={ [
+                {
+                  label: 'Message ID',
+                  value: userRequest.id,
+                },
+                {
+                  label: 'User',
+                  value: user.display_name,
+                },
+                {
+                  label: 'Delete Request',
+                  value: <DeleteRequest userRequest={ userRequest } />,
+                },
+              ] }
+            />
           </PopoverContent>
         </Popover>
       </MessageHeader>

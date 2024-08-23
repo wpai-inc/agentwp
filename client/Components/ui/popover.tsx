@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { cn } from '@/lib/utils';
-import { usePage } from '@/Providers/PageProvider';
 
 const Popover = PopoverPrimitive.Root;
 
@@ -11,9 +10,8 @@ const PopoverContent = React.forwardRef<
   React.ElementRef< typeof PopoverPrimitive.Content >,
   React.ComponentPropsWithoutRef< typeof PopoverPrimitive.Content >
 >( ( { className, align = 'end', sideOffset = 4, ...props }, ref ) => {
-  const { root } = usePage();
   return (
-    <PopoverPrimitive.Portal container={ root }>
+    <PopoverPrimitive.Portal container={ window.agentwp }>
       <PopoverPrimitive.Content
         ref={ ref }
         align={ align }

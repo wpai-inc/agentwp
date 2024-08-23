@@ -35,11 +35,13 @@ type ChatContextType = {
   clearHistory: () => void;
   open: boolean;
   setOpen: ( open: boolean ) => void;
-  snippetPlugin: string | null,
-  setSnippetPlugin: ( plugin: string | null ) => void,
+  snippetPlugin: string | null;
+  setSnippetPlugin: ( plugin: string | null ) => void;
   message: string;
   setMessage: ( message: string ) => void;
   messageSubmitted: boolean;
+  addUserRequest: ( ur: UserRequestType ) => void;
+  removeUserRequest: ( ur: UserRequestType ) => void;
 };
 
 const ChatContext = createContext< ChatContextType | undefined >( undefined );
@@ -126,8 +128,12 @@ export default function ChatProvider( {
     } );
   }
 
-  function addUserRequest( msg: UserRequestType ) {
-    setConversation( [ msg, ...conversation ] );
+  function addUserRequest( ur: UserRequestType ) {
+    setConversation( [ ur, ...conversation ] );
+  }
+
+  function removeUserRequest( ur: UserRequestType ) {
+    setConversation( conversation.filter( item => item.id !== ur.id ) );
   }
 
   async function sendMessage( message: string ) {
@@ -183,6 +189,8 @@ export default function ChatProvider( {
         messageSubmitted,
         snippetPlugin,
         setSnippetPlugin,
+        addUserRequest,
+        removeUserRequest,
       } }>
       { children }
     </ChatContext.Provider>
