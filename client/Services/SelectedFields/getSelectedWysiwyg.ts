@@ -14,7 +14,6 @@ export function getSelectedWysiwyg(
       const editor = e.editor;
 
       editor.on( 'focus', function () {
-        console.log( '(AWP) WYSIWYG SELECTED', editor );
         handleSelectedWysiwygEditor( editor, setSelectedInput, selectedInputRef );
       } );
     } );

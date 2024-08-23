@@ -12,7 +12,6 @@ export function getSelectedGutenbergBlock(
     );
     if ( blocksContainer ) {
       blocksContainer.addEventListener( 'click', () => {
-        console.log( '(AWP) GUTENBERG EDITOR SELECTED' );
         const hasSelectedBlock = wp.data.select( 'core/block-editor' ).hasSelectedBlock();
         if ( hasSelectedBlock ) {
           const theSelectedBlock = wp.data.select( 'core/block-editor' ).getSelectedBlock();

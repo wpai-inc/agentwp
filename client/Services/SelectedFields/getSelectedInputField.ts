@@ -13,7 +13,6 @@ export function getSelectedInputField(
   >,
 ) {
   document.addEventListener( 'focusin', function ( event ) {
-    console.log( 'focusin event', event );
     handleElementFocus( event, setSelectedInput, selectedInputRef );
   } );
 
@@ -41,7 +40,6 @@ export function handleElementFocus(
   inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
 
   // wait for the input to be editable in case is a div
-  console.log( 'inputElement', inputElement );
   if (
     ( ( inputElement.tagName === 'INPUT' &&
       'type' in inputElement &&
@@ -52,7 +50,6 @@ export function handleElementFocus(
     //     ( selectedInputRef.current && inputElement.id !== selectedInputRef.current.id ) ) &&
     ! inputElement.closest( '#agentwp-admin-chat' )
   ) {
-    console.log( '(AWP) INPUT SELECTED', inputElement.id );
     handleSelectedElement( inputElement, setSelectedInput, selectedInputRef );
   }
 }
@@ -81,7 +78,6 @@ export function handleSelectedElement(
 
   const inputPath = generateUniqueSelector( inputElement );
   const inputXPath = getXPath( inputElement );
-  console.log( 'inputXPath', inputXPath );
   let inputLabel = '';
   if ( inputId ) {
     inputLabel = document.querySelector( `label[for="${ inputId }"]` )?.textContent || '';
@@ -113,7 +109,6 @@ export function handleSelectedElement(
       inputValue,
     },
   } );
-  console.log( 'inputElement', inputElement );
 
   selectedInputRef.current?.addEventListener( 'input', function ( ev ) {
     const inputElement = ev.target as HTMLInputElement | HTMLTextAreaElement;
