@@ -36,6 +36,7 @@ export default function MessageBox() {
       setCommandMenuFocused( true );
     } else if ( e.key === 'Enter' && ! e.metaKey && ! e.ctrlKey && ! e.shiftKey && ! e.altKey ) {
       sendMessage( message );
+      e.preventDefault();
     } else {
       setCommandMenuFocused( false );
     }
