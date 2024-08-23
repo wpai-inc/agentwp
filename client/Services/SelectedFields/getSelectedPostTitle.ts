@@ -1,13 +1,14 @@
 import isEditorReady from '@/lib/isEditorReady';
 import React from 'react';
 
-export default function getSelectedPostTitle(
+export function getSelectedPostTitle(
   setSelectedInput: React.Dispatch< React.SetStateAction< any > >,
 ) {
   isEditorReady( () => {
     const postTitleContainer = document.querySelector( 'h1.wp-block-post-title' );
     if ( postTitleContainer ) {
       postTitleContainer.addEventListener( 'click', () => {
+        console.log( '(AWP) POST TITLE SELECTED' );
         setSelectedInput( {
           type: 'post_title',
           data: {

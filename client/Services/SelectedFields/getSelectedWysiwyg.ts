@@ -3,7 +3,7 @@ import type { Editor } from 'tinymce';
 
 declare const tinymce: Editor;
 
-export default function getSelectedWysiwyg(
+export function getSelectedWysiwyg(
   setSelectedInput: Dispatch< React.SetStateAction< any > >,
   selectedInputRef: MutableRefObject<
     null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
@@ -14,13 +14,14 @@ export default function getSelectedWysiwyg(
       const editor = e.editor;
 
       editor.on( 'focus', function () {
-        handleSelectedWisiwygEditor( editor, setSelectedInput, selectedInputRef );
+        console.log( '(AWP) WYSIWYG SELECTED', editor );
+        handleSelectedWysiwygEditor( editor, setSelectedInput, selectedInputRef );
       } );
     } );
   }
 }
 
-export function handleSelectedWisiwygEditor(
+export function handleSelectedWysiwygEditor(
   editor: Editor,
   setSelectedInput: Dispatch< React.SetStateAction< any > >,
   selectedInputRef: MutableRefObject<
@@ -36,13 +37,13 @@ export function handleSelectedWisiwygEditor(
     data: {
       inputId: editorId,
       inputPath: '#' + editorId,
-      inputLabel: 'wysiwyg editor',
+      inputLabel: 'Editor',
       inputName: 'wysiwyg editor',
       inputValue,
     },
   } );
 
-  selectedInputRef.current?.on( 'keyup', ( e: KeyboardEvent ) => {
+  selectedInputRef.current?.on( 'change', ( e: KeyboardEvent ) => {
     if ( tinymce.activeEditor.id === selectedInputRef.current?.id ) {
       setSelectedInput( ( prev: any ) => ( {
         ...prev,

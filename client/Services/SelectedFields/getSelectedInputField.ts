@@ -1,33 +1,21 @@
 import { generateUniqueSelector } from '@/lib/utils';
 import { Dispatch, MutableRefObject } from 'react';
 import { Editor } from 'tinymce';
+import getXPath from 'get-xpath';
 
 const excludeKeywords = [ 'search' ];
+declare const FLBuilder: any;
 
-export default function getSelectedInputField(
+export function getSelectedInputField(
   setSelectedInput: Dispatch< React.SetStateAction< any > >,
   selectedInputRef: MutableRefObject<
     null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
   >,
 ) {
-  window.addEventListener( 'focusin', function ( event ) {
-    handleElementFocus( event );
+  document.addEventListener( 'focusin', function ( event ) {
+    console.log( 'focusin event', event );
+    handleElementFocus( event, setSelectedInput, selectedInputRef );
   } );
-
-  function handleElementFocus( event: Event ) {
-    const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLElement;
-    console.log( 'focusin', inputElement );
-    if (
-      ( ( inputElement.tagName === 'INPUT' &&
-        'type' in inputElement &&
-        inputElement.type === 'text' ) ||
-        inputElement.tagName === 'TEXTAREA' ||
-        ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
-      ! inputElement.closest( '#agentwp-admin-chat' )
-    ) {
-      handleSelectedElement( inputElement, setSelectedInput, selectedInputRef );
-    }
-  }
 
   document.addEventListener( 'mousedown', event => {
     const clickedElement = event.target as HTMLElement;
@@ -39,6 +27,34 @@ export default function getSelectedInputField(
       setSelectedInput( null );
     }
   } );
+}
+
+export function handleElementFocus(
+  event: Event,
+  setSelectedInput: Dispatch< React.SetStateAction< any > >,
+  selectedInputRef: MutableRefObject<
+    null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
+  >,
+) {
+  let inputElement;
+
+  inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
+
+  // wait for the input to be editable in case is a div
+  console.log( 'inputElement', inputElement );
+  if (
+    ( ( inputElement.tagName === 'INPUT' &&
+      'type' in inputElement &&
+      inputElement.type === 'text' ) ||
+      inputElement.tagName === 'TEXTAREA' ||
+      ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
+    //   ( ! selectedInputRef.current ||
+    //     ( selectedInputRef.current && inputElement.id !== selectedInputRef.current.id ) ) &&
+    ! inputElement.closest( '#agentwp-admin-chat' )
+  ) {
+    console.log( '(AWP) INPUT SELECTED', inputElement.id );
+    handleSelectedElement( inputElement, setSelectedInput, selectedInputRef );
+  }
 }
 
 export function handleSelectedElement(
@@ -64,6 +80,8 @@ export function handleSelectedElement(
   }
 
   const inputPath = generateUniqueSelector( inputElement );
+  const inputXPath = getXPath( inputElement );
+  console.log( 'inputXPath', inputXPath );
   let inputLabel = '';
   if ( inputId ) {
     inputLabel = document.querySelector( `label[for="${ inputId }"]` )?.textContent || '';
@@ -71,7 +89,12 @@ export function handleSelectedElement(
     inputLabel = document.querySelector( `label[for="${ inputName }"]` )?.textContent || '';
   }
   if ( ! inputLabel ) {
-    inputLabel = inputElement.type || '';
+    //if is a div with contenteditable
+    if ( inputElement.tagName === 'DIV' ) {
+      inputLabel = inputElement.getAttribute( 'aria-label' ) || 'editable content';
+    } else {
+      inputLabel = inputElement.type || '';
+    }
   }
 
   selectedInputRef.current = inputElement;
@@ -83,6 +106,7 @@ export function handleSelectedElement(
     type: 'input',
     data: {
       inputPath,
+      inputXPath,
       inputLabel,
       inputName,
       inputId,
