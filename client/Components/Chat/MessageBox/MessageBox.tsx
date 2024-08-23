@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import { useStream } from '@/Providers/StreamProvider';
@@ -11,24 +11,15 @@ import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
 
 export default function MessageBox() {
-  const { sendMessage, setChatSetting } = useChat();
+  const { sendMessage, setChatSetting, message, setMessage } = useChat();
   const { streamClosed, cancelStream } = useStream();
-  const [ message, setMessage ] = useState( '' );
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
 
-  const send = useCallback(
-    ( msg: string ) => {
-      sendMessage( msg );
-      setMessage( '' );
-    },
-    [ sendMessage ],
-  );
-
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
-    send( message );
+    sendMessage( message );
   }
 
   function handleKeyDown( e: React.KeyboardEvent< HTMLElement >, menuFocused: boolean ) {
@@ -44,7 +35,7 @@ export default function MessageBox() {
       e.preventDefault();
       setCommandMenuFocused( true );
     } else if ( e.key === 'Enter' && ( e.metaKey || e.ctrlKey ) ) {
-      send( message );
+      sendMessage( message );
     } else {
       setCommandMenuFocused( false );
     }

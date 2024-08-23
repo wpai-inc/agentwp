@@ -33,11 +33,12 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const { setCurrentUserRequestId, addActionToCurrentRequest, currentUserRequestId } =
     useUserRequests();
   const { addErrors } = useError();
-  const { client } = useClient();
+  const { client, getStreamUrl } = useClient();
   const { page } = usePage();
   const ctrl = useRef< AbortController >( new AbortController() );
 
-  async function startStream( stream_url: string, user_request_id: string ) {
+  async function startStream( user_request_id: string ) {
+    const stream_url = getStreamUrl( user_request_id );
     setCurrentUserRequestId( user_request_id );
     resetStream();
 
@@ -98,11 +99,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     client.abortUserRequest( currentUserRequestId );
   }
 
-  async function startStreamFromRequest( user_request_id: string ) {
-    const url = client.getStreamUrl( user_request_id );
-    await startStream( url, user_request_id );
-  }
-
   async function handleStreamError( e: any ) {
     console.error( 'Stream error', e );
     addErrors( [ e ] );
@@ -118,7 +114,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       value={ {
         startStream,
         cancelStream,
-        startStreamFromRequest,
         liveAction: liveAction.current,
         streamClosed,
       } }>

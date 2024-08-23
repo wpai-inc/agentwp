@@ -1,9 +1,13 @@
 import { createContext, useContext } from 'react';
-export const ClientContext = createContext< any | undefined >( undefined );
 import AwpClient from '@/Services/AwpClient';
 import { usePage } from '@/Providers/PageProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { HistoryData } from '@/Types/types';
+import type { Setting } from '@/Page/Admin/Chat/Settings/ChatSettings';
+import { useNotifications } from './NotificationProvider';
+import { optimistic, OptimisticFn } from '@/lib/utils';
+
+export const ClientContext = createContext< any | undefined >( undefined );
 
 export function useClient() {
   const client = useContext( ClientContext );
@@ -20,8 +24,13 @@ type ErrorType = {
 export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
   const { addErrors } = useError();
-
+  const { notify } = useNotifications();
+  const client = new AwpClient( page.access_token ).setBaseUrl( page.api_host );
   const userProfileUrl = page.api_host + '/dashboard';
+
+  function getStreamUrl( user_request_id: string ): string {
+    return client.getStreamUrl( user_request_id );
+  }
 
   async function getHistory( since?: string ): Promise< HistoryData[] > {
     return tryRequest( async () => {
@@ -42,11 +51,23 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
-  async function updateSetting( name: string, value: any ) {
-    return tryRequest( async () => {
-      const response = await client.updateSetting( name, value );
-      return response.data;
-    } );
+  async function updateSetting(
+    name: string,
+    value: any,
+    settings: Setting[],
+    update: ( settings: Setting[] ) => void,
+  ) {
+    const updatedSettings = settings.map( setting =>
+      name === setting.name ? { ...setting, value } : setting,
+    );
+
+    await tryRequest(
+      async () => {
+        return await client.updateSetting( name, value );
+      },
+      () => update( updatedSettings ),
+      () => update( settings ),
+    );
   }
 
   async function getSettings() {
@@ -70,19 +91,15 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
-  async function tryRequest(
-    fn: () => Promise< any >,
-    defaultValue: any = [],
-    failureMsg?: string,
-  ) {
-    try {
-      return await fn();
-    } catch ( e: any ) {
-      const msg = failureMsg || "We're having trouble connecting to your account.";
+  const tryRequest: OptimisticFn = async ( fn, onSuccess, onFailure ) => {
+    const catchFailures = ( e: any, msg: string ) => {
+      notify.error( msg );
       displayError( e, msg );
-      return defaultValue;
-    }
-  }
+      onFailure && onFailure( e, msg );
+    };
+
+    return await optimistic( fn, onSuccess, catchFailures );
+  };
 
   function displayError( e: ErrorType, msg: string ): [] {
     addErrors( [ msg ] );
@@ -90,7 +107,6 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     return [];
   }
 
-  const client = new AwpClient( page.access_token ).setBaseUrl( page.api_host );
   return (
     <ClientContext.Provider
       value={ {
@@ -103,6 +119,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         userProfileUrl,
         getSettings,
         updateSetting,
+        getStreamUrl,
       } }>
       { children }
     </ClientContext.Provider>

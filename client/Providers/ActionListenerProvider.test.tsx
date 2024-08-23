@@ -24,7 +24,7 @@ describe( 'ActionListenerProvider', () => {
     // Mock the useStream hook
     ( useStream as jest.Mock ).mockReturnValue( {
       streamClosed: true,
-      startStreamFromRequest: jest.fn(),
+      startStream: jest.fn(),
     } );
 
     // Mock the useUserRequests hook
@@ -84,7 +84,7 @@ describe( 'ActionListenerProvider', () => {
     // Mock the useStream hook
     ( useStream as jest.Mock ).mockReturnValue( {
       streamClosed: true,
-      startStreamFromRequest: jest.fn(),
+      startStream: jest.fn(),
     } );
 
     // Mock the useUserRequests hook
@@ -101,8 +101,8 @@ describe( 'ActionListenerProvider', () => {
       </ActionListenerProvider>,
     );
 
-    // Verify that the startStreamFromRequest function is called
-    expect( useStream().startStreamFromRequest ).toHaveBeenCalledWith( 'requestId1' );
+    // Verify that the startStream function is called
+    expect( useStream().startStream ).toHaveBeenCalledWith( 'requestId1' );
   } );
 
   // Add more tests for other actions and edge cases

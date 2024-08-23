@@ -2,11 +2,7 @@ import { useStream } from '@/Providers/StreamProvider';
 import ActionContainer from './ActionContainer';
 
 export default function ActionIncomplete( { userRequestId }: { userRequestId: string } ) {
-  const { startStreamFromRequest } = useStream();
+  const { startStream } = useStream();
 
-  function handleRetry() {
-    startStreamFromRequest( userRequestId );
-  }
-
-  return <ActionContainer title="Try again" pending={ false } handleRetry={ handleRetry } />;
+  return <ActionContainer title="Try again" pending={ false } handleRetry={ () => startStream( userRequestId ) } />;
 }
