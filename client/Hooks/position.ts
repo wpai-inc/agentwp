@@ -22,7 +22,7 @@ export type TwoDCoord = {
   y: number;
 };
 
-export type ResizeSide = 'top' | 'bottom' | 'left' | 'right';
+export type ResizeSide = 't' | 'b' | 'l' | 'r' | 'tl' | 'tr' | 'bl' | 'br';
 
 export type ResizeHandler = ( width: number, height: number ) => void;
 
@@ -180,19 +180,38 @@ export const usePosition = ( {
         let offset = size.offset;
 
         switch ( resizeSide ) {
-          case 'top':
+          case 't':
             newHeight = Math.max( elementStartPos.y - dy, 0 );
             break;
-          case 'bottom':
+          case 'b':
             newHeight = Math.max( elementStartPos.y + dy, 0 );
             offset.y = dy;
             break;
-          case 'left':
+          case 'l':
             newWidth = Math.max( elementStartPos.x - dx, 0 );
             break;
-          case 'right':
+          case 'r':
             newWidth = Math.max( elementStartPos.x + dx, 0 );
             offset.x = dx;
+          case 'tl':
+            newWidth = Math.max( elementStartPos.x - dx, 0 );
+            newHeight = Math.max( elementStartPos.y - dy, 0 );
+            break;
+          case 'tr':
+            newWidth = Math.max( elementStartPos.x + dx, 0 );
+            newHeight = Math.max( elementStartPos.y - dy, 0 );
+            offset.x = dx;
+            break;
+          case 'bl':
+            newWidth = Math.max( elementStartPos.x - dx, 0 );
+            newHeight = Math.max( elementStartPos.y + dy, 0 );
+            offset.y = dy;
+            break;
+          case 'br':
+            newWidth = Math.max( elementStartPos.x + dx, 0 );
+            newHeight = Math.max( elementStartPos.y + dy, 0 );
+            offset.x = dx;
+            offset.y = dy;
             break;
         }
         setSize( {

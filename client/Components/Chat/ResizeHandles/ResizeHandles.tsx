@@ -8,10 +8,14 @@ export default function ResizeHandles( {
 } ) {
   return (
     <>
-      <Handle position={ 'top' } resizeHandler={ resizeHandler } />
-      <Handle position={ 'bottom' } resizeHandler={ resizeHandler } />
-      <Handle position={ 'left' } resizeHandler={ resizeHandler } />
-      <Handle position={ 'right' } resizeHandler={ resizeHandler } />
+      <Handle position={ 't' } resizeHandler={ resizeHandler } />
+      <Handle position={ 'b' } resizeHandler={ resizeHandler } />
+      <Handle position={ 'l' } resizeHandler={ resizeHandler } />
+      <Handle position={ 'r' } resizeHandler={ resizeHandler } />
+      <Handle position={ 'tl' } resizeHandler={ resizeHandler } />
+      <Handle position={ 'tr' } resizeHandler={ resizeHandler } />
+      <Handle position={ 'bl' } resizeHandler={ resizeHandler } />
+      <Handle position={ 'br' } resizeHandler={ resizeHandler } />
     </>
   );
 }
