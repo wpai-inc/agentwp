@@ -47,6 +47,10 @@ export function useChatUI() {
   return ctx;
 }
 
+export function maybeUseChatUI() {
+  return useContext( ChatUIContext );
+}
+
 export default function Chat() {
   const { setTurnedOff } = useApp();
   const { open, setOpen } = useChat();
