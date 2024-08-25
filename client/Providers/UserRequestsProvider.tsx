@@ -11,6 +11,7 @@ import {
 import { FeedbackType } from '@/Providers/FeedbackProvider';
 import { usePage } from './PageProvider';
 import { v4 as uuid } from 'uuid';
+import { optimistic } from '@/lib/utils';
 
 export type ActionType =
   | NavigateAction
@@ -164,16 +165,24 @@ export default function UserRequestsProvider( {
   }
 
   async function fetchConvo( since?: string | null ) {
-    const items = await getConversation( since ?? undefined );
+    const items = await optimistic(
+      async () => await getConversation( since ?? undefined ),
+      () => setLoadingConversation( true ),
+      convoLoadFailure,
+    );
+
     if ( items && items.length > 0 ) {
       setCurrentUserRequestId( items[ 0 ]?.id );
       setConversation( items );
     } else {
-      setCurrentUserRequestId( null );
-      clearConversation();
+      convoLoadFailure();
     }
+  }
 
+  function convoLoadFailure() {
     setLoadingConversation( false );
+    setCurrentUserRequestId( null );
+    clearConversation();
   }
 
   return (
