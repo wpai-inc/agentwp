@@ -15,6 +15,7 @@ type ClientContextType = {
   getSuggestions: ( pageCtx?: any ) => Promise< [] >;
   clearConversation: () => Promise< [] >;
   unclearConversation: ( since: string ) => Promise< [] >;
+  deleteConversation: ( convoId: number ) => Promise< [] >;
   userProfileUrl: string;
   getSettings: () => Promise< [] >;
   updateSetting: (
@@ -104,6 +105,12 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
+  async function deleteConversation( convoId: number ) {
+    return tryRequest( async () => {
+      await client.isAuthorized()?.deleteConversation( convoId );
+    } );
+  }
+
   async function getSuggestions( pageCtx?: any ) {
     return tryRequest( async () => {
       const res = await client.isAuthorized()?.getSuggestions( pageCtx );
@@ -141,6 +148,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
         getConversation,
         getSuggestions,
         clearConversation,
+        deleteConversation,
         unclearConversation,
         userProfileUrl,
         getSettings,
