@@ -8,6 +8,7 @@ import { type BlockType } from '@/Types/types';
 import { useChat } from '@/Providers/ChatProvider';
 import { useInputSelect } from '@/Providers//InputSelectProvider';
 import { CleanWysiwygContent, WriteToWysiwyg } from '@/Services/WriteToWysiwyg';
+import { WriteToCodeMirror } from '@/Services/WriteToCodeMirror';
 
 const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { updateAgentMessage } = useChat();
@@ -51,6 +52,8 @@ const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
         if ( selectedInput.type === 'WYSIWYG' ) {
           newInputFieldContent = WriteToWysiwyg( text, selectedInput );
+        } else if ( selectedInput.type === 'CodeMirror' ) {
+          WriteToCodeMirror( text, selectedInput );
         } else {
           newInputFieldContent = WriteToInputField( text, selectedInput );
         }
