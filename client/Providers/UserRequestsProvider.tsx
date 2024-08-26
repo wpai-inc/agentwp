@@ -172,6 +172,7 @@ export default function UserRequestsProvider( {
     );
 
     if ( items && items.length > 0 ) {
+      setLoadingConversation( false );
       setCurrentUserRequestId( items[ 0 ]?.id );
       setConversation( items );
     } else {
