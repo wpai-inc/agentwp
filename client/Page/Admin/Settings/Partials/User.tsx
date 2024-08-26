@@ -21,7 +21,7 @@ export function User( { user }: { user: AgentWpUser } ) {
   }
 
   return (
-    <div className="flex justify-between items-center p-2 odd:bg-gray-100">
+    <div className="flex justify-between items-center p-2 odd:bg-brand-gray-20">
       <div className="flex items-center gap-4">
         <img src={ user.image } alt={ user.name } className={ 'w-8 h-8 rounded-full' } />
         <div>{ user.name }</div>
