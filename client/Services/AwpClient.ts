@@ -112,6 +112,10 @@ export default class AwpClient {
     return this.request( 'POST', `${ this.baseUrl }/api/convo`, {}, data );
   }
 
+  async deleteConversation( convoId: number ): Promise< AxiosResponse > {
+    return this.request( 'DELETE', `${ this.baseUrl }/api/convo/${ convoId }` );
+  }
+
   async refreshToken(): Promise< AxiosResponse > {
     return this.adminRequest( `refresh_token` );
   }

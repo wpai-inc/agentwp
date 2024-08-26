@@ -4,10 +4,12 @@ import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 import { HistoryData } from '@/Types/types';
+import IconRemove from '@material-design-icons/svg/outlined/remove.svg?react';
+import { optimistic } from '@/lib/utils';
 
 export default function History() {
-  const [ history, setHistory ] = useState< HistoryData[] >();
-  const { getHistory } = useClient();
+  const [ history, setHistory ] = useState< HistoryData[] >( [] );
+  const { getHistory, deleteConversation } = useClient();
   const { since, setSince } = useUserRequests();
   const { clearHistory, setChatSetting, isEmptyConversation } = useChat();
 
@@ -28,6 +30,16 @@ export default function History() {
   function handleResume( createdAt: string ) {
     setSince( createdAt );
     setChatSetting( null );
+  }
+
+  function handleDeleteConvo( convo: HistoryData ) {
+    const originalHistory = history;
+    optimistic(
+      async () => await deleteConversation( convo.conversationId ),
+      () =>
+        setHistory( history => history?.filter( c => c.conversationId !== convo.conversationId ) ),
+      () => setHistory( originalHistory ),
+    );
   }
 
   return (
@@ -60,12 +72,19 @@ export default function History() {
 
   function HistoryItem( { convo }: { convo: HistoryData } ) {
     return (
-      <button
-        className="flex w-full justify-between gap-4 mb-2 rounded bg-slate-100 px-4 py-2 hover:bg-slate-200 transition-colors"
-        onClick={ () => handleResume( convo.conversationCreatedAt ) }>
-        <time className="block text-nowrap font-semibold">Resume { convo.humanCreatedAt }</time>
-        <blockquote className="truncate">{ convo.message }</blockquote>
-      </button>
+      <div className="flex w-full items-center gap-4 bg-slate-100 mb-2 rounded">
+        <button
+          className="hover:bg-slate-200 transition-colors px-4 py-2"
+          onClick={ () => handleResume( convo.conversationCreatedAt ) }>
+          <time className="block text-nowrap font-semibold">Resume { convo.humanCreatedAt }</time>
+        </button>
+        <blockquote className="truncate flex-1">{ convo.message }</blockquote>
+        <button
+          onClick={ () => handleDeleteConvo( convo ) }
+          className="hover:bg-slate-200  transition-colors p-2">
+          <IconRemove className="w-5 h-5" />
+        </button>
+      </div>
     );
   }
 }
