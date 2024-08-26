@@ -23,15 +23,11 @@ class CoreChat implements ClientSetupLocationInterface
 
     public function setup(): void
     {
-        add_action('admin_init', [$this, 'registerChat']);
+        add_action('in_admin_header', [$this->client, 'appRoot'], 100);
         add_action('admin_enqueue_scripts', [$this->client, 'enqueue_client_assets']);
         add_action('admin_enqueue_scripts', [$this->client, 'registerPageProps']);
         add_filter('admin_body_class', [$this->client, 'bodyClass']);
         add_action('wp_ajax_'.$this->client->slug('_'), [$this->client, 'registerControllers']);
     }
 
-    public function registerChat(): void
-    {
-        add_action('in_admin_header', [$this->client, 'appRoot'], 100);
-    }
 }
