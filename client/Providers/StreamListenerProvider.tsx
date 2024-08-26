@@ -67,7 +67,7 @@ const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         updateAgentMessage( currentUserRequestId, liveAction );
       }
     }
-  }, [ liveAction, currentUserRequestId, selectedInput ] );
+  }, [ liveAction, currentUserRequestId ] );
 
   useEffect( () => {
     if ( startingStreaming.liveAction?.action.ability === 'write_to_editor' ) {
