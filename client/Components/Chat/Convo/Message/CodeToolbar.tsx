@@ -67,8 +67,8 @@ export default function CodeToolbar( { code, language }: { code: string; languag
     <>
       <div className="flex justify-between p-2 bg-[#f9dabb] text-[#f3ae6a] rounded-xl mb-3 font-sans">
         <span>Test code before using</span>
-        <a href="/" target="_blank" rel="noreferrer" className="text-[#ee8131]">
-          LEARN HOW
+        <a href="https://kb.agentwp.com/testing-code" target="_blank" rel="noreferrer" className="text-[#ee8131] uppercase">
+          Learn How
         </a>
       </div>
 
