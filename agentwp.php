@@ -5,7 +5,7 @@
  * Plugin URI: https://codewp.ai
  * Description: Adds a AI Agent to your WordPress installation.
  * Version: 0.1.7
- * Author: WP AI Inc.
+ * Author: WPAI Inc.
  * Author URI: https://codewp.ai
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html

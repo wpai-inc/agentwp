@@ -1,4 +1,4 @@
-# Agent WP Plugin
+# AgentWP Plugin
 
 ## Installation and Setup
 
