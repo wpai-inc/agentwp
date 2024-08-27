@@ -68,7 +68,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         onmessage( ev ) {
           if ( ev.event === 'error' ) {
             let aar = JSON.parse( ev.data );
-            throw new Error( `Error when processing message: ${ aar }` );
+            throw new Error( `Error when processing message: ${ aar.reason }` );
           }
           if ( ev.event === 'close' && liveAction.current ) {
             addActionToCurrentRequest( user_request_id, liveAction.current );

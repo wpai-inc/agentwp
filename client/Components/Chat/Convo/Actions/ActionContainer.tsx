@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactElement } from 'react';
 import { cn } from '@/lib/utils';
 import { Spinner } from '@/Components/Spinner';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/ui/collapsible';
@@ -39,7 +39,6 @@ export default function ActionContainer( {
     if ( handleRetry ) return handleRetry();
   }
 
-  console.log( error );
   return (
     <Collapsible
       open={ isOpen }
@@ -64,7 +63,7 @@ export default function ActionContainer( {
               </button>
             </AgentTooltip>
           ) : (
-            icon && React.cloneElement( icon, { className: iconClassName } )
+            icon && React.cloneElement( icon as ReactElement, { className: iconClassName } )
           ) }
           <p className="overflow-hidden text-ellipsis whitespace-nowrap">{ title }</p>
         </div>
