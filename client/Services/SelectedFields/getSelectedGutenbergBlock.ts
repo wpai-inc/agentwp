@@ -7,14 +7,16 @@ export function getSelectedGutenbergBlock(
   setSelectedInput: React.Dispatch< React.SetStateAction< any > >,
 ) {
   isEditorReady( () => {
-    const blocksContainer = document.querySelector(
-      '.block-editor-writing-flow .is-root-container',
-    );
-    if ( blocksContainer ) {
-      blocksContainer.addEventListener( 'click', () => {
-        const hasSelectedBlock = wp.data.select( 'core/block-editor' ).hasSelectedBlock();
+    const { subscribe, select } = wp.data;
+    let previousSelectedBlockClientId: string | null = null;
+
+    const onSelectionChange = () => {
+      const selectedBlockClientId = select( 'core/block-editor' ).getSelectedBlockClientId();
+
+      if ( selectedBlockClientId !== previousSelectedBlockClientId ) {
+        const hasSelectedBlock = select( 'core/block-editor' ).hasSelectedBlock();
         if ( hasSelectedBlock ) {
-          const theSelectedBlock = wp.data.select( 'core/block-editor' ).getSelectedBlock();
+          const theSelectedBlock = select( 'core/block-editor' ).getSelectedBlock();
           const blockClientId = theSelectedBlock.clientId;
           if ( blockClientId ) {
             const blocks = wp.blocks.getBlockTypes();
@@ -40,7 +42,15 @@ export function getSelectedGutenbergBlock(
             } );
           }
         }
-      } );
+
+        previousSelectedBlockClientId = selectedBlockClientId;
+      }
+    };
+
+    const unsubscribe = subscribe( onSelectionChange );
+
+    function cleanup() {
+      unsubscribe();
     }
   } );
 }
