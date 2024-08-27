@@ -1,3 +1,5 @@
+import { CardList } from '@/Components/Admin/CardList';
+
 type QuickLink = {
   title: string;
   url: string;
@@ -6,35 +8,34 @@ type QuickLink = {
 export default function QuickLinks() {
   const links: QuickLink[] = [
     {
-      title: 'Lorem',
-      url: 'https://example.com',
+      title: 'All Agents',
+      url: 'app.agentwp.com',
     },
     {
-      title: 'Ipsum',
-      url: 'https://example.com',
+      title: 'Billing',
+      url: 'app.agentwp.com/billing',
     },
     {
-      title: 'Dolor',
-      url: 'https://example.com',
+      title: 'Agent Settings',
+      url: 'tab',
     },
     {
-      title: 'Sit',
-      url: 'https://example.com',
+      title: 'Changes and Updates',
+      url: 'agentwp.com/blog',
     },
     {
-      title: 'Amet',
-      url: 'https://example.com',
+      title: 'AgentWP Blog',
+      url: 'agentwp.com/blog',
     },
   ];
   return (
-    <ul>
-      { links.map( ( link, key ) => (
-        <li key={ key }>
-          <a href={ link.url } target="_blank" rel="noreferrer">
-            { link.title }
-          </a>
-        </li>
-      ) ) }
-    </ul>
+    <CardList
+      items={ links.map( link => ( {
+        href: link.url,
+        children: link.title,
+        target: '_blank',
+        rel: 'noreferrer',
+      } ) ) }
+    />
   );
 }

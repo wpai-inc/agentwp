@@ -7,22 +7,22 @@ import UserList from '../Partials/UserList';
 import { Card } from '@/Components/Admin/Card';
 
 export default function UsersManagement() {
-  const adminRequest = useAdminRoute();
+  const { adminRequest, tryRequest } = useAdminRoute();
 
   const [ users, setUsers ] = useState< AgentWpUser[] >( [] );
   const [ searching, setSearching ] = useState( false );
 
-  function getUsers() {
-    setSearching( true );
-    adminRequest
-      .get( 'agentwp_users' )
-      .then( ( response: any ) => {
-        setUsers( response.data.data );
-        setSearching( false );
-      } )
-      .catch( ( error: any ) => {
-        console.error( error );
-      } );
+  async function getUsers() {
+    const response = await tryRequest(
+      'get',
+      'agentwp_users',
+      null,
+      () => setSearching( true ),
+      () => setSearching( false ),
+    );
+
+    setUsers( response.data.data );
+    setSearching( false );
   }
 
   useEffect( () => {

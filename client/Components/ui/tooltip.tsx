@@ -27,7 +27,7 @@ const TooltipContent = React.forwardRef<
       'data-[side=right]:slide-in-from-left-2',
       'data-[side=top]:slide-in-from-bottom-2',
       'dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50',
-      'bg-gray-800 text-gray-100',
+      'bg-gray-800 text-brand-gray-20',
       className,
     ) }
     { ...props }

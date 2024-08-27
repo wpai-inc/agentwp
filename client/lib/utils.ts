@@ -39,6 +39,7 @@ export const generateUniqueSelector = (element: Element): string => {
       const sibling = element?.parentNode?.childNodes;
       let nodeIndex = 0;
       let hasSameNodeType = false;
+      if ( sibling ) {
       for (let i = 0; i < sibling.length; i++) {
         if (sibling[i].nodeType === Node.ELEMENT_NODE && sibling[i].nodeName === element.nodeName) {
           if (sibling[i] === element) {
@@ -48,12 +49,36 @@ export const generateUniqueSelector = (element: Element): string => {
           hasSameNodeType = true;
         }
       }
+      }
       if (hasSameNodeType) {
         selector += ':nth-of-type(' + nodeIndex + ')';
       }
       path = selector + (path ? ' > ' + path : '');
-      element = element.parentNode;
+      element = element.parentNode as Element;
     }
   }
   return path;
+};
+
+export type OptimisticFn = (
+  fn: () => Promise< any >,
+  onSuccess?: () => void,
+  onFailure?: ( e: any, msg: string ) => void,
+) => Promise< any >;
+
+export const optimistic: OptimisticFn = async ( fn, onSuccess, onFailure ) => {
+  onSuccess && onSuccess();
+
+  try {
+    return await fn();
+  } catch ( e: any ) {
+    const msg = e?.msg || 'An error occurred';
+    onFailure && onFailure( e, msg );
+    throw e;
+  }
+};
+
+export const getElementByXpath = ( path: string ) => {
+  return document.evaluate( path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
+    .singleNodeValue;
 };

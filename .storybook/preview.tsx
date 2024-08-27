@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
 import '@/assets/styles/app.css';
-import App from '../client/Shared/App';
+import AppProvider from '../client/Providers/AppProvider';
 import ChatProvider from '../client/Providers/ChatProvider';
 import ClientSettingsProvider from '../client/Providers/ClientSettingsProvider';
 import ScreenProvider from '../client/Providers/ScreenProvider';
@@ -31,7 +31,7 @@ const page = {
     user_login: 'greg',
     user_nicename: 'greg',
     display_name: 'greg',
-    roles: ['administrator'],
+    roles: [ 'administrator' ],
     avatar_url: 'https://secure.gravatar.com/avatar/7b3f7b3f7b3f7b3f7b3f7b3f7b3f7b3f?s=96&d=mm&r=g',
   },
   is_admin: true,
@@ -71,20 +71,20 @@ const preview: Preview = {
     },
   },
   decorators: [
-    function (Story, { parameters }) {
+    function ( Story, { parameters } ) {
       return (
-        <PageProvider page={page}>
+        <PageProvider page={ page }>
           <NotificationsProvider>
-            <App>
+            <AppProvider>
               <ErrorProvider>
                 <AdminRouteProvider>
                   <ClientProvider>
                     <ClientSettingsProvider>
                       <ScreenProvider>
-                        <UserRequestsProvider messages={parameters.messages}>
+                        <UserRequestsProvider messages={ parameters.messages }>
                           <StreamProvider>
                             <ActionListenerProvider>
-                              <ChatProvider defaultOpen={parameters.open}>
+                              <ChatProvider defaultOpen={ parameters.open }>
                                 <Story />
                               </ChatProvider>
                             </ActionListenerProvider>
@@ -95,7 +95,7 @@ const preview: Preview = {
                   </ClientProvider>
                 </AdminRouteProvider>
               </ErrorProvider>
-            </App>
+            </AppProvider>
           </NotificationsProvider>
         </PageProvider>
       );

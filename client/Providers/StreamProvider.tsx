@@ -6,6 +6,7 @@ import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { usePage } from '@/Providers/PageProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
+import { optimistic } from '@/lib/utils';
 
 export const StreamContext = createContext< any | undefined >( undefined );
 
@@ -33,11 +34,12 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const { setCurrentUserRequestId, addActionToCurrentRequest, currentUserRequestId } =
     useUserRequests();
   const { addErrors } = useError();
-  const { client } = useClient();
+  const { client, getStreamUrl } = useClient();
   const { page } = usePage();
   const ctrl = useRef< AbortController >( new AbortController() );
 
-  async function startStream( stream_url: string, user_request_id: string ) {
+  async function startStream( user_request_id: string ) {
+    const stream_url = getStreamUrl( user_request_id );
     setCurrentUserRequestId( user_request_id );
     resetStream();
 
@@ -66,7 +68,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         onmessage( ev ) {
           if ( ev.event === 'error' ) {
             let aar = JSON.parse( ev.data );
-            throw new Error( `Error when processing message: ${ aar }` );
+            throw new Error( `Error when processing message: ${ aar.reason }` );
           }
           if ( ev.event === 'close' && liveAction.current ) {
             addActionToCurrentRequest( user_request_id, liveAction.current );
@@ -88,19 +90,28 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     }
   }
 
-  async function cancelStream() {
-    // Abbort the connection
-    ctrl.current.abort();
+  function cancelStream( userRequestId: string ) {
+    if ( currentUserRequestId === userRequestId ) {
+      optimistic(
+        () => abortRequest( userRequestId ),
+        () => {
+          console.log( 'Stream canceled' );
+          // Abort the connection
+          ctrl.current.abort();
 
-    // Reset the controller
-    ctrl.current = new AbortController();
-    setStreamClosed( true );
-    client.abortUserRequest( currentUserRequestId );
+          // Reset the controller
+          ctrl.current = new AbortController();
+          setStreamClosed( true );
+        },
+      );
+    }
   }
 
-  async function startStreamFromRequest( user_request_id: string ) {
-    const url = client.getStreamUrl( user_request_id );
-    await startStream( url, user_request_id );
+  async function abortRequest( userRequestId: string ) {
+    if ( currentUserRequestId === userRequestId ) {
+      console.log( 'aborting request' );
+      client.abortUserRequest( userRequestId );
+    }
   }
 
   async function handleStreamError( e: any ) {
@@ -118,7 +129,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       value={ {
         startStream,
         cancelStream,
-        startStreamFromRequest,
+        abortRequest,
         liveAction: liveAction.current,
         streamClosed,
       } }>

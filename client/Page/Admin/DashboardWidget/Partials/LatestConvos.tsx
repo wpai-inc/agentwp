@@ -19,13 +19,17 @@ export default function LatestConvos() {
   }, [] );
 
   return (
-    <div>
+    <div className="max-h-[calc(100vh-275px)] min-h-[calc(100%-2rem)] overflow-y-auto">
       { isLoading ? (
         <div className="min-h-10 flex items-center justify-center">
           <Spinner show={ true } />
         </div>
       ) : convos.length > 0 ? (
-        convos.map( convo => <ConvoItem key={ convo.conversationCreatedAt } { ...convo } /> )
+        <div className="flex flex-col-reverse">
+          { convos.map( convo => (
+            <ConvoItem key={ convo.conversationCreatedAt } { ...convo } />
+          ) ) }
+        </div>
       ) : (
         <p>No recent conversations.</p>
       ) }
@@ -40,7 +44,7 @@ function openConvo( since: string ) {
 function ConvoItem( convo: HistoryData ) {
   return (
     <button
-      className="p-2 w-full text-left odd:bg-gray-100 flex justify-between"
+      className="p-2 w-full text-left odd:bg-brand-gray-20 flex justify-between"
       onClick={ () => openConvo( convo.conversationCreatedAt ) }>
       <blockquote className="truncate">{ convo.message }</blockquote>
       <time className="text-sm font-semibold block text-nowrap ml-3">{ convo.humanCreatedAt }</time>

@@ -7,7 +7,7 @@ import { useAdminRoute } from '@/Providers/AdminRouteProvider';
 
 export default function Wizard() {
   const { page } = usePage();
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
 
   const [ steps, setSteps ] = useState( [
     {

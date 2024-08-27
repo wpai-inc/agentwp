@@ -5,17 +5,16 @@ import { useNotifications } from '@/Providers/NotificationProvider';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
 
 export default class AwpClient {
-  private baseUrl: string = 'https://app.agentwp.com';
-  private token?: string;
+  public token?: string;
+  public agentWpVersion = '0.1-alpha1';
+
   private httpClient: AxiosInstance;
-
+  private baseUrl: string = 'https://app.agentwp.com';
   private adminRequest = useAdminRoute();
-
-  private agentWpVersion = '0.1-alpha1';
 
   constructor( token?: string ) {
     const { page, setPageData } = usePage();
-    const { addNotification } = useNotifications();
+    const { notify } = useNotifications();
     this.token = token || page.access_token;
     this.baseUrl = page.api_host;
 
@@ -43,7 +42,7 @@ export default class AwpClient {
           }
 
           // Logout user or redirect to login page
-          addNotification( 'Your API token is invalid or expired. Please login again.', 'error' );
+          notify.error( 'Your API token is invalid or expired. Please login again.' );
           this.adminRequest.get( 'logout' );
           throw new Error( 'Your API token is invalid or expired. Please login again.' );
         }
@@ -97,6 +96,11 @@ export default class AwpClient {
       { result: data },
     );
   }
+
+  async storeAgentError( actionId: string, data: { message: string } ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/error`, {}, data );
+  }
+
   async abortUserRequest( userRequestId: string ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/request/${ userRequestId }/abort`, {}, {} );
   }
@@ -113,12 +117,20 @@ export default class AwpClient {
     return this.request( 'POST', `${ this.baseUrl }/api/convo`, {}, data );
   }
 
+  async deleteConversation( convoId: number ): Promise< AxiosResponse > {
+    return this.request( 'DELETE', `${ this.baseUrl }/api/convo/${ convoId }` );
+  }
+
   async refreshToken(): Promise< AxiosResponse > {
     return this.adminRequest( `refresh_token` );
   }
 
   async postEscalation( escalationId: string ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/escalation/${ escalationId }` );
+  }
+
+  async removeUserRequest( userRequestId: string ): Promise< AxiosResponse > {
+    return this.request( 'DELETE', `${ this.baseUrl }/api/request/${ userRequestId }` );
   }
 
   async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {

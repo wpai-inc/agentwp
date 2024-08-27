@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import { cn } from '@/lib/utils';
 import { useChat } from '@/Providers/ChatProvider';
 import { HistoryData } from '@/Types/types';
+import IconRemove from '@material-design-icons/svg/outlined/remove.svg?react';
+import { optimistic } from '@/lib/utils';
 
 export default function History() {
-  const [ history, setHistory ] = useState< HistoryData[] >();
-  const { getHistory, unclearConversation } = useClient();
-  const { since, setSince, refreshConvo } = useUserRequests();
+  const [ history, setHistory ] = useState< HistoryData[] >( [] );
+  const { getHistory, deleteConversation } = useClient();
+  const { since, setSince } = useUserRequests();
   const { clearHistory, setChatSetting, isEmptyConversation } = useChat();
 
   useEffect( () => {
@@ -18,24 +19,27 @@ export default function History() {
 
   async function fetchHistory( since: string | null ) {
     const history = await getHistory( since );
-    console.log( history );
     setHistory( history );
   }
 
-  async function handleUnclear( since: string | null ) {
-    await unclearConversation( since );
-    fetchHistory( null );
-    refreshConvo();
-  }
-
   function handleClearConvo() {
-    clearHistory();
     setChatSetting( null );
+    clearHistory();
   }
 
   function handleResume( createdAt: string ) {
     setSince( createdAt );
     setChatSetting( null );
+  }
+
+  function handleDeleteConvo( convo: HistoryData ) {
+    const originalHistory = history;
+    optimistic(
+      async () => await deleteConversation( convo.conversationId ),
+      () =>
+        setHistory( history => history?.filter( c => c.conversationId !== convo.conversationId ) ),
+      () => setHistory( originalHistory ),
+    );
   }
 
   return (
@@ -68,19 +72,19 @@ export default function History() {
 
   function HistoryItem( { convo }: { convo: HistoryData } ) {
     return (
-      <button
-        className="flex w-full justify-between gap-4 mb-2 rounded bg-slate-100 px-4 py-2 hover:bg-slate-200 transition-colors"
-        onClick={ () => handleResume( convo.conversationCreatedAt ) }>
-        <time className="block text-nowrap font-semibold">Resume { convo.humanCreatedAt }</time>
-        <blockquote className="truncate">{ convo.message }</blockquote>
-      </button>
+      <div className="flex w-full items-center gap-4 bg-slate-100 mb-2 rounded">
+        <button
+          className="hover:bg-slate-200 transition-colors px-4 py-2"
+          onClick={ () => handleResume( convo.conversationCreatedAt ) }>
+          <time className="block text-nowrap font-semibold">Resume { convo.humanCreatedAt }</time>
+        </button>
+        <blockquote className="truncate flex-1">{ convo.message }</blockquote>
+        <button
+          onClick={ () => handleDeleteConvo( convo ) }
+          className="hover:bg-slate-200  transition-colors p-2">
+          <IconRemove className="w-5 h-5" />
+        </button>
+      </div>
     );
-    {
-      /* <button
-          className="underline"
-          onClick={ () => handleUnclear( convo.conversationCreatedAt ) }>
-          Unclear
-        </button> */
-    }
   }
 }

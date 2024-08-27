@@ -14,6 +14,11 @@ export default function ChatOverlay() {
           className="bg-white absolute shadow rounded z-20 w-[calc(100%-1rem)] m-[0.5rem] h-[calc(100%-1rem)]"
           initial={ { scale: 0, y: '100%' } }
           animate={ { scale: 1, y: 0 } }
+          transition={ {
+            type: 'spring',
+            duration: 0.3,
+            bounce: 0.25,
+          } }
           exit={ { scale: 0, y: '100%' } }>
           <div className="py-2 px-4 flex items-center justify-between border-b border-brand-gray-15/50">
             { chatSetting.header && <h2 className="font-bold">{ chatSetting.header }</h2> }

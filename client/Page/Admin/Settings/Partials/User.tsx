@@ -4,19 +4,24 @@ import type { AgentWpUser } from '@/Types/types';
 import { useState } from 'react';
 
 export function User( { user }: { user: AgentWpUser } ) {
-  const adminRequest = useAdminRoute();
+  const { tryRequest } = useAdminRoute();
   const [ checked, setChecked ] = useState( user.agentwp_access );
 
-  function setAgentwpAccess( value: boolean ) {
-    setChecked( value );
-    adminRequest.post( 'update_user', {
-      user: user.id,
-      agentwp_access: value,
-    } );
+  async function setAgentwpAccess( value: boolean ) {
+    await tryRequest(
+      'post',
+      'update_user',
+      {
+        user: user.id,
+        agentwp_access: value,
+      },
+      () => setChecked( value ),
+      () => setChecked( ! value ),
+    );
   }
 
   return (
-    <div className="flex justify-between items-center p-2 odd:bg-gray-100">
+    <div className="flex justify-between items-center p-2 odd:bg-brand-gray-20">
       <div className="flex items-center gap-4">
         <img src={ user.image } alt={ user.name } className={ 'w-8 h-8 rounded-full' } />
         <div>{ user.name }</div>

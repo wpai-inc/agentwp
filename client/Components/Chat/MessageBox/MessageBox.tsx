@@ -1,7 +1,6 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
-import { useStream } from '@/Providers/StreamProvider';
 import { cn } from '@/lib/utils';
 import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
@@ -11,24 +10,20 @@ import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
 
 export default function MessageBox() {
-  const { sendMessage, setChatSetting } = useChat();
-  const { streamClosed, cancelStream } = useStream();
-  const [ message, setMessage ] = useState( '' );
+  const { sendMessage, setChatSetting, message, setMessage, messageSubmitted, cancelMessage } =
+    useChat();
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
 
-  const send = useCallback(
-    ( msg: string ) => {
-      sendMessage( msg );
-      setMessage( '' );
-    },
-    [ sendMessage ],
-  );
-
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
-    send( message );
+    sendMessage( message );
+  }
+
+  function handleCancelMessage( e: React.MouseEvent< HTMLButtonElement > ) {
+    e.preventDefault();
+    cancelMessage();
   }
 
   function handleKeyDown( e: React.KeyboardEvent< HTMLElement >, menuFocused: boolean ) {
@@ -43,8 +38,9 @@ export default function MessageBox() {
     if ( e.key === 'ArrowUp' || e.key === 'ArrowDown' ) {
       e.preventDefault();
       setCommandMenuFocused( true );
-    } else if ( e.key === 'Enter' && ( e.metaKey || e.ctrlKey ) ) {
-      send( message );
+    } else if ( e.key === 'Enter' && ! e.metaKey && ! e.ctrlKey && ! e.shiftKey && ! e.altKey ) {
+      e.preventDefault();
+      sendMessage( message );
     } else {
       setCommandMenuFocused( false );
     }
@@ -92,19 +88,19 @@ export default function MessageBox() {
               <TuneIcon className="h-6 w-6" />
             </Button>
           </AgentTooltip>
-          { streamClosed ? (
-            <Button
-              type="submit"
-              className={ cn( 'rounded bg-brand-primary px-3' ) }
-              disabled={ ! streamClosed || ! page.onboarding_completed || ! page.agentwp_access }>
-              { streamClosed ? <UpArrowIcon className="h-5 w-5" /> : 'Pending...' }
-            </Button>
-          ) : (
+          { messageSubmitted ? (
             <Button
               type="button"
               className={ cn( 'rounded bg-brand-primary px-3.5' ) }
-              onClick={ cancelStream }>
+              onClick={ handleCancelMessage }>
               <div className="h-4 w-4 bg-white"></div>
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className={ cn( 'rounded bg-brand-primary px-3' ) }
+              disabled={ ! page.onboarding_completed || ! page.agentwp_access }>
+              <UpArrowIcon className="h-5 w-5" />
             </Button>
           ) }
         </div>

@@ -1,7 +1,7 @@
 import isEditorReady from '@/lib/isEditorReady';
 import React from 'react';
 
-export default function getSelectedPostTitle(
+export function getSelectedPostTitle(
   setSelectedInput: React.Dispatch< React.SetStateAction< any > >,
 ) {
   isEditorReady( () => {

@@ -78,6 +78,7 @@ export type GutenbergStreamType = {
 
 type SelectedInputType = {
   inputPath: string;
+  inputXPath: string;
   inputLabel: string;
   inputName: string | null;
   inputId: string | null;

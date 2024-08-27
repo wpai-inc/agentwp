@@ -9,6 +9,9 @@ import {
   WriteToEditorAction,
 } from '@wpai/schemas';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
+import { usePage } from './PageProvider';
+import { v4 as uuid } from 'uuid';
+import { optimistic } from '@/lib/utils';
 
 export type ActionType =
   | NavigateAction
@@ -45,6 +48,8 @@ export type UserRequestType = {
 type UserRequestsContextType = {
   conversation: UserRequestType[];
   setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
+  clearConversation: () => void;
+  createUserRequest: ( message: string ) => UserRequestType;
   currentUserRequestId: string | null;
   currentUserRequest?: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
@@ -57,20 +62,9 @@ type UserRequestsContextType = {
   addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
 };
 
-const UserRequestsContext = createContext< UserRequestsContextType >( {
-  conversation: [],
-  setConversation: () => {},
-  currentUserRequestId: null,
-  currentUserRequest: undefined,
-  setCurrentUserRequestId: () => {},
-  currentAction: null,
-  fetchConvo: async () => {},
-  refreshConvo: () => {},
-  loadingConversation: false,
-  since: null,
-  setSince: () => {},
-  addActionToCurrentRequest: () => {},
-} );
+const UserRequestsContext = createContext< UserRequestsContextType >(
+  {} as UserRequestsContextType,
+);
 
 export function useUserRequests() {
   const chat = useContext( UserRequestsContext );
@@ -87,6 +81,7 @@ export default function UserRequestsProvider( {
   messages?: UserRequestType[];
   children: React.ReactNode;
 } ) {
+  const { page } = usePage();
   const { getConversation } = useClient();
   const [ since, setSince ] = useState< string | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
@@ -113,11 +108,17 @@ export default function UserRequestsProvider( {
     };
   }, [] );
 
+  /**
+   * The currentUserRequest is always the last request in the conversation.
+   */
   const currentUserRequest = useMemo(
     () => conversation.find( request => request.id === currentUserRequestId ),
     [ conversation, currentUserRequestId ],
   );
 
+  /**
+   * The currentAction is always the last action in the currentUserRequest.
+   */
   const currentAction = useMemo(
     () =>
       currentUserRequest?.agent_actions
@@ -145,17 +146,44 @@ export default function UserRequestsProvider( {
     [ conversation, currentUserRequestId ],
   );
 
-  async function fetchConvo( since: string | null ) {
-    const items = await getConversation( since );
+  function createUserRequest( message: string ): UserRequestType {
+    return {
+      id: uuid(),
+      message,
+      user: {
+        name: page.user.name,
+        email: page.user.email,
+      },
+      created_at: new Date().toISOString(),
+      human_created_at: 'just now',
+      agent_actions: [],
+    };
+  }
+
+  function clearConversation() {
+    setConversation( [] );
+  }
+
+  async function fetchConvo( since?: string | null ) {
+    const items = await optimistic(
+      async () => await getConversation( since ?? undefined ),
+      () => setLoadingConversation( true ),
+      convoLoadFailure,
+    );
+
     if ( items && items.length > 0 ) {
+      setLoadingConversation( false );
       setCurrentUserRequestId( items[ 0 ]?.id );
       setConversation( items );
     } else {
-      setCurrentUserRequestId( null );
-      setConversation( [] );
+      convoLoadFailure();
     }
+  }
 
+  function convoLoadFailure() {
     setLoadingConversation( false );
+    setCurrentUserRequestId( null );
+    clearConversation();
   }
 
   return (
@@ -163,6 +191,8 @@ export default function UserRequestsProvider( {
       value={ {
         conversation,
         setConversation,
+        clearConversation,
+        createUserRequest,
         currentUserRequestId,
         currentUserRequest,
         setCurrentUserRequestId,

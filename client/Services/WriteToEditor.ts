@@ -6,7 +6,6 @@ import { type BlockType, GutenbergStreamType } from '@/Types/types';
 export function WriteToEditor( content: string, previousContent: BlockType[] ) {
   try {
     if ( content ) {
-      console.log( 'Writing to content' );
       const updatedBlocks = parse( content ) as GutenbergStreamType;
       if ( ! updatedBlocks.content ) {
         console.info( 'No content to write...' );
@@ -32,7 +31,6 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
         insertBlock( block ).then( clientId => {
           updatedBlocks.content[ key ].clientId = clientId;
           updatedBlocks.content[ key ].status = 'ready';
-          // console.log( 'Block Inserted', key, updatedBlocks[ key ] );
         } );
       } else if (
         block.attributes?.content &&
@@ -50,7 +48,6 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
             }
           } );
         }
-        // console.log( 'Block Content Updated', key, updatedBlocks[ key ] );
       } else if (
         block.innerBlocks &&
         block.innerBlocks?.length > 0 &&
@@ -69,9 +66,7 @@ export function WriteToEditor( content: string, previousContent: BlockType[] ) {
             }
           } );
         }
-        // console.log( 'Block Inner Blocks Updated', key, updatedBlocks[ key ] );
       }
-      // } );
       return updatedBlocks;
     }
   } catch ( error ) {

@@ -8,6 +8,7 @@ import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { StreamableFieldType } from '@/Types/types';
+import { optimistic } from '@/lib/utils';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -17,23 +18,33 @@ type CreateUserRequestResponse = {
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
 type StoreRequestType = {
+  id: string | null;
   message: string;
   selected_input: StreamableFieldType | null;
   site_data?: any[];
 };
 
-const ChatContext = createContext( {
-  conversation: [] as UserRequestType[],
-  isEmptyConversation: false,
-  sendMessage: ( _message: string ) => {},
-  updateAgentMessage: ( _urId: string, _updatedAa: AgentAction ) => {},
-  cancelStreaming: () => {},
-  setChatSetting: ( _setting: ChatSettingProps ) => {},
-  chatSetting: null as ChatSettingProps,
-  clearHistory: () => {},
-  open: false,
-  setOpen: ( _open: boolean ) => {},
-} );
+type ChatContextType = {
+  conversation: UserRequestType[];
+  isEmptyConversation: boolean;
+  sendMessage: ( message: string ) => void;
+  updateAgentMessage: ( urId: string, updatedAa: AgentAction ) => void;
+  cancelMessage: () => void;
+  setChatSetting: ( setting: ChatSettingProps ) => void;
+  chatSetting: ChatSettingProps;
+  clearHistory: () => void;
+  open: boolean;
+  setOpen: ( open: boolean ) => void;
+  snippetPlugin: string | null;
+  setSnippetPlugin: ( plugin: string | null ) => void;
+  message: string;
+  setMessage: ( message: string ) => void;
+  messageSubmitted: boolean;
+  addUserRequest: ( ur: UserRequestType ) => void;
+  removeUserRequest: ( ur: UserRequestType ) => void;
+};
+
+const ChatContext = createContext< ChatContextType | undefined >( undefined );
 
 export function useChat() {
   const chat = useContext( ChatContext );
@@ -53,20 +64,35 @@ export default function ChatProvider( {
   const { client, clearConversation } = useClient();
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
+  const [ message, setMessage ] = useState( '' );
+  const [ messageSubmitted, setMessageSubmitted ] = useState< boolean >( false );
   const [ chatSetting, setChatSetting ] = useState< ChatSettingProps >( null );
-  const { conversation, setConversation, fetchConvo } = useUserRequests();
-  const { startStream } = useStream();
+  const {
+    conversation,
+    setConversation,
+    clearConversation: clear,
+    createUserRequest,
+    currentUserRequestId,
+  } = useUserRequests();
+  const { startStream, cancelStream } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
-  const adminRequest = useAdminRoute();
+  const { adminRequest } = useAdminRoute();
+  const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
 
   async function clearHistory() {
-    await clearConversation();
-    fetchConvo( null );
+    optimistic( clearConversation, clear, ( e: any ) => {
+      setConversation( conversation );
+      addErrors( [ e ] );
+    } );
   }
 
-  async function userRequest( message: string ): Promise< CreateUserRequestResponse > {
+  async function userRequest(
+    message: string,
+    id: string | null = null,
+  ): Promise< CreateUserRequestResponse > {
     let req: StoreRequestType = {
+      id,
       message,
       selected_input: selectedInput,
     };
@@ -103,29 +129,40 @@ export default function ChatProvider( {
     } );
   }
 
-  function addUserRequest( msg: UserRequestType ) {
-    setConversation( [ msg, ...conversation ] );
+  function addUserRequest( ur: UserRequestType ) {
+    setConversation( [ ur, ...conversation ] );
+  }
+
+  function removeUserRequest( ur: UserRequestType ) {
+    setConversation( conversation.filter( item => item.id !== ur.id ) );
   }
 
   async function sendMessage( message: string ) {
-    try {
-      const { stream_url, user_request } = await userRequest( message );
-      addUserRequest( user_request );
-      startStream( stream_url, user_request.id );
-    } catch ( e: any ) {
-      addErrors( [ e ] );
-      console.error( e );
-    }
+    const ur = createUserRequest( message );
+    setMessageSubmitted( true );
+
+    await optimistic(
+      async () => {
+        const { user_request } = await userRequest( ur.message, ur.id );
+        await startStream( user_request.id );
+      },
+      () => {
+        setMessage( '' );
+        addUserRequest( ur );
+      },
+      ( e: any ) => {
+        addErrors( [ e ] );
+        setMessage( message );
+      },
+    );
+
+    setMessageSubmitted( false );
   }
 
-  async function cancelStreaming() {
-    try {
-      const { stream_url, user_request } = await userRequest( '' );
-      addUserRequest( user_request );
-      startStream( stream_url, user_request.id );
-    } catch ( e: any ) {
-      addErrors( [ e ] );
-      console.error( e );
+  function cancelMessage() {
+    if ( currentUserRequestId ) {
+      setMessageSubmitted( false );
+      cancelStream( currentUserRequestId );
     }
   }
 
@@ -138,12 +175,19 @@ export default function ChatProvider( {
         isEmptyConversation,
         sendMessage,
         updateAgentMessage,
-        cancelStreaming,
+        cancelMessage,
         setChatSetting,
         chatSetting,
         clearHistory,
         open,
         setOpen,
+        message,
+        setMessage,
+        messageSubmitted,
+        snippetPlugin,
+        setSnippetPlugin,
+        addUserRequest,
+        removeUserRequest,
       } }>
       { children }
     </ChatContext.Provider>

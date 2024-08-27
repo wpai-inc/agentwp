@@ -2,11 +2,14 @@ import { useEffect } from 'react';
 import { useChat } from '@/Providers/ChatProvider';
 import { useUserRequests } from './UserRequestsProvider';
 import { AWPEventChatSinceType, AWPEventChatOpenType } from '@/Types/types';
-import { useChatUI } from '@/Components/Chat/Chat';
+import { maybeUseChatUI } from '@/Components/Chat/Chat';
 
 const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
-  const { chatSetting, setChatSetting } = useChat();
-  const { toggle } = useChatUI();
+  const { chatSetting, setChatSetting, cancelMessage } = useChat();
+
+  const chatUI = maybeUseChatUI();
+  const toggleChat = chatUI?.toggle;
+
   const { setSince } = useUserRequests();
 
   /**
@@ -31,18 +34,37 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
    * Toggle the chat with the
    * CMD + L key
    */
+  if ( toggleChat ) {
+    useEffect( () => {
+      const handleToggle = ( e: KeyboardEvent ) => {
+        if ( ( e.metaKey || e.ctrlKey ) && e.key === 'l' ) {
+          e.preventDefault();
+          toggleChat();
+        }
+      };
+      window.addEventListener( 'keydown', handleToggle );
+      return () => {
+        window.removeEventListener( 'keydown', handleToggle );
+      };
+    }, [ toggleChat ] );
+  }
+
+  /**
+   * Cancel the chat with the
+   * CMD + X key
+   */
   useEffect( () => {
-    const handleToggle = ( e: KeyboardEvent ) => {
-      if ( ( e.metaKey || e.ctrlKey ) && e.key === 'l' ) {
+    const handleCxl = ( e: KeyboardEvent ) => {
+      if ( ( e.metaKey || e.ctrlKey ) && e.key === 'x' ) {
         e.preventDefault();
-        toggle();
+        cancelMessage();
       }
     };
-    window.addEventListener( 'keydown', handleToggle );
+    window.addEventListener( 'keydown', handleCxl );
     return () => {
-      window.removeEventListener( 'keydown', handleToggle );
+      window.removeEventListener( 'keydown', handleCxl );
     };
-  }, [ toggle ] );
+  }, [ cancelMessage ] );
 
   /**
    * Custom Event Listener for Chat Since
@@ -53,15 +75,15 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
   useEffect( () => {
     window.agentwp.addEventListener( 'awp:chat:since', ( e: AWPEventChatOpenType ) => {
       if ( e.detail?.since ) {
-        toggle();
+        toggleChat && toggleChat();
         setSince( e.detail.since );
       }
     } );
 
     window.agentwp.addEventListener( 'awp:chat:toggle', ( e: AWPEventChatSinceType ) => {
-      toggle();
+      toggleChat && toggleChat();
     } );
-  }, [ window.agentwp, setSince, toggle ] );
+  }, [ window.agentwp, setSince, toggleChat ] );
 
   return <>{ children }</>;
 };

@@ -7,6 +7,8 @@ import type { AgentAction } from '@/Providers/UserRequestsProvider';
 import { type BlockType } from '@/Types/types';
 import { useChat } from '@/Providers/ChatProvider';
 import { useInputSelect } from '@/Providers//InputSelectProvider';
+import { CleanWysiwygContent, WriteToWysiwyg } from '@/Services/WriteToWysiwyg';
+import { WriteToCodeMirror } from '@/Services/WriteToCodeMirror';
 
 const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { updateAgentMessage } = useChat();
@@ -45,7 +47,16 @@ const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         selectedInput
       ) {
         const text = liveAction.action.text.replace( /```json/g, '' ).replace( /```/g, '' );
-        const newInputFieldContent = WriteToInputField( text, selectedInput );
+
+        let newInputFieldContent;
+
+        if ( selectedInput.type === 'WYSIWYG' ) {
+          newInputFieldContent = WriteToWysiwyg( text, selectedInput );
+        } else if ( selectedInput.type === 'CodeMirror' ) {
+          WriteToCodeMirror( text, selectedInput );
+        } else {
+          newInputFieldContent = WriteToInputField( text, selectedInput );
+        }
 
         if ( newInputFieldContent?.summary ) {
           liveAction.action.ability = 'message';
@@ -56,15 +67,17 @@ const StreamListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         updateAgentMessage( currentUserRequestId, liveAction );
       }
     }
-  }, [ liveAction, currentUserRequestId, selectedInput ] );
+  }, [ liveAction, currentUserRequestId ] );
 
   useEffect( () => {
     if ( startingStreaming.liveAction?.action.ability === 'write_to_editor' ) {
-      // clear the editor content
       CleanGutenbergContent();
     } else if ( startingStreaming.liveAction?.action.ability === 'write_to_input' ) {
-      // clear the editor content
-      CleanInputFieldContent( selectedInput );
+      if ( selectedInput?.type === 'WYSIWYG' ) {
+        CleanWysiwygContent( selectedInput );
+      } else {
+        CleanInputFieldContent( selectedInput );
+      }
     }
   }, [ startingStreaming ] );
 
