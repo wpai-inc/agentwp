@@ -36,8 +36,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             $setup = new $location($this);
             if ($setup && $setup->active()) {
                 $this->location = $setup;
-
-                return;
             }
         }
     }

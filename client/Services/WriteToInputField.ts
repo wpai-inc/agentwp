@@ -33,7 +33,10 @@ export function WriteToInputField( content: string, selectedInput: StreamableFie
           updatedInputField.content;
       } else {
         // if the div has lost the contenteditable add it back
-        if ( ! inputElement.getAttribute( 'contenteditable' ) ) {
+        if (
+          ! inputElement.getAttribute( 'contenteditable' ) &&
+          ! inputElement.classList.contains( 'CodeMirror' )
+        ) {
           inputElement.setAttribute( 'contenteditable', 'true' );
         }
         inputElement.innerText = updatedInputField.content;

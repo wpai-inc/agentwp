@@ -4,6 +4,7 @@ import { Editor } from 'tinymce';
 import getXPath from 'get-xpath';
 
 const excludeKeywords = [ 'search' ];
+const excludeParents = [ '.CodeMirror' ];
 declare const FLBuilder: any;
 
 export function getSelectedInputField(
@@ -20,6 +21,7 @@ export function getSelectedInputField(
     const clickedElement = event.target as HTMLElement;
     if (
       clickedElement !== selectedInputRef.current &&
+      ! selectedInputRef.current?.classList.contains( 'CodeMirror' ) &&
       ! clickedElement.closest( '#agentwp-admin-chat' )
     ) {
       selectedInputRef.current = null;
@@ -46,8 +48,9 @@ export function handleElementFocus(
       inputElement.type === 'text' ) ||
       inputElement.tagName === 'TEXTAREA' ||
       ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
-    //   ( ! selectedInputRef.current ||
-    //     ( selectedInputRef.current && inputElement.id !== selectedInputRef.current.id ) ) &&
+
+    ( ! selectedInputRef.current ||
+        ( selectedInputRef.current && inputElement.id !== selectedInputRef.current.id ) ) &&
     ! inputElement.closest( '#agentwp-admin-chat' ) &&
     ! inputElement.closest( '#agentwp-settings-chat' )
   ) {
@@ -64,6 +67,11 @@ export function handleSelectedElement(
 ) {
   const inputName = inputElement.getAttribute( 'name' );
   const inputId = inputElement.getAttribute( 'id' );
+
+  if ( excludeParents.some( parent => inputElement.closest( parent ) ) ) {
+    return;
+  }
+
   if (
     excludeKeywords.some( keyword => {
       return (
