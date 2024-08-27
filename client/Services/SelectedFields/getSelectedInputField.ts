@@ -48,7 +48,8 @@ export function handleElementFocus(
       ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
     //   ( ! selectedInputRef.current ||
     //     ( selectedInputRef.current && inputElement.id !== selectedInputRef.current.id ) ) &&
-    ! inputElement.closest( '#agentwp-admin-chat' )
+    ! inputElement.closest( '#agentwp-admin-chat' ) &&
+    ! inputElement.closest( '#agentwp-settings-chat' )
   ) {
     handleSelectedElement( inputElement, setSelectedInput, selectedInputRef );
   }
