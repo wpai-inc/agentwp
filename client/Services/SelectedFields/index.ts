@@ -5,6 +5,7 @@ import { getSelectedWysiwyg } from '@/Services/SelectedFields/getSelectedWysiwyg
 import { getSelectedElementorField } from './getSelectedElementorField';
 import { getSelectedBeaverBuilderFields } from './getSelectedBeaverBuilderFields';
 import { getSelectedBricksBuilderFields } from './getSelectedBricksBuilderFields';
+import { getSelectedCodeMirror } from './getSelectedCodeMirror';
 
 export {
   getSelectedGutenbergBlock,
@@ -14,4 +15,5 @@ export {
   getSelectedElementorField,
   getSelectedBeaverBuilderFields,
   getSelectedBricksBuilderFields,
+  getSelectedCodeMirror,
 };

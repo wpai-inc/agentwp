@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import {
   getSelectedBricksBuilderFields,
+  getSelectedCodeMirror,
   getSelectedElementorField,
   getSelectedGutenbergBlock,
   getSelectedInputField,
@@ -43,6 +44,7 @@ export const InputSelectProvider = ( { children }: { children: ReactNode } ) => 
     getSelectedPostTitle( setSelectedInput );
     getSelectedElementorField( setSelectedInput, selectedInputRef );
     getSelectedBricksBuilderFields( setSelectedInput, selectedInputRef );
+    getSelectedCodeMirror( setSelectedInput, selectedInputRef );
   }, [] );
 
   useEffect( () => {
