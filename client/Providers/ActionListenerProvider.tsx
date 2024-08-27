@@ -58,8 +58,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   async function executeAction( aa: AgentAction ) {
     switch ( aa.action.ability ) {
       case 'query':
-        // TODO: BUG the stream is not waiting for this to finish
-        // Probably because this component is rerendered from outside
         try {
           const response = await adminRequest.get( 'run_action_query', {
             params: {
@@ -72,8 +70,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
             data: response.data.data.results,
           } );
         } catch ( error ) {
-          console.error( 'Query execution error', ( error as any ).response.data.data );
-          // Handle error if needed
           await client.storeAgentResult( aa.id, {
             status: 'error',
             error: ( error as any ).response.data.data,
@@ -104,9 +100,11 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
           status: 'success',
         } );
         break;
+      default:
+        await client.storeAgentError( aa.id, {
+          message: 'Invalid ability',
+        } );
     }
-    //@ovi Prevent multiple executions of the same action
-    // aa.hasExecuted = true;
   }
 
   return <>{ children }</>;

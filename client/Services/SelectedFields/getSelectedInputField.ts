@@ -48,7 +48,11 @@ export function handleElementFocus(
       inputElement.type === 'text' ) ||
       inputElement.tagName === 'TEXTAREA' ||
       ( inputElement.tagName === 'DIV' && inputElement.isContentEditable ) ) &&
-    ! inputElement.closest( '#agentwp-admin-chat' )
+
+    ( ! selectedInputRef.current ||
+        ( selectedInputRef.current && inputElement.id !== selectedInputRef.current.id ) ) &&
+    ! inputElement.closest( '#agentwp-admin-chat' ) &&
+    ! inputElement.closest( '#agentwp-settings-chat' )
   ) {
     handleSelectedElement( inputElement, setSelectedInput, selectedInputRef );
   }

@@ -74,7 +74,9 @@ export default function CodeToolbar( { code, language }: { code: string; languag
     <div className="flex justify-between p-2 bg-brand-gray-25 text-brand-gray-70 rounded-t-xl">
       <span className="text-sm uppercase">{ language }</span>
       <div className="flex items-center justify-end gap-3">
-        <button className="ml-2 text-xs hover:text-brand-gray-100" onClick={ () => copy( code ) }>
+        <button
+          className="ml-2 text-xs hover:text-brand-brand-gray-20"
+          onClick={ () => copy( code ) }>
           { copied ? 'Copied!' : <IconCopy className="w-4 h-4" /> }
         </button>
 

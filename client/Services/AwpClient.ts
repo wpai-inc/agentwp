@@ -42,7 +42,7 @@ export default class AwpClient {
           }
 
           // Logout user or redirect to login page
-          notify( 'Your API token is invalid or expired. Please login again.', 'error' );
+          notify.error( 'Your API token is invalid or expired. Please login again.' );
           this.adminRequest.get( 'logout' );
           throw new Error( 'Your API token is invalid or expired. Please login again.' );
         }
@@ -96,6 +96,11 @@ export default class AwpClient {
       { result: data },
     );
   }
+
+  async storeAgentError( actionId: string, data: { message: string } ): Promise< AxiosResponse > {
+    return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/error`, {}, data );
+  }
+
   async abortUserRequest( userRequestId: string ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/request/${ userRequestId }/abort`, {}, {} );
   }
@@ -110,6 +115,10 @@ export default class AwpClient {
 
   async storeConversation( data: object ): Promise< AxiosResponse > {
     return this.request( 'POST', `${ this.baseUrl }/api/convo`, {}, data );
+  }
+
+  async deleteConversation( convoId: number ): Promise< AxiosResponse > {
+    return this.request( 'DELETE', `${ this.baseUrl }/api/convo/${ convoId }` );
   }
 
   async refreshToken(): Promise< AxiosResponse > {

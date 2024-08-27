@@ -12,7 +12,11 @@ export default function ActionQuery( { hasExecuted, action, result }: AgentActio
   }
 
   return (
-    <ActionContainer icon={ icon } title={ title } pending={ ! hasExecuted } error={ result.error }>
+    <ActionContainer
+      icon={ icon }
+      title={ title }
+      pending={ ! hasExecuted }
+      error={ result?.error }>
       <code>{ action.sql as string }</code>
     </ActionContainer>
   );
