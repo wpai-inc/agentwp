@@ -24,7 +24,6 @@ export function getSelectedInputField(
       ! selectedInputRef.current?.classList.contains( 'CodeMirror' ) &&
       ! clickedElement.closest( '#agentwp-admin-chat' )
     ) {
-      console.log( 'deselecting input', selectedInputRef.current );
       selectedInputRef.current = null;
       setSelectedInput( null );
     }

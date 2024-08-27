@@ -19,7 +19,6 @@ export function getSelectedCodeMirror(
         inputElement.isContentEditable &&
         inputElement.classList.contains( 'CodeMirror-code' )
       ) {
-        console.log( '(AWP) CODEMIRROR SELECTED', inputElement );
         const CodeMirrorInstance = inputElement.closest( '.CodeMirror' );
         handleCodeMirrorFocus( CodeMirrorInstance, setSelectedInput, selectedInputRef );
       }
@@ -35,9 +34,7 @@ export function handleCodeMirrorFocus(
   >,
 ) {
   selectedInputRef.current = CodeMirrorInstance;
-  console.log( 'CodeMirrorInstance', selectedInputRef.current );
   const inputValue = CodeMirrorInstance.CodeMirror.getValue() || '';
-  console.log( 'CM inputValue', inputValue );
   setSelectedInput( {
     type: 'CodeMirror',
     data: {
