@@ -89,23 +89,19 @@ export default function MessageBox() {
               <TuneIcon className="h-6 w-6" />
             </Button>
           </AgentTooltip>
-          { messageSubmitted ? (
-            <Button
-              type="button"
-              className={ cn( 'rounded bg-brand-primary px-3.5' ) }
-              onClick={ handleCancelMessage }>
-              <div className="h-4 w-4 bg-white"></div>
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              variant="brand"
-              size="lg"
-              className={ cn( 'rounded bg-brand-primary h-10 w-10' ) }
-              disabled={ ! page.onboarding_completed || ! page.agentwp_access }>
+          <Button
+            type={ messageSubmitted ? 'button' : 'submit' }
+            variant="brand"
+            size="lg"
+            onClick={ messageSubmitted ? handleCancelMessage : undefined }
+            className={ cn( 'rounded bg-brand-primary h-10 w-10' ) }
+            disabled={ ! page.onboarding_completed || ! page.agentwp_access }>
+            { messageSubmitted ? (
+              <div className="h-3 w-3 bg-white"></div>
+            ) : (
               <UpArrowIcon className="h-5 w-5" />
-            </Button>
-          ) }
+            ) }
+          </Button>
         </div>
       </form>
     </CommandMenu>
