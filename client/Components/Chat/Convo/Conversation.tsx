@@ -7,6 +7,7 @@ import { useChat } from '@/Providers/ChatProvider';
 import { useApp } from '@/Providers/AppProvider';
 import { TokenUsageStatus } from '@/Types/enums';
 import OverCapacity from '@/Components/Chat/OverCapacity';
+import ChatMessageUtilityBar from '@/Page/Admin/Chat/Partials/ChatMessageUtilityBar';
 
 export default function Conversation() {
   const { conversation } = useChat();
@@ -21,7 +22,8 @@ export default function Conversation() {
         <>
           <Dialog conversation={ conversation } />
           <div className="relative mx-auto w-full max-w-screen-md">
-            <div className="absolute -top-12 right-0 left-0 z-10 h-12 from-brand-gray to-transparent bg-gradient-to-t"></div>
+            <div className="absolute -top-12 right-0 left-0 z-10 h-12 from-white to-transparent bg-gradient-to-t"></div>
+            <ChatMessageUtilityBar />
             <div className="p-1.5">
               { tokenUsageStatus == TokenUsageStatus.Normal && <MessageBox /> }
               { tokenUsageStatus != TokenUsageStatus.Normal && (

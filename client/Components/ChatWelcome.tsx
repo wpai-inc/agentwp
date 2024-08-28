@@ -43,7 +43,7 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
           href="https://agentwp.com/capabilities/"
           target="_blank"
           className={ cn(
-            'block bg-brand-gray-20 cursor-pointer mt-2 rounded-lg self-stretch',
+            'block bg-brand-gray cursor-pointer mt-2 rounded-lg self-stretch',
             'px-3 py-2 flex items-center justify-between text-gray-600',
             'col-span-2 shadow-sm',
           ) }>

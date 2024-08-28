@@ -8,6 +8,7 @@ import CommandMenu from '../Commands/CommandMenu';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
+import ChatMessageUtilityBar from '@/Page/Admin/Chat/Partials/ChatMessageUtilityBar';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting, message, setMessage, messageSubmitted, cancelMessage } =
@@ -65,12 +66,12 @@ export default function MessageBox() {
       handleKeyDown={ handleKeyDown }
       message={ message }
       setMessage={ setMessage }>
-      <form className="relative rounded-lg bg-white p-2" onSubmit={ submit }>
+      <form className="relative rounded-lg bg-brand-gray p-2" onSubmit={ submit }>
         <textarea
           onChange={ e => setMessage( e.target.value ) }
           value={ message }
           ref={ textAreaRef }
-          className="h-24 w-full resize-none p-2 text-base"
+          className="h-24 w-full resize-none p-2 text-base bg-transparent"
           placeholder="Message..."
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
@@ -98,7 +99,9 @@ export default function MessageBox() {
           ) : (
             <Button
               type="submit"
-              className={ cn( 'rounded bg-brand-primary px-3' ) }
+              variant="brand"
+              size="lg"
+              className={ cn( 'rounded bg-brand-primary h-10 w-10' ) }
               disabled={ ! page.onboarding_completed || ! page.agentwp_access }>
               <UpArrowIcon className="h-5 w-5" />
             </Button>

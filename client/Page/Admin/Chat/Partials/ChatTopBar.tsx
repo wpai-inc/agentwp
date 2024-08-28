@@ -10,6 +10,7 @@ import { useClient } from '@/Providers/ClientProvider';
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import { usePage } from '@/Providers/PageProvider';
 import { maybeUseChatUI } from '@/Components/Chat/Chat';
+import { Button } from '@/Components/ui/button';
 
 export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEvent ) => void } ) {
   const { setChatSetting, clearHistory, isEmptyConversation } = useChat();
@@ -31,35 +32,39 @@ export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEve
           handleDrag( e.nativeEvent );
         }
       } }
-      className={ cn(
-        'py-2 px-2 cursor-move border-b border-b-brand-gray-25',
-        'flex justify-between',
-      ) }>
+      className={ cn( 'flex justify-between p-3 cursor-pointer', {
+        'cursor-move': handleDrag,
+      } ) }>
       <div className="flex h-8 items-center gap-2">
         <Logo className="h-full" />
       </div>
-      <div className="flex items-center gap-1 text-gray-900 hover:text-black">
+      <div className="flex items-center justify-center">
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
           <AgentTooltip content="New conversation">
-            <button onClick={ clearHistory }>
-              <AddIcon className="h-5 w-5" />
-            </button>
+            <Button onClick={ clearHistory } className="">
+              New Chat
+              <AddIcon className="h-4 w-4" />
+            </Button>
           </AgentTooltip>
         ) }
         <AgentTooltip content="View history">
-          <button onClick={ handleHistorySettings }>
+          <Button onClick={ handleHistorySettings } variant="ghost" size="sm">
             <HistoryIcon className="h-5 w-5" />
-          </button>
+          </Button>
         </AgentTooltip>
         <AgentTooltip content="Settings">
-          <a href={ page.settings_page } onClick={ () => toggle && toggle() }>
-            <SettingsIcon className="h-5 w-5" />
-          </a>
+          <Button variant="ghost" size="sm" asChild>
+            <a href={ page.settings_page } onClick={ () => toggle && toggle() }>
+              <SettingsIcon className="h-5 w-5" />
+            </a>
+          </Button>
         </AgentTooltip>
         <AgentTooltip content="Your profile">
-          <a href={ userProfileUrl } className="block" target="_blank">
-            <AccountIcon className="h-5 w-5" />
-          </a>
+          <Button asChild variant="ghost" size="sm">
+            <a href={ userProfileUrl } target="_blank">
+              <AccountIcon className="h-5 w-5" />
+            </a>
+          </Button>
         </AgentTooltip>
       </div>
     </div>
