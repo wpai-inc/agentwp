@@ -2,6 +2,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/Components/ui/alert';
 import { TokenUsageStatus } from '@/Types/enums';
 import { buttonVariants } from '@/Components/ui/button';
 import { cn } from '@/lib/utils';
+import { usePage } from '@/Providers/PageProvider';
 
 interface OverCapacityProps {
   cooldownTime: Date | null;
@@ -9,6 +10,8 @@ interface OverCapacityProps {
 }
 
 export default function OverCapacity( props: OverCapacityProps ) {
+  const { page } = usePage();
+
   return (
     <Alert
       variant="default"
@@ -36,7 +39,7 @@ export default function OverCapacity( props: OverCapacityProps ) {
             className: 'rounded-full bg-brand-primary px-3',
           } ),
         ) }
-        href="https://app.agentwp.com/enroll/pro">
+        href={ page.account.upgrade_link }>
         Upgrade now
       </a>
     </Alert>

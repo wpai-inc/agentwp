@@ -35,16 +35,19 @@ export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEve
       className={ cn( 'flex justify-between p-3 cursor-pointer', {
         'cursor-move': handleDrag,
       } ) }>
-      <a
-        href={ page.settings_page }
-        onClick={ () => toggle && toggle() }
-        className="hover:scale-125 transition">
-        <Logo className="h-7 w-7" />
-      </a>
+      <div className="flex items-center gap-2">
+        <a
+          href={ page.settings_page }
+          onClick={ () => toggle && toggle() }
+          className="hover:scale-125 transition">
+          <Logo className="h-7 w-7" />
+        </a>
+        { page.account.plan.slug === 'free' && <FreeUpgrade /> }
+      </div>
       <div className="flex items-center justify-center">
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
           <AgentTooltip content="New conversation">
-            <Button onClick={ clearHistory } className="">
+            <Button onClick={ clearHistory } className="uppercase">
               New Chat
               <AddIcon className="h-4 w-4" />
             </Button>
@@ -72,4 +75,17 @@ export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEve
       </div>
     </div>
   );
+
+  function FreeUpgrade() {
+    return (
+      <>
+        <Button asChild variant="brand" className="h-full">
+          <span>{ page.account.plan.name }</span>
+        </Button>
+        <Button asChild variant="dark" className="h-full">
+          <a href={ page.account.upgrade_link }>Upgrade</a>
+        </Button>
+      </>
+    );
+  }
 }

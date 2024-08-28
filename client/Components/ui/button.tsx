@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        'default': 'bg-brand-gray text-black opacity-75 uppercase gap-0.5 hover:opacity-100',
+        'default': 'bg-brand-gray text-black opacity-75 gap-0.5 hover:opacity-100',
         'destructive':
           'bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90',
         'outline':
@@ -20,6 +20,7 @@ const buttonVariants = cva(
           'hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50',
         'link': 'text-slate-900 underline-offset-4 hover:underline dark:text-slate-50',
         'brand': 'text-white bg-brand-primary border-brand-primary',
+        'dark': 'text-white bg-brand-dark hover:bg-brand-primary',
         'brand-outline': 'text-brand-gray-30 bg-white border border-brand-gray-30',
         'brand-gray': 'text-brand-gray-70 bg-brand-gray-20',
       },

@@ -20,7 +20,7 @@ export default function ChatMessageUtilityBar() {
   return (
     <div className="flex items-center justify-end">
       { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
-        <Button onClick={ clearHistory } className="w-full">
+        <Button onClick={ clearHistory } className="w-full uppercase">
           New Chat
           <AddIcon className="h-4 w-4" />
         </Button>
