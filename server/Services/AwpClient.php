@@ -31,6 +31,7 @@ class AwpClient
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
     {
         $client = $this->buildClient();
+
         $defaultHeaders = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -47,9 +48,16 @@ class AwpClient
             $additionalHeaders,
         );
 
-        $request = new Request($method, $url, $headers, $body);
+        $request = new Request($method, $this->getBaseUri().ltrim($url, '/'), $headers, $body);
 
         return $client->send($request);
+    }
+
+    public function json(string $method, string $url, $body = null): ?array
+    {
+        $res = $this->request($method, $url, [], $body);
+
+        return json_decode($res->getBody()->getContents(), true);
     }
 
     public function setToken(string $token): self
@@ -64,13 +72,6 @@ class AwpClient
         $this->timeout = $timeout;
 
         return $this;
-    }
-
-    private function buildClient(): Client
-    {
-        return new Client([
-            'timeout' => $this->timeout,
-        ]);
     }
 
     public function setWpUser($wp_user): self
@@ -92,5 +93,18 @@ class AwpClient
         $this->apiHost = $apiHost;
 
         return $this;
+    }
+
+    private function buildClient(): Client
+    {
+        return new Client([
+            'timeout' => $this->timeout,
+            'base_uri' => $this->apiHost.$this->getBaseUri(),
+        ]);
+    }
+
+    private function getBaseUri(): string
+    {
+        return '/api/';
     }
 }

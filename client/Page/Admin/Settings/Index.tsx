@@ -21,6 +21,8 @@ const rootElement = document.getElementById( 'agentwp-admin-settings' );
 
 declare const agentwpData: PageData;
 
+console.log( agentwpData );
+
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
   window.agentwp = rootElement as AWPRootType;
