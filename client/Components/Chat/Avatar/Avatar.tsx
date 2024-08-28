@@ -1,16 +1,20 @@
+import { cn } from '@/lib/utils';
+
 export default function Avatar( {
   name,
   time,
   image,
+  className,
 }: {
   name: string;
   time: string;
   image?: string;
+  className?: string;
 } ) {
   return (
     <div className="flex gap-2 items-center">
       { image ? (
-        <img src={ image } alt={ name } className="w-8 h-8 rounded-full" />
+        <img src={ image } alt={ name } className={ cn( 'w-9 h-9 rounded-full', className ) } />
       ) : (
         <div className="w-8 h-8 flex items-center justify-center font-bold bg-white rounded-full">
           { name }

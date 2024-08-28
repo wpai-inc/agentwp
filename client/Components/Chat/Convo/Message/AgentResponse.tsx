@@ -46,7 +46,12 @@ export default function AgentResponse( {
       ) : null }
 
       <MessageHeader>
-        <Avatar name="AgentWP" time={ time } image={ logoUrl } />
+        <Avatar
+          name="AgentWP"
+          time={ time }
+          image={ logoUrl }
+          className="border p-1 border-brand"
+        />
         <div className="flex items-center gap-4">
           { ! incomplete && <Rate /> }
           <Popover>
