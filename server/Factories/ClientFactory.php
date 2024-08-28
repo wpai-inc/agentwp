@@ -15,6 +15,7 @@ class ClientFactory
         } elseif ($access_token = $main->auth()->getAccessToken()) {
             $client->setToken($access_token);
         }
+
         $client->setWpUser(wp_get_current_user())
             ->setSiteId($main->siteId())
             ->setApiHost($main->apiHost());

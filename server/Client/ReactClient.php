@@ -117,27 +117,29 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 <?php
     }
 
+    /**
+     * Data to be passed to the client
+     */
     public function pageProps(): array
     {
-        $merge = $this->data();
-
-        return [
+        return array_merge([
             'page' => $this->slug(),
             'url' => $this->main->url(),
-            'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),
-            ...$merge,
-        ];
+            'notice_visible' => boolval(get_option('codewpai_notice_visible', 1))],
+            $this->globalData(),
+            $this->data(),
+        );
     }
 
     public function registerPageProps()
     {
-        wp_localize_script($this->slug('-'), $this->slug('_'), $this->pageProps());
-        wp_localize_script($this->slug('-'), 'agentwp_settings', $this->pageData());
+        wp_localize_script($this->slug('-'), $this->main::SLUG.'Data', $this->pageProps());
     }
 
-    public function pageData()
+    public function globalData()
     {
         $current_user_data = wp_get_current_user()->data;
+
         // only keep the necessary data
         $current_user = [
             'ID' => $current_user_data->ID,
@@ -168,6 +170,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'client_id' => $this->main->settings->client_id,
             'api_host' => $this->main->apiClientHost(),
             'user' => $current_user,
+            'account' => $this->main->client()->json('GET', '/user'),
             'onboarding_completed' => $this->main->settings->onboarding_completed,
             'account_settings' => $this->main->accountSettings()->get(),
             'general_settings' => $this->main->settings->getGeneralSettings(),

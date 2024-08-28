@@ -8,14 +8,15 @@ class RevokeApiToken
 {
     private Main $main;
 
-    public function __construct(Main $main) {
+    public function __construct(Main $main)
+    {
         $this->main = $main;
     }
 
     public function revoke(): void
     {
         try {
-            $this->main->client()->request('POST', $this->main->apiHost().'/api/sites/disconnect');
+            $this->main->client()->request('POST', 'sites/disconnect');
         } catch (\Exception $e) {
             // Do nothing
             error_log($e->getMessage());

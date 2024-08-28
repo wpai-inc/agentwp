@@ -12,6 +12,9 @@ export type AWPRootType = HTMLElement & {
 };
 
 export type PageData = {
+  page: string;
+  url: string;
+  notice_visible: string;
   home_url: string;
   plugin_url: string;
   settings_page: string;
@@ -24,6 +27,11 @@ export type PageData = {
   rest_route: string;
   rest_endpoint: string;
   user: WpUser;
+  account: {
+    user: UserData;
+    plan: PlanData;
+    config: ConfigData;
+  };
   is_admin: boolean;
   agentwp_manager: boolean;
   agentwp_users_manager: boolean;
@@ -94,6 +102,7 @@ type AgentWpGeneralSettings = {
   cleanup_after_deactivate: boolean;
 };
 
+/** Copied from awp/resources/js/types/generated.d.ts */
 export type HistoryData = {
   conversationId: number;
   userRequestId: number;
@@ -104,4 +113,28 @@ export type HistoryData = {
   conversationCreatedAt: string;
   userRequestCreatedAt: string;
   humanCreatedAt: string;
+};
+
+export type PlanData = {
+  name: string;
+  slug: string;
+  priceYearly: number;
+  priceMonthly: number;
+};
+
+export type ConfigData = {
+  abilities: Array< any >;
+  context_awareness: Array< any >;
+  capabilities: Array< any >;
+  convo_only: boolean;
+  convo_disabled: boolean;
+  token_limit: number;
+  token_limit_per_site: number;
+  token_limit_per_user: number;
+};
+
+export type UserData = {
+  name: string;
+  email: string;
+  email_verified_at: string;
 };

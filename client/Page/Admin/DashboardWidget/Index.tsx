@@ -13,14 +13,14 @@ import Footer from './Partials/Footer';
 
 const rootElement = document.getElementById( 'agentwp-admin-dashboardwidget' );
 
-declare const agentwp_settings: PageData;
+declare const agentwpData: PageData;
 
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
   const wpWidgetStyleReset = { margin: '-11px -12px -12px -12px' };
   root.render(
     <StrictMode>
-      <PageProvider page={ agentwp_settings }>
+      <PageProvider page={ agentwpData }>
         <NotificationsProvider>
           <ErrorProvider>
             <AdminRouteProvider>
