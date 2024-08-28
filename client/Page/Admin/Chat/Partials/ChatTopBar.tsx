@@ -35,9 +35,12 @@ export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEve
       className={ cn( 'flex justify-between p-3 cursor-pointer', {
         'cursor-move': handleDrag,
       } ) }>
-      <div className="flex h-8 items-center gap-2">
-        <Logo className="h-full" />
-      </div>
+      <a
+        href={ page.settings_page }
+        onClick={ () => toggle && toggle() }
+        className="hover:scale-125 transition">
+        <Logo className="h-7 w-7" />
+      </a>
       <div className="flex items-center justify-center">
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
           <AgentTooltip content="New conversation">
