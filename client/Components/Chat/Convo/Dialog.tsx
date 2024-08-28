@@ -6,7 +6,6 @@ import { ChatError } from '@/Components/Chat/Alerts/Error';
 import { usePage } from '@/Providers/PageProvider';
 import ContentContext from '@/Components/Chat/ContentContext/ContentContext';
 import { useInputSelect } from '@/Providers/InputSelectProvider';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Dialog( { conversation }: { conversation: UserRequestType[] } ) {
   const { errors } = useError();
@@ -15,26 +14,11 @@ export default function Dialog( { conversation }: { conversation: UserRequestTyp
 
   return (
     <InnerContainer>
-      <AnimatePresence>
-        { ! conversation.length ? (
-          <ChatWelcome user={ page.user } />
-        ) : (
-          conversation.map( msg => (
-            <motion.div
-              key={ msg.id }
-              initial={ { opacity: 0, scale: 0 } }
-              animate={ { opacity: 1, scale: 1 } }
-              transition={ {
-                type: 'spring',
-                duration: 0.3,
-                bounce: 0.25,
-              } }
-              exit={ { opacity: 0, scale: 0 } }>
-              <Message key={ msg.id } { ...msg } />
-            </motion.div>
-          ) )
-        ) }
-      </AnimatePresence>
+      { ! conversation.length ? (
+        <ChatWelcome user={ page.user } />
+      ) : (
+        conversation.map( msg => <Message key={ msg.id } { ...msg } /> )
+      ) }
       { !! errors.length && <ChatError errors={ errors } /> }
       { selectedInput && <ContentContext selectedInput={ selectedInput } /> }
     </InnerContainer>
