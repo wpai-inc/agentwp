@@ -8,7 +8,6 @@ import CommandMenu from '../Commands/CommandMenu';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
-import ChatMessageUtilityBar from '@/Page/Admin/Chat/Partials/ChatMessageUtilityBar';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting, message, setMessage, messageSubmitted, cancelMessage } =
