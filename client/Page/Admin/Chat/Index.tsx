@@ -14,7 +14,7 @@ declare global {
 }
 
 const rootElement = document.getElementById( 'agentwp-admin-chat' );
-declare const agentwp_settings: PageData;
+declare const agentwpData: PageData;
 
 if ( rootElement ) {
   window.agentwp = rootElement as AWPRootType;
@@ -22,7 +22,7 @@ if ( rootElement ) {
   root.render(
     <React.StrictMode>
       <NotificationsProvider>
-        <PageProvider page={ agentwp_settings }>
+        <PageProvider page={ agentwpData }>
           <ChatApp />
         </PageProvider>
       </NotificationsProvider>

@@ -19,7 +19,7 @@ declare global {
 
 const rootElement = document.getElementById( 'agentwp-admin-settings' );
 
-declare const agentwp_settings: PageData;
+declare const agentwpData: PageData;
 
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
@@ -27,12 +27,12 @@ if ( rootElement ) {
 
   root.render(
     <React.StrictMode>
-      <PageProvider page={ agentwp_settings }>
+      <PageProvider page={ agentwpData }>
         <NotificationsProvider>
           <ErrorProvider>
             <AdminRouteProvider>
               <ClientProvider>
-                { agentwp_settings?.onboarding_completed ? <Settings /> : <Wizard /> }
+                { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
               </ClientProvider>
             </AdminRouteProvider>
           </ErrorProvider>

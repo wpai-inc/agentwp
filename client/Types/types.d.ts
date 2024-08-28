@@ -12,6 +12,9 @@ export type AWPRootType = HTMLElement & {
 };
 
 export type PageData = {
+  page: string;
+  url: string;
+  notice_visible: string;
   home_url: string;
   plugin_url: string;
   settings_page: string;
