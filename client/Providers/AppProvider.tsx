@@ -26,15 +26,11 @@ export default function AppProvider( { children }: { children: React.ReactNode }
     TokenUsageStatus.Normal,
   );
 
-  const checkCooldownTime = () => {
+  useEffect( () => {
     if ( cooldownTime && new Date( cooldownTime ) < new Date() ) {
       setCooldownTime( null );
       setTokenUsageStatus( TokenUsageStatus.Normal );
     }
-  };
-
-  useEffect( () => {
-    checkCooldownTime();
   }, [ cooldownTime ] );
 
   return (

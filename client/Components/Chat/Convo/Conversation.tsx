@@ -1,14 +1,12 @@
 import Dialog from '@/Components/Chat/Convo/Dialog';
-import MessageBox from '@/Components/Chat/MessageBox/MessageBox';
 import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 import { useApp } from '@/Providers/AppProvider';
-import { TokenUsageStatus } from '@/Types/enums';
-import OverCapacity from '@/Components/Chat/OverCapacity';
 import ChatMessageUtilityBar from '@/Page/Admin/Chat/Partials/ChatMessageUtilityBar';
 import ChatNotices from '@/Components/Chat/Notices/ChatNotices';
+import ChatMessageInput from './Message/ChatMessageInput';
 
 export default function Conversation() {
   const { conversation } = useChat();
@@ -28,25 +26,13 @@ export default function Conversation() {
               <ChatNotices />
               <ChatMessageUtilityBar />
             </div>
-            <ChatMessageInput />
+            <ChatMessageInput coolDownTime={ cooldownTime } tokenUsageStatus={ tokenUsageStatus } />
           </div>
           <ChatOverlay />
         </>
       ) }
     </div>
   );
-
-  function ChatMessageInput() {
-    return (
-      <>
-        { tokenUsageStatus == TokenUsageStatus.Normal ? (
-          <MessageBox />
-        ) : (
-          <OverCapacity cooldownTime={ cooldownTime } tokenUsageStatus={ tokenUsageStatus } />
-        ) }
-      </>
-    );
-  }
 }
 
 function DialogFade() {
