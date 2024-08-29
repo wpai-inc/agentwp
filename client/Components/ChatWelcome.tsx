@@ -16,15 +16,12 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
     null,
     null,
   ] );
-  const isLoading = suggestions.length === 0;
 
   useEffect( () => {
     getSuggestions().then( ( response: string[] ) => {
       setSuggestions( response );
     } );
   }, [] );
-
-  console.log( isLoading );
 
   return (
     <motion.div
@@ -74,7 +71,6 @@ function ChatOption( {
   onClick?: () => void;
   index: number;
 } ) {
-  console.log( 'index', index );
   const delay: {
     [ index: number ]: string;
   } = {
