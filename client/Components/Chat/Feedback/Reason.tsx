@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import IconCancel from '@material-design-icons/svg/outlined/cancel.svg?react';
+import { useState } from 'react';
+import { cn, optimistic } from '@/lib/utils';
+import IconClose from '@material-design-icons/svg/outlined/close.svg?react';
 import { useFeedback } from '@/Providers/FeedbackProvider';
-import { Spinner } from '@/Components/Spinner';
+import { ChatNotice } from '../Notices/ChatNotice';
+import { Button } from '@/Components/ui/button';
 
 const reasons = [ "Didn't follow instructions", 'Not relevant', 'Inaccurate response' ];
 
@@ -10,15 +11,14 @@ export default function Reason() {
   const { sendFeedback, setOpened } = useFeedback();
   const [ reason, setReason ] = useState< string >( '' );
   const [ otherReason, setOtherReason ] = useState< boolean >( false );
-  const [ waiting, setWaiting ] = useState< boolean >( false );
   const [ successful, setSuccessful ] = useState< boolean >( false );
-  const [ visible, setVisible ] = useState( false );
 
   async function handleSendMessage( r: string ) {
-    setWaiting( true );
-    await sendFeedback( false, r );
-    setWaiting( false );
-    setSuccessful( true );
+    optimistic(
+      async () => await sendFeedback( false, r ),
+      () => setSuccessful( true ),
+      () => setSuccessful( false ),
+    );
   }
 
   function handleSelectOther() {
@@ -26,48 +26,39 @@ export default function Reason() {
     setReason( '' );
   }
 
-  useEffect( () => {
-    if ( successful ) {
-      setVisible( true );
-      const timer = setTimeout( () => setVisible( false ), 3000 );
-      return () => clearTimeout( timer );
-    }
-  }, [ successful ] );
-
   return successful ? (
-    <div
-      className={ cn(
-        'bg-green-200 text-green-600 text-center px-4 py-2 rounded-lg transition-opacity duration-200 overflow-hidden',
-        { 'opacity-0 h-0': ! visible, 'opacity-100 my-6': visible },
-      ) }>
-      Thank you for your feedback!
-    </div>
+    <ChatNotice variant="success" dismissable>
+      <p>Thank you for your feedback!</p>
+    </ChatNotice>
   ) : (
     <form
       onSubmit={ e => {
         e.preventDefault();
         handleSendMessage( reason );
       } }
-      className={ cn( 'p-4 rounded-xl border border-brand-gray-25 w-full' ) }>
-      <div className="flex items-center justify-between mb-4">
+      className={ cn( 'w-full rounded-xl border border-brand-gray-25 p-4' ) }>
+      <div className="mb-4 flex items-center justify-between">
         <legend>Rating Feedback</legend>
         <button onClick={ () => setOpened( false ) }>
-          <IconCancel className="h-4 w-4" />
+          <IconClose className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex flex-wrap gap-2">
         { reasons.map( r => (
           <Button
             key={ r }
             onClick={ () => handleSendMessage( r ) }
-            active={ reason === r }
-            type="button">
+            type="button"
+            variant="outline">
             { r }
           </Button>
         ) ) }
         <Button
-          className={ otherReason ? 'bg-brand-gray-25' : 'bg-brand-gray-50' }
+          className={ cn( {
+            'bg-brand-gray': otherReason,
+            'bg-brand-gray-20': ! otherReason,
+          } ) }
           type="button"
           onClick={ handleSelectOther }>
           Other...
@@ -78,34 +69,15 @@ export default function Reason() {
           <textarea
             value={ reason }
             onChange={ e => setReason( e.target.value ) }
-            className="border border-brand-25 p-3 rounded-lg w-full bg-transparent"
+            className="w-full rounded-lg bg-brand-gray p-3 ring-brand-primary focus:ring-2"
           />
-          <div className="text-right">
-            <Button className="bg-brand-gray-50" type="submit">
-              <Spinner show={ waiting } />
+          <div className="mt-2 text-right">
+            <Button variant="brand" type="submit" disabled={ reason.length < 2 }>
               Submit
             </Button>
           </div>
         </div>
       ) }
     </form>
-  );
-}
-
-function Button( {
-  children,
-  className,
-  active,
-  ...rest
-}: React.ButtonHTMLAttributes< HTMLButtonElement > & { active?: boolean } ) {
-  const buttonClassName = cn(
-    'px-4 py-2 rounded-lg border border-brand-gray-25 hover:bg-brand-gray-50 cursor-pointer peer-checked:bg-brand-gray-50',
-    className,
-    { 'bg-brand-gray-25': active },
-  );
-  return (
-    <button className={ buttonClassName } { ...rest }>
-      { children }
-    </button>
   );
 }

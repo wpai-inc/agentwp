@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -13,12 +13,12 @@ const buttonVariants = cva(
         'destructive':
           'bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90',
         'outline':
-          'border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50',
+          'border border-slate-200 bg-white hover:bg-brand-gray hover:text-brand-dark dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50',
         'secondary':
-          'bg-slate-100 text-slate-900 hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80',
+          'bg-brand-gray text-brand-dark hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80',
         'ghost':
-          'hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50',
-        'link': 'text-slate-900 underline-offset-4 hover:underline dark:text-slate-50',
+          'hover:bg-slate-100 hover:text-brand-dark dark:hover:bg-slate-800 dark:hover:text-slate-50',
+        'link': 'text-brand-dark underline-offset-4 hover:underline dark:text-slate-50',
         'brand': 'text-white bg-brand-primary border-brand-primary',
         'dark': 'text-white bg-brand-dark hover:bg-brand-primary',
         'brand-outline': 'text-brand-gray-30 bg-white border border-brand-gray-30',
@@ -45,13 +45,13 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes< HTMLButtonElement >,
+  extends ButtonHTMLAttributes< HTMLButtonElement >,
     VariantProps< typeof buttonVariants > {
   asChild?: boolean;
   isBusy?: boolean;
 }
 
-const Button = React.forwardRef< HTMLButtonElement, ButtonProps >(
+const Button = forwardRef< HTMLButtonElement, ButtonProps >(
   ( { className, variant, size, pill, isBusy, asChild = false, ...props }, ref ) => {
     const Comp = asChild ? Slot : 'button';
     return (

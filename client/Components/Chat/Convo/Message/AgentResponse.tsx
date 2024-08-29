@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover
 import { useFeedback } from '@/Providers/FeedbackProvider';
 import Reason from '@/Components/Chat/Feedback/Reason';
 import MessageMeta from '@/Components/Chat/Convo/Message/MessageMeta';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function AgentResponse( {
   agentActions,
@@ -36,7 +37,7 @@ export default function AgentResponse( {
   return (
     <div className="text-black/60">
       { otherActions.length > 0 ? (
-        <div className="flex-1 space-y-2 mb-4">
+        <div className="mb-4 flex-1 space-y-2">
           { otherActions.map( aa => {
             if ( aa.action ) {
               return <ActionComponent key={ aa.id } { ...aa } />;
@@ -50,7 +51,7 @@ export default function AgentResponse( {
           name="AgentWP"
           time={ time }
           image={ logoUrl }
-          className="border p-1 border-brand"
+          className="border-brand border p-1"
         />
         <div className="flex items-center gap-4">
           { ! incomplete && <Rate /> }
@@ -76,7 +77,16 @@ export default function AgentResponse( {
         </div>
       </MessageHeader>
 
-      { opened && <Reason /> }
+      <AnimatePresence>
+        { opened && (
+          <motion.div
+            initial={ { opacity: 0, y: '100%', scaleY: 0 } }
+            animate={ { opacity: 1, y: 0, scaleY: 1 } }
+            exit={ { opacity: 0, y: '100%', scaleY: 0 } }>
+            <Reason />
+          </motion.div>
+        ) }
+      </AnimatePresence>
 
       { messageAction ? (
         <ActionComponent { ...messageAction } />

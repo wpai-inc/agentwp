@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useState } from 'react';
+import { createContext, FC, useContext, useState } from 'react';
 import { useClient } from '@/Providers/ClientProvider';
 
 export type FeedbackType = {
@@ -8,7 +8,7 @@ export type FeedbackType = {
 
 interface ContextProps {
   handleApproval: ( approved: boolean ) => void;
-  sendFeedback: ( approved: boolean, message?: string ) => Promise< void >;
+  sendFeedback: ( approved: boolean, message?: string ) => void;
   approved?: boolean;
   feedback?: FeedbackType;
   opened: boolean;
@@ -25,18 +25,14 @@ export function useFeedback() {
   return ctx;
 }
 
-export const FeedbackProvider: FC< {
-  children: React.ReactNode;
-  userRequestId: string;
-  feedback?: FeedbackType;
-} > = ( { children, userRequestId, feedback } ) => {
+export const FeedbackProvider: FC = ( { children, userRequestId, feedback } ) => {
   const [ approved, setApproved ] = useState< boolean | undefined >( feedback?.approved );
   const [ opened, setOpened ] = useState< boolean >( false );
 
   const { client } = useClient();
 
   async function sendFeedback( approved: boolean, message?: string ) {
-    return client.isAuthorized()?.feedback( userRequestId, {
+    client.isAuthorized()?.feedback( userRequestId, {
       approved,
       message,
     } );
