@@ -65,12 +65,14 @@ export default function MessageBox() {
       handleKeyDown={ handleKeyDown }
       message={ message }
       setMessage={ setMessage }>
-      <form className="relative rounded-lg bg-brand-gray p-2" onSubmit={ submit }>
+      <form
+        className="relative rounded-lg bg-brand-gray p-2 focus-within:ring-2 ring-brand-primary transition"
+        onSubmit={ submit }>
         <textarea
           onChange={ e => setMessage( e.target.value ) }
           value={ message }
           ref={ textAreaRef }
-          className="h-24 w-full resize-none p-2 text-base bg-transparent"
+          className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0"
           placeholder="Message..."
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
