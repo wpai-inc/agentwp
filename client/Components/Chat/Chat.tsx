@@ -188,7 +188,7 @@ export default function Chat() {
             ref={ scope }
             onMouseEnter={ () => setIsHovering( true ) }
             onMouseLeave={ () => setIsHovering( false ) }
-            className={ cn( 'fixed bottom-4 right-4 z-[10000] origin-bottom-right', {
+            className={ cn( 'fixed bottom-4 right-4 z-[10000] origin-top-left', {
               'user-select-none': isDragging,
               'overflow-hidden': isOpening || isClosing,
             } ) }>
