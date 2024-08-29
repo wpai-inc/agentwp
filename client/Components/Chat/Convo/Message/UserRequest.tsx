@@ -47,9 +47,7 @@ export default function UserRequest( {
           </PopoverContent>
         </Popover>
       </MessageHeader>
-      <div className="my-4 pr-4">
-        <MD content={ userRequest.message } />
-      </div>
+      <MD content={ userRequest.message } />
     </div>
   );
 }

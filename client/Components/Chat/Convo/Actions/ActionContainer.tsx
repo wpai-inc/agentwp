@@ -45,7 +45,7 @@ export default function ActionContainer( {
       onOpenChange={ setIsOpen }
       onClick={ handleOnClick }
       className={ cn(
-        'min-h-10 bg-brand-gray py-2 px-4 items-center rounded-xl gap-2 my-2 text-gray-700 text-sm w-full',
+        'min-h-10 bg-brand-gray py-2 px-4 items-center rounded-xl gap-2 text-gray-700 text-sm w-full',
         {
           'cursor-pointer': shouldClick(),
           'opacity-60 text-gray-500': hasError,

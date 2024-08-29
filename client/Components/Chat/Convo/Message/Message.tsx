@@ -20,8 +20,8 @@ export default function Message( userRequest: UserRequestType ) {
 
   return (
     <FeedbackProvider userRequestId={ userRequest.id } feedback={ userRequest.feedback }>
-      <div id={ userRequest.id } className="my-4">
-        <div className="border-b border-brand-gray-25 px-4">
+      <div id={ userRequest.id }>
+        <div className="border-b border-brand-gray-25 p-4">
           <UserRequest userRequest={ userRequest } user={ page.user } />
         </div>
         <div className="border-b border-brand-gray-25 p-4">

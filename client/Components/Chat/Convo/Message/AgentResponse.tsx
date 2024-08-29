@@ -36,7 +36,7 @@ export default function AgentResponse( {
   return (
     <div className="text-black/60">
       { otherActions.length > 0 ? (
-        <div className="flex-1">
+        <div className="flex-1 space-y-2 mb-4">
           { otherActions.map( aa => {
             if ( aa.action ) {
               return <ActionComponent key={ aa.id } { ...aa } />;
