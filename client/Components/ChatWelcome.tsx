@@ -37,7 +37,7 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
         bounce: 0.25,
       } }
       exit={ { opacity: 0, scale: 0 } }
-      className="flex flex-col h-full justify-center items-center">
+      className="flex flex-col h-full justify-center items-center p-4">
       <p className="text-3xl font-semibold text-black">Hi { name },</p>
       <p className="text-xl text-center text-black">Here are some things I can help you with.</p>
       <div className={ cn( 'grid grid-cols-2 gap-3 mt-3 w-full max-w-96' ) }>
