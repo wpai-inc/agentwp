@@ -20,7 +20,7 @@ export default function Conversation() {
       ) : (
         <>
           <Dialog conversation={ conversation } />
-          <div className="relative mx-auto w-full max-w-screen-md p-1.5">
+          <div className="relative mx-auto w-full max-w-screen-md p-2">
             <DialogFade />
             <div className="space-y-2 mb-2">
               <ChatNotices />
