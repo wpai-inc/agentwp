@@ -29,6 +29,7 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 import { useApp } from '@/Providers/AppProvider';
 import ToggleButton from '@/Components/Chat/ToggleButton/ToggleButton';
+import ChatContainer from './Partials/ChatContainer';
 
 type ChatUIContextType = {
   toggle: () => void;
@@ -57,7 +58,6 @@ export default function Chat() {
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { updateSetting } = useClientSettings();
   const { canAccessAgent } = usePage();
-  const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
   const [ isOpening, setIsOpening ] = useState( false );
   const [ isClosing, setIsClosing ] = useState( false );
@@ -183,22 +183,15 @@ export default function Chat() {
     canAccessAgent && (
       <ChatUIContext.Provider value={ { toggle, open, setOpen } }>
         <HotKeyProvider>
-          <div
+          <ChatContainer
             ref={ scope }
-            onMouseEnter={ () => setIsHovering( true ) }
-            onMouseLeave={ () => setIsHovering( false ) }
-            className={ cn(
-              'bg-brand-gray shadow-xl transition-shadow duration-500 flex flex-col border-gray-200 rounded-xl fixed bottom-4 right-4 z-[10000] origin-bottom-right',
-              {
-                'user-select-none': isDragging,
-                'overflow-hidden': isOpening || isClosing,
-              },
-            ) }>
+            className={ cn( 'fixed bottom-4 right-4 z-[10000] origin-top-left group/chat', {
+              'user-select-none': isDragging,
+              'overflow-hidden': isOpening || isClosing,
+            } ) }>
             <WindowActions
               toggle={ toggle }
               handleDrag={ onDrag }
-              onMouseEnter={ () => setIsHovering( true ) }
-              show={ isHovering || isDragging }
               isMaximized={ isMaximized }
               maximizeWindow={ handleMaximize }
               restoreWindow={ handleRestore }
@@ -206,43 +199,49 @@ export default function Chat() {
             <ChatTopBar handleDrag={ onDrag } />
             <Conversation />
             <ResizeHandles resizeHandler={ onChatWindowResize } />
-          </div>
-          <ContextMenu>
-            <ContextMenuTrigger>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
-                  </TooltipTrigger>
-                  <TooltipContent side="right" align="center">
-                    <p>
-                      { open ? (
-                        <>
-                          Click to minimize
-                          <br /> AgentWP.
-                        </>
-                      ) : (
-                        <>
-                          AgentWP is hidden.
-                          <br /> Click to show.
-                        </>
-                      ) }
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </ContextMenuTrigger>
-            <ContextMenuContent>
-              <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
-                <ContextMenuIcon>
-                  <PowerOffIcon />
-                </ContextMenuIcon>
-                Turn off
-              </ContextMenuItem>
-            </ContextMenuContent>
-          </ContextMenu>
+          </ChatContainer>
+          <ChatTrigger />
         </HotKeyProvider>
       </ChatUIContext.Provider>
     )
   );
+
+  function ChatTrigger() {
+    return (
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
+              </TooltipTrigger>
+              <TooltipContent side="right" align="center">
+                <p>
+                  { open ? (
+                    <>
+                      Click to minimize
+                      <br /> AgentWP.
+                    </>
+                  ) : (
+                    <>
+                      AgentWP is hidden.
+                      <br /> Click to show.
+                    </>
+                  ) }
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
+            <ContextMenuIcon>
+              <PowerOffIcon />
+            </ContextMenuIcon>
+            Turn off
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    );
+  }
 }

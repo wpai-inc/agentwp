@@ -30,6 +30,7 @@ export type PageData = {
   account: {
     user: UserData;
     plan: PlanData;
+    upgrade_link: string;
     config: ConfigData;
   };
   is_admin: boolean;

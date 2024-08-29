@@ -34,9 +34,9 @@ export default function AgentResponse( {
   const { opened } = useFeedback();
 
   return (
-    <div className="border-gray-25 border-t py-4 text-black/60">
+    <div className="text-black/60">
       { otherActions.length > 0 ? (
-        <div className="flex-1">
+        <div className="flex-1 space-y-2 mb-4">
           { otherActions.map( aa => {
             if ( aa.action ) {
               return <ActionComponent key={ aa.id } { ...aa } />;
@@ -46,7 +46,12 @@ export default function AgentResponse( {
       ) : null }
 
       <MessageHeader>
-        <Avatar name="AgentWP" time={ time } image={ logoUrl } />
+        <Avatar
+          name="AgentWP"
+          time={ time }
+          image={ logoUrl }
+          className="border p-1 border-brand"
+        />
         <div className="flex items-center gap-4">
           { ! incomplete && <Rate /> }
           <Popover>

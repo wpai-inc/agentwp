@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: [ 'class' ],
-  content: [ './client/**/*.{ts,tsx}' ],
+  darkMode: ['class'],
+  content: ['./client/**/*.{ts,tsx}'],
   // important: 'div[id^="agentwp"]',
   prefix: '',
   theme: {
@@ -51,8 +51,7 @@ module.exports = {
             20: '#EEEEEE',
             25: '#E8E8E9',
             30: '#ABABAB',
-            // 50: '#cacacb',
-            50: '#b6b6b7',
+            50: '#BBBBBB',
             70: '#777777',
           },
         },
@@ -64,5 +63,5 @@ module.exports = {
   //   // These are readded in the base layer under app.css
   //   preflight: false,
   // },
-  plugins: [ require( 'tailwindcss-animate' ), require( '@tailwindcss/typography' ) ],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 };

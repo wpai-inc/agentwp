@@ -10,7 +10,7 @@ export default function ActionMessage( props: AgentAction ) {
   const action = props.action as MessageAction;
 
   return (
-    <div className="flex flex-col pt-4 gap-4">
+    <div className="flex flex-col gap-4">
       <ActionSimpleMessage { ...props } />
       { action?.graph && (
         <Visualization

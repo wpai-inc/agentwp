@@ -16,7 +16,6 @@ const Corners = () => {
 };
 
 export default function WindowActions( {
-  show = false,
   toggle,
   handleDrag,
   maximizeWindow,
@@ -24,7 +23,6 @@ export default function WindowActions( {
   isMaximized,
   ...props
 }: {
-  show?: boolean;
   toggle: () => void;
   onMouseEnter?: () => void;
   maximizeWindow?: () => void;
@@ -36,14 +34,11 @@ export default function WindowActions( {
     <div
       onMouseDown={ e => handleDrag( e.nativeEvent ) }
       className={ cn(
-        'absolute left-0 top-0 grid h-full grid-rows-2 pl-2 opacity-0 transition-all duration-300 z-10',
-        {
-          '-translate-x-full opacity-100': show,
-        },
+        'absolute left-0 top-0 grid h-full grid-rows-2 pl-2 opacity-0 transition-all duration-300 z-10 group-hover/chat:-translate-x-full group-hover/chat:opacity-100',
       ) }
       { ...props }>
       <div className="overflow-hidden pl-3">
-        <div className="relative z-0 mt-16 flex w-6 flex-col items-center justify-center gap-2 rounded-bl-lg rounded-tl-lg bg-brand-gray py-2 shadow-lg">
+        <div className="relative z-0 mt-16 flex w-7 flex-col items-center justify-center gap-2 rounded-bl-lg rounded-tl-lg bg-white py-2 shadow-lg">
           { isMaximized ? (
             <AgentTooltip content="Return chat window to normal size" side="right">
               <Button
@@ -51,7 +46,7 @@ export default function WindowActions( {
                 className="p-0 h-auto hover:bg-transparent"
                 onClick={ restoreWindow }>
                 <ExitFullscreen
-                  className={ cn( 'h-4 w-4 cursor-pointer hover:text-teal-500', 'text-gray-400' ) }
+                  className={ cn( 'h-5 w-5 cursor-pointer hover:text-teal-500', 'text-gray-400' ) }
                 />
               </Button>
             </AgentTooltip>
@@ -63,7 +58,7 @@ export default function WindowActions( {
                 variant="ghost"
                 className="p-0 h-auto hover:bg-transparent"
                 onClick={ maximizeWindow }>
-                <Fullscreen className={ cn( 'h-4 w-4 hover:text-teal-500', 'text-gray-400' ) } />
+                <Fullscreen className={ cn( 'h-5 w-5 hover:text-teal-500', 'text-gray-400' ) } />
               </Button>
             </AgentTooltip>
           ) }
@@ -78,7 +73,7 @@ export default function WindowActions( {
           <Corners />
         </div>
       </div>
-      <div className="pl-3">
+      <div className="pl-4">
         <AgentTooltip content="Drag or double-click to reset window position" side="right">
           <button
             id="dragHandle"

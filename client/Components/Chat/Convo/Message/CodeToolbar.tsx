@@ -8,6 +8,7 @@ import CodeSnippets from '@/assets/codesnippets.png';
 import WoodySnippets from '@/assets/woodysnippets.png';
 import { useError } from '@/Providers/ErrorProvider';
 import { useChat } from '@/Providers/ChatProvider';
+import { ChatNotice } from '@/Components/Chat/Notices/ChatNotice';
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
   const { adminRequest } = useAdminRoute();
@@ -72,12 +73,18 @@ export default function CodeToolbar( { code, language }: { code: string; languag
 
   return (
     <>
-      <div className="flex justify-between p-2 bg-[#f9dabb] text-[#f3ae6a] rounded-xl mb-3 font-sans">
-        <span>Test code before using</span>
-        <a href="https://kb.agentwp.com/testing-code" target="_blank" rel="noreferrer" className="text-[#ee8131] uppercase">
-          Learn How
-        </a>
-      </div>
+      <ChatNotice
+        action={
+          <a
+            href="https://kb.agentwp.com/testing-code"
+            target="_blank"
+            rel="noreferrer"
+            className="uppercase underline underline-offset-2 text-base">
+            Learn How
+          </a>
+        }>
+        <p>Test code before using</p>
+      </ChatNotice>
 
       <div className="flex justify-between p-2 bg-brand-gray-25 text-brand-gray-70 rounded-t-xl">
         <span className="text-sm uppercase">{ language }</span>

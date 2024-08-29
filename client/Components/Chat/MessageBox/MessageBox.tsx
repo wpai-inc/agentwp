@@ -65,12 +65,14 @@ export default function MessageBox() {
       handleKeyDown={ handleKeyDown }
       message={ message }
       setMessage={ setMessage }>
-      <form className="relative rounded-lg bg-white p-2" onSubmit={ submit }>
+      <form
+        className="relative rounded-lg bg-brand-gray p-2 focus-within:ring-2 ring-brand-primary transition"
+        onSubmit={ submit }>
         <textarea
           onChange={ e => setMessage( e.target.value ) }
           value={ message }
           ref={ textAreaRef }
-          className="h-24 w-full resize-none p-2 text-base"
+          className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0"
           placeholder="Message..."
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
@@ -88,21 +90,19 @@ export default function MessageBox() {
               <TuneIcon className="h-6 w-6" />
             </Button>
           </AgentTooltip>
-          { messageSubmitted ? (
-            <Button
-              type="button"
-              className={ cn( 'rounded bg-brand-primary px-3.5' ) }
-              onClick={ handleCancelMessage }>
-              <div className="h-4 w-4 bg-white"></div>
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              className={ cn( 'rounded bg-brand-primary px-3' ) }
-              disabled={ ! page.onboarding_completed || ! page.agentwp_access }>
+          <Button
+            type={ messageSubmitted ? 'button' : 'submit' }
+            variant="brand"
+            size="lg"
+            onClick={ messageSubmitted ? handleCancelMessage : undefined }
+            className={ cn( 'rounded bg-brand-primary h-10 w-10' ) }
+            disabled={ ! page.onboarding_completed || ! page.agentwp_access }>
+            { messageSubmitted ? (
+              <div className="h-3 w-3 bg-white"></div>
+            ) : (
               <UpArrowIcon className="h-5 w-5" />
-            </Button>
-          ) }
+            ) }
+          </Button>
         </div>
       </form>
     </CommandMenu>

@@ -25,12 +25,12 @@ svg {
 }
 
 .external-border-bottom-left {
-    width: 12px; /* Adjust as needed */
-    height: 12px;
-    background: radial-gradient(circle at bottom left, transparent 12px, rgb(246, 247, 247) 0);
+  width: 12px; /* Adjust as needed */
+  height: 12px;
+  background: radial-gradient( circle at bottom left, transparent 12px, rgb( 255, 255, 255 ) 0 );
 }
 .external-border-top-left {
-    width: 12px; /* Adjust as needed */
-    height: 12px;
-    background: radial-gradient(circle at top left, transparent 12px, rgb(246, 247, 247) 0);
+  width: 12px; /* Adjust as needed */
+  height: 12px;
+  background: radial-gradient( circle at top left, transparent 12px, rgb( 255, 255, 255 ) 0 );
 }

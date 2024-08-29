@@ -53,7 +53,7 @@ export default function Settings() {
             </div>
             <div className="text-right">
               <Button variant="brand" pill={ true }>
-                <a href="https://app.agentwp.com/enroll/pro">Upgrade to Pro</a>
+                <a href={ page.account.upgrade_link }>Upgrade to Pro</a>
               </Button>
             </div>
           </div>
