@@ -10,7 +10,7 @@ import { UserRequestType } from './UserRequestsProvider';
 
 type ClientContextType = {
   client: AwpClient;
-  getHistory: ( since?: string ) => Promise< HistoryData[] >;
+  getHistory: ( since?: string ) => Promise< HistoryResponseType >;
   getConversation: ( since?: string ) => Promise< UserRequestType[] >;
   getSuggestions: ( pageCtx?: any ) => Promise< [] >;
   clearConversation: () => Promise< [] >;
@@ -42,6 +42,10 @@ type ErrorType = {
   message: string;
 };
 
+export type HistoryResponseType = {
+  [ key: string ]: HistoryData[];
+};
+
 export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
   const { addErrors } = useError();
@@ -53,10 +57,10 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     return client.getStreamUrl( user_request_id );
   }
 
-  async function getHistory( since?: string ): Promise< HistoryData[] > {
+  async function getHistory( since?: string ): Promise< HistoryResponseType > {
     return tryRequest( async () => {
       const response = await client.getHistory( since );
-      return response.data as HistoryData[];
+      return response.data;
     } );
   }
 
