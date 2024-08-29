@@ -65,14 +65,12 @@ export default function MessageBox() {
       handleKeyDown={ handleKeyDown }
       message={ message }
       setMessage={ setMessage }>
-      <form
-        className="relative rounded-lg bg-brand-gray p-2 focus-within:ring-2 ring-brand-primary transition"
-        onSubmit={ submit }>
+      <form className="relative rounded-lg bg-brand-gray p-2" onSubmit={ submit }>
         <textarea
           onChange={ e => setMessage( e.target.value ) }
           value={ message }
           ref={ textAreaRef }
-          className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0"
+          className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:bg-white transition"
           placeholder="Message..."
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
@@ -80,6 +78,7 @@ export default function MessageBox() {
         <div className="flex items-center justify-between">
           <AgentTooltip content="Conversation Settings">
             <Button
+              type="button"
               onClick={ () =>
                 setChatSetting( { component: <ChatSettings />, header: 'Settings' } )
               }

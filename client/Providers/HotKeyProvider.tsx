@@ -51,11 +51,11 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
 
   /**
    * Cancel the chat with the
-   * CMD + X key
+   * CMD + SHIFT + X key
    */
   useEffect( () => {
     const handleCxl = ( e: KeyboardEvent ) => {
-      if ( ( e.metaKey || e.ctrlKey ) && e.key === 'x' ) {
+      if ( ( e.metaKey || e.ctrlKey ) && e.shiftKey && e.key === 'x' ) {
         e.preventDefault();
         cancelMessage();
       }
