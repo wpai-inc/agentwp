@@ -7,7 +7,7 @@ import ChatOverlay from '@/Components/Chat/ChatOverlay';
 export default function StaticChat() {
   return (
     <HotKeyProvider>
-      <ChatContainer id="agentwp-settings-chat" className="h-full max-h-screen w-full">
+      <ChatContainer id="agentwp-settings-chat" className="relative h-full max-h-screen w-full">
         <ChatTopBar />
         <Conversation />
         <ChatOverlay />
