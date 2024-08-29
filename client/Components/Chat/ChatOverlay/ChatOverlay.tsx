@@ -11,7 +11,7 @@ export default function ChatOverlay() {
       { chatSetting?.component && (
         <motion.div
           key="chat-overlay"
-          className="bg-white absolute shadow rounded z-20 w-[calc(100%-1rem)] m-[0.5rem] h-[calc(100%-1rem)]"
+          className="absolute bottom-0 left-2 right-2 z-20 flex h-[calc(100%-52px)] flex-col overflow-y-auto rounded bg-white shadow"
           initial={ { scale: 0, y: '100%' } }
           animate={ { scale: 1, y: 0 } }
           transition={ {
@@ -20,13 +20,13 @@ export default function ChatOverlay() {
             bounce: 0.25,
           } }
           exit={ { scale: 0, y: '100%' } }>
-          <div className="py-2 px-4 flex items-center justify-between border-b border-brand-gray-15/50">
+          <div className="flex items-center justify-between border-b border-brand-gray-15/50 px-4 py-2">
             { chatSetting.header && <h2 className="font-bold">{ chatSetting.header }</h2> }
             <Button variant="ghost" onClick={ () => setChatSetting( null ) } className="-mr-2">
               <CloseIcon className="h-4 w-4" />
             </Button>
           </div>
-          <div className="py-6 px-4">{ chatSetting.component }</div>
+          <div className="flex-1 p-4">{ chatSetting.component }</div>
         </motion.div>
       ) }
     </AnimatePresence>

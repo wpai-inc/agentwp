@@ -1,4 +1,5 @@
 import { usePage } from '@/Providers/PageProvider';
+import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import {
   useState,
   useRef,
@@ -185,7 +186,7 @@ export default function Chat() {
         <HotKeyProvider>
           <ChatContainer
             ref={ scope }
-            className={ cn( 'fixed bottom-4 right-4 z-[10000] origin-top-left group/chat', {
+            className={ cn( 'group/chat fixed bottom-4 right-4 z-[10000] origin-top-left', {
               'user-select-none': isDragging,
               'overflow-hidden': isOpening || isClosing,
             } ) }>
@@ -198,6 +199,7 @@ export default function Chat() {
             />
             <ChatTopBar handleDrag={ onDrag } />
             <Conversation />
+            <ChatOverlay />
             <ResizeHandles resizeHandler={ onChatWindowResize } />
           </ChatContainer>
           <ChatTrigger />
