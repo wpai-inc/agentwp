@@ -3,10 +3,15 @@ import { useApp } from '@/Providers/AppProvider';
 import { TokenUsageStatus } from '@/Types/enums';
 
 interface ContextProps {
-  errors: string[];
+  errors: ChatErrorType[];
   clearErrors: () => void;
   addErrors: ( error: string[] ) => void;
 }
+
+export type ChatErrorType = {
+  id: string;
+  message: string;
+};
 
 export const ErrorContext = createContext< ContextProps | undefined >( undefined );
 
@@ -19,7 +24,7 @@ export function useError() {
 }
 
 export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
-  const [ errors, setErrors ] = useState< any[] >( [] );
+  const [ errors, setErrors ] = useState< ChatErrorType[] >( [] );
   const { setCooldownTime, setTokenUsageStatus } = useApp();
 
   const addErrors = ( errors: string[] ) => {

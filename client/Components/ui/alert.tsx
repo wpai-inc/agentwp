@@ -3,31 +3,37 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
+export type AlertVariantProps = VariantProps< typeof alertVariants >;
+
 const alertVariants = cva(
-  'relative w-full rounded-lg border border-slate-200 p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-slate-950 dark:border-slate-800 dark:[&>svg]:text-slate-50',
+  'relative w-full rounded-lg [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-slate-950 flex justify-between items-center',
   {
     variants: {
       variant: {
-        default: 'bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-50',
-        destructive:
-          'border-red-500/50 text-red-500 dark:border-red-500 [&>svg]:text-red-500 dark:border-red-900/50 dark:text-red-900 dark:dark:border-red-900 dark:[&>svg]:text-red-900',
+        default: 'bg-orange-200 text-orange-400',
+        destructive: 'bg-red-200 text-red-400 [&>svg]:text-red-500',
         informative: 'bg-[#edacd2] text-white border-none',
+      },
+      size: {
+        sm: 'text-sm rounded-xl py-1 px-3',
+        default: 'text-base p-2',
       },
     },
     defaultVariants: {
       variant: 'default',
+      size: 'default',
     },
   },
 );
 
 const Alert = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes< HTMLDivElement > & VariantProps< typeof alertVariants >
->( ( { className, variant, ...props }, ref ) => (
+  React.HTMLAttributes< HTMLDivElement > & AlertVariantProps
+>( ( { className, variant, size, ...props }, ref ) => (
   <div
     ref={ ref }
     role="alert"
-    className={ cn( alertVariants( { variant } ), className ) }
+    className={ cn( alertVariants( { variant, size } ), className ) }
     { ...props }
   />
 ) );
@@ -49,7 +55,7 @@ const AlertDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes< HTMLParagraphElement >
 >( ( { className, ...props }, ref ) => (
-  <div ref={ ref } className={ cn( 'text-sm [&_p]:leading-relaxed', className ) } { ...props } />
+  <div ref={ ref } className={ cn( '[&_p]:leading-relaxed', className ) } { ...props } />
 ) );
 AlertDescription.displayName = 'AlertDescription';
 

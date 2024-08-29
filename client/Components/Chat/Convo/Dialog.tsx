@@ -1,16 +1,10 @@
 import Message from '@/Components/Chat/Convo/Message/Message';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
 import ChatWelcome from '@/Components/ChatWelcome';
-import { useError } from '@/Providers/ErrorProvider';
-import { ChatError } from '@/Components/Chat/Alerts/Error';
 import { usePage } from '@/Providers/PageProvider';
-import ContentContext from '@/Components/Chat/ContentContext/ContentContext';
-import { useInputSelect } from '@/Providers/InputSelectProvider';
 
 export default function Dialog( { conversation }: { conversation: UserRequestType[] } ) {
-  const { errors } = useError();
   const { page } = usePage();
-  const { selectedInput } = useInputSelect();
 
   return (
     <InnerContainer>
@@ -19,8 +13,6 @@ export default function Dialog( { conversation }: { conversation: UserRequestTyp
       ) : (
         conversation.map( msg => <Message key={ msg.id } { ...msg } /> )
       ) }
-      { !! errors.length && <ChatError errors={ errors } /> }
-      { selectedInput && <ContentContext selectedInput={ selectedInput } /> }
     </InnerContainer>
   );
 }
