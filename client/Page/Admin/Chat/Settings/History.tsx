@@ -4,16 +4,17 @@ import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 import IconExpand from '@material-design-icons/svg/outlined/expand_more.svg?react';
-import { optimistic } from '@/lib/utils';
 import { HistoryResponseType } from '@/Providers/ClientProvider';
 import { HistoryData } from '@/Types/types';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/ui/collapsible';
+import { cn } from '@/lib/utils';
 
 export default function History() {
-  const [ history, setHistory ] = useState< HistoryResponseType >( [] );
-  const { getHistory, deleteConversation } = useClient();
+  const [ history, setHistory ] = useState< HistoryResponseType >( {} );
+  const { getHistory } = useClient();
   const { since, setSince } = useUserRequests();
-  const { clearHistory, setChatSetting, isEmptyConversation } = useChat();
+  const { setChatSetting } = useChat();
+  const [ openStates, setOpenStates ] = useState< { [ key: number ]: boolean } >( {} );
 
   useEffect( () => {
     fetchHistory( since ?? undefined );
@@ -22,54 +23,8 @@ export default function History() {
   async function fetchHistory( since?: string ) {
     const history = await getHistory( since );
     setHistory( history );
+    setOpenStates( { 0: true } );
   }
-
-  function handleClearConvo() {
-    setChatSetting( null );
-    clearHistory();
-  }
-
-  function handleResume( createdAt: string ) {
-    setSince( createdAt );
-    setChatSetting( null );
-  }
-
-  const timeframes = Object.keys( history );
-  return (
-    <div className="space-y-4">
-      { ! history ? (
-        <LoadingScreen />
-      ) : (
-        <div>
-          { timeframes.length > 0 && (
-            <div>
-              <div className="flex justify-between mb-4">
-                <h2 className="font-bold">Conversations</h2>
-                { ! isEmptyConversation && (
-                  <button className="underline" onClick={ handleClearConvo }>
-                    Clear Current Conversation
-                  </button>
-                ) }
-              </div>
-              <div className="space-y-6">
-                { timeframes.map( ( timeframe, idx ) => (
-                  <Collapsible defaultOpen={ true }>
-                    <CollapsibleTrigger className="flex w-full gap-1 items-center mb-2">
-                      <IconExpand className="h-5 w-6" />
-                      { timeframe }
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <HistoryList items={ history[ timeframe ] } />
-                    </CollapsibleContent>
-                  </Collapsible>
-                ) ) }
-              </div>
-            </div>
-          ) }
-        </div>
-      ) }
-    </div>
-  );
 
   function HistoryList( { items }: { items: HistoryData[] } ) {
     return items.map( convo => <HistoryItem key={ convo.conversationId } convo={ convo } /> );
@@ -78,11 +33,46 @@ export default function History() {
   function HistoryItem( { convo }: { convo: HistoryData } ) {
     return (
       <button
-        className="hover:bg-slate-200 transition-colors p-2 rounded flex justify-between items-center w-full text-left -mx-2"
+        className="hover:bg-brand-gray-20 transition-colors p-2 rounded flex justify-between items-center w-full text-left -mx-2"
         onClick={ () => handleResume( convo.conversationCreatedAt ) }>
         <blockquote className="truncate flex-1">{ convo.message }</blockquote>
         <time className="block text-nowrap font-semibold">{ convo.humanCreatedAt }</time>
       </button>
     );
   }
+
+  function handleToggle( idx: number ) {
+    setOpenStates( prev => ( {
+      ...prev,
+      [ idx ]: ! prev[ idx ],
+    } ) );
+  }
+
+  function handleResume( createdAt: string ) {
+    setSince( createdAt );
+    setChatSetting( null );
+  }
+
+  const timeframes = Object.keys( history );
+
+  return timeframes.length === 0 ? (
+    <LoadingScreen />
+  ) : (
+    <div className="space-y-6">
+      { timeframes.map( ( timeframe, idx ) => {
+        const isOpen = !! openStates[ idx ];
+        return (
+          <Collapsible open={ isOpen } onOpenChange={ () => handleToggle( idx ) } key={ idx }>
+            <CollapsibleTrigger className="flex w-full gap-1 items-center mb-2">
+              <IconExpand className={ cn( 'h-5 w-6', { 'rotate-180': isOpen } ) } />
+              { timeframe }
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <HistoryList items={ history[ timeframe ] } />
+            </CollapsibleContent>
+          </Collapsible>
+        );
+      } ) }
+    </div>
+  );
 }
