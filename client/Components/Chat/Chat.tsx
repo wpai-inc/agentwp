@@ -58,7 +58,6 @@ export default function Chat() {
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
   const { updateSetting } = useClientSettings();
   const { canAccessAgent } = usePage();
-  const [ isHovering, setIsHovering ] = useState( false );
   const [ scope, animate ] = useAnimate();
   const [ isOpening, setIsOpening ] = useState( false );
   const [ isClosing, setIsClosing ] = useState( false );
@@ -186,17 +185,13 @@ export default function Chat() {
         <HotKeyProvider>
           <ChatContainer
             ref={ scope }
-            onMouseEnter={ () => setIsHovering( true ) }
-            onMouseLeave={ () => setIsHovering( false ) }
-            className={ cn( 'fixed bottom-4 right-4 z-[10000] origin-top-left', {
+            className={ cn( 'fixed bottom-4 right-4 z-[10000] origin-top-left group/chat', {
               'user-select-none': isDragging,
               'overflow-hidden': isOpening || isClosing,
             } ) }>
             <WindowActions
               toggle={ toggle }
               handleDrag={ onDrag }
-              onMouseEnter={ () => setIsHovering( true ) }
-              show={ isHovering || isDragging }
               isMaximized={ isMaximized }
               maximizeWindow={ handleMaximize }
               restoreWindow={ handleRestore }

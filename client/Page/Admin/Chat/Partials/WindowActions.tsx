@@ -16,7 +16,6 @@ const Corners = () => {
 };
 
 export default function WindowActions( {
-  show = false,
   toggle,
   handleDrag,
   maximizeWindow,
@@ -24,7 +23,6 @@ export default function WindowActions( {
   isMaximized,
   ...props
 }: {
-  show?: boolean;
   toggle: () => void;
   onMouseEnter?: () => void;
   maximizeWindow?: () => void;
@@ -36,10 +34,7 @@ export default function WindowActions( {
     <div
       onMouseDown={ e => handleDrag( e.nativeEvent ) }
       className={ cn(
-        'absolute left-0 top-0 grid h-full grid-rows-2 pl-2 opacity-0 transition-all duration-300 z-10',
-        {
-          '-translate-x-full opacity-100': show,
-        },
+        'absolute left-0 top-0 grid h-full grid-rows-2 pl-2 opacity-0 transition-all duration-300 z-10 group-hover/chat:-translate-x-full group-hover/chat:opacity-100',
       ) }
       { ...props }>
       <div className="overflow-hidden pl-3">

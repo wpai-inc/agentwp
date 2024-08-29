@@ -16,6 +16,8 @@ export default function MessageBox() {
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
 
+  console.log( 'rendering MessageBox' );
+
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
     sendMessage( message );
