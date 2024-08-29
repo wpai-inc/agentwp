@@ -9,7 +9,7 @@ import { LightTheme } from '@/Components/Chat/Convo/Message/CodeTheme';
 
 export default function MD( { content }: { content: string } ) {
   return (
-    <div className="prose w-full max-w-none overflow-hidden break-words dark:prose-invert prose-code:break-all prose-pre:relative prose-pre:max-w-full prose-pre:overflow-x-auto prose-pre:whitespace-pre-wrap prose-pre:rounded-none prose-pre:bg-transparent prose-pre:p-0">
+    <div className="prose text-base prose-p:text-base w-full max-w-none overflow-hidden break-words dark:prose-invert prose-code:break-all prose-pre:relative prose-pre:max-w-full prose-pre:overflow-x-auto prose-pre:whitespace-pre-wrap prose-pre:rounded-none prose-pre:bg-transparent prose-pre:p-0">
       <Markdown
         children={ content }
         remarkPlugins={ [ remarkBreaks, remarkRehype, remarkGfm ] }
