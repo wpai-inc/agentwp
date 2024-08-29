@@ -20,15 +20,19 @@ export default function Message( userRequest: UserRequestType ) {
 
   return (
     <FeedbackProvider userRequestId={ userRequest.id } feedback={ userRequest.feedback }>
-      <div id={ userRequest.id } className="mb-4 border-b border-brand-gray-25">
-        <UserRequest userRequest={ userRequest } user={ page.user } />
-        <AgentResponse
-          userRequestId={ userRequest.id }
-          time={ userRequest.human_created_at }
-          agentActions={ userRequest.agent_actions }
-          pending={ pending }
-          incomplete={ isIncomplete }
-        />
+      <div id={ userRequest.id } className="my-4">
+        <div className="border-b border-brand-gray-25 px-4">
+          <UserRequest userRequest={ userRequest } user={ page.user } />
+        </div>
+        <div className="border-b border-brand-gray-25 p-4">
+          <AgentResponse
+            userRequestId={ userRequest.id }
+            time={ userRequest.human_created_at }
+            agentActions={ userRequest.agent_actions }
+            pending={ pending }
+            incomplete={ isIncomplete }
+          />
+        </div>
       </div>
     </FeedbackProvider>
   );

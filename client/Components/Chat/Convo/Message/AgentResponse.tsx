@@ -34,7 +34,7 @@ export default function AgentResponse( {
   const { opened } = useFeedback();
 
   return (
-    <div className="border-gray-25 border-t py-4 text-black/60">
+    <div className="text-black/60">
       { otherActions.length > 0 ? (
         <div className="flex-1">
           { otherActions.map( aa => {

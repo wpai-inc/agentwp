@@ -45,7 +45,7 @@ export default function ActionContainer( {
       onOpenChange={ setIsOpen }
       onClick={ handleOnClick }
       className={ cn(
-        'min-h-10 bg-brand-gray-20 p-2 px-4 items-center rounded-lg gap-4 my-2 text-gray-700 text-sm w-full',
+        'min-h-10 bg-brand-gray py-2 px-4 items-center rounded-xl gap-2 my-2 text-gray-700 text-sm w-full',
         {
           'cursor-pointer': shouldClick(),
           'opacity-60 text-gray-500': hasError,
@@ -53,18 +53,20 @@ export default function ActionContainer( {
         className,
       ) }>
       <div className="flex justify-between items-center">
-        <div className="flex gap-4 items-center max-w-full">
-          { pending && ! handleRetry ? (
-            <Spinner show={ true } />
-          ) : hasError ? (
-            <AgentTooltip content={ error }>
-              <button>
-                <IconAlert className={ iconClassName } />
-              </button>
-            </AgentTooltip>
-          ) : (
-            icon && React.cloneElement( icon as ReactElement, { className: iconClassName } )
-          ) }
+        <div className="flex gap-2 items-center max-w-full">
+          <div>
+            { pending && ! handleRetry ? (
+              <Spinner show={ true } />
+            ) : hasError ? (
+              <AgentTooltip content={ error }>
+                <button>
+                  <IconAlert className={ iconClassName } />
+                </button>
+              </AgentTooltip>
+            ) : (
+              icon && React.cloneElement( icon as ReactElement, { className: iconClassName } )
+            ) }
+          </div>
           <p className="overflow-hidden text-ellipsis whitespace-nowrap">{ title }</p>
         </div>
         { ! pending && handleRetry && <IconRenew className={ iconClassName } /> }
