@@ -40,7 +40,7 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
       className="flex flex-col h-full justify-center items-center">
       <p className="text-3xl font-semibold text-black">Hi { name },</p>
       <p className="text-xl text-center text-black">Here are some things I can help you with.</p>
-      <div className={ cn( 'grid grid-cols-2 gap-3 mt-3 w-full max-w-80' ) }>
+      <div className={ cn( 'grid grid-cols-2 gap-3 mt-3 w-full max-w-96' ) }>
         { suggestions.map( ( msg: string | null, key: number ) => (
           <ChatOption
             key={ key }
@@ -95,7 +95,7 @@ function ChatOption( {
           [ delay[ index ] ]: ! message,
         },
       ) }>
-      { message && <p>{ message }</p> }
+      { message && <p className="line-clamp-3">{ message }</p> }
     </div>
   );
 }
