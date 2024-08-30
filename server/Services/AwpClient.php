@@ -53,6 +53,11 @@ class AwpClient
         return $client->send($request);
     }
 
+    public function isAuthorized(): bool
+    {
+        return ! is_null($this->token);
+    }
+
     public function json(string $method, string $url, $body = null): ?array
     {
         $res = $this->request($method, $url, [], $body);

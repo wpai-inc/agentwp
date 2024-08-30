@@ -140,7 +140,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     {
         $current_user_data = wp_get_current_user()->data;
 
-        // only keep the necessary data
         $current_user = [
             'ID' => $current_user_data->ID,
             'user_email' => $current_user_data->user_email,
@@ -170,7 +169,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'client_id' => $this->main->settings->client_id,
             'api_host' => $this->main->apiClientHost(),
             'user' => $current_user,
-            'account' => $this->main->client()->json('GET', '/user'),
+            'account' => $this->main->client()->isAuthorized() ? $this->main->client()->json('GET', '/user') : [],
             'onboarding_completed' => $this->main->settings->onboarding_completed,
             'account_settings' => $this->main->accountSettings()->get(),
             'general_settings' => $this->main->settings->getGeneralSettings(),
