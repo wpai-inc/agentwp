@@ -1,6 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-export type AWPEventChatSinceType = CustomEvent< { since: string } >;
+export type AWPEventChatSinceType = CustomEvent;
 export type AWPEventChatOpenType = CustomEvent;
 export type AWPRootType = HTMLElement & {
   listener: ( this: Window, ev: AWPEventChatSinceType ) => any;
@@ -124,9 +124,9 @@ export type PlanData = {
 };
 
 export type ConfigData = {
-  abilities: Array< any >;
-  context_awareness: Array< any >;
-  capabilities: Array< any >;
+  abilities: Array;
+  context_awareness: Array;
+  capabilities: Array;
   convo_only: boolean;
   convo_disabled: boolean;
   token_limit: number;
@@ -138,4 +138,42 @@ export type UserData = {
   name: string;
   email: string;
   email_verified_at: string;
+};
+
+export type WpPost = {
+  id: number;
+  date: string;
+  date_gmt: string;
+  guid: {
+    rendered: string;
+  };
+  modified: string;
+  modified_gmt: string;
+  slug: string;
+  status: string;
+  type: string;
+  link: string;
+  title: {
+    rendered: string;
+  };
+  content: {
+    rendered: string;
+    protected: boolean;
+  };
+  excerpt: {
+    rendered: string;
+    protected: boolean;
+  };
+  author: number;
+  featured_media: number;
+  comment_status: string;
+  ping_status: string;
+  sticky: boolean;
+  template: string;
+  format: string;
+  meta: {
+    footnotes: string;
+  };
+  categories: number[];
+  tags: number[];
 };

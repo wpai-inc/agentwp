@@ -1,5 +1,4 @@
 import { usePage } from '@/Providers/PageProvider';
-import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import {
   useState,
   useRef,
@@ -13,7 +12,6 @@ import { cn } from '@/lib/utils';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import HotKeyProvider from '@/Providers/HotKeyProvider';
-import Conversation from './Convo/Conversation';
 import { usePosition } from '@/Hooks/position';
 import ResizeHandles from '@/Components/Chat/ResizeHandles/ResizeHandles';
 import { useAnimate, ValueAnimationTransition } from 'framer-motion';
@@ -31,6 +29,7 @@ import { useChat } from '@/Providers/ChatProvider';
 import { useApp } from '@/Providers/AppProvider';
 import ToggleButton from '@/Components/Chat/ToggleButton/ToggleButton';
 import ChatContainer from './Partials/ChatContainer';
+import ChatCore from './Partials/ChatCore';
 
 type ChatUIContextType = {
   toggle: () => void;
@@ -198,8 +197,7 @@ export default function Chat() {
               restoreWindow={ handleRestore }
             />
             <ChatTopBar handleDrag={ onDrag } />
-            <Conversation />
-            <ChatOverlay />
+            <ChatCore />
             <ResizeHandles resizeHandler={ onChatWindowResize } />
           </ChatContainer>
           <ChatTrigger />
