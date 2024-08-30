@@ -11,13 +11,14 @@ export type ClientSettings = {
   width: number;
   height: number;
   offset: TwoDCoord;
+  updateDismissed: boolean;
 };
 
 type ClientSettingValue = string | boolean | number | null | object;
 
 interface ContextProps {
   settings: ClientSettings;
-  setSettings: React.Dispatch< React.SetStateAction< ClientSettings > >;
+  setSettings: React.Dispatch;
   updateSetting: ( key: keyof ClientSettings, value: ClientSettingValue ) => void;
 }
 
@@ -49,7 +50,7 @@ export const useClientSettings = () => {
   return context;
 };
 
-export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
+export const ClientSettingsProvider: FC = ( { children } ) => {
   const [ settings, setSettings ] = useState< ClientSettings >( {
     chatOpen: getLocalStorage( 'chatOpen', false ) as boolean,
     chatMaximized: getLocalStorage( 'chatMaximized', false ) as boolean,
@@ -59,6 +60,7 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
     width: getLocalStorage( 'width', 400 ) as number,
     height: getLocalStorage( 'height', 800 ) as number,
     offset: getLocalStorage( 'offset', { x: 0, y: 0 } ) as TwoDCoord,
+    updateDismissed: getLocalStorage( 'updateDismissed', false ) as boolean,
   } );
 
   function updateSetting( key: keyof ClientSettings, value: ClientSettingValue ) {
