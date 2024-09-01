@@ -74,6 +74,7 @@ export default function CodeToolbar( { code, language }: { code: string; languag
   return (
     <>
       <ChatNotice
+        className="mb-2"
         action={
           <a
             href="https://kb.agentwp.com/testing-code"

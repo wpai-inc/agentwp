@@ -10,7 +10,7 @@ import {
 } from '@wpai/schemas';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
 import { usePage } from './PageProvider';
-import { v4 as uuid } from 'uuid';
+import { generate as uuid } from 'ordered-uuid-v4';
 import { optimistic } from '@/lib/utils';
 
 export type ActionType =

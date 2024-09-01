@@ -25,7 +25,11 @@ export function useFeedback() {
   return ctx;
 }
 
-export const FeedbackProvider: FC = ( { children, userRequestId, feedback } ) => {
+export const FeedbackProvider: FC< {
+  userRequestId: string;
+  feedback?: FeedbackType;
+  children: React.ReactNode;
+} > = ( { children, userRequestId, feedback } ) => {
   const [ approved, setApproved ] = useState< boolean | undefined >( feedback?.approved );
   const [ opened, setOpened ] = useState< boolean >( false );
 
