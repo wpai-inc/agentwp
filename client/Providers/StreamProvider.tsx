@@ -43,51 +43,52 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     setCurrentUserRequestId( user_request_id );
     resetStream();
 
-    try {
-      await fetchEventSource( stream_url, {
-        method: 'POST',
-        body: JSON.stringify( { screen } ),
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + client.token,
-          'X-WP-AGENT-VERSION': client.agentWpVersion,
-          'X-Wp-Agent-Version': client.agentWpVersion,
-          'X-Wp-User-Id': page.user.ID,
-          'X-Wp-Site-Id': page.site_id,
-          'Content-Type': 'application/json',
-        },
-        signal: ctrl.current.signal,
-        openWhenHidden: true,
-        onclose: () => setStreamClosed( true ),
-        async onopen( response ) {
-          if ( response.status > 300 ) {
-            let body = await response.json();
-            throw new Error( body?.message ?? 'Unknown error' );
-          }
-        },
-        onmessage( ev ) {
-          if ( ev.event === 'error' ) {
-            let aar = JSON.parse( ev.data );
-            throw new Error( `Error when processing message: ${ aar.reason }` );
-          }
-          if ( ev.event === 'close' && liveAction.current ) {
-            addActionToCurrentRequest( user_request_id, liveAction.current );
-            setStreamClosed( true );
-            return;
-          }
+    console.log( screen );
+    // try {
+    //   await fetchEventSource( stream_url, {
+    //     method: 'POST',
+    //     body: JSON.stringify( { screen } ),
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Authorization': 'Bearer ' + client.token,
+    //       'X-WP-AGENT-VERSION': client.agentWpVersion,
+    //       'X-Wp-Agent-Version': client.agentWpVersion,
+    //       'X-Wp-User-Id': page.user.ID,
+    //       'X-Wp-Site-Id': page.site_id,
+    //       'Content-Type': 'application/json',
+    //     },
+    //     signal: ctrl.current.signal,
+    //     openWhenHidden: true,
+    //     onclose: () => setStreamClosed( true ),
+    //     async onopen( response ) {
+    //       if ( response.status > 300 ) {
+    //         let body = await response.json();
+    //         throw new Error( body?.message ?? 'Unknown error' );
+    //       }
+    //     },
+    //     onmessage( ev ) {
+    //       if ( ev.event === 'error' ) {
+    //         let aar = JSON.parse( ev.data );
+    //         throw new Error( `Error when processing message: ${ aar.reason }` );
+    //       }
+    //       if ( ev.event === 'close' && liveAction.current ) {
+    //         addActionToCurrentRequest( user_request_id, liveAction.current );
+    //         setStreamClosed( true );
+    //         return;
+    //       }
 
-          let aa = JSON.parse( ev.data ) as AgentAction;
-          liveAction.current = aa;
-          forceUpdate();
-        },
-        onerror( err ) {
-          throw err;
-        },
-      } );
-    } catch ( e ) {
-      await handleStreamError( e );
-      setStreamClosed( true );
-    }
+    //       let aa = JSON.parse( ev.data ) as AgentAction;
+    //       liveAction.current = aa;
+    //       forceUpdate();
+    //     },
+    //     onerror( err ) {
+    //       throw err;
+    //     },
+    //   } );
+    // } catch ( e ) {
+    //   await handleStreamError( e );
+    //   setStreamClosed( true );
+    // }
   }
 
   function cancelStream( userRequestId: string ) {
