@@ -10,9 +10,5 @@ module.exports = {
             'warn',
             { allowConstantExport: true },
         ],
-    },
-    "space-in-parens": [
-        1,
-        "always"
-    ],
+    }
 }
