@@ -1,9 +1,16 @@
+import React from 'react';
 import Message from '@/Components/Chat/Convo/Message/Message';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
 import ChatWelcome from '@/Components/ChatWelcome';
 import { usePage } from '@/Providers/PageProvider';
 
-export default function Dialog( { conversation }: { conversation: UserRequestType[] } ) {
+function DialogComponent( {
+  conversation,
+  messageSubmitted,
+}: {
+  conversation: UserRequestType[];
+  messageSubmitted: boolean;
+} ) {
   const { page } = usePage();
 
   return (
@@ -11,7 +18,13 @@ export default function Dialog( { conversation }: { conversation: UserRequestTyp
       { ! conversation.length ? (
         <ChatWelcome user={ page.user } />
       ) : (
-        conversation.map( msg => <Message key={ msg.id } { ...msg } /> )
+        conversation.map( userRequest => (
+          <Message
+            key={ userRequest.id }
+            submitted={ messageSubmitted }
+            userRequest={ userRequest }
+          />
+        ) )
       ) }
     </InnerContainer>
   );
@@ -24,3 +37,7 @@ function InnerContainer( { children }: { children: React.ReactNode } ) {
     </div>
   );
 }
+
+const Dialog = React.memo( DialogComponent );
+
+export default Dialog;

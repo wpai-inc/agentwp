@@ -5,15 +5,19 @@ import type { UserRequestType } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { FeedbackProvider } from '@/Providers/FeedbackProvider';
 import { useStream } from '@/Providers/StreamProvider';
-import { useChat } from '@/Providers/ChatProvider';
 
-export default function Message( userRequest: UserRequestType ) {
+export default function Message( {
+  userRequest,
+  submitted,
+}: {
+  userRequest: UserRequestType;
+  submitted: boolean;
+} ) {
   const { page } = usePage();
-  const { messageSubmitted } = useChat();
   const { currentUserRequestId } = useUserRequests();
   const sameUserRequest = userRequest.id === currentUserRequestId;
   const { streamClosed } = useStream();
-  const pending = ( sameUserRequest && ! streamClosed ) || messageSubmitted;
+  const pending = ( sameUserRequest && ! streamClosed ) || submitted;
   const isIncomplete =
     userRequest.agent_actions?.length === 0 ||
     userRequest.agent_actions?.some( aa => ! aa.action && ! aa.result?.status );
