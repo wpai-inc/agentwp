@@ -48,9 +48,14 @@ class AwpClient
             $additionalHeaders,
         );
 
-        $request = new Request($method, $this->getBaseUri().ltrim($url, '/'), $headers, $body);
+        try {
+            $request = new Request($method, $this->getBaseUri().ltrim($url, '/'), $headers, $body);
 
-        return $client->send($request);
+            return $client->send($request);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return $e->getResponse();
+        }
     }
 
     public function isAuthorized(): bool
