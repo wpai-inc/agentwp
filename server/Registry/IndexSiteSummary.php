@@ -26,6 +26,7 @@ class IndexSiteSummary implements Cacheable, Registrable
     public function register(): void
     {
         $this->registerActionSchedules(['autoUpdate']);
+        add_action('init', [$this, 'checkCache']);
     }
 
     public static function cacheId(): string
@@ -49,5 +50,12 @@ class IndexSiteSummary implements Cacheable, Registrable
     public function send(array $data): void
     {
         $this->main->client(false)->summarizeSite(json_encode($data));
+    }
+
+    public function checkCache(): void
+    {
+        if (! $this->cache()->hasCache()) {
+            $this->scheduleNow('autoUpdate');
+        }
     }
 }
