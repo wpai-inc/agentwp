@@ -12,7 +12,9 @@ export type StoreAgentResponse = {
   };
 };
 
-const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
+type ProviderProps = { children: React.ReactNode };
+
+const ActionListenerProvider: React.FC< ProviderProps > = ( { children } ) => {
   const { streamClosed, startStream } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
   const { adminRequest } = useAdminRoute();
@@ -25,6 +27,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         executeAndContinueAction( currentAction, currentUserRequestId );
         return;
       }
+
       /**
        * Tries reconnecting stream.
        * Allows for two errors before stopping the stream.

@@ -132,7 +132,7 @@ export default function UserRequestsProvider( {
       if ( userRequestId ) {
         setConversation( conversation => {
           return conversation.map( request => {
-            if ( request.id === userRequestId ) {
+            if ( request.id === userRequestId && ! request.agent_actions.includes( action ) ) {
               return {
                 ...request,
                 agent_actions: [ ...request.agent_actions, action ],

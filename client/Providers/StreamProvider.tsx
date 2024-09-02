@@ -31,6 +31,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const forceUpdate = useForceUpdate();
   const liveAction = useRef< AgentAction | null >( null );
   const [ streamClosed, setStreamClosed ] = useState( true );
+  const [ retries, setRetries ] = useState< number >( -1 );
   const { setCurrentUserRequestId, addActionToCurrentRequest, currentUserRequestId } =
     useUserRequests();
   const { addErrors } = useError();
@@ -43,7 +44,14 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     setCurrentUserRequestId( user_request_id );
     resetStream();
 
+    if ( retries > 2 ) {
+      addErrors( [ 'Too many retries.' ] );
+      setRetries( -1 );
+      return;
+    }
+
     try {
+      setRetries( retries => retries + 1 );
       await fetchEventSource( stream_url, {
         method: 'POST',
         body: JSON.stringify( { screen } ),
