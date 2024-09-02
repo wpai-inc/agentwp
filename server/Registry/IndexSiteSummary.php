@@ -55,7 +55,7 @@ class IndexSiteSummary implements Cacheable, Registrable
     public function checkCache(): void
     {
         if (! $this->cache()->hasCache()) {
-            $this->autoUpdate();
+            $this->scheduleNow('autoUpdate');
         }
     }
 }
