@@ -6,7 +6,7 @@ use WpAi\AgentWp\Services\Cache;
 
 trait HasCache
 {
-    public function cache($data): Cache
+    public function cache($data = null): Cache
     {
         return new Cache(self::cacheId(), $data);
     }

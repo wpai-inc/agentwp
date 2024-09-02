@@ -26,6 +26,7 @@ class IndexSiteSummary implements Cacheable, Registrable
     public function register(): void
     {
         $this->registerActionSchedules(['autoUpdate']);
+        add_action('plugins_loaded', [$this, 'checkCache']);
     }
 
     public static function cacheId(): string
@@ -35,6 +36,7 @@ class IndexSiteSummary implements Cacheable, Registrable
 
     public function autoUpdate(): void
     {
+        wp_die('autoUpdate');
         if (! $this->main->siteId() || (defined('DOING_AJAX') && DOING_AJAX)) {
             return;
         }
@@ -49,5 +51,13 @@ class IndexSiteSummary implements Cacheable, Registrable
     public function send(array $data): void
     {
         $this->main->client(false)->summarizeSite(json_encode($data));
+    }
+
+    public function checkCache(): void
+    {
+        error_log('checkCache');
+        if (! $this->cache()->hasCache()) {
+            $this->autoUpdate();
+        }
     }
 }

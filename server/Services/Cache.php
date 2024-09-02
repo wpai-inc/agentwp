@@ -25,6 +25,11 @@ class Cache
         return $this->key;
     }
 
+    public function hasCache(): bool
+    {
+        return get_option($this->key) !== false;
+    }
+
     public function hit(): bool
     {
         $last_hash = get_option($this->key);
