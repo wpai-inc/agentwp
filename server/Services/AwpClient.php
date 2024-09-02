@@ -60,9 +60,13 @@ class AwpClient
 
     public function json(string $method, string $url, $body = null): ?array
     {
-        $res = $this->request($method, $url, [], $body);
+        try {
+            $res = $this->request($method, $url, [], $body);
 
-        return json_decode($res->getBody()->getContents(), true);
+            return json_decode($res->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function setToken(string $token): self
