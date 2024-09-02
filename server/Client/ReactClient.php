@@ -13,7 +13,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 {
     protected string $pageName;
 
-    protected Main $main;
+    public Main $main;
 
     protected array $locations = [];
 
@@ -30,7 +30,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     public function setLocation(): void
     {
         foreach ($this->locations as $location) {
-            if (! class_exists($location)) {
+            if ( ! class_exists($location)) {
                 throw new \Error('Location class does not exist: '.$location);
             }
             $setup = new $location($this);
@@ -40,7 +40,9 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         }
     }
 
-    public function registrations(): void {}
+    public function registrations(): void
+    {
+    }
 
     /**
      * Register the client and anything else.
@@ -102,19 +104,47 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
     public function appRoot(): void
     {
-        ?>
-        <noscript>
-            <div class="no-js">
-                <?php
+        if ($this->main->auth()->hasAccess()) {
+            ?>
+            <noscript>
+                <div class="no-js">
+                    <?php
+                    echo esc_html__(
+                        'Warning: AgentWP will not work properly without JavaScript, please enable it.',
+                        'agentwp'
+                    );
+                    ?>
+                </div>
+            </noscript>
+            <div id="<?php echo $this->slug() ?>"></div>
+            <?php
+        } else {
+            $managers = $this->main->auth->managers();
+            ?>
+            <div>
+                <h1>AgentWP</h1>
+                <div>
+                    <p>
+                        <?php
                         echo esc_html__(
-                            'Warning: AgentWP will not work properly without JavaScript, please enable it.',
+                            'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
                             'agentwp'
                         );
-        ?>
+                        ?>
+                    </p>
+                    <div>
+                        <strong>AgentsWP Managers:</strong>
+                        <ul>
+                        <?php
+                        foreach ($managers as $manager) {
+                            echo "<li>{$manager->data->display_name} ({$manager->data->user_email})</li>";
+                        }
+                        ?>
+                    </ul>
+                </div>
             </div>
-        </noscript>
-        <div id="<?php echo $this->slug() ?>"></div>
-<?php
+            <?php
+        }
     }
 
     /**
@@ -125,7 +155,8 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         return array_merge([
             'page' => $this->slug(),
             'url' => $this->main->url(),
-            'notice_visible' => boolval(get_option('codewpai_notice_visible', 1))],
+            'notice_visible' => boolval(get_option('codewpai_notice_visible', 1))
+        ],
             $this->globalData(),
             $this->data(),
         );

@@ -16,7 +16,7 @@ class Dashboard implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return is_admin();
+        return is_admin() &&  $this->client->main->auth()->hasAccess();
     }
 
     public function setup(): void

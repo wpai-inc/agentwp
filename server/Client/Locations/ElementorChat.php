@@ -16,7 +16,7 @@ class ElementorChat implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return is_admin() && isset($_GET['action']) && $_GET['action'] === 'elementor';
+        return is_admin() && $this->client->main->auth()->hasAccess() && isset($_GET['action']) && $_GET['action'] === 'elementor';
     }
 
     public function setup(): void

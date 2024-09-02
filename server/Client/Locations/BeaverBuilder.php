@@ -17,7 +17,7 @@ class BeaverBuilder implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return isset($_GET['fl_builder']) && class_exists('FLBuilderLoader');
+        return isset($_GET['fl_builder']) && $this->client->main->auth()->hasAccess() && class_exists('FLBuilderLoader');
     }
 
     public function setup(): void
