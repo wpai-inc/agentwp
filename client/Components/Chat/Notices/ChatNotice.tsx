@@ -13,12 +13,14 @@ export function ChatNotice( {
   size,
   action,
   className,
+  noInitialAnimation = false,
 }: {
   children: React.ReactNode;
   className?: string;
   dismissable?: boolean | string;
   onDismiss?: () => void;
   action?: React.ReactNode;
+  noInitialAnimation?: boolean;
 } & AlertVariantProps ) {
   const [ dismissed, setDismissed ] = useState( false );
 
@@ -31,7 +33,7 @@ export function ChatNotice( {
     <AnimatePresence>
       { ! dismissed && (
         <motion.div
-          initial={ { opacity: 0, y: '100%', scaleY: 0 } }
+          initial={ noInitialAnimation ? {} : { opacity: 0, y: '100%', scaleY: 0 } }
           animate={ { opacity: 1, y: 0, scaleY: 1 } }
           exit={ { opacity: 0, y: '100%', scaleY: 0 } }>
           <Alert variant={ variant } size={ size } className={ cn( 'not-prose', className ) }>

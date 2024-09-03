@@ -8,7 +8,7 @@ import ChatNotices from '@/Components/Chat/Notices/ChatNotices';
 import ChatMessageInput from './Message/ChatMessageInput';
 
 export default function Conversation() {
-  const { conversation } = useChat();
+  const { conversation, messageSubmitted } = useChat();
   const { loadingConversation } = useUserRequests();
   const { cooldownTime, tokenUsageStatus } = useApp();
 
@@ -18,7 +18,7 @@ export default function Conversation() {
         <LoadingScreen />
       ) : (
         <>
-          <Dialog conversation={ conversation } />
+          <Dialog conversation={ conversation } messageSubmitted={ messageSubmitted } />
           <div className="relative mx-auto w-full max-w-screen-md p-2">
             <DialogFade />
             <div className="mb-2 space-y-2">

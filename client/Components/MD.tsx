@@ -9,7 +9,7 @@ import { LightTheme } from '@/Components/Chat/Convo/Message/CodeTheme';
 
 export default function MD( { content }: { content: string } ) {
   return (
-    <div className="prose text-base prose-p:text-base prose-code:before:hidden prose-code:after:hidden prose-code:font-normal w-full max-w-none prose-code:text-amber-600 prose-code:bg-amber-50 prose-code:border-amber-200 prose-code:border prose-code:rounded-md overflow-hidden break-words dark:prose-invert prose-code:break-all prose-pre:relative prose-pre:max-w-full prose-pre:overflow-x-auto prose-pre:whitespace-pre-wrap prose-pre:rounded-none prose-pre:bg-transparent prose-pre:p-0">
+    <div className="prose w-full max-w-none overflow-hidden break-words text-base dark:prose-invert prose-p:text-base prose-code:break-all prose-code:rounded-md prose-code:border prose-code:border-amber-200 prose-code:bg-amber-50 prose-code:font-normal prose-code:text-amber-600 prose-code:before:hidden prose-code:after:hidden prose-pre:relative prose-pre:max-w-full prose-pre:overflow-x-auto prose-pre:whitespace-pre-wrap prose-pre:rounded-none prose-pre:bg-transparent prose-pre:p-0">
       <Markdown
         children={ content }
         remarkPlugins={ [ remarkBreaks, remarkRehype, remarkGfm ] }
@@ -28,7 +28,8 @@ export default function MD( { content }: { content: string } ) {
                   showLineNumbers={ true }
                   style={ LightTheme }
                   language={ match[ 1 ] }
-                  PreTag="div"
+                  PreTag="pre"
+                  CodeTag="span"
                 />
               </div>
             ) : (
