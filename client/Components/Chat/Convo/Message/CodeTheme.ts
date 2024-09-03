@@ -1,22 +1,4 @@
 export const LightTheme = {
-  'code[class*="language-"]': {
-    color: '#393A34',
-    fontFamily: '"Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace',
-    direction: 'ltr',
-    textAlign: 'left',
-    whiteSpace: 'pre',
-    wordSpacing: 'normal',
-    wordBreak: 'normal',
-    fontSize: '.9em',
-    lineHeight: '1.2em',
-    MozTabSize: '4',
-    OTabSize: '4',
-    tabSize: '4',
-    WebkitHyphens: 'none',
-    MozHyphens: 'none',
-    msHyphens: 'none',
-    hyphens: 'none',
-  },
   'pre[class*="language-"]': {
     color: '#393A34',
     fontFamily: '"Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace',

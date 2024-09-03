@@ -74,29 +74,30 @@ export default function CodeToolbar( { code, language }: { code: string; languag
   return (
     <>
       <ChatNotice
+        noAnimation={ true }
         className="mb-2"
         action={
           <a
             href="https://kb.agentwp.com/testing-code"
             target="_blank"
             rel="noreferrer"
-            className="uppercase underline underline-offset-2 text-base">
+            className="text-base uppercase underline underline-offset-2">
             Learn How
           </a>
         }>
         <p>Test code before using</p>
       </ChatNotice>
 
-      <div className="flex justify-between p-2 bg-brand-gray-25 text-brand-gray-70 rounded-t-xl">
+      <div className="flex justify-between rounded-t-xl bg-brand-gray-25 p-2 text-brand-gray-70">
         <span className="text-sm uppercase">{ language }</span>
         <div className="flex items-center justify-end gap-3">
-          <button className="ml-2 text-xs hover:text-brand-gray-100" onClick={ () => copy( code ) }>
-            { copied ? 'Copied!' : <IconCopy className="w-4 h-4" /> }
+          <button className="hover:text-brand-gray-100 ml-2 text-xs" onClick={ () => copy( code ) }>
+            { copied ? 'Copied!' : <IconCopy className="h-4 w-4" /> }
           </button>
 
           { pluginIcon && (
             <button onClick={ addSnippet }>
-              <img src={ pluginIcon } alt="WordPress Code Snippet" className="w-6 m-0" />
+              <img src={ pluginIcon } alt="WordPress Code Snippet" className="m-0 w-6" />
             </button>
           ) }
         </div>
