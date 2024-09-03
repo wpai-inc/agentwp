@@ -74,7 +74,7 @@ export default function CodeToolbar( { code, language }: { code: string; languag
   return (
     <>
       <ChatNotice
-        noAnimation={ true }
+        noInitialAnimation={ true }
         className="mb-2"
         action={
           <a
