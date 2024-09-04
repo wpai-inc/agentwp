@@ -5,6 +5,7 @@ import type { UserRequestType } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { FeedbackProvider } from '@/Providers/FeedbackProvider';
 import { useStream } from '@/Providers/StreamProvider';
+import { StreamingStatusEnum } from '@/Types/enums';
 
 export default function Message( {
   userRequest,
@@ -16,11 +17,16 @@ export default function Message( {
   const { page } = usePage();
   const { currentUserRequestId } = useUserRequests();
   const sameUserRequest = userRequest.id === currentUserRequestId;
-  const { streamClosed } = useStream();
-  const pending = ( sameUserRequest && ! streamClosed ) || submitted;
+  const { streamingStatus } = useStream();
+  const pending =
+    ( sameUserRequest && streamingStatus > StreamingStatusEnum.OFF ) || submitted;
   const isIncomplete =
     userRequest.agent_actions?.length === 0 ||
     userRequest.agent_actions?.some( aa => ! aa.action && ! aa.result?.status );
+  const isAborted =
+    streamingStatus === StreamingStatusEnum.SHOULD_ABORT ||
+    userRequest.agent_actions?.some( aa => aa.result?.status === 'aborted' ) ||
+    userRequest.status === 'aborted';
 
   return (
     <FeedbackProvider userRequestId={ userRequest.id } feedback={ userRequest.feedback }>
@@ -35,6 +41,7 @@ export default function Message( {
             agentActions={ userRequest.agent_actions }
             pending={ pending }
             incomplete={ isIncomplete }
+            aborted={ isAborted }
           />
         </div>
       </div>

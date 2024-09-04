@@ -4,6 +4,7 @@ import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useError } from './ErrorProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { useClient } from './ClientProvider';
+import { StreamingStatusEnum } from '@/Types/enums';
 
 export type StoreAgentResponse = {
   status: string;
@@ -12,22 +13,20 @@ export type StoreAgentResponse = {
   };
 };
 
-type ProviderProps = { children: React.ReactNode };
-
-const ActionListenerProvider: React.FC< ProviderProps > = ( { children } ) => {
-  const { streamClosed, startStream } = useStream();
+const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
+  const { streamingStatus, startStream } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
   const { adminRequest } = useAdminRoute();
   const { client } = useClient();
   const { errors } = useError();
 
   useEffect( () => {
-    if ( currentAction && streamClosed ) {
+    console.log( 'ActionListenerProvider', currentAction, streamingStatus );
+    if ( currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
       if ( currentAction.action ) {
         executeAndContinueAction( currentAction, currentUserRequestId );
         return;
       }
-
       /**
        * Tries reconnecting stream.
        * Allows for two errors before stopping the stream.
@@ -41,7 +40,7 @@ const ActionListenerProvider: React.FC< ProviderProps > = ( { children } ) => {
         startStream( currentUserRequestId );
       }
     }
-  }, [ currentAction, streamClosed, currentUserRequestId ] );
+  }, [ currentAction, streamingStatus, currentUserRequestId ] );
 
   async function executeAndContinueAction( aa: AgentAction, reqId: string | null ) {
     if ( ! aa.hasExecuted ) {
@@ -59,6 +58,7 @@ const ActionListenerProvider: React.FC< ProviderProps > = ( { children } ) => {
   }
 
   async function executeAction( aa: AgentAction ) {
+    console.log( 'Executing action', aa );
     switch ( aa.action.ability ) {
       case 'query':
         try {

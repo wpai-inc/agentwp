@@ -43,6 +43,7 @@ export type UserRequestType = {
   human_created_at: string;
   agent_actions: AgentAction[];
   feedback?: FeedbackType;
+  status?: string;
 };
 
 type UserRequestsContextType = {
@@ -60,6 +61,7 @@ type UserRequestsContextType = {
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
   addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
+  setRequestAborted: ( userRequestId: string ) => void;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >(
@@ -129,13 +131,32 @@ export default function UserRequestsProvider( {
 
   const addActionToCurrentRequest = useCallback(
     function ( userRequestId: string, action: AgentAction ) {
-      if ( userRequestId ) {
+      if ( userRequestId && currentUserRequestId === userRequestId ) {
         setConversation( conversation => {
           return conversation.map( request => {
             if ( request.id === userRequestId && ! request.agent_actions.includes( action ) ) {
               return {
                 ...request,
                 agent_actions: [ ...request.agent_actions, action ],
+              };
+            }
+            return request;
+          } );
+        } );
+      }
+    },
+    [ conversation, currentUserRequestId ],
+  );
+
+  const setRequestAborted = useCallback(
+    function ( userRequestId: string ) {
+      if ( userRequestId && currentUserRequestId === userRequestId ) {
+        setConversation( conversation => {
+          return conversation.map( request => {
+            if ( request.id === userRequestId ) {
+              return {
+                ...request,
+                status: 'aborted',
               };
             }
             return request;
@@ -186,6 +207,8 @@ export default function UserRequestsProvider( {
     clearConversation();
   }
 
+  useEffect( () => {}, [ conversation ] );
+
   return (
     <UserRequestsContext.Provider
       value={ {
@@ -203,6 +226,7 @@ export default function UserRequestsProvider( {
         since,
         setSince,
         addActionToCurrentRequest,
+        setRequestAborted,
       } }>
       { children }
     </UserRequestsContext.Provider>
