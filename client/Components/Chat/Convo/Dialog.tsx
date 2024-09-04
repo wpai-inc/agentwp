@@ -32,7 +32,7 @@ function DialogComponent( {
 
 function InnerContainer( { children }: { children: React.ReactNode } ) {
   return (
-    <div className="relative mx-auto flex w-full max-w-screen-md flex-1 flex-col-reverse overflow-y-auto py-4">
+    <div className="relative mx-auto flex w-full max-w-screen-md flex-1 flex-col-reverse overflow-y-auto py-4 pb-12">
       { children }
     </div>
   );
