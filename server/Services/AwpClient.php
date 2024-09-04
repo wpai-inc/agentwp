@@ -57,7 +57,7 @@ class AwpClient
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null)
     {
         try {
-            return json_decode($this->requestRaw($method, $url, $additionalHeaders, $body)->getBody()->getContents(), true);
+            return $this->requestRaw($method, $url, $additionalHeaders, $body);
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
