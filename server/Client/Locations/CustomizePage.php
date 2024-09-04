@@ -16,7 +16,7 @@ class CustomizePage implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return is_admin() && basename($_SERVER['PHP_SELF']) === 'customize.php';
+        return is_admin() && $this->client->main->auth()->hasAccess() && basename($_SERVER['PHP_SELF']) === 'customize.php';
     }
 
     public function setup(): void

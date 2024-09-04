@@ -37,6 +37,9 @@ trait HasMenu
 
     public function subPages(array $pages): self
     {
+        if (! $this->main->auth()->hasAccess()) {
+            return $this;
+        }
         $this->subPages = $pages;
 
         return $this;

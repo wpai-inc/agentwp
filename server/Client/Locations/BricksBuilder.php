@@ -17,7 +17,7 @@ class BricksBuilder implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return isset($_GET['bricks']) && $_GET['bricks'] === 'run' && !isset($_GET['brickspreview']);
+        return isset($_GET['bricks']) && $_GET['bricks'] === 'run' && !isset($_GET['brickspreview']) && $this->client->main->auth()->hasAccess();
     }
 
     public function setup(): void

@@ -15,7 +15,7 @@ class AccountSettings
     {
         $response = $this->client->getSiteSettings();
 
-        if($response){
+        if ($response) {
             return json_decode($response->getBody()->getContents(), true);
         }
 

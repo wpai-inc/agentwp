@@ -104,4 +104,9 @@ class UserAuth
     {
         return $this->user->roles[0] ?? null;
     }
+
+    public function managers(): array
+    {
+        return get_users(['role' => 'agentwp_manager']);
+    }
 }
