@@ -10,6 +10,7 @@ import {
 } from '@wpai/schemas';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
 import { usePage } from './PageProvider';
+// @ts-ignore
 import { generate as uuid } from 'ordered-uuid-v4';
 import { optimistic } from '@/lib/utils';
 
@@ -131,7 +132,7 @@ export default function UserRequestsProvider( {
 
   const addActionToCurrentRequest = useCallback(
     function ( userRequestId: string, action: AgentAction ) {
-      if ( userRequestId && currentUserRequestId === userRequestId ) {
+      if ( userRequestId ) {
         setConversation( conversation => {
           return conversation.map( request => {
             if ( request.id === userRequestId && ! request.agent_actions.includes( action ) ) {

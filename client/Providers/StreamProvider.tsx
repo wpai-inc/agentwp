@@ -30,7 +30,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const { screen } = useScreen();
   const forceUpdate = useForceUpdate();
   const liveAction = useRef< AgentAction | null >( null );
-    const [ retries, setRetries ] = useState< number >( -1 );
+  const [ retries, setRetries ] = useState< number >( -1 );
   const {
     setCurrentUserRequestId,
     addActionToCurrentRequest,
@@ -50,7 +50,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       return;
     }
     setStreamingStatus( StreamingStatusEnum.PENDING );
-    forceUpdate();
 
     const stream_url = getStreamUrl( user_request_id );
     setCurrentUserRequestId( user_request_id );
@@ -59,6 +58,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     if ( retries > 2 ) {
       addErrors( [ 'Too many retries.' ] );
       setRetries( -1 );
+      setStreamingStatus( StreamingStatusEnum.OFF );
       return;
     }
 
