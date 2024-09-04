@@ -28,7 +28,7 @@ class AwpClient
         $this->wp_user = wp_get_current_user();
     }
 
-    public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
+    public function requestRaw(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
     {
         $client = $this->buildClient();
 
@@ -48,13 +48,20 @@ class AwpClient
             $additionalHeaders,
         );
 
-        try {
-            $request = new Request($method, $this->getBaseUri().ltrim($url, '/'), $headers, $body);
+        $request = new Request($method, $this->getBaseUri().ltrim($url, '/'), $headers, $body);
 
-            return $client->send($request);
+        return $client->send($request);
+
+    }
+
+    public function request(string $method, string $url, array $additionalHeaders = [], $body = null)
+    {
+        try {
+            return json_decode($this->requestRaw($method, $url, $additionalHeaders, $body)->getBody()->getContents(), true);
         } catch (\Exception $e) {
             error_log($e->getMessage());
-            return $e->getResponse();
+
+            return null;
         }
     }
 
