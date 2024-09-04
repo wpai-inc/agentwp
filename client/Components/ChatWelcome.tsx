@@ -38,14 +38,15 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
       <p className="text-3xl font-semibold text-black">Hi { name },</p>
       <p className="text-xl text-center text-black">Here are some things I can help you with.</p>
       <div className={ cn( 'grid grid-cols-2 gap-3 mt-3 w-full max-w-96' ) }>
-        { suggestions.map( ( msg: string | null, key: number ) => (
-          <ChatOption
-            key={ key }
-            index={ key }
-            message={ msg }
-            onClick={ msg ? () => sendMessage( msg ) : undefined }
-          />
-        ) ) }
+        { suggestions &&
+          suggestions.map( ( msg: string | null, key: number ) => (
+            <ChatOption
+              key={ key }
+              index={ key }
+              message={ msg }
+              onClick={ msg ? () => sendMessage( msg ) : undefined }
+            />
+          ) ) }
         <a
           href="https://agentwp.com/capabilities/"
           target="_blank"

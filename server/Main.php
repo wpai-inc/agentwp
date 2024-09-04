@@ -44,7 +44,7 @@ class Main
         $this->settings = new Settings;
         $this->auth = new UserAuth;
         $this->pluginUrl = plugin_dir_url($this->file);
-        $this->settingsPage = admin_url('options-general.php?page=agentwp-admin-settings');
+        $this->settingsPage = admin_url('admin.php?page=agentwp-admin-settings');
         $this->registerSchedules();
         $this->registerAdminStyles();
     }
