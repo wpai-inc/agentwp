@@ -16,7 +16,6 @@ use WpAi\AgentWp\Traits\GeneralSettingsData;
  */
 class Settings
 {
-
     use GeneralSettingsData;
 
     const SLUG = 'agentwp';
@@ -25,15 +24,15 @@ class Settings
 
     public array $general_settings = [
         'cleanup_after_deactivate' => [
-            'type'    => 'boolean',
+            'type' => 'boolean',
             'default' => true,
         ],
     ];
 
     public function __construct()
     {
-        $data = get_option(self::SLUG . '_settings');
-        if ( ! is_array($data)) {
+        $data = get_option(self::SLUG.'_settings');
+        if (! is_array($data)) {
             $data = [];
         }
         $this->data = $data;
@@ -55,7 +54,7 @@ class Settings
             $this->data[$key] = $value;
         }
 
-        return update_option(self::SLUG . '_settings', $this->data);
+        return update_option(self::SLUG.'_settings', $this->data);
     }
 
     public function delete($key): bool
@@ -72,7 +71,7 @@ class Settings
             }
         }
 
-        return update_option(self::SLUG . '_settings', $this->data);
+        return update_option(self::SLUG.'_settings', $this->data);
     }
 
     public function has($key): bool
@@ -83,8 +82,8 @@ class Settings
     public function setAccessToken($token): bool
     {
         if (extension_loaded('openssl') && defined('AUTH_KEY') && ! empty(AUTH_KEY)) {
-            $iv                     = substr(AUTH_KEY, 0, 16);
-            $token['access_token']  = openssl_encrypt($token['access_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv);
+            $iv = substr(AUTH_KEY, 0, 16);
+            $token['access_token'] = openssl_encrypt($token['access_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv);
             $token['refresh_token'] = $token['refresh_token'] ? openssl_encrypt($token['refresh_token'], 'aes-256-cbc', AUTH_KEY, 0, $iv) : '';
         }
 
@@ -97,7 +96,6 @@ class Settings
 
     public function getAccessToken(): ?string
     {
-
         if (empty($this->data['token']['access_token'])) {
             return null;
         }
@@ -149,7 +147,7 @@ class Settings
     public function sanitize_settings($settings): array
     {
         $general_settings = $this->general_settings;
-        $defaults         = $this->getGeneralSettingsDefaultValues();
+        $defaults = $this->getGeneralSettingsDefaultValues();
 
         // Merge with defaults and only allow defined keys
         $settings = wp_parse_args($settings, $defaults);
@@ -185,7 +183,7 @@ class Settings
 
     public function get(string $key)
     {
-        $key   = explode('.', $key);
+        $key = explode('.', $key);
         $value = $this->data;
         foreach ($key as $k) {
             if (isset($value[$k])) {
@@ -194,6 +192,7 @@ class Settings
                 return null;
             }
         }
+
         return $value;
     }
 }

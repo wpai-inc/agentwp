@@ -73,7 +73,7 @@ class AwpClient
     public function json(string $method, string $url, $body = null): ?array
     {
         try {
-            $res = $this->request($method, $url, [], $body);
+            $res = $this->requestRaw($method, $url, [], $body);
 
             return json_decode($res->getBody()->getContents(), true);
         } catch (\Exception $e) {
