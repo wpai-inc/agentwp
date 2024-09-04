@@ -8,6 +8,10 @@ import CommandMenu from '../Commands/CommandMenu';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
 import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
+import { useStream } from '@/Providers/StreamProvider';
+import { StreamingStatusEnum } from '@/Types/enums';
+import { useError } from '@/Providers/ErrorProvider';
+import { LoaderIcon } from 'lucide-react';
 
 export default function MessageBox() {
   const { sendMessage, setChatSetting, message, setMessage, messageSubmitted, cancelMessage } =
@@ -15,9 +19,14 @@ export default function MessageBox() {
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
+  const { streamingStatus } = useStream();
+  const { addErrors } = useError();
 
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
+    if ( message.trim() === '' ) {
+      return addErrors( [ 'Message is empty' ] );
+    }
     sendMessage( message );
   }
 
@@ -84,22 +93,33 @@ export default function MessageBox() {
               }
               variant="ghost"
               size="icon"
-              disabled={ ! page.onboarding_completed || ! page.agentwp_access }
+              disabled={
+                ! page.onboarding_completed ||
+                ! page.agentwp_access ||
+                streamingStatus === StreamingStatusEnum.SHOULD_ABORT
+              }
               className="text-brand-gray-50 hover:bg-inherit">
               <TuneIcon className="h-6 w-6" />
             </Button>
           </AgentTooltip>
           <Button
-            type={ messageSubmitted ? 'button' : 'submit' }
+            type={ streamingStatus === StreamingStatusEnum.OFF ? 'submit' : 'button' }
             variant="brand"
             size="lg"
-            onClick={ messageSubmitted ? handleCancelMessage : undefined }
+            onClick={ streamingStatus > StreamingStatusEnum.OFF ? handleCancelMessage : undefined }
             className={ cn( 'rounded bg-brand-primary h-10 w-10' ) }
-            disabled={ ! page.onboarding_completed || ! page.agentwp_access }>
-            { messageSubmitted ? (
-              <div className="h-3 w-3 bg-white"></div>
-            ) : (
+            disabled={
+              ! page.onboarding_completed ||
+              ! page.agentwp_access ||
+              streamingStatus === StreamingStatusEnum.SHOULD_ABORT ||
+              streamingStatus === StreamingStatusEnum.ABORT
+            }>
+            { streamingStatus === StreamingStatusEnum.OFF ? (
               <UpArrowIcon className="h-5 w-5" />
+            ) : streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ? (
+              <LoaderIcon className="animate-spin h-4 w-4" />
+            ) : (
+              <div className="h-3 w-3 bg-white"></div>
             ) }
           </Button>
         </div>

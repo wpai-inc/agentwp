@@ -6,17 +6,23 @@ import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { FeedbackProvider } from '@/Providers/FeedbackProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import { useChat } from '@/Providers/ChatProvider';
+import { StreamingStatusEnum } from '@/Types/enums';
 
 export default function Message( userRequest: UserRequestType ) {
   const { page } = usePage();
   const { messageSubmitted } = useChat();
   const { currentUserRequestId } = useUserRequests();
   const sameUserRequest = userRequest.id === currentUserRequestId;
-  const { streamClosed } = useStream();
-  const pending = ( sameUserRequest && ! streamClosed ) || messageSubmitted;
+  const { streamingStatus } = useStream();
+  const pending =
+    ( sameUserRequest && streamingStatus > StreamingStatusEnum.OFF ) || messageSubmitted;
   const isIncomplete =
     userRequest.agent_actions?.length === 0 ||
     userRequest.agent_actions?.some( aa => ! aa.action && ! aa.result?.status );
+  const isAborted =
+    streamingStatus === StreamingStatusEnum.SHOULD_ABORT ||
+    userRequest.agent_actions?.some( aa => aa.result?.status === 'aborted' ) ||
+    userRequest.status === 'aborted';
 
   return (
     <FeedbackProvider userRequestId={ userRequest.id } feedback={ userRequest.feedback }>
@@ -31,6 +37,7 @@ export default function Message( userRequest: UserRequestType ) {
             agentActions={ userRequest.agent_actions }
             pending={ pending }
             incomplete={ isIncomplete }
+            aborted={ isAborted }
           />
         </div>
       </div>
