@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useCallback } from 'react';
+import { createContext, useContext, useState, useRef, useCallback, useEffect } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useUserRequests } from './UserRequestsProvider';
 import { useClient } from '@/Providers/ClientProvider';
@@ -6,7 +6,7 @@ import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { usePage } from '@/Providers/PageProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
-import { optimistic } from '@/lib/utils';
+import { StreamingStatusEnum } from '@/Types/enums';
 
 export const StreamContext = createContext< any | undefined >( undefined );
 
@@ -30,23 +30,35 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const { screen } = useScreen();
   const forceUpdate = useForceUpdate();
   const liveAction = useRef< AgentAction | null >( null );
-  const [ streamClosed, setStreamClosed ] = useState( true );
   const [ retries, setRetries ] = useState< number >( -1 );
-  const { setCurrentUserRequestId, addActionToCurrentRequest, currentUserRequestId } =
-    useUserRequests();
+  const {
+    setCurrentUserRequestId,
+    addActionToCurrentRequest,
+    setRequestAborted,
+    currentUserRequestId,
+  } = useUserRequests();
   const { addErrors } = useError();
   const { client, getStreamUrl } = useClient();
   const { page } = usePage();
   const ctrl = useRef< AbortController >( new AbortController() );
+  const [ streamingStatus, setStreamingStatus ] = useState( StreamingStatusEnum.OFF );
+  const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
 
   async function startStream( user_request_id: string ) {
+    if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
+      setStreamingStatus( StreamingStatusEnum.ABORT );
+      return;
+    }
+    setStreamingStatus( StreamingStatusEnum.PENDING );
+
     const stream_url = getStreamUrl( user_request_id );
     setCurrentUserRequestId( user_request_id );
-    resetStream();
+    liveAction.current = null;
 
     if ( retries > 2 ) {
       addErrors( [ 'Too many retries.' ] );
       setRetries( -1 );
+      setStreamingStatus( StreamingStatusEnum.OFF );
       return;
     }
 
@@ -66,8 +78,15 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         },
         signal: ctrl.current.signal,
         openWhenHidden: true,
-        onclose: () => setStreamClosed( true ),
+        onclose: () => {
+          setStreamingStatus( StreamingStatusEnum.OFF );
+        },
         async onopen( response ) {
+          if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
+            setStreamingStatus( StreamingStatusEnum.ABORT );
+          } else {
+            setStreamingStatus( StreamingStatusEnum.STREAMING );
+          }
           if ( response.status > 300 ) {
             let body = await response.json();
             throw new Error( body?.message ?? 'Unknown error' );
@@ -80,7 +99,8 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           }
           if ( ev.event === 'close' && liveAction.current ) {
             addActionToCurrentRequest( user_request_id, liveAction.current );
-            setStreamClosed( true );
+            // setStreamClosed( true );
+            setStreamingStatus( StreamingStatusEnum.OFF );
             return;
           }
 
@@ -89,37 +109,32 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           forceUpdate();
         },
         onerror( err ) {
+          console.log( 'Stream error' );
+          setStreamingStatus( StreamingStatusEnum.OFF );
           throw err;
         },
       } );
     } catch ( e ) {
       await handleStreamError( e );
-      setStreamClosed( true );
+      setStreamingStatus( StreamingStatusEnum.OFF );
+      //   setStreamClosed( true );
     }
   }
 
   function cancelStream( userRequestId: string ) {
     if ( currentUserRequestId === userRequestId ) {
-      optimistic(
-        () => abortRequest( userRequestId ),
-        () => {
-          console.log( 'Stream canceled' );
-          // Abort the connection
-          ctrl.current.abort();
-
-          // Reset the controller
-          ctrl.current = new AbortController();
-          setStreamClosed( true );
-        },
-      );
+      if ( latestStreamingStatus.current >= StreamingStatusEnum.STREAMING ) {
+        setStreamingStatus( StreamingStatusEnum.ABORT );
+      } else {
+        setStreamingStatus( StreamingStatusEnum.SHOULD_ABORT );
+      }
     }
   }
 
   async function abortRequest( userRequestId: string ) {
-    if ( currentUserRequestId === userRequestId ) {
-      console.log( 'aborting request' );
-      client.abortUserRequest( userRequestId );
-    }
+    setRequestAborted( userRequestId );
+    await client.abortUserRequest( userRequestId );
+    setStreamingStatus( StreamingStatusEnum.OFF );
   }
 
   async function handleStreamError( e: any ) {
@@ -127,19 +142,31 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     addErrors( [ e ] );
   }
 
-  function resetStream() {
-    setStreamClosed( false );
-    liveAction.current = null;
-  }
+  useEffect( () => {
+    latestStreamingStatus.current = streamingStatus;
+  }, [ streamingStatus ] );
+
+  useEffect( () => {
+    if ( streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ) {
+      liveAction.current = null;
+    }
+    if ( streamingStatus === StreamingStatusEnum.ABORT ) {
+      ctrl.current.abort();
+      ctrl.current = new AbortController();
+      if ( currentUserRequestId ) {
+        abortRequest( currentUserRequestId );
+      }
+    }
+  }, [ streamingStatus, currentUserRequestId ] );
 
   return (
     <StreamContext.Provider
       value={ {
         startStream,
         cancelStream,
-        abortRequest,
         liveAction: liveAction.current,
-        streamClosed,
+        streamingStatus,
+        setStreamingStatus,
       } }>
       { children }
     </StreamContext.Provider>

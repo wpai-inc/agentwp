@@ -10,6 +10,7 @@ import {
 } from '@wpai/schemas';
 import { FeedbackType } from '@/Providers/FeedbackProvider';
 import { usePage } from './PageProvider';
+// @ts-ignore
 import { generate as uuid } from 'ordered-uuid-v4';
 import { optimistic } from '@/lib/utils';
 
@@ -43,6 +44,7 @@ export type UserRequestType = {
   human_created_at: string;
   agent_actions: AgentAction[];
   feedback?: FeedbackType;
+  status?: string;
 };
 
 type UserRequestsContextType = {
@@ -60,6 +62,7 @@ type UserRequestsContextType = {
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
   addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
+  setRequestAborted: ( userRequestId: string ) => void;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >(
@@ -146,6 +149,25 @@ export default function UserRequestsProvider( {
     [ conversation, currentUserRequestId ],
   );
 
+  const setRequestAborted = useCallback(
+    function ( userRequestId: string ) {
+      if ( userRequestId && currentUserRequestId === userRequestId ) {
+        setConversation( conversation => {
+          return conversation.map( request => {
+            if ( request.id === userRequestId ) {
+              return {
+                ...request,
+                status: 'aborted',
+              };
+            }
+            return request;
+          } );
+        } );
+      }
+    },
+    [ conversation, currentUserRequestId ],
+  );
+
   function createUserRequest( message: string ): UserRequestType {
     return {
       id: uuid(),
@@ -203,6 +225,7 @@ export default function UserRequestsProvider( {
         since,
         setSince,
         addActionToCurrentRequest,
+        setRequestAborted,
       } }>
       { children }
     </UserRequestsContext.Provider>

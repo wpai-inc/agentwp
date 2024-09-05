@@ -12,6 +12,7 @@ import { useFeedback } from '@/Providers/FeedbackProvider';
 import Reason from '@/Components/Chat/Feedback/Reason';
 import MessageMeta from '@/Components/Chat/Convo/Message/MessageMeta';
 import { AnimatePresence, motion } from 'framer-motion';
+import ActionAborted from '@/Components/Chat/Convo/Actions/ActionAborted';
 
 export default function AgentResponse( {
   agentActions,
@@ -19,12 +20,14 @@ export default function AgentResponse( {
   time,
   pending = false,
   incomplete = false,
+  aborted = false,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
   time: string;
   pending?: boolean;
   incomplete?: boolean;
+  aborted?: boolean;
 } ) {
   const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
     | AgentAction
@@ -92,8 +95,11 @@ export default function AgentResponse( {
         <ActionComponent { ...messageAction } />
       ) : (
         <>
-          { pending && <ActionPending /> }
-          { incomplete && ! pending && <ActionIncomplete userRequestId={ userRequestId } /> }
+          { aborted && <ActionAborted /> }
+          { ! aborted && pending && <ActionPending /> }
+          { ! aborted && incomplete && ! pending && (
+            <ActionIncomplete userRequestId={ userRequestId } />
+          ) }
         </>
       ) }
     </div>
