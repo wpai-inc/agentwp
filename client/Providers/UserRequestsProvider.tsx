@@ -208,8 +208,6 @@ export default function UserRequestsProvider( {
     clearConversation();
   }
 
-  useEffect( () => {}, [ conversation ] );
-
   return (
     <UserRequestsContext.Provider
       value={ {
