@@ -196,8 +196,7 @@ export default function Chat() {
               maximizeWindow={ handleMaximize }
               restoreWindow={ handleRestore }
             />
-            <ChatTopBar handleDrag={ onDrag } />
-            <ChatCore />
+            <ChatCore handleDrag={ onDrag } />
             <ResizeHandles resizeHandler={ onChatWindowResize } />
           </ChatContainer>
           <ChatTrigger />

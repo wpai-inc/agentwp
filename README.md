@@ -70,4 +70,8 @@ The components and styling use [Tailwind](https://tailwindcss.com) with [shad/cn
 
 To add a shad/cn component, use `npx shadcn-ui@latest add [component]`
 
+## Icons
+
+[Available icons](https://marella.me/material-design-icons/demo/svg/)
+
 ---
