@@ -25,8 +25,12 @@ export default function SettingsTab() {
    * Methods
    */
   function authorize() {
+    const redirectUri = encodeURIComponent(
+      page.admin_route + 'admin.php?page=agentwp-admin-settings',
+    );
+
     setAuthorizing( true );
-    document.location = `${ page.api_host }/oauth/authorize?client_id=${ page.client_id }&redirect_uri=https%3A%2F%2Fawpwp.ovi.work%2Fwp-admin%2Foptions-general.php%3Fpage%3Dagentwp-admin-settings&response_type=code&scope=site_connection`;
+    document.location = `${ page.api_host }/oauth/authorize?client_id=${ page.client_id }&redirect_uri=${ redirectUri }&response_type=code&scope=site_connection`;
     setAuthorizing( false );
   }
 
