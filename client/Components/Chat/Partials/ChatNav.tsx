@@ -20,7 +20,7 @@ export default function ChatNav( {
   const { page } = usePage();
 
   return (
-    <nav className="grid grid-cols-4 gap-2 p-2">
+    <nav className="mx-auto w-full grid grid-cols-4 gap-2 p-2 max-w-screen-md">
       <Tab icon={ IconChat } active={ tab === 'convo' } onClick={ () => setTab( 'convo' ) } />
       <Tab icon={ IconSearch } active={ tab === 'search' } onClick={ () => setTab( 'search' ) } />
       <Tab icon={ IconAgent } active={ tab === 'support' } onClick={ () => setTab( 'support' ) } />
