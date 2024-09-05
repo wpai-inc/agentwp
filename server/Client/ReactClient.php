@@ -122,19 +122,19 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             $managers = $this->main->auth->managers();
             ?>
             <div>
-                <h1>AgentWP</h1>
+            <h1>AgentWP</h1>
+            <div>
+                <p>
+                    <?php
+                    echo esc_html__(
+                        'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
+                        'agentwp'
+                    );
+                    ?>
+                </p>
                 <div>
-                    <p>
-                        <?php
-                        echo esc_html__(
-                            'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
-                            'agentwp'
-                        );
-                        ?>
-                    </p>
-                    <div>
-                        <strong>AgentsWP Managers:</strong>
-                        <ul>
+                    <strong>AgentsWP Managers:</strong>
+                    <ul>
                         <?php
                         foreach ($managers as $manager) {
                             echo "<li>{$manager->data->display_name} ({$manager->data->user_email})</li>";
@@ -181,6 +181,8 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'roles' => wp_get_current_user()->roles,
         ];
 
+        $access_token = $this->main->auth->getAccessToken();
+
         return [
             'home_url' => home_url(),
             'plugin_url' => $this->main->pluginUrl,
@@ -191,17 +193,17 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'nonce' => wp_create_nonce(Main::nonce()),
             'wp_rest_nonce' => wp_create_nonce('wp_rest'),
             'is_admin' => $this->main->auth->isAdmin(),
-            'agentwp_manager' => $this->main->auth->isManager(),
-            'agentwp_users_manager' => $this->main->auth->canManageUsers(),
-            'agentwp_access' => $this->main->auth->hasAccess(),
-            'access_token' => $this->main->auth->getAccessToken(),
-            'refresh_token' => $this->main->auth->getRefreshToken(),
+            'access_token' => $access_token,
+            'refresh_token' => $access_token ? $this->main->auth->getRefreshToken() : '',
+            'onboarding_completed' => $access_token ? $this->main->settings->onboarding_completed : false,
+            'agentwp_manager' => $access_token ? $this->main->auth->isManager() : false,
+            'agentwp_users_manager' => $access_token ? $this->main->auth->canManageUsers() : false,
+            'agentwp_access' => $access_token ? $this->main->auth->hasAccess() : false,
             'site_id' => $this->main->siteId(),
             'client_id' => $this->main->settings->client_id,
             'api_host' => $this->main->apiClientHost(),
             'user' => $current_user,
             'account' => $this->main->client()->json('GET', '/user'),
-            'onboarding_completed' => $this->main->settings->onboarding_completed,
             'account_settings' => $this->main->accountSettings()->get(),
             'general_settings' => $this->main->settings->getGeneralSettings(),
         ];

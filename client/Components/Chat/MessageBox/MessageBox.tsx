@@ -107,7 +107,7 @@ export default function MessageBox() {
             variant="brand"
             size="lg"
             onClick={ streamingStatus > StreamingStatusEnum.OFF ? handleCancelMessage : undefined }
-            className={ cn( 'rounded bg-brand-primary h-10 w-10' ) }
+            className="rounded bg-brand-primary h-10 w-10"
             disabled={
               ! page.onboarding_completed ||
               ! page.agentwp_access ||

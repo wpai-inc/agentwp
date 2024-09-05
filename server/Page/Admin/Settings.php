@@ -100,7 +100,7 @@ class Settings extends ReactClient
             if ($response['access_token']) {
                 $this->settings->setAccessToken($response);
             }
-            wp_redirect(admin_url('options-general.php?page=agentwp-admin-settings'));
+            wp_redirect(admin_url('admin.php?page=agentwp-admin-settings'));
         }
     }
 }

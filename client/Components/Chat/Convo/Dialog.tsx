@@ -3,6 +3,7 @@ import Message from '@/Components/Chat/Convo/Message/Message';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
 import ChatWelcome from '@/Components/ChatWelcome';
 import { usePage } from '@/Providers/PageProvider';
+import InnerContainer from '@/Components/Chat/Partials/ChatInnerContainer';
 
 function DialogComponent( {
   conversation,
@@ -14,7 +15,7 @@ function DialogComponent( {
   const { page } = usePage();
 
   return (
-    <InnerContainer>
+    <InnerContainer className="flex-col-reverse">
       { ! conversation.length ? (
         <ChatWelcome user={ page.user } />
       ) : (
@@ -27,14 +28,6 @@ function DialogComponent( {
         ) )
       ) }
     </InnerContainer>
-  );
-}
-
-function InnerContainer( { children }: { children: React.ReactNode } ) {
-  return (
-    <div className="relative mx-auto flex w-full max-w-screen-md flex-1 flex-col-reverse overflow-y-auto py-4">
-      { children }
-    </div>
   );
 }
 

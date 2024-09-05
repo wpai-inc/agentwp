@@ -1,29 +1,29 @@
 import { WpUser } from '@/Types/types';
 import { Button } from '@/Components/ui/button';
 
-export default function ChatNotConnected({ user }: { user: WpUser }) {
+export default function ChatNotConnected( { user }: { user: WpUser } ) {
   const name = user.display_name;
 
   const currentPage = window.location.href;
-  const showButton = currentPage.indexOf('page=agentwp-admin-settings') === -1;
+  const showButton = currentPage.indexOf( 'page=agentwp-admin-settings' ) === -1;
 
   return (
     <div className="mb-8 flex h-full flex-col items-center justify-center">
-      <p className="text-3xl font-semibold text-black">Hi {name},</p>
+      <p className="text-3xl font-semibold text-black">Hi { name },</p>
       <p className="text-center text-xl text-black">
         To begin using AgentWP, connect it to the AI services. If this is your first time connecting
         this site, a quick indexing process will take place.
       </p>
 
-      {showButton && (
-        <Button className="mt-6 block w-full" variant="brand" asChild={true}>
+      { showButton && (
+        <Button className="mt-6 block w-full" variant="brand" asChild={ true }>
           <a
             className="flex items-center"
-            href="/wp-admin/options-general.php?page=agentwp-admin-settings&tab=connect">
+            href="/wp-admin/admin.php?page=agentwp-admin-settings&tab=connect">
             Connect AI Services
           </a>
         </Button>
-      )}
+      ) }
     </div>
   );
 }

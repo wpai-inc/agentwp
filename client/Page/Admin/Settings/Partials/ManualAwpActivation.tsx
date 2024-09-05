@@ -37,16 +37,10 @@ export function ManualAwpActivation() {
       },
     );
 
-    if ( ! data.success ) {
+    if ( ! data.data?.success ) {
       setServerErrors( { ...serverErrors, apiKey: data.data.message } );
       console.error( data.data.message );
     } else {
-      setServerErrors( { ...serverErrors, apiKey: '' } );
-      /**
-       * @todo:
-       * - Go to users management page
-       * - Improve this
-       */
       document.location.reload();
     }
   }

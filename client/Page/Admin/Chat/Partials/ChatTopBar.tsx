@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import HistoryIcon from '@material-design-icons/svg/outlined/history.svg?react';
-import SettingsIcon from '@material-design-icons/svg/outlined/settings.svg?react';
 import AccountIcon from '@material-design-icons/svg/outlined/account_circle.svg?react';
 import Logo from '@/Components/Logo';
 import { useChat } from '@/Providers/ChatProvider';
@@ -11,12 +10,13 @@ import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import { usePage } from '@/Providers/PageProvider';
 import { maybeUseChatUI } from '@/Components/Chat/Chat';
 import { Button } from '@/Components/ui/button';
+import type { HandleDrag } from '@/Components/Chat/Partials/ChatCore';
 
-export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEvent ) => void } ) {
+export default function ChatTopBar( { handleDrag }: HandleDrag ) {
   const { setChatSetting, clearHistory, isEmptyConversation } = useChat();
   const toggle = maybeUseChatUI()?.toggle;
-  const { userProfileUrl } = useClient();
   const { page } = usePage();
+  const { userProfileUrl } = useClient();
 
   function handleHistorySettings() {
     setChatSetting( {
@@ -42,7 +42,7 @@ export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEve
           className="hover:scale-125 transition">
           <Logo className="h-7 w-7" />
         </a>
-        { page.account.plan.slug === 'free' && <FreeUpgrade /> }
+        { page.account?.plan.slug === 'free' && <FreeUpgrade /> }
       </div>
       <div className="flex items-center justify-center">
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
@@ -56,13 +56,6 @@ export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEve
         <AgentTooltip content="View history">
           <Button onClick={ handleHistorySettings } variant="ghost" size="sm">
             <HistoryIcon className="h-5 w-5" />
-          </Button>
-        </AgentTooltip>
-        <AgentTooltip content="Settings">
-          <Button variant="ghost" size="sm" asChild>
-            <a href={ page.settings_page } onClick={ () => toggle && toggle() }>
-              <SettingsIcon className="h-5 w-5" />
-            </a>
           </Button>
         </AgentTooltip>
         <AgentTooltip content="Your profile">
@@ -80,10 +73,10 @@ export default function ChatTopBar( { handleDrag }: { handleDrag?: ( e: MouseEve
     return (
       <>
         <Button asChild variant="brand" className="h-full">
-          <span>{ page.account.plan.name }</span>
+          <span>{ page.account?.plan.name }</span>
         </Button>
         <Button asChild variant="dark" className="h-full">
-          <a href={ page.account.upgrade_link }>Upgrade</a>
+          <a href={ page.account?.upgrade_link }>Upgrade</a>
         </Button>
       </>
     );
