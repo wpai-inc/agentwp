@@ -9,7 +9,6 @@ import {
   useContext,
 } from 'react';
 import { cn } from '@/lib/utils';
-import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import WindowActions from '@/Page/Admin/Chat/Partials/WindowActions';
 import HotKeyProvider from '@/Providers/HotKeyProvider';
 import { usePosition } from '@/Hooks/position';

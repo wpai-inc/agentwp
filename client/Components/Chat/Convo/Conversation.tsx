@@ -5,8 +5,8 @@ import { useChat } from '@/Providers/ChatProvider';
 import { useApp } from '@/Providers/AppProvider';
 import ChatMessageUtilityBar from '@/Page/Admin/Chat/Partials/ChatMessageUtilityBar';
 import ChatNotices from '@/Components/Chat/Notices/ChatNotices';
-import ChatMessageInput from '../Convo/Message/ChatMessageInput';
-import TabContainer from './TabContainer';
+import ChatMessageInput from './Message/ChatMessageInput';
+import TabContainer from '../Tabs/TabContainer';
 
 export default function Conversation() {
   const { conversation, messageSubmitted } = useChat();
@@ -20,7 +20,7 @@ export default function Conversation() {
       ) : (
         <>
           <Dialog conversation={ conversation } messageSubmitted={ messageSubmitted } />
-          <div className="relative mx-auto w-full max-w-screen-md p-2">
+          <div className="relative mx-auto w-full max-w-screen-md p-2 pb-0">
             <DialogFade />
             <div className="mb-2 space-y-2">
               <ChatNotices />

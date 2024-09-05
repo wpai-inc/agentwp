@@ -58,7 +58,7 @@ const Tab = forwardRef<
         },
       ) }
       { ...props }>
-      <Icon className="h-6 w-6" />
+      <Icon className="h-5 w-5" />
     </Element>
   );
 } );
