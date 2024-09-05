@@ -147,11 +147,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   }, [ streamingStatus ] );
 
   useEffect( () => {
-    console.log(
-      'streamingStatus',
-      latestStreamingStatus.current,
-      new Date().toLocaleTimeString(),
-    );
     if ( streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ) {
       liveAction.current = null;
     }

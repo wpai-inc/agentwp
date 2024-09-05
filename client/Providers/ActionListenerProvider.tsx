@@ -21,7 +21,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { errors } = useError();
 
   useEffect( () => {
-    console.log( 'ActionListenerProvider', currentAction, streamingStatus );
     if ( currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
       if ( currentAction.action ) {
         executeAndContinueAction( currentAction, currentUserRequestId );
@@ -58,7 +57,6 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   }
 
   async function executeAction( aa: AgentAction ) {
-    console.log( 'Executing action', aa );
     switch ( aa.action.ability ) {
       case 'query':
         try {
