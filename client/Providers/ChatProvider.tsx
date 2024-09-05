@@ -9,6 +9,7 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 import { StreamableFieldType } from '@/Types/types';
 import { optimistic } from '@/lib/utils';
+import { StreamingStatusEnum } from '@/Types/enums';
 
 type CreateUserRequestResponse = {
   stream_url: string;
@@ -73,8 +74,9 @@ export default function ChatProvider( {
     clearConversation: clear,
     createUserRequest,
     currentUserRequestId,
+    setCurrentUserRequestId,
   } = useUserRequests();
-  const { startStream, cancelStream } = useStream();
+  const { startStream, cancelStream, setStreamingStatus, streamingStatus } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const { adminRequest } = useAdminRoute();
@@ -82,6 +84,7 @@ export default function ChatProvider( {
 
   async function clearHistory() {
     optimistic( clearConversation, clear, ( e: any ) => {
+      console.error( 'SETTING conversation clear history' );
       setConversation( conversation );
       addErrors( [ e ] );
     } );
@@ -96,6 +99,9 @@ export default function ChatProvider( {
       message,
       selected_input: selectedInput,
     };
+    if ( streamingStatus === StreamingStatusEnum.OFF ) {
+      setStreamingStatus( StreamingStatusEnum.CONVO );
+    }
     const siteData = await adminRequest.get( 'site_data' );
     if ( siteData.data?.data ) {
       req.site_data = siteData.data.data;
@@ -112,21 +118,23 @@ export default function ChatProvider( {
    * @param updatedAa
    */
   function updateAgentMessage( urId: string, updatedAa: AgentAction ) {
-    setConversation( ( prev: UserRequestType[] ) => {
-      return prev.map( function ( msg ) {
-        if ( msg.id === urId ) {
-          return {
-            ...msg,
-            agent_actions: msg.agent_actions
-              ? msg.agent_actions.some( aa => aa.id === updatedAa.id )
-                ? msg.agent_actions.map( aa => ( aa.id === updatedAa.id ? updatedAa : aa ) )
-                : [ ...msg.agent_actions, updatedAa ]
-              : [ updatedAa ],
-          };
-        }
-        return msg;
+    if ( urId === currentUserRequestId ) {
+      setConversation( ( prev: UserRequestType[] ) => {
+        return prev.map( function ( msg ) {
+          if ( msg.id === urId ) {
+            return {
+              ...msg,
+              agent_actions: msg.agent_actions
+                ? msg.agent_actions.some( aa => aa.id === updatedAa.id )
+                  ? msg.agent_actions.map( aa => ( aa.id === updatedAa.id ? updatedAa : aa ) )
+                  : [ ...msg.agent_actions, updatedAa ]
+                : [ updatedAa ],
+            };
+          }
+          return msg;
+        } );
       } );
-    } );
+    }
   }
 
   function addUserRequest( ur: UserRequestType ) {
@@ -144,6 +152,7 @@ export default function ChatProvider( {
     await optimistic(
       async () => {
         const { user_request } = await userRequest( ur.message, ur.id );
+        setCurrentUserRequestId( user_request.id );
         await startStream( user_request.id );
       },
       () => {
@@ -153,6 +162,7 @@ export default function ChatProvider( {
       ( e: any ) => {
         addErrors( [ e ] );
         setMessage( message );
+        setStreamingStatus( StreamingStatusEnum.OFF );
       },
     );
 
