@@ -5,7 +5,8 @@ import { useChat } from '@/Providers/ChatProvider';
 import { useApp } from '@/Providers/AppProvider';
 import ChatMessageUtilityBar from '@/Page/Admin/Chat/Partials/ChatMessageUtilityBar';
 import ChatNotices from '@/Components/Chat/Notices/ChatNotices';
-import ChatMessageInput from './Message/ChatMessageInput';
+import ChatMessageInput from '../Convo/Message/ChatMessageInput';
+import TabContainer from './TabContainer';
 
 export default function Conversation() {
   const { conversation, messageSubmitted } = useChat();
@@ -13,7 +14,7 @@ export default function Conversation() {
   const { cooldownTime, tokenUsageStatus } = useApp();
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-auto">
+    <TabContainer>
       { loadingConversation ? (
         <LoadingScreen />
       ) : (
@@ -29,7 +30,7 @@ export default function Conversation() {
           </div>
         </>
       ) }
-    </div>
+    </TabContainer>
   );
 }
 
