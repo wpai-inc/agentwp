@@ -23,6 +23,8 @@ class AwpClient
 
     private ?string $apiHost;
 
+    private $disconnectCallback;
+
     public function __construct()
     {
         $this->wp_user = wp_get_current_user();
@@ -57,10 +59,16 @@ class AwpClient
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null)
     {
         try {
-            return $this->requestRaw($method, $url, $additionalHeaders, $body);
+            $response = $this->requestRaw($method, $url, $additionalHeaders, $body);
+            if ($response->getStatusCode() > 200) {
+                // Disconnect the site
+                if ($this->disconnectCallback) {
+                    call_user_func($this->disconnectCallback);
+                }
+            }
+            return $response;
         } catch (\Exception $e) {
             error_log($e->getMessage());
-
             return null;
         }
     }
@@ -127,5 +135,11 @@ class AwpClient
     private function getBaseUri(): string
     {
         return '/api/';
+    }
+
+    public function setDisconnectCallback(callable $callback): self
+    {
+        $this->disconnectCallback = $callback;
+        return $this;
     }
 }
