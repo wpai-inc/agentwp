@@ -18,7 +18,7 @@ class Settings
 {
     use GeneralSettingsData;
 
-    const SLUG = 'agentwp';
+    public const SLUG = 'agentwp';
 
     public $data;
 
@@ -131,6 +131,11 @@ class Settings
     public function disconnectSite($main): void
     {
         (new RevokeApiToken($main))->revoke();
+        $this->cleanupConnectionDetails();
+    }
+
+    public function cleanupConnectionDetails(): void
+    {
         $this->delete(['site_id', 'client_id', 'client_secret', 'token', 'verification_key', 'onboarding_completed']);
     }
 
