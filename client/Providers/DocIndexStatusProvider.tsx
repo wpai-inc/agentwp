@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createContext, FC, useContext } from 'react';
 import type { DocIndexStatusData } from '@/Types/types';
 import { useClient } from './ClientProvider';
+import { useAdminRoute } from './AdminRouteProvider';
 
 type ContextProps = {
   total: number;
@@ -10,6 +11,8 @@ type ContextProps = {
   current?: DocIndexStatusData;
   remaining: DocIndexStatusData[];
   done: boolean;
+  hasIndexed: boolean;
+  startIndexing: () => void;
 };
 
 export const DocIndexStatusContext = createContext< ContextProps | undefined >( undefined );
@@ -26,7 +29,9 @@ export const DocIndexStatusProvider: FC< {
   children: React.ReactNode;
 } > = ( { children } ) => {
   const { getDocIndexStatus } = useClient();
+  const { tryRequest } = useAdminRoute();
   const [ docIndex, setDocIndex ] = useState< DocIndexStatusData[] >( [] );
+  const [ hasIndexed, setHasIndexed ] = useState( true );
 
   const total = useMemo(
     () => docIndex.reduce( ( acc, curr ) => acc + curr.total, 0 ),
@@ -59,7 +64,15 @@ export const DocIndexStatusProvider: FC< {
   const done: boolean = useMemo( () => docIndex.every( doc => doc.done ), [ docIndex ] );
 
   function fetchDocIndexStatus() {
-    getDocIndexStatus().then( data => setDocIndex( data ) );
+    getDocIndexStatus().then( data => {
+      setHasIndexed( data.lastIndexedAt ? true : false );
+      setDocIndex( data.statuses );
+    } );
+  }
+
+  function startIndexing() {
+    setHasIndexed( true );
+    tryRequest( 'post', 'index_site_docs' );
   }
 
   useEffect( fetchDocIndexStatus, [] );
@@ -74,6 +87,7 @@ export const DocIndexStatusProvider: FC< {
     return () => clearInterval( interval );
   }, [ done ] );
 
+  console.log( 'hasIndexed', hasIndexed );
   return (
     <DocIndexStatusContext.Provider
       value={ {
@@ -83,6 +97,8 @@ export const DocIndexStatusProvider: FC< {
         current,
         remaining,
         done,
+        hasIndexed,
+        startIndexing,
       } }>
       { children }
     </DocIndexStatusContext.Provider>

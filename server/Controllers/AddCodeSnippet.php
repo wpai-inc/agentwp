@@ -1,8 +1,6 @@
 <?php
 /**
  * Add code snippet to the site.
- * 
- * @package AgentWP
  */
 
 namespace WpAi\AgentWp\Controllers;
@@ -16,14 +14,14 @@ class AddCodeSnippet extends BaseController
 {
     protected string $method = 'POST';
 
-    public function add_snippet()
+    public function __invoke()
     {
         $this->verifyNonce();
         if (! $this->main->siteId()) {
             $this->error('You do not have permission to perform this action');
         }
 
-        $params = json_decode( $this->request->getContent(), true );
+        $params = json_decode($this->request->getContent(), true);
         if (! $params) {
             $this->error('Invalid request');
         }
@@ -32,7 +30,7 @@ class AddCodeSnippet extends BaseController
             $this->error('Code snippet is required');
         }
 
-        $snippet = new SnippetHandler();
+        $snippet = new SnippetHandler;
         if (! $snippet->activeSnippetPlugin) {
             $this->error('No active snippet plugin found');
         }

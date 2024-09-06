@@ -9,10 +9,15 @@ import { useNotifications } from './NotificationProvider';
 import { optimistic, OptimisticFn } from '@/lib/utils';
 import { UserRequestType } from './UserRequestsProvider';
 
+type DocIndexStatusResponse = {
+  lastIndexedAt: string | null;
+  statuses: DocIndexStatusData[];
+};
+
 type ClientContextType = {
   client: AwpClient;
   getHistory: ( since?: string ) => Promise< HistoryResponseType >;
-  getDocIndexStatus: () => Promise< DocIndexStatusData[] >;
+  getDocIndexStatus: () => Promise< DocIndexStatusResponse >;
   getConversation: ( since?: string ) => Promise< UserRequestType[] >;
   getSuggestions: ( pageCtx?: any ) => Promise< [] >;
   clearConversation: () => Promise< [] >;
@@ -66,7 +71,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
     } );
   }
 
-  async function getDocIndexStatus(): Promise< DocIndexStatusData[] > {
+  async function getDocIndexStatus(): Promise< DocIndexStatusResponse > {
     return tryRequest( async () => {
       const response = await client.getDocIndexStatus();
       return response.data;

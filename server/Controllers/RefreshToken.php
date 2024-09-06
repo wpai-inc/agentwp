@@ -5,13 +5,11 @@ namespace WpAi\AgentWp\Controllers;
 use WpAi\AgentWp\Services\RefreshApiToken;
 use WpAi\AgentWp\UserAuth;
 
-
 class RefreshToken extends BaseController
 {
-
     protected string $permission = UserAuth::CAP_AGENTWP_ACCESS;
 
-    public function refresh(): void
+    public function __invoke(): void
     {
         $this->verifyNonce();
 

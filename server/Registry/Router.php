@@ -2,46 +2,47 @@
 
 namespace WpAi\AgentWp\Registry;
 
-use WpAi\AgentWp\Main;
-use WpAi\AgentWp\Controllers\Logout;
-use WpAi\AgentWp\Controllers\GetUsers;
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Controllers\RefreshToken;
-use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\AddCodeSnippet;
 use WpAi\AgentWp\Controllers\DisconnectSite;
-use WpAi\AgentWp\Controllers\SaveConnection;
-use WpAi\AgentWp\Controllers\ValidateWebsite;
-use WpAi\AgentWp\Controllers\SiteDataController;
+use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
 use WpAi\AgentWp\Controllers\GetCodeSnippetPlugin;
+use WpAi\AgentWp\Controllers\GetUsers;
+use WpAi\AgentWp\Controllers\Logout;
+use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
 use WpAi\AgentWp\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Controllers\QueryActionController;
+use WpAi\AgentWp\Controllers\RefreshToken;
+use WpAi\AgentWp\Controllers\SaveConnection;
+use WpAi\AgentWp\Controllers\SiteDataController;
+use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
-use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
-use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
+use WpAi\AgentWp\Controllers\ValidateWebsite;
+use WpAi\AgentWp\Main;
 
 class Router implements Registrable
 {
     const REST_ROUTE_ENDPOINT = 'agentwp/v1';
 
     protected array $routes = [
-        'test_route' => [TestResponse::class, 'test_response'],
-        'run_action_query' => [QueryActionController::class, 'query'],
-        'agentwp_users' => [GetUsers::class, 'get_users'],
-        'site_data' => [SiteDataController::class, 'maybe_send_site_data'],
-        'update_user' => [UpdateUserCapabilities::class, 'update_user_capabilities'],
-        'onboarding_completed' => [MakeOnboardingAsCompleted::class, 'onboarding_completed'],
-        'get_unique_verification_key' => [GenerateUniqueVerificationKey::class, 'generate_unique_verification_key'],
-        'validate_website' => [ValidateWebsite::class, 'validate_website'],
-        'save_connection' => [SaveConnection::class, 'save_connection'],
-        'logout' => [Logout::class, 'logout'],
-        'disconnect_site' => [DisconnectSite::class, 'disconnect_site'],
-        'manual_activation' => [ManuallyActivateAgent::class, 'activate'],
+        'test_route' => TestResponse::class,
+        'run_action_query' => QueryActionController::class,
+        'agentwp_users' => GetUsers::class,
+        'site_data' => SiteDataController::class,
+        'update_user' => UpdateUserCapabilities::class,
+        'onboarding_completed' => MakeOnboardingAsCompleted::class,
+        'get_unique_verification_key' => GenerateUniqueVerificationKey::class,
+        'validate_website' => ValidateWebsite::class,
+        'save_connection' => SaveConnection::class,
+        'logout' => Logout::class,
+        'disconnect_site' => DisconnectSite::class,
+        'manual_activation' => ManuallyActivateAgent::class,
         'refresh_token' => [RefreshToken::class, 'refresh'],
-        'update_general_settings' => [UpdateGeneralSettings::class, 'update_settings'],
-        'code_snippet_plugin' => [GetCodeSnippetPlugin::class, 'code_snippet_plugin'],
-        'add_snippet' => [AddCodeSnippet::class, 'add_snippet'],
+        'update_general_settings' => UpdateGeneralSettings::class,
+        'code_snippet_plugin' => GetCodeSnippetPlugin::class,
+        'add_snippet' => AddCodeSnippet::class,
+        'index_site_docs' => \WpAi\AgentWp\Controllers\IndexSiteDocs::class,
     ];
 
     private Main $main;
@@ -59,10 +60,17 @@ class Router implements Registrable
     public function routes(): void
     {
         foreach ($this->routes as $route => $callback) {
-            $controller = new $callback[0]($this->main);
+            if (is_string($callback)) {
+                $controller = new $callback($this->main);
+                $callback = [$controller, '__invoke'];
+            } else {
+                $controller = new $callback[0]($this->main);
+                $callback = [$controller, $callback[1]];
+            }
+
             register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
                 'methods' => $controller->method(),
-                'callback' => [$controller, $callback[1]],
+                'callback' => $callback,
                 'permission_callback' => [$controller, 'check_permission'],
             ]);
         }
