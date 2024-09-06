@@ -116,6 +116,15 @@ export type HistoryData = {
   humanCreatedAt: string;
 };
 
+export type DocIndexStatusData = {
+  id: number;
+  docType: string;
+  total: number;
+  indexed: number;
+  percent: number;
+  done: boolean;
+};
+
 export type PlanData = {
   name: string;
   slug: string;
