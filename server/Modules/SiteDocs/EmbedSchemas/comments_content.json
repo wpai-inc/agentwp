@@ -1,0 +1,17 @@
+{
+    "name": "comments_content",
+    "join": "",
+    "values": [
+        {
+            "type": "db_query",
+            "result": {
+                "type": "array",
+                "join": " "
+            },
+            "location": {
+                "table": "commentmeta",
+                "column": "meta_value"
+            }
+        }
+    ]
+}

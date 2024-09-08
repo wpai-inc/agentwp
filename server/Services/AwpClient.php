@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use WpAi\AgentWp\Traits\ClientRequests;
+use GuzzleHttp\Exception\ClientException;
 
 class AwpClient
 {
@@ -48,13 +49,12 @@ class AwpClient
             $additionalHeaders,
         );
 
-        $request = new Request($method, $this->getBaseUri().ltrim($url, '/'), $headers, $body);
+        $request = new Request($method, $this->getBaseUri() . ltrim($url, '/'), $headers, $body);
 
         return $client->send($request);
-
     }
 
-    public function request(string $method, string $url, array $additionalHeaders = [], $body = null)
+    public function request(string $method, string $url, array $additionalHeaders = [], string $body = null)
     {
         try {
             return $this->requestRaw($method, $url, $additionalHeaders, $body);
@@ -70,13 +70,19 @@ class AwpClient
         return ! is_null($this->token);
     }
 
-    public function json(string $method, string $url, $body = null): ?array
+    public function json(string $method, string $url, array $headers = [], array $body = null): ?array
     {
         try {
-            $res = $this->requestRaw($method, $url, [], $body);
-
+            $res = $this->requestRaw($method, $url, $headers, json_encode($body));
             return json_decode($res->getBody()->getContents(), true);
+        } catch (ClientException $e) {
+            return [
+                'status' => $e->getCode(),
+                'error' => json_decode($e->getResponse()->getBody()->getContents(), true)
+            ];
         } catch (\Exception $e) {
+            error_log($e->getMessage());
+
             return null;
         }
     }
@@ -120,7 +126,7 @@ class AwpClient
     {
         return new Client([
             'timeout' => $this->timeout,
-            'base_uri' => $this->apiHost.$this->getBaseUri(),
+            'base_uri' => $this->apiHost . $this->getBaseUri(),
         ]);
     }
 

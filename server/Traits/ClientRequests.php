@@ -56,6 +56,11 @@ trait ClientRequests
         }
     }
 
+    public function indexDocs(array $data): ?array
+    {
+        return $this->json('POST', '/docs', [], $data);
+    }
+
     public function indexError($data): ?ResponseInterface
     {
         try {

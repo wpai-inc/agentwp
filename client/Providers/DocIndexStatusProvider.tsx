@@ -70,9 +70,10 @@ export const DocIndexStatusProvider: FC< {
     } );
   }
 
-  function startIndexing() {
+  async function startIndexing() {
     setHasIndexed( true );
-    tryRequest( 'post', 'index_site_docs' );
+    const result = tryRequest( 'post', 'index_site_docs' );
+    console.log( result );
   }
 
   useEffect( fetchDocIndexStatus, [] );
