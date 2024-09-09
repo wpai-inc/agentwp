@@ -25,7 +25,7 @@ class IndexSiteDocs implements Registrable
 
     public function register(): void
     {
-        // $this->registerActionSchedules(['autoUpdate']);
+        $this->registerActionSchedules(['run']);
         // add_action('wp', [$this, 'run']);
     }
 

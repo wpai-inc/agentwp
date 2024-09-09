@@ -38,7 +38,7 @@ class Router implements Registrable
         'logout' => Logout::class,
         'disconnect_site' => DisconnectSite::class,
         'manual_activation' => ManuallyActivateAgent::class,
-        'refresh_token' => [RefreshToken::class, 'refresh'],
+        'refresh_token' => RefreshToken::class,
         'update_general_settings' => UpdateGeneralSettings::class,
         'code_snippet_plugin' => GetCodeSnippetPlugin::class,
         'add_snippet' => AddCodeSnippet::class,

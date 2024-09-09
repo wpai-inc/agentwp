@@ -66,17 +66,17 @@ export const DocIndexStatusProvider: FC< {
   function fetchDocIndexStatus() {
     getDocIndexStatus().then( data => {
       setHasIndexed( data.lastIndexedAt ? true : false );
+      console.log( data.statuses );
       setDocIndex( data.statuses );
     } );
   }
 
   async function startIndexing() {
     setHasIndexed( true );
-    const result = tryRequest( 'post', 'index_site_docs' );
-    console.log( result );
+    tryRequest( 'post', 'index_site_docs' );
   }
 
-  // useEffect( fetchDocIndexStatus, [] );
+  useEffect( fetchDocIndexStatus, [] );
 
   useEffect( () => {
     const interval = setInterval( fetchDocIndexStatus, 3000 );
@@ -88,7 +88,6 @@ export const DocIndexStatusProvider: FC< {
     return () => clearInterval( interval );
   }, [ done ] );
 
-  console.log( 'hasIndexed', hasIndexed );
   return (
     <DocIndexStatusContext.Provider
       value={ {
