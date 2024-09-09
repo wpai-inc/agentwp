@@ -3,10 +3,18 @@ import IconUp from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
 import { useSearch } from '@/Providers/SearchProvider';
 
 export default function SearchInput() {
-  const { query, setQuery } = useSearch();
+  const { query, setQuery, search } = useSearch();
+
+  function submit( e: React.FormEvent ) {
+    e.preventDefault();
+    search( query );
+  }
+
   return (
     <div className="mt-2 mb-0 max-w-screen-md mx-auto px-2 w-full">
-      <form className="p-4 bg-brand-gray text-brand-gray-50 focus-within:ring-2 ring-brand-primary transition rounded ring-inset">
+      <form
+        className="p-4 bg-brand-gray text-brand-gray-50 focus-within:ring-2 ring-brand-primary transition rounded ring-inset"
+        onSubmit={ submit }>
         <div className="flex items-center">
           <input
             type="search"

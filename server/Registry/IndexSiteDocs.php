@@ -5,9 +5,9 @@ namespace WpAi\AgentWp\Registry;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Modules\SiteDocs\IndexStatus;
+use WpAi\AgentWp\Modules\SiteDocs\SiteDocs;
 use WpAi\AgentWp\Traits\HasCache;
 use WpAi\AgentWp\Traits\HasScheduler;
-use WpAi\AgentWp\Modules\SiteDocs\SiteDocs;
 
 class IndexSiteDocs implements Registrable
 {
@@ -26,7 +26,7 @@ class IndexSiteDocs implements Registrable
     public function register(): void
     {
         // $this->registerActionSchedules(['autoUpdate']);
-        add_action('wp', [$this, 'run']);
+        // add_action('wp', [$this, 'run']);
     }
 
     public function autoUpdate(): void
@@ -46,7 +46,7 @@ class IndexSiteDocs implements Registrable
     {
         while ($this->docs->inprogress()) {
             $success = $this->send();
-            if (!$success) {
+            if (! $success) {
                 break;
             }
         }
@@ -63,6 +63,7 @@ class IndexSiteDocs implements Registrable
 
         if (isset($response['error'])) {
             error_log(print_r($response['error'], true));
+
             return false;
         }
 

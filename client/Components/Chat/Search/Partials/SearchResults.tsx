@@ -10,31 +10,7 @@ type SearchResult = {
   thumbnail?: string;
 };
 
-export default function SearchResults() {
-  const results: SearchResult[] = [
-    {
-      title: 'How to Create a Custom WordPress Theme',
-      excerpt: 'Learn how to create a custom WordPress theme from scratch.',
-      url: 'https://example.com/how-to-create-a-custom-wordpress-theme',
-      date: 'March 15, 2023',
-      author: 'John Doe',
-    },
-    {
-      title: 'How to Create a Custom WordPress Theme',
-      excerpt:
-        'Learn how to create a custom WordPress theme from scratch. This is a very long excerpt that should be truncated.',
-      url: 'https://example.com/how-to-create-a-custom-wordpress-theme',
-      date: 'March 15, 2023',
-      thumbnail: 'https://via.placeholder.com/150x150',
-    },
-    {
-      title: 'How to Create a Custom WordPress Theme',
-      excerpt: 'Learn how to create a custom WordPress theme from scratch.',
-      url: 'https://example.com/how-to-create-a-custom-wordpress-theme',
-      date: 'March 15, 2023',
-    },
-  ];
-
+export default function SearchResults( { results }: { results: SearchResult[] } ) {
   return (
     <div className="space-y-2 -mx-4">
       <ChatHeading

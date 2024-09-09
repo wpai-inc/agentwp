@@ -43,6 +43,7 @@ class Router implements Registrable
         'code_snippet_plugin' => GetCodeSnippetPlugin::class,
         'add_snippet' => AddCodeSnippet::class,
         'index_site_docs' => \WpAi\AgentWp\Controllers\IndexSiteDocs::class,
+        'search_query' => \WpAi\AgentWp\Controllers\SearchQuery::class,
     ];
 
     private Main $main;

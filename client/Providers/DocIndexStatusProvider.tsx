@@ -76,7 +76,7 @@ export const DocIndexStatusProvider: FC< {
     console.log( result );
   }
 
-  useEffect( fetchDocIndexStatus, [] );
+  // useEffect( fetchDocIndexStatus, [] );
 
   useEffect( () => {
     const interval = setInterval( fetchDocIndexStatus, 3000 );

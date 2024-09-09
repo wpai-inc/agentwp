@@ -6,7 +6,7 @@ import { useSearch } from '@/Providers/SearchProvider';
 import { AnimatePresence } from 'framer-motion';
 
 export default function SearchResponse() {
-  const { query } = useSearch();
+  const { query, results, pending } = useSearch();
   return (
     <div className="px-4 max-w-screen-md space-y-4">
       { query && (
@@ -14,9 +14,13 @@ export default function SearchResponse() {
           <SearchTerm term={ query } />
         </AnimatePresence>
       ) }
-      <SearchStatus />
-      <SearchResults />
-      <SearchSummary />
+      { pending && <SearchStatus /> }
+      { results.length > 0 && (
+        <>
+          <SearchResults results={ results } />
+          <SearchSummary />
+        </>
+      ) }
     </div>
   );
 }
