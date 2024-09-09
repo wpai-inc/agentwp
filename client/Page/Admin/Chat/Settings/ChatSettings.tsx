@@ -3,7 +3,6 @@ import { Switch } from '@/Components/ui/switch';
 import { Label } from '@/Components/ui/label';
 import { useClient } from '@/Providers/ClientProvider';
 import { usePage } from '@/Providers/PageProvider';
-import type { AccountSetting } from '@/Types/types';
 
 export type Setting = {
   name: string;
@@ -30,13 +29,7 @@ export default function ChatSettings() {
   } = usePage();
 
   const initSettings: Setting[] = defaultSettings.map( setting => {
-    const accountSetting = account_settings.find(
-      ( s: AccountSetting ) => s.name === setting.name,
-    );
-    if ( accountSetting ) {
-      return { ...setting, value: accountSetting.value };
-    }
-    return setting;
+    return { ...setting, value: account_settings[ setting.name ] || setting.value };
   } );
 
   const [ settings, setSettings ] = useState< Setting[] >( initSettings );
