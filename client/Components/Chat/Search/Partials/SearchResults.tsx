@@ -1,14 +1,6 @@
 import ChatHeading from '../../Partials/ChatHeading';
 import IconLink from '@material-design-icons/svg/outlined/open_in_new.svg?react';
-
-type SearchResult = {
-  title: string;
-  excerpt?: string;
-  url: string;
-  author?: string;
-  date: string;
-  thumbnail?: string;
-};
+import type { SearchResult } from '@/Providers/SearchProvider';
 
 export default function SearchResults( { results }: { results: SearchResult[] } ) {
   return (

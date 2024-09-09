@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react';
 import ChatHeading from '../../Partials/ChatHeading';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/ui/collapsible';
 import IconOpen from '@material-design-icons/svg/outlined/add.svg?react';
@@ -9,8 +10,9 @@ type Status = {
   past: string;
 };
 
-export default function SearchStatus() {
+export default function SearchStatus( { pending }: { pending: boolean } ) {
   const [ open, setOpen ] = useState( false );
+  const [ step, setStep ] = useState( 0 );
   const statuses: Status[] = [
     {
       present: 'Extracting entities...',
@@ -34,7 +36,21 @@ export default function SearchStatus() {
     },
   ];
 
-  const status = statuses[ statuses.length - 1 ];
+  const status = useMemo( () => statuses[ step ], [ step ] );
+
+  useEffect( () => {
+    if ( pending ) {
+      const interval = setInterval( () => {
+        setStep( step => step + 1 );
+      }, 1000 );
+
+      if ( step === 3 ) {
+        clearInterval( interval );
+      }
+
+      return () => clearInterval( interval );
+    }
+  }, [ pending, step ] );
 
   return (
     <div className="space-y-2">

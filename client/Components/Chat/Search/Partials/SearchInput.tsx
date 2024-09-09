@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
 import IconUp from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
 import { useSearch } from '@/Providers/SearchProvider';
 
 export default function SearchInput() {
-  const { query, setQuery, search } = useSearch();
+  const { search } = useSearch();
+  const [ input, setInput ] = useState< string >( '' );
 
   function submit( e: React.FormEvent ) {
     e.preventDefault();
-    search( query );
+    search( input );
+    setInput( '' );
   }
 
   return (
@@ -20,8 +23,8 @@ export default function SearchInput() {
             type="search"
             placeholder="Search for anything"
             className="bg-transparent focus:ring-0 flex-1 text-xl text-brand-dark placeholder-brand-gray-50"
-            value={ query }
-            onChange={ e => setQuery( e.target.value ) }
+            value={ input }
+            onChange={ e => setInput( e.target.value ) }
           />
           <Button variant="brand" size="lg" className="rounded h-10 w-10">
             <IconUp className="h-5 w-5" />

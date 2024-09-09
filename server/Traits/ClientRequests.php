@@ -61,6 +61,16 @@ trait ClientRequests
         return $this->json('POST', '/docs', [], $data);
     }
 
+    public function searchQuery(array $data): ?array
+    {
+        return $this->json('POST', '/search', [], $data);
+    }
+
+    public function searchSummarize(string $queryId, array $results): ?array
+    {
+        return $this->json('POST', "/search/$queryId/summary", [], $results);
+    }
+
     public function indexError($data): ?ResponseInterface
     {
         try {
