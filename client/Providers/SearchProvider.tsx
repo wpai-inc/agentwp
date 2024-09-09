@@ -5,10 +5,9 @@ import { AxiosResponse } from 'axios';
 type ContextProps = {
   query: string;
   setQuery: ( query: string ) => void;
-  results: any[];
+  results: SearchQueryResponseType | null;
   pending: boolean;
   search: ( query: string ) => void;
-  summary: string;
   resetQuery: () => void;
 };
 
@@ -43,9 +42,8 @@ type SearchQueryResponseType = {
 export const SearchProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
   const { tryRequest } = useAdminRoute();
   const [ query, setQuery ] = useState< string >( '' );
-  const [ results, setResults ] = useState< any >( [] );
+  const [ results, setResults ] = useState< SearchQueryResponseType | null >( null );
   const [ pending, setPending ] = useState< boolean >( false );
-  const [ summary, setSummary ] = useState< string >( '' );
 
   async function search( query: string ) {
     setQuery( query );
@@ -53,15 +51,13 @@ export const SearchProvider: FC< { children: React.ReactNode } > = ( { children 
     const res: AxiosResponse< SearchQueryResponseType > = await tryRequest( 'get', 'search_query', {
       query,
     } );
-    setResults( res.data.results );
-    setSummary( res.data.summary || '' );
+    setResults( res.data );
     setPending( false );
   }
 
   function resetQuery() {
     setQuery( '' );
-    setSummary( '' );
-    setResults( [] );
+    setResults( null );
   }
 
   return (
@@ -72,7 +68,6 @@ export const SearchProvider: FC< { children: React.ReactNode } > = ( { children 
         results,
         pending,
         search,
-        summary,
         resetQuery,
       } }>
       { children }

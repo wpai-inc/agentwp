@@ -20,8 +20,9 @@ class SearchQuery extends BaseController
             $this->error('You do not have permission to perform this action');
         }
 
+        $q = $this->request->get('query');
         $searchRes = $this->main->client()->searchQuery([
-            'query' => $this->request->get('query'),
+            'query' => $q,
             'wpResults' => [],
         ]);
 
@@ -34,23 +35,29 @@ class SearchQuery extends BaseController
                 'results' => $hydratedResults,
             ];
 
-            $summarizeRes = $this->main->client()->searchSummarize(
-                $searchRes['query']['id'],
-                [
-                    'totalResults' => $searchRes['total'],
-                    'results' => array_map(function ($r) {
-                        return [
-                            'object' => [
-                                'type' => $r->type,
-                                'id' => $r->id,
-                            ],
-                            'excerpt' => $r->excerpt,
-                        ];
-                    }, $hydratedResults),
-                ]);
-
-            if ($summarizeRes['summary']) {
-                $finalResponse['summary'] = $summarizeRes['summary'];
+            if( count($hydratedResults) > 0 ) {
+                $summarizeRes = $this->main->client()->searchSummarize(
+                    $searchRes['query']['id'],
+                    [
+                        'totalResults' => $searchRes['total'],
+                        'results' => array_map(function ($r) {
+                            return [
+                                'object' => [
+                                    'type' => $r->type,
+                                    'id' => $r->id,
+                                ],
+                                'excerpt' => $r->excerpt,
+                            ];
+                        }, $hydratedResults),
+                    ]);
+    
+                if ($summarizeRes['summary']) {
+                    $finalResponse['summary'] = $summarizeRes['summary'];
+                }
+            } else {
+                $finalResponse['summary'] = <<<EOT
+                The query for "$q" returned no results, indicating that there are no entries or relevant data associated with that term.
+                EOT;
             }
 
             return $finalResponse;
