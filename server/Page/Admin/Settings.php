@@ -34,28 +34,31 @@ class Settings extends ReactClient
 
     public function registrations(): void
     {
-        $subpages = [
-            [
-                'name' => 'AI Connection Manager',
-                'slug' => 'settings',
-                'data' => [],
-            ],
-            [
-                'name' => 'Users',
-                'slug' => 'users',
-                'data' => [],
-            ],
-            [
-                'name' => 'Settings',
-                'slug' => 'settings',
-                'data' => [],
-            ],
-            [
-                'name' => 'Open Chat',
-                'slug' => 'dashboard',
-                'data' => [],
-            ],
-        ];
+        $subpages = [];
+        if ($this->settings->client_id && $this->settings->client_secret && $this->settings->onboarding_completed) {
+            $subpages = [
+                [
+                    'name' => 'AI Connection Manager',
+                    'slug' => 'settings',
+                    'data' => [],
+                ],
+                [
+                    'name' => 'Users',
+                    'slug' => 'users',
+                    'data' => [],
+                ],
+                [
+                    'name' => 'Settings',
+                    'slug' => 'settings',
+                    'data' => [],
+                ],
+                [
+                    'name' => 'Open Chat',
+                    'slug' => 'dashboard',
+                    'data' => [],
+                ],
+            ];
+        }
 
         $this->hasFooter()->registerPage();
         $this
