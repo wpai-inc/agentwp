@@ -4,7 +4,8 @@ namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Controllers\AddCodeSnippet;
-use WpAi\AgentWp\Controllers\DisconnectSite;
+use WpAi\AgentWp\Controllers\DisconnectSite
+use WpAi\AgentWp\Controllers\GetMentionItems;
 use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
 use WpAi\AgentWp\Controllers\GetCodeSnippetPlugin;
 use WpAi\AgentWp\Controllers\GetUsers;
@@ -43,6 +44,7 @@ class Router implements Registrable
         'update_general_settings' => [UpdateGeneralSettings::class, 'update_settings'],
         'code_snippet_plugin' => [GetCodeSnippetPlugin::class, 'code_snippet_plugin'],
         'add_snippet' => [AddCodeSnippet::class, 'add_snippet'],
+        'mention_items' => [GetMentionItems::class, 'reference_items'],
         'update_site_settings' => [UpdateSiteSettings::class, 'update_site_settings'],
     ];
 

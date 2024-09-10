@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
-import { cn } from '@/lib/utils';
 import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
 import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import CommandMenu from '../Commands/CommandMenu';
@@ -12,10 +11,10 @@ import { useStream } from '@/Providers/StreamProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 import { useError } from '@/Providers/ErrorProvider';
 import { LoaderIcon } from 'lucide-react';
+import TextBox from './TextBox';
 
 export default function MessageBox() {
-  const { sendMessage, setChatSetting, message, setMessage, messageSubmitted, cancelMessage } =
-    useChat();
+  const { sendMessage, setChatSetting, message, setMessage, cancelMessage } = useChat();
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
@@ -66,6 +65,10 @@ export default function MessageBox() {
     }
   }
 
+  const handleCallback = ( text: string ) => {
+    setMessage( text );
+  };
+
   return (
     <CommandMenu
       deactivate={ true }
@@ -75,11 +78,12 @@ export default function MessageBox() {
       message={ message }
       setMessage={ setMessage }>
       <form className="relative rounded-lg bg-brand-gray p-2" onSubmit={ submit }>
+        <TextBox callback={ handleCallback } message={ message } />
         <textarea
           onChange={ e => setMessage( e.target.value ) }
           value={ message }
           ref={ textAreaRef }
-          className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:bg-white transition"
+          className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:bg-white transition hidden"
           placeholder="Message..."
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }

@@ -21,6 +21,7 @@ type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 type StoreRequestType = {
   id: string | null;
   message: string;
+  mentions: any[];
   selected_input: StreamableFieldType | null;
   site_data?: any[];
 };
@@ -93,10 +94,12 @@ export default function ChatProvider( {
   async function userRequest(
     message: string,
     id: string | null = null,
+    mentions: any[] = [],
   ): Promise< CreateUserRequestResponse > {
     let req: StoreRequestType = {
       id,
       message,
+      mentions,
       selected_input: selectedInput,
     };
     if ( streamingStatus === StreamingStatusEnum.OFF ) {
@@ -151,7 +154,7 @@ export default function ChatProvider( {
 
     await optimistic(
       async () => {
-        const { user_request } = await userRequest( ur.message, ur.id );
+        const { user_request } = await userRequest( ur.message, ur.id, ur.mentions );
         setCurrentUserRequestId( user_request.id );
         await startStream( user_request.id );
       },

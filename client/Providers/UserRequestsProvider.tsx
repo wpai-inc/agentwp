@@ -13,6 +13,8 @@ import { usePage } from './PageProvider';
 // @ts-ignore
 import { generate as uuid } from 'ordered-uuid-v4';
 import { optimistic } from '@/lib/utils';
+import transformMentionedMessage from '@/Components/Chat/MessageBox/helpers/transformMentionedMessage';
+import getMentionsFromText from '@/Components/Chat/MessageBox/helpers/getMentionsFromText';
 
 export type ActionType =
   | NavigateAction
@@ -36,6 +38,7 @@ export type AgentAction = {
 export type UserRequestType = {
   id: string;
   message: string;
+  mentions: any[];
   user: {
     name: string;
     email: string;
@@ -171,7 +174,8 @@ export default function UserRequestsProvider( {
   function createUserRequest( message: string ): UserRequestType {
     return {
       id: uuid(),
-      message,
+      message: transformMentionedMessage( message ),
+      mentions: getMentionsFromText( message ),
       user: {
         name: page.user.name,
         email: page.user.email,
