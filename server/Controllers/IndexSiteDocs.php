@@ -20,7 +20,7 @@ class IndexSiteDocs extends BaseController
             $this->error('You do not have permission to perform this action');
         }
 
-        (new \WpAi\AgentWp\Registry\IndexSiteDocs($this->main))
-            ->scheduleNow('run');
+        $indexer = (new \WpAi\AgentWp\Registry\IndexSiteDocs($this->main));
+        $indexer->start();
     }
 }

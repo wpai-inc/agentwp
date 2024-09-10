@@ -25,9 +25,7 @@ export function useDocIndexStatus() {
   return ctx;
 }
 
-export const DocIndexStatusProvider: FC< {
-  children: React.ReactNode;
-} > = ( { children } ) => {
+export function DocIndexStatusProvider( { children }: { children: React.ReactNode } ) {
   const { getDocIndexStatus } = useClient();
   const { tryRequest } = useAdminRoute();
   const [ docIndex, setDocIndex ] = useState< DocIndexStatusData[] >( [] );
@@ -65,8 +63,8 @@ export const DocIndexStatusProvider: FC< {
 
   function fetchDocIndexStatus() {
     getDocIndexStatus().then( data => {
+      console.log( 'data', data );
       setHasIndexed( data.lastIndexedAt ? true : false );
-      console.log( data.statuses );
       setDocIndex( data.statuses );
     } );
   }
@@ -103,4 +101,4 @@ export const DocIndexStatusProvider: FC< {
       { children }
     </DocIndexStatusContext.Provider>
   );
-};
+}
