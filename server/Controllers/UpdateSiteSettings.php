@@ -17,7 +17,9 @@ class UpdateSiteSettings extends BaseController
         $this->verifyNonce();
         $data = $this->getContent();
 
-        Transient::set('account_settings', $this->parseSettings($data), 12 * HOUR_IN_SECONDS);
+        $transient = new Transient($this->main);
+
+        $transient->set('account_settings', $this->parseSettings($data), 12 * HOUR_IN_SECONDS);
 
         $this->respond($data);
     }

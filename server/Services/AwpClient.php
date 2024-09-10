@@ -52,8 +52,6 @@ class AwpClient
             'body' => $body,
         ]);
 
-        @ray($response);
-
         return $response;
 
     }

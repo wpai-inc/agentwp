@@ -2,22 +2,29 @@
 
 namespace WpAi\AgentWp\Services;
 
+use WpAi\AgentWp\Main;
+
 class Transient
 {
-    private const PREFIX = 'agentwp_';
+    private Main $main;
 
-    public static function get(string $key)
+    public function __construct(Main $main)
     {
-        return get_transient(self::PREFIX.$key);
+        $this->main = $main;
     }
 
-    public static function set(string $key, $value, int $expiration = 0)
+    public function get(string $key)
     {
-        set_transient(self::PREFIX.$key, $value, $expiration);
+        return get_transient($this->main::SLUG);
     }
 
-    public static function delete(string $key)
+    public function set(string $key, $value, int $expiration = 0)
     {
-        delete_transient(self::PREFIX.$key);
+        set_transient($this->main::SLUG.$key, $value, $expiration);
+    }
+
+    public function delete(string $key)
+    {
+        delete_transient($this->main::SLUG.$key);
     }
 }
