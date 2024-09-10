@@ -2,11 +2,9 @@
 
 namespace WpAi\AgentWp\Traits;
 
-use Psr\Http\Message\ResponseInterface;
-
 trait ClientRequests
 {
-    public function getSiteSettings(): ?ResponseInterface
+    public function getSiteSettings(): ?array
     {
         try {
             return $this->request(
@@ -22,7 +20,7 @@ trait ClientRequests
         }
     }
 
-    public function indexSite(string $data): ?ResponseInterface
+    public function indexSite(string $data): ?array
     {
         try {
             return $this->request(
@@ -39,7 +37,7 @@ trait ClientRequests
         }
     }
 
-    public function summarizeSite(string $data): ?ResponseInterface
+    public function summarizeSite(string $data): ?array
     {
         try {
             return $this->request(
@@ -56,7 +54,7 @@ trait ClientRequests
         }
     }
 
-    public function indexError($data): ?ResponseInterface
+    public function indexError($data): ?array
     {
         try {
             return $this->request(
@@ -73,7 +71,7 @@ trait ClientRequests
         }
     }
 
-    public function updateUser($user_id = null): ?ResponseInterface
+    public function updateUser($user_id = null): ?array
     {
         if ($user_id) {
             $user = get_user_by('ID', $user_id);
