@@ -19,10 +19,18 @@ class SiteDocs
         return $this;
     }
 
+    public function init(): self
+    {
+        $docType = $this->getDocType();
+        $doc = $this->getDoc($docType);
+        IndexStatus::init($docType, $doc->getTotal());
+        return $this;
+    }
+
     public function inprogress(): bool
     {
         if ($this->status) {
-            return !$this->status->done;
+            return $this->status->status === 1;
         }
 
         return true;

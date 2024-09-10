@@ -6,24 +6,36 @@ use WpAi\AgentWp\Main;
 
 class IndexStatus
 {
-    public int $id;
+    public int $id = 0;
     public string $docType;
     public int $total;
     public int $indexed;
     public float $percent;
     public bool $done;
+    public int $status;
+    public int $last_doc_id_indexed = 0;
 
     public static string $statusKey = 'docs_indexing_status';
 
     private array $comparisonKeys = ['id', 'docType', 'total', 'indexed'];
 
+    private array $states = [
+        'initiated' => 0,
+        'running' => 1,
+        'paused' => 2,
+        'completed' => 3,
+        'failed' => 4,
+    ];
+
     public function __construct(
-        int $id,
+        int $id = 0,
         string $docType,
         int $total,
         int $indexed,
         float $percent,
-        bool $done
+        bool $done,
+        int $status = 0,
+        ?int $last_doc_id_indexed = null
     ) {
         $this->id = $id;
         $this->docType = $docType;
@@ -31,11 +43,48 @@ class IndexStatus
         $this->indexed = $indexed;
         $this->percent = $percent;
         $this->done = $done;
+        $this->status = $status;
+        if ($this->last_doc_id_indexed) {
+            $this->last_doc_id_indexed = $last_doc_id_indexed;
+        }
+    }
+
+    public static function init(string $docType, int $total): bool
+    {
+        return self::set([
+            'id' => 0,
+            'docType' => $docType,
+            'total' => $total,
+            'indexed' => 0,
+            'percent' => 0,
+            'done' => false,
+            'status' => 0,
+        ]);
     }
 
     public static function getStatusKey(): string
     {
         return Main::SLUG . '_' . self::$statusKey;
+    }
+
+    public function pause(): bool
+    {
+        return $this->update('status', $this->states['paused']);
+    }
+
+    public function complete(): bool
+    {
+        return $this->update('status', $this->states['completed']);
+    }
+
+    public function run(): bool
+    {
+        return $this->update('status', $this->states['running']);
+    }
+
+    public function fail(): bool
+    {
+        return $this->update('status', $this->states['failed']);
     }
 
     public static function fromArray(array $data): self
@@ -46,7 +95,9 @@ class IndexStatus
             $data['total'],
             $data['indexed'],
             $data['percent'],
-            $data['done']
+            $data['done'],
+            $data['status'],
+            isset($data['last_doc_id_indexed']) ? $data['last_doc_id_indexed'] : null,
         );
         return $status;
     }
@@ -75,6 +126,8 @@ class IndexStatus
             'indexed' => $this->indexed,
             'percent' => $this->percent,
             'done' => $this->done,
+            'status' => $this->status,
+            'last_doc_id_indexed' => $this->last_doc_id_indexed,
         ];
     }
 
@@ -87,8 +140,18 @@ class IndexStatus
         return null;
     }
 
-    public function update(): bool
+    public function update(?string $key, $value = null): bool
     {
-        return \update_option($this->getStatusKey(), $this->toArray());
+        $arr = $this->toArray();
+        if ($key) {
+            $arr[$key] = $value;
+        }
+
+        return self::set($arr);
+    }
+
+    public static function set(array $arr)
+    {
+        return \update_option(self::getStatusKey(), $arr);
     }
 }

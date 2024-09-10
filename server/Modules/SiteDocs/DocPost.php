@@ -18,8 +18,6 @@ class DocPost extends Doc
         'posts_title',
     ];
 
-    private $page = 1;
-
     public function getTotal(): int
     {
         if (! $this->total) {
@@ -31,10 +29,10 @@ class DocPost extends Doc
 
     public function getDocs(): array
     {
-        $posts = $this->getPosts($this->page, $this->batchAmount);
+        $lastId = $this->status ? $this->status->last_doc_id_indexed : 0;
+        $posts = $this->getPosts($this->batchAmount, $lastId);
 
         return array_map(function ($post) {
-
             return [
                 'table' => 'posts',
                 'id' => (int) $post->ID,
@@ -63,19 +61,17 @@ class DocPost extends Doc
         return [];
     }
 
-    private function getPosts($page_number = 1, $batch_amount = 10)
+    private function getPosts($batch_amount = 10, int $last_doc_id_indexed): array
     {
-        $offset = ($page_number - 1) * $batch_amount;
-
         global $wpdb;
 
         return $wpdb->get_results("
             SELECT p.ID, p.post_parent, p.post_date, p.post_modified, p.post_title, p.post_content
             FROM {$wpdb->posts} p
             WHERE p.post_type = 'post' AND p.post_status = 'publish'
-            ORDER BY p.ID
+            AND p.ID > {$last_doc_id_indexed}
+            ORDER BY p.ID ASC
             LIMIT {$batch_amount}
-            OFFSET {$offset}
         ");
     }
 

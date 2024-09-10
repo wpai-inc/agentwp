@@ -25,9 +25,7 @@ export function useDocIndexStatus() {
   return ctx;
 }
 
-export const DocIndexStatusProvider: FC< {
-  children: React.ReactNode;
-} > = ( { children } ) => {
+export function DocIndexStatusProvider( { children }: { children: React.ReactNode } ) {
   const { getDocIndexStatus } = useClient();
   const { tryRequest } = useAdminRoute();
   const [ docIndex, setDocIndex ] = useState< DocIndexStatusData[] >( [] );
@@ -65,6 +63,7 @@ export const DocIndexStatusProvider: FC< {
 
   function fetchDocIndexStatus() {
     getDocIndexStatus().then( data => {
+      console.log( 'data', data );
       setHasIndexed( data.lastIndexedAt ? true : false );
       setDocIndex( data.statuses );
     } );
@@ -72,11 +71,10 @@ export const DocIndexStatusProvider: FC< {
 
   async function startIndexing() {
     setHasIndexed( true );
-    const result = tryRequest( 'post', 'index_site_docs' );
-    console.log( result );
+    tryRequest( 'post', 'index_site_docs' );
   }
 
-  // useEffect( fetchDocIndexStatus, [] );
+  useEffect( fetchDocIndexStatus, [] );
 
   useEffect( () => {
     const interval = setInterval( fetchDocIndexStatus, 3000 );
@@ -88,7 +86,6 @@ export const DocIndexStatusProvider: FC< {
     return () => clearInterval( interval );
   }, [ done ] );
 
-  console.log( 'hasIndexed', hasIndexed );
   return (
     <DocIndexStatusContext.Provider
       value={ {
@@ -104,4 +101,4 @@ export const DocIndexStatusProvider: FC< {
       { children }
     </DocIndexStatusContext.Provider>
   );
-};
+}

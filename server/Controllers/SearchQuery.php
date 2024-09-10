@@ -6,6 +6,8 @@
 
 namespace WpAi\AgentWp\Controllers;
 
+use WpAi\AgentWp\Services\HybridSearch;
+
 /**
  * Get code snippet plugin controller.
  */
@@ -21,36 +23,29 @@ class SearchQuery extends BaseController
         }
 
         $q = $this->request->get('query');
+
+        $hybrid = new HybridSearch($q);
+
         $searchRes = $this->main->client()->searchQuery([
             'query' => $q,
-            'wpResults' => [],
+            'wpResults' => $hybrid->searchWp(),
         ]);
 
         if (isset($searchRes['error'])) {
             $this->error($searchRes['error']);
         } else {
-            $hydratedResults = $this->hydrateResults($searchRes['results']);
+            $hybrid->setRemoteResults($searchRes);
             $finalResponse = [
-                'total' => $searchRes['total'],
-                'results' => $hydratedResults,
+                'total' => $hybrid->getTotal(),
+                'results' => $hybrid->getResults(),
             ];
 
-            if( count($hydratedResults) > 0 ) {
+            if ($hybrid->hasResults()) {
                 $summarizeRes = $this->main->client()->searchSummarize(
-                    $searchRes['query']['id'],
-                    [
-                        'totalResults' => $searchRes['total'],
-                        'results' => array_map(function ($r) {
-                            return [
-                                'object' => [
-                                    'type' => $r->type,
-                                    'id' => $r->id,
-                                ],
-                                'excerpt' => $r->excerpt,
-                            ];
-                        }, $hydratedResults),
-                    ]);
-    
+                    $hybrid->getQueryId(),
+                    $hybrid->getSummaryResults()
+                );
+
                 if ($summarizeRes['summary']) {
                     $finalResponse['summary'] = $summarizeRes['summary'];
                 }
@@ -62,81 +57,5 @@ class SearchQuery extends BaseController
 
             return $finalResponse;
         }
-    }
-
-    private function hydrateResults(array $results): array
-    {
-        return array_filter(array_map(function ($result) {
-            switch ($result['type']) {
-                case 'posts':
-                    return $this->getResultFromPost($result['id'], $result['score']);
-                default:
-                    return null;
-            }
-        }, $results), function ($i) {
-            return $i !== null;
-        });
-    }
-
-    private function getResultFromPost(int $postId, float $score): SearchResult
-    {
-        $post = get_post($postId);
-        $excerpt = get_the_excerpt($postId);
-        $title = get_the_title($postId);
-
-        return new SearchResult(
-            'posts',
-            $postId,
-            $title,
-            get_permalink($postId),
-            get_the_date('Y-m-d', $postId),
-            $score,
-            ! empty($excerpt) ? $excerpt : $title,
-            get_the_author_meta('display_name', $post->post_author),
-            get_the_post_thumbnail_url($postId),
-        );
-    }
-}
-
-class SearchResult
-{
-    public string $type;
-
-    public int $id;
-
-    public string $title;
-
-    public ?string $excerpt;
-
-    public string $url;
-
-    public ?string $author;
-
-    public string $date;
-
-    public ?string $thumbnail;
-
-    public float $score;
-
-    public function __construct(
-        string $type,
-        int $id,
-        string $title,
-        string $url,
-        string $date,
-        float $score,
-        ?string $excerpt = null,
-        ?string $author = null,
-        ?string $thumbnail = null
-    ) {
-        $this->type = $type;
-        $this->id = $id;
-        $this->title = $title;
-        $this->url = $url;
-        $this->date = $date;
-        $this->score = $score;
-        $this->excerpt = $excerpt;
-        $this->author = $author;
-        $this->thumbnail = $thumbnail;
     }
 }

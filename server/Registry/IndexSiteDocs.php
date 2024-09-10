@@ -25,21 +25,13 @@ class IndexSiteDocs implements Registrable
 
     public function register(): void
     {
-        // $this->registerActionSchedules(['autoUpdate']);
-        // add_action('wp', [$this, 'run']);
+        $this->registerActionSchedules(['run']);
     }
 
-    public function autoUpdate(): void
+    public function start(): void
     {
-        if (! $this->main->siteId() || (defined('DOING_AJAX') && DOING_AJAX)) {
-            return;
-        }
-        $data = $this->docs->data();
-        $cache = $this->cache($this->docs->data());
-
-        if (! $cache->hit()) {
-            $this->send($cache->getData());
-        }
+        $this->docs->init();
+        $this->scheduleNow('run');
     }
 
     public function run(): void
@@ -63,7 +55,7 @@ class IndexSiteDocs implements Registrable
 
         if (isset($response['error'])) {
             error_log(print_r($response['error'], true));
-
+            $status->fail();
             return false;
         }
 
