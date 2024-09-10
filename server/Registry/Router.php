@@ -4,10 +4,10 @@ namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Controllers\AddCodeSnippet;
-use WpAi\AgentWp\Controllers\DisconnectSite
-use WpAi\AgentWp\Controllers\GetMentionItems;
+use WpAi\AgentWp\Controllers\DisconnectSite;
 use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
 use WpAi\AgentWp\Controllers\GetCodeSnippetPlugin;
+use WpAi\AgentWp\Controllers\GetMentionItems;
 use WpAi\AgentWp\Controllers\GetUsers;
 use WpAi\AgentWp\Controllers\Logout;
 use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
