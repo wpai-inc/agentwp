@@ -9,7 +9,7 @@ class ClientFactory
 {
     public static function make(Main $main, bool $checkUserAccessRights = true): AwpClient
     {
-        $client = new AwpClient;
+        $client = new AwpClient();
         if (! $checkUserAccessRights && $access_token = $main->settings->getAccessToken()) {
             $client->setToken($access_token);
         } elseif ($access_token = $main->auth()->getAccessToken()) {
@@ -18,7 +18,10 @@ class ClientFactory
 
         $client->setWpUser(wp_get_current_user())
             ->setSiteId($main->siteId())
-            ->setApiHost($main->apiHost());
+            ->setApiHost($main->apiHost())
+            ->setDisconnectCallback(function () use ($main) {
+                $main->settings->cleanupConnectionDetails();
+            });
 
         return $client;
     }

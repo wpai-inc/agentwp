@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toJpeg } from 'html-to-image';
-import { useClient } from '@/Providers/ClientProvider';
 import type { StreamableFieldType } from '@/Types/types';
+import { usePage } from './PageProvider';
 
 type postContentType = {
   post_content: string;
@@ -56,8 +56,7 @@ async function getScreenshot(): Promise< string > {
 }
 
 export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
-  const { getSettings } = useClient();
-  const [ enabled, setEnabled ] = useState< boolean | undefined >( undefined );
+  const page = usePage();
   const [ screen, setScreen ] = useState< ScreenType >( {
     url: '',
     title: '',
@@ -65,26 +64,12 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
     screenshot: '',
   } );
 
-  const screenshotSetting = async () => {
-    const settings = await getSettings();
-    const enabled = settings.find( ( setting: any ) => setting.name === 'screenshotsEnabled' );
-    if ( enabled === undefined || typeof enabled.value !== 'boolean' ) {
-      setEnabled( false );
-    }
-
-    setEnabled( enabled?.value || false );
-  };
-
   useEffect( () => {
-    screenshotSetting();
-  }, [] );
-
-  useEffect( () => {
-    const fetchData = async ( enabled: boolean ) => {
+    const fetchData = async () => {
       const url = window.location.href;
       const title = document.title;
       const links = Array.from( document.links ).map( link => link.href );
-      const screenshot = enabled ? await getScreenshot() : '';
+      const screenshot = page.account_settings.screenshotsEnabled ? await getScreenshot() : '';
 
       setScreen( {
         url,
@@ -94,10 +79,8 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
       } );
     };
 
-    if ( typeof enabled === 'boolean' ) {
-      fetchData( enabled );
-    }
-  }, [ enabled ] );
+    fetchData();
+  } );
 
   return (
     <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>

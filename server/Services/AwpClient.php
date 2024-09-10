@@ -2,9 +2,6 @@
 
 namespace WpAi\AgentWp\Services;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\ResponseInterface;
 use WpAi\AgentWp\Traits\ClientRequests;
 
 class AwpClient
@@ -23,14 +20,15 @@ class AwpClient
 
     private ?string $apiHost;
 
+    private $disconnectCallback;
+
     public function __construct()
     {
         $this->wp_user = wp_get_current_user();
     }
 
-    public function requestRaw(string $method, string $url, array $additionalHeaders = [], $body = null): ResponseInterface
+    public function requestRaw(string $method, string $url, array $additionalHeaders = [], $body = null): array
     {
-        $client = $this->buildClient();
 
         $defaultHeaders = [
             'Accept' => 'application/json',
@@ -48,16 +46,28 @@ class AwpClient
             $additionalHeaders,
         );
 
-        $request = new Request($method, $this->getBaseUri().ltrim($url, '/'), $headers, $body);
+        $response = wp_remote_request($this->apiHost.$this->getBaseUri().ltrim($url, '/'), [
+            'method' => $method,
+            'headers' => $headers,
+            'body' => $body,
+        ]);
 
-        return $client->send($request);
+        return $response;
 
     }
 
     public function request(string $method, string $url, array $additionalHeaders = [], $body = null)
     {
         try {
-            return $this->requestRaw($method, $url, $additionalHeaders, $body);
+            $response = $this->requestRaw($method, $url, $additionalHeaders, $body);
+            if ($response['response']['code'] > 200) {
+                // Disconnect the site
+                if ($this->disconnectCallback) {
+                    call_user_func($this->disconnectCallback);
+                }
+            }
+
+            return $response;
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
@@ -75,7 +85,7 @@ class AwpClient
         try {
             $res = $this->requestRaw($method, $url, [], $body);
 
-            return json_decode($res->getBody()->getContents(), true);
+            return json_decode($res['body'], true);
         } catch (\Exception $e) {
             return null;
         }
@@ -127,5 +137,12 @@ class AwpClient
     private function getBaseUri(): string
     {
         return '/api/';
+    }
+
+    public function setDisconnectCallback(callable $callback): self
+    {
+        $this->disconnectCallback = $callback;
+
+        return $this;
     }
 }
