@@ -53,6 +53,12 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
             </Button>
           </AgentTooltip>
         ) }
+        { /* <AgentTooltip content="Convo-only mode restricts conversation to chat only, instead of attempting to execute actions.">
+          <label>
+            <Switch checked={ true } />
+            Convo Only
+          </label>
+        </AgentTooltip> */ }
         <AgentTooltip content="View history">
           <Button onClick={ handleHistorySettings } variant="ghost" size="sm">
             <HistoryIcon className="h-5 w-5" />

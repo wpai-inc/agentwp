@@ -10,6 +10,7 @@ class AccountSettings
     use SiteSettings;
 
     private AwpClient $client;
+
     private Main $main;
 
     public function __construct(AwpClient $client, Main $main)
