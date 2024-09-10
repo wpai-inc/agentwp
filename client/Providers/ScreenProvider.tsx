@@ -56,7 +56,7 @@ async function getScreenshot(): Promise< string > {
 }
 
 export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
-  const page = usePage();
+  const { getAccountSetting } = usePage();
   const [ screen, setScreen ] = useState< ScreenType >( {
     url: '',
     title: '',
@@ -69,7 +69,7 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
       const url = window.location.href;
       const title = document.title;
       const links = Array.from( document.links ).map( link => link.href );
-      const screenshot = page.account_settings.screenshotsEnabled ? await getScreenshot() : '';
+      const screenshot = getAccountSetting( 'visionEnabled' ) ? await getScreenshot() : '';
 
       setScreen( {
         url,

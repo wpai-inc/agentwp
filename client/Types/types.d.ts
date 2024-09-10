@@ -40,12 +40,7 @@ export type PageData = {
   access_token: string;
   onboarding_completed: boolean;
   general_settings: AgentWpGeneralSettings;
-  account_settings: AccountSetting[];
-};
-
-export type AccountSetting = {
-  name: string;
-  value: any;
+  account_settings: SiteSettingData[];
 };
 
 export type WpUser = {
@@ -123,10 +118,18 @@ export type PlanData = {
   priceMonthly: number;
 };
 
+export type SiteSettingValue = 'convoOnly' | 'webEnabled' | 'visionEnabled';
+
+export type SiteSettingData = {
+  name: SiteSettingValue;
+  value: any;
+  label: string;
+};
+
 export type ConfigData = {
-  abilities: Array;
-  context_awareness: Array;
-  capabilities: Array;
+  abilities: [];
+  context_awareness: [];
+  capabilities: [];
   convo_only: boolean;
   convo_disabled: boolean;
   token_limit: number;
