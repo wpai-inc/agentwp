@@ -9,6 +9,8 @@ class BaseController
 {
     protected string $method = 'GET';
 
+    protected array $middleware = [];
+
     /**
      * Always use a nonce unless there's a good reason
      * not too. Dangerous option. Use with caution.
@@ -36,6 +38,12 @@ class BaseController
     {
         if (! $this->dangerNoNonce) {
             $this->verifyNonce();
+        }
+
+        foreach ($this->middleware as $middleware) {
+            if (method_exists($this, $middleware)) {
+                $this->$middleware();
+            }
         }
 
         if ($this->permission === 'all') {
@@ -89,5 +97,12 @@ class BaseController
         }
 
         return $data;
+    }
+
+    protected function check_site_connection(): void
+    {
+        if (! $this->main->siteId()) {
+            $this->error('You do not have permission to perform this action');
+        }
     }
 }

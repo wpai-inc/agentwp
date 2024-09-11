@@ -13,12 +13,12 @@ class IndexSiteDocs extends BaseController
 {
     protected string $method = 'POST';
 
+    protected array $middleware = [
+        'check_site_connection',
+    ];
+
     public function __invoke()
     {
-        if (! $this->main->siteId()) {
-            $this->error('You do not have permission to perform this action');
-        }
-
         $indexer = (new \WpAi\AgentWp\Registry\IndexSiteDocs($this->main));
         $indexer->start();
     }

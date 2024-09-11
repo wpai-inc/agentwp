@@ -14,12 +14,12 @@ class AddCodeSnippet extends BaseController
 {
     protected string $method = 'POST';
 
+    protected array $middleware = [
+        'check_site_connection',
+    ];
+
     public function __invoke()
     {
-        if (! $this->main->siteId()) {
-            $this->error('You do not have permission to perform this action');
-        }
-
         $params = json_decode($this->request->getContent(), true);
         if (! $params) {
             $this->error('Invalid request');
