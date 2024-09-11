@@ -1,0 +1,17 @@
+{
+    "name": "meta_values",
+    "join": "",
+    "values": [
+        {
+            "type": "db_query",
+            "result": {
+                "type": "array",
+                "join": " "
+            },
+            "location": {
+                "table": "postmeta",
+                "column": "meta_value"
+            }
+        }
+    ]
+}

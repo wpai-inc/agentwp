@@ -11,7 +11,7 @@ class SiteDataController extends BaseController
 
     protected string $method = 'GET';
 
-    public function maybe_send_site_data()
+    public function __invoke()
     {
         $this->verifyNonce();
         if (! $this->main->siteId()) {

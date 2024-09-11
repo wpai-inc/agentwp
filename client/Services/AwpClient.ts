@@ -88,6 +88,10 @@ export default class AwpClient {
     } );
   }
 
+  async getDocIndexStatus(): Promise< AxiosResponse > {
+    return this.request( 'GET', `${ this.baseUrl }/api/docs/status/` );
+  }
+
   async storeAgentResult( actionId: string, data: object ): Promise< AxiosResponse > {
     return this.request(
       'POST',

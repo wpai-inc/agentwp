@@ -6,11 +6,11 @@ use WpAi\AgentWp\UserAuth;
 
 class SaveConnection extends BaseController
 {
-
     protected string $permission = 'hasValidVerificationKey';
+
     protected string $method = 'POST';
 
-    public function save_connection(): void
+    public function __invoke(): void
     {
 
         $key = sanitize_text_field($_REQUEST['verification_key'] ?? '');
@@ -29,15 +29,14 @@ class SaveConnection extends BaseController
         $data = json_decode(file_get_contents('php://input'), true);
 
         $this->main->settings->set([
-            'site_id'       => sanitize_text_field($data['site_id']),
-            'client_id'     => sanitize_text_field($data['client_id']),
+            'site_id' => sanitize_text_field($data['site_id']),
+            'client_id' => sanitize_text_field($data['client_id']),
             'client_secret' => sanitize_text_field($data['client_secret']),
         ]);
 
-
         // Make the current user an AWP users manager
         $user_email = sanitize_text_field($data['user_email']);
-        $user       = get_user_by('email', $user_email);
+        $user = get_user_by('email', $user_email);
 
         $user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
         $user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_USERS);

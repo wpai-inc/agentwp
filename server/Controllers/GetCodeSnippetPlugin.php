@@ -1,8 +1,6 @@
 <?php
 /**
  * Get code snippet plugin controller.
- * 
- * @package AgentWP
  */
 
 namespace WpAi\AgentWp\Controllers;
@@ -16,14 +14,14 @@ class GetCodeSnippetPlugin extends BaseController
 {
     protected string $method = 'GET';
 
-    public function code_snippet_plugin()
+    public function __invoke()
     {
         $this->verifyNonce();
         if (! $this->main->siteId()) {
             $this->error('You do not have permission to perform this action');
         }
 
-        $plugin = (new SnippetHandler())->activeSnippetPlugin;
+        $plugin = (new SnippetHandler)->activeSnippetPlugin;
         $plugin = $plugin ? $plugin->name : '';
 
         $this->respond($plugin);

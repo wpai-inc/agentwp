@@ -10,7 +10,7 @@ class UpdateUserCapabilities extends BaseController
 
     protected string $method = 'POST';
 
-    public function update_user_capabilities(): void
+    public function __invoke(): void
     {
         $this->verifyNonce();
 

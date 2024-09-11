@@ -45,7 +45,7 @@ class AwpClient
             $additionalHeaders,
         );
 
-        $response = wp_remote_request($this->apiHost.$this->getBaseUri().ltrim($url, '/'), [
+        $response = wp_remote_request($this->apiHost . $this->getBaseUri() . ltrim($url, '/'), [
             'method' => $method,
             'headers' => $headers,
             'body' => $body,
@@ -72,13 +72,15 @@ class AwpClient
         return ! is_null($this->token);
     }
 
-    public function json(string $method, string $url, $body = null): ?array
+    public function json(string $method, string $url, array $headers = [], array $body = null): ?array
     {
         try {
             $res = $this->requestRaw($method, $url, [], $body);
 
             return json_decode($res['body'], true);
         } catch (\Exception $e) {
+            error_log($e->getMessage());
+
             return null;
         }
     }

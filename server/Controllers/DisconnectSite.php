@@ -8,7 +8,7 @@ class DisconnectSite extends BaseController
 {
     protected string $permission = UserAuth::CAP_MANAGE_AGENTWP_CONNECTION;
 
-    public function disconnect_site(): void
+    public function __invoke(): void
     {
         $this->verifyNonce();
         $this->main->settings->disconnectSite($this->main);

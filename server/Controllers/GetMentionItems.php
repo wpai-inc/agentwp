@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Get reference items controller.
  * 
@@ -14,7 +15,7 @@ class GetMentionItems extends BaseController
 {
     protected string $method = 'GET';
 
-    public function reference_items()
+    public function __invoke()
     {
         $this->verifyNonce();
         if (! $this->main->siteId()) {
@@ -23,7 +24,7 @@ class GetMentionItems extends BaseController
 
         $keyword = $this->request->query->get('keyword');
         $keyword = sanitize_text_field($keyword);
-        $keyword = str_ireplace( '@', '', $keyword );
+        $keyword = str_ireplace('@', '', $keyword);
 
         $post_types = get_post_types(['public' => true]);
         unset($post_types['attachment']);
@@ -63,7 +64,7 @@ class GetMentionItems extends BaseController
         ];
 
         if (!empty($keyword)) {
-            $args['search'] = '*' . esc_attr( $keyword ) . '*';
+            $args['search'] = '*' . esc_attr($keyword) . '*';
             $args['search_columns'] = ['user_login', 'user_nicename', 'user_email'];
             $args['meta_query'] = [
                 'relation' => 'OR',

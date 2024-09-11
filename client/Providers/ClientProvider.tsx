@@ -4,14 +4,21 @@ import { usePage } from '@/Providers/PageProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { HistoryData } from '@/Types/types';
 import type { Setting } from '@/Page/Admin/Chat/Settings/ChatSettings';
+import type { DocIndexStatusData } from '@/Types/types';
 import { useNotifications } from './NotificationProvider';
 import { optimistic, OptimisticFn } from '@/lib/utils';
 import { UserRequestType } from './UserRequestsProvider';
 import { useAdminRoute } from './AdminRouteProvider';
 
+type DocIndexStatusResponse = {
+  lastIndexedAt: string | null;
+  statuses: DocIndexStatusData[];
+};
+
 type ClientContextType = {
   client: AwpClient;
   getHistory: ( since?: string ) => Promise< HistoryResponseType >;
+  getDocIndexStatus: () => Promise< DocIndexStatusResponse >;
   getConversation: ( since?: string ) => Promise< UserRequestType[] >;
   getSuggestions: ( pageCtx?: any ) => Promise< [] >;
   clearConversation: () => Promise< [] >;
@@ -61,6 +68,13 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
   async function getHistory( since?: string ): Promise< HistoryResponseType > {
     return tryRequest( async () => {
       const response = await client.getHistory( since );
+      return response.data;
+    } );
+  }
+
+  async function getDocIndexStatus(): Promise< DocIndexStatusResponse > {
+    return tryRequest( async () => {
+      const response = await client.getDocIndexStatus();
       return response.data;
     } );
   }
@@ -150,6 +164,7 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
       value={ {
         client,
         getHistory,
+        getDocIndexStatus,
         getConversation,
         getSuggestions,
         clearConversation,

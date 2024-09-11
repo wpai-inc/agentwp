@@ -1,51 +1,27 @@
 import ChatHeading from '../../Partials/ChatHeading';
 import IconLink from '@material-design-icons/svg/outlined/open_in_new.svg?react';
+import type { SearchResult } from '@/Providers/SearchProvider';
 
-type SearchResult = {
-  title: string;
-  excerpt?: string;
-  url: string;
-  author?: string;
-  date: string;
-  thumbnail?: string;
-};
-
-export default function SearchResults() {
-  const results: SearchResult[] = [
-    {
-      title: 'How to Create a Custom WordPress Theme',
-      excerpt: 'Learn how to create a custom WordPress theme from scratch.',
-      url: 'https://example.com/how-to-create-a-custom-wordpress-theme',
-      date: 'March 15, 2023',
-      author: 'John Doe',
-    },
-    {
-      title: 'How to Create a Custom WordPress Theme',
-      excerpt:
-        'Learn how to create a custom WordPress theme from scratch. This is a very long excerpt that should be truncated.',
-      url: 'https://example.com/how-to-create-a-custom-wordpress-theme',
-      date: 'March 15, 2023',
-      thumbnail: 'https://via.placeholder.com/150x150',
-    },
-    {
-      title: 'How to Create a Custom WordPress Theme',
-      excerpt: 'Learn how to create a custom WordPress theme from scratch.',
-      url: 'https://example.com/how-to-create-a-custom-wordpress-theme',
-      date: 'March 15, 2023',
-    },
-  ];
-
+export default function SearchResults( {
+  results,
+  total,
+}: {
+  results: SearchResult[];
+  total: number;
+} ) {
   return (
     <div className="space-y-2 -mx-4">
       <ChatHeading
         className="px-4"
         explanation="Displays a list of relevant content items from your WordPress site that match your search query.">
-        Results (30)
+        Results ({ total })
       </ChatHeading>
       <div className="divide-y divide-brand-gray border-b border-brand-gray">
-        { results.map( ( result, index ) => (
-          <Result key={ index } { ...result } />
-        ) ) }
+        { results.length > 0 ? (
+          results.map( ( result, index ) => <Result key={ index } { ...result } /> )
+        ) : (
+          <NoResults />
+        ) }
       </div>
     </div>
   );
@@ -76,4 +52,8 @@ function Result( { title, date, excerpt, thumbnail, url, author }: SearchResult 
       </span>
     </a>
   );
+}
+
+function NoResults() {
+  return <div className="p-4 text-center text-brand-gray-70">No results found.</div>;
 }

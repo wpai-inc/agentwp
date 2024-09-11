@@ -4,10 +4,9 @@ namespace WpAi\AgentWp\Controllers;
 
 class ValidateWebsite extends BaseController
 {
-
     protected string $permission = 'hasValidVerificationKey';
 
-    public function validate_website(): void
+    public function __invoke(): void
     {
         $key = sanitize_text_field($_REQUEST['verification_key']);
         if (

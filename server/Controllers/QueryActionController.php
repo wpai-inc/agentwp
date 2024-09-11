@@ -4,7 +4,7 @@ namespace WpAi\AgentWp\Controllers;
 
 class QueryActionController extends BaseController
 {
-    public function query(): void
+    public function __invoke(): void
     {
         $this->hasAccessToDatabase();
 
@@ -12,6 +12,11 @@ class QueryActionController extends BaseController
 
         // unescape slashes
         $sql = stripslashes($this->request->query->get('sql'));
+
+        // validate query and only accept SELECT queries
+        if (preg_match('/\b(INSERT|UPDATE|DELETE)\b/i', $sql)) {
+            $this->error('Only SELECT queries are allowed. The query was: ' . $sql, 422);
+        }
 
         try {
             $args = $this->request->query->all('args');
@@ -41,10 +46,38 @@ class QueryActionController extends BaseController
 
         // List of disallowed keywords
         $disallowedKeywords = [
-            'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REPLACE', 'DROP', 'ALTER', 'CREATE',
-            'GRANT', 'REVOKE', 'LOCK', 'UNLOCK', 'LOAD DATA', 'MERGE', 'SET', 'CALL', 'EXECUTE',
-            'DO', 'HANDLER', 'RENAME', 'ANALYZE', 'OPTIMIZE', 'REPAIR', 'BACKUP', 'RESTORE',
-            'PURGE', 'RESET', 'START', 'STOP', 'COMMIT', 'ROLLBACK', 'SAVEPOINT',
+            'INSERT',
+            'UPDATE',
+            'DELETE',
+            'TRUNCATE',
+            'REPLACE',
+            'DROP',
+            'ALTER',
+            'CREATE',
+            'GRANT',
+            'REVOKE',
+            'LOCK',
+            'UNLOCK',
+            'LOAD DATA',
+            'MERGE',
+            'SET',
+            'CALL',
+            'EXECUTE',
+            'DO',
+            'HANDLER',
+            'RENAME',
+            'ANALYZE',
+            'OPTIMIZE',
+            'REPAIR',
+            'BACKUP',
+            'RESTORE',
+            'PURGE',
+            'RESET',
+            'START',
+            'STOP',
+            'COMMIT',
+            'ROLLBACK',
+            'SAVEPOINT',
         ];
 
         // Check for disallowed keywords

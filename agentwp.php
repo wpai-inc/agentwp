@@ -16,7 +16,7 @@
  */
 defined('ABSPATH') || exit;
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
@@ -48,6 +48,7 @@ function agentwp_bootstrap(): void
         \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
         \WpAi\AgentWp\Registry\IndexSiteData::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,
+        \WpAi\AgentWp\Registry\IndexSiteDocs::class,
         \WpAi\AgentWp\Registry\ErrorIndexer::class,
         \WpAi\AgentWp\Registry\Router::class,
         \WpAi\AgentWp\Registry\WpUser::class,

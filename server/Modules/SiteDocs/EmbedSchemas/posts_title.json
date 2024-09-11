@@ -1,0 +1,16 @@
+{
+    "name": "posts_title",
+    "join": "",
+    "values": [
+        {
+            "type": "db_query",
+            "result": {
+                "type": "string"
+            },
+            "location": {
+                "table": "posts",
+                "column": "post_title"
+            }
+        }
+    ]
+}
