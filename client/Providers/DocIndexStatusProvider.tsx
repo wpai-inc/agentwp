@@ -74,7 +74,7 @@ export function DocIndexStatusProvider( { children }: { children: React.ReactNod
     tryRequest( 'post', 'index_site_docs' );
   }
 
-  useEffect( fetchDocIndexStatus, [] );
+  // useEffect( fetchDocIndexStatus, [] );
 
   useEffect( () => {
     const interval = setInterval( fetchDocIndexStatus, 3000 );
