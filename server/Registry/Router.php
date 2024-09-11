@@ -18,7 +18,6 @@ use WpAi\AgentWp\Controllers\SaveConnection;
 use WpAi\AgentWp\Controllers\SiteDataController;
 use WpAi\AgentWp\Controllers\TestResponse;
 use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
-use WpAi\AgentWp\Controllers\UpdateSiteSettings;
 use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
 use WpAi\AgentWp\Controllers\ValidateWebsite;
 use WpAi\AgentWp\Main;
@@ -45,7 +44,6 @@ class Router implements Registrable
         'code_snippet_plugin' => [GetCodeSnippetPlugin::class, 'code_snippet_plugin'],
         'add_snippet' => [AddCodeSnippet::class, 'add_snippet'],
         'mention_items' => [GetMentionItems::class, 'reference_items'],
-        'update_site_settings' => [UpdateSiteSettings::class, 'update_site_settings'],
     ];
 
     private Main $main;

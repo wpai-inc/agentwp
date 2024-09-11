@@ -60,7 +60,7 @@ class Installer implements Registrable
 
     public function cleanup_plugin_data()
     {
-        $key = $this->main->settings::SLUG;
+        $key = Main::SLUG;
         $this->main->settings->delete('general_settings');
         delete_option($key.'_summary');
         delete_option($key.'_site_data');

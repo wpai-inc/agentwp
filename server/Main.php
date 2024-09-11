@@ -111,7 +111,7 @@ class Main
 
     public function accountSettings(): AccountSettings
     {
-        return new AccountSettings($this->client(), $this);
+        return new AccountSettings($this->client());
     }
 
     private function runtimeApiHost()

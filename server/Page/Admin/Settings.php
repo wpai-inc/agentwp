@@ -18,17 +18,9 @@ class Settings extends ReactClient
         \WpAi\AgentWp\Client\Locations\Settings::class,
     ];
 
-    private \WpAi\AgentWp\Settings $settings;
-
-    private UserAuth $user;
-
     public function __construct(Main $main)
     {
         parent::__construct($main);
-
-        $this->settings = new \WpAi\AgentWp\Settings;
-        $this->user = new UserAuth;
-
         add_action('current_screen', [$this, 'maybe_get_token']);
     }
 
@@ -79,17 +71,19 @@ class Settings extends ReactClient
     public function maybe_get_token(): void
     {
         $screen = get_current_screen();
+
         if ($screen->id === 'toplevel_page_agentwp-admin-settings' && isset($_GET['code'])) {
             $code = sanitize_text_field($_GET['code']);
             $response_raw = wp_remote_post($this->main->apiHost().'/oauth/token', [
                 'body' => [
                     'grant_type' => 'authorization_code',
-                    'client_id' => $this->settings->client_id,
-                    'client_secret' => $this->settings->client_secret,
+                    'client_id' => $this->main->settings->client_id,
+                    'client_secret' => $this->main->settings->client_secret,
                     'redirect_uri' => $this->main->settingsPage,
                     'code' => $code,
                 ],
             ]);
+
             $response = json_decode($response_raw['body'], true);
 
             $response['expires_in'] = $response['expires_in'] * 1000;
@@ -98,7 +92,7 @@ class Settings extends ReactClient
             $current_user->add_cap(UserAuth::CAP_MANAGE_AGENTWP_CONNECTION);
 
             if ($response['access_token']) {
-                $this->settings->setAccessToken($response);
+                $this->main->settings->setAccessToken($response);
             }
             wp_redirect(admin_url('admin.php?page=agentwp-admin-settings'));
         }
