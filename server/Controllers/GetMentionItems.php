@@ -2,8 +2,6 @@
 
 /**
  * Get reference items controller.
- * 
- * @package AgentWP
  */
 
 namespace WpAi\AgentWp\Controllers;
@@ -17,7 +15,6 @@ class GetMentionItems extends BaseController
 
     public function __invoke()
     {
-        $this->verifyNonce();
         if (! $this->main->siteId()) {
             $this->error('You do not have permission to perform this action');
         }
@@ -49,7 +46,7 @@ class GetMentionItems extends BaseController
             }
 
             $type = get_post_type_object($post_type);
-            if (!empty($posts)) {
+            if (! empty($posts)) {
                 $data[$post_type] = [
                     'title' => $type->labels->name,
                     'items' => $posts,
@@ -63,8 +60,8 @@ class GetMentionItems extends BaseController
             'order' => 'DESC',
         ];
 
-        if (!empty($keyword)) {
-            $args['search'] = '*' . esc_attr($keyword) . '*';
+        if (! empty($keyword)) {
+            $args['search'] = '*'.esc_attr($keyword).'*';
             $args['search_columns'] = ['user_login', 'user_nicename', 'user_email'];
             $args['meta_query'] = [
                 'relation' => 'OR',
@@ -93,7 +90,7 @@ class GetMentionItems extends BaseController
             ];
         }
 
-        if (!empty($usrs)) {
+        if (! empty($usrs)) {
             $data['users'] = [
                 'title' => 'Users',
                 'items' => $usrs,

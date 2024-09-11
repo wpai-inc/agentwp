@@ -12,7 +12,6 @@ class MakeOnboardingAsCompleted extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
         $this->main->settings->set('onboarding_completed', true);
         $this->respond();
     }

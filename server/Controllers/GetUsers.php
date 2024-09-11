@@ -8,7 +8,6 @@ class GetUsers extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
         $search_term = '';
         if (! empty($_GET['search'])) {
             $search_term = sanitize_text_field($_GET['search']);

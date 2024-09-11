@@ -14,7 +14,6 @@ class UpdateGeneralSettings extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
         $data = $this->getContent();
         $general_settings = $this->main->settings->updateGeneralSettings($data);
         $this->respond($general_settings);

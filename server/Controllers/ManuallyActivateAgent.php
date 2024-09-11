@@ -10,8 +10,6 @@ class ManuallyActivateAgent extends BaseController
 
     public function __invoke()
     {
-        $this->verifyNonce();
-
         $data = json_decode(file_get_contents('php://input'), true);
         $data = json_decode(base64_decode($data['apiKey']), true);
 

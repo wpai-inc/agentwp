@@ -27,7 +27,15 @@ class Router implements Registrable
     const REST_ROUTE_ENDPOINT = 'agentwp/v1';
 
     protected array $routes = [
-        'test_route' => TestResponse::class,
+        'test_route' => [
+            TestResponse::class,
+            'successfulResponse',
+        ],
+        'test_stream_forward' => [
+            TestResponse::class,
+            'stream',
+        ],
+        'test_auth' => \WpAi\AgentWp\Controllers\TestAuthResponse::class,
         'agentwp_users' => GetUsers::class,
         'site_data' => SiteDataController::class,
         'update_user' => UpdateUserCapabilities::class,
@@ -71,7 +79,7 @@ class Router implements Registrable
                 $callback = [$controller, $callback[1]];
             }
 
-            register_rest_route(self::REST_ROUTE_ENDPOINT, '/' . $route, [
+            register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
                 'methods' => $controller->method(),
                 'callback' => $callback,
                 'permission_callback' => [$controller, 'check_permission'],

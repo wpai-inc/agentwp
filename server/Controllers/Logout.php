@@ -11,8 +11,6 @@ class Logout extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
-
         (new RevokeApiToken($this->main))->revoke();
         $this->main->settings->delete(['client_secret', 'token', 'verification_key']);
         $this->respond();

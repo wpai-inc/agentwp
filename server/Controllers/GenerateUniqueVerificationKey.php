@@ -8,8 +8,6 @@ class GenerateUniqueVerificationKey extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
-
         $key = uniqid('agentwp-', true);
         $this->main->settings->set('verification_key', $key);
         $this->respond([

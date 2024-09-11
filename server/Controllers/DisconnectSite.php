@@ -10,7 +10,6 @@ class DisconnectSite extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
         $this->main->settings->disconnectSite($this->main);
         $this->respond();
     }

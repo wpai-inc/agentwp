@@ -16,7 +16,6 @@ class GetCodeSnippetPlugin extends BaseController
 
     public function __invoke()
     {
-        $this->verifyNonce();
         if (! $this->main->siteId()) {
             $this->error('You do not have permission to perform this action');
         }

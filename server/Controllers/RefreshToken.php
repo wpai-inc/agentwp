@@ -11,8 +11,6 @@ class RefreshToken extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
-
         $new_api_token = (new RefreshApiToken($this->main))->refresh();
 
         $this->respond(['api_token' => $new_api_token]);

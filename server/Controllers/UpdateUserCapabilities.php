@@ -12,8 +12,6 @@ class UpdateUserCapabilities extends BaseController
 
     public function __invoke(): void
     {
-        $this->verifyNonce();
-
         $data = json_decode(file_get_contents('php://input'), true);
         $user_id = sanitize_text_field($data['user']);
         $user = new \WP_User($user_id);

@@ -9,6 +9,12 @@ class BaseController
 {
     protected string $method = 'GET';
 
+    /**
+     * Always use a nonce unless there's a good reason
+     * not too. Dangerous option. Use with caution.
+     */
+    protected bool $dangerNoNonce = false;
+
     protected string $permission = 'all';
 
     protected Request $request;
@@ -28,6 +34,10 @@ class BaseController
 
     public function check_permission(): bool
     {
+        if (! $this->dangerNoNonce) {
+            $this->verifyNonce();
+        }
+
         if ($this->permission === 'all') {
             return true;
         }
@@ -66,17 +76,18 @@ class BaseController
 
     protected function verifyNonce(): void
     {
-        if (!wp_verify_nonce($_GET['nonce'], $this->main::SLUG)) {
+        if (! wp_verify_nonce($_GET['nonce'], $this->main::SLUG)) {
             $this->error('Invalid nonce', 403);
         }
     }
 
-    protected function getContent():array
+    protected function getContent(): array
     {
         $data = json_decode($this->request->getContent(), true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             $this->error('Invalid JSON data', 400);
         }
+
         return $data;
     }
 }
