@@ -1,6 +1,6 @@
 <?php
 
-namespace WpAi\AgentWp\Controllers;
+namespace WpAi\AgentWp\Http\Controllers;
 
 use WpAi\AgentWp\Services\Cache;
 use WpAi\AgentWp\SiteData;
@@ -11,8 +11,8 @@ class SiteDataController extends BaseController
 
     protected string $method = 'GET';
 
-    protected array $middleware = [
-        'check_site_connection',
+    public array $middleware = [
+        \WpAi\AgentWp\Http\Middleware\CheckSiteConnection::class,
     ];
 
     public function __invoke()

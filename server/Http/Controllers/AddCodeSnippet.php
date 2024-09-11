@@ -3,7 +3,7 @@
  * Add code snippet to the site.
  */
 
-namespace WpAi\AgentWp\Controllers;
+namespace WpAi\AgentWp\Http\Controllers;
 
 use WpAi\AgentWp\Modules\CodeSnippets\SnippetHandler;
 
@@ -14,8 +14,8 @@ class AddCodeSnippet extends BaseController
 {
     protected string $method = 'POST';
 
-    protected array $middleware = [
-        'check_site_connection',
+    public array $middleware = [
+        \WpAi\AgentWp\Http\Middleware\CheckSiteConnection::class,
     ];
 
     public function __invoke()

@@ -1,6 +1,6 @@
 <?php
 
-namespace WpAi\AgentWp\Controllers;
+namespace WpAi\AgentWp\Http\Controllers;
 
 class QueryActionController extends BaseController
 {
@@ -15,7 +15,7 @@ class QueryActionController extends BaseController
 
         // validate query and only accept SELECT queries
         if (preg_match('/\b(INSERT|UPDATE|DELETE)\b/i', $sql)) {
-            $this->error('Only SELECT queries are allowed. The query was: ' . $sql, 422);
+            $this->error('Only SELECT queries are allowed. The query was: '.$sql, 422);
         }
 
         try {
@@ -104,7 +104,7 @@ class QueryActionController extends BaseController
     {
         // user should be authenticated and to be an admin
         $user = wp_get_current_user();
-        if ($user->ID === 0 || ! $user->has_cap('administrator') || !$this->main->auth->hasAccess()) {
+        if ($user->ID === 0 || ! $user->has_cap('administrator') || ! $this->main->auth->hasAccess()) {
             throw new \Exception('You do not have access to the database');
         }
 

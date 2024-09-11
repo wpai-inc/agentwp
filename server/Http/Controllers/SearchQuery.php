@@ -4,7 +4,7 @@
  * Add code snippet to the site.
  */
 
-namespace WpAi\AgentWp\Controllers;
+namespace WpAi\AgentWp\Http\Controllers;
 
 use WpAi\AgentWp\Services\HybridSearch;
 
@@ -15,8 +15,8 @@ class SearchQuery extends BaseController
 {
     protected string $method = 'GET';
 
-    protected array $middleware = [
-        'check_site_connection',
+    public array $middleware = [
+        \WpAi\AgentWp\Http\Middleware\CheckSiteConnection::class,
     ];
 
     public function __invoke()

@@ -1,6 +1,6 @@
 <?php
 
-namespace WpAi\AgentWp\Controllers;
+namespace WpAi\AgentWp\Http\Controllers;
 
 class ValidateWebsite extends BaseController
 {

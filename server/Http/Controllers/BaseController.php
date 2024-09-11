@@ -1,15 +1,18 @@
 <?php
 
-namespace WpAi\AgentWp\Controllers;
+namespace WpAi\AgentWp\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
 use WpAi\AgentWp\Main;
+use WpAi\AgentWp\Traits\HasHttpErrors;
 
 class BaseController
 {
+    use HasHttpErrors;
+
     protected string $method = 'GET';
 
-    protected array $middleware = [];
+    public array $middleware = [];
 
     /**
      * Always use a nonce unless there's a good reason
@@ -40,12 +43,6 @@ class BaseController
             $this->verifyNonce();
         }
 
-        foreach ($this->middleware as $middleware) {
-            if (method_exists($this, $middleware)) {
-                $this->$middleware();
-            }
-        }
-
         if ($this->permission === 'all') {
             return true;
         }
@@ -72,11 +69,6 @@ class BaseController
         wp_send_json_success($response);
     }
 
-    protected function error($response, $status_code = null): void
-    {
-        $this->respond($response, $status_code);
-    }
-
     protected function respondWithError(string $message, int $status_code): void
     {
         wp_send_json_error($message, $status_code);
@@ -97,12 +89,5 @@ class BaseController
         }
 
         return $data;
-    }
-
-    protected function check_site_connection(): void
-    {
-        if (! $this->main->siteId()) {
-            $this->error('You do not have permission to perform this action');
-        }
     }
 }
