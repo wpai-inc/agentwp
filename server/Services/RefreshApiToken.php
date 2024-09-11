@@ -8,7 +8,8 @@ class RefreshApiToken
 {
     private Main $main;
 
-    public function __construct(Main $main) {
+    public function __construct(Main $main)
+    {
         $this->main = $main;
     }
 
@@ -22,7 +23,7 @@ class RefreshApiToken
                 return null;
             }
             $response = $this->main->client()
-                ->request('POST', $this->main->apiHost().'/oauth/token', [], json_encode([
+                ->request('POST', 'oauth/token', [], json_encode([
                     'grant_type' => 'refresh_token',
                     'refresh_token' => $refresh_token,
                     'client_id' => $this->main->settings->client_id,
@@ -30,10 +31,9 @@ class RefreshApiToken
                     'scope' => 'site_connection',
                 ]));
 
-            $response_array = json_decode($response->getBody(), true);
-            $this->main->settings->setAccessToken($response_array);
+            $this->main->settings->setAccessToken($response);
 
-            return $response_array;
+            return $response;
         } catch (\Exception $e) {
             // Do nothing
             error_log($e->getMessage());

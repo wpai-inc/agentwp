@@ -27,9 +27,8 @@ class AwpClient
         $this->wp_user = wp_get_current_user();
     }
 
-    public function requestRaw(string $method, string $url, array $additionalHeaders = [], $body = null): array
+    public function requestRaw(string $method, string $url, array $additionalHeaders = [], $body = null)
     {
-
         $defaultHeaders = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -53,19 +52,12 @@ class AwpClient
         ]);
 
         return $response;
-
     }
 
-    public function request(string $method, string $url, array $additionalHeaders = [], $body = null)
+    public function request(string $method, string $url, array $additionalHeaders = [], $body = null): ?array
     {
         try {
             $response = $this->requestRaw($method, $url, $additionalHeaders, $body);
-            if ($response['response']['code'] > 200) {
-                // Disconnect the site
-                if ($this->disconnectCallback) {
-                    call_user_func($this->disconnectCallback);
-                }
-            }
 
             return $response;
         } catch (\Exception $e) {
@@ -126,23 +118,8 @@ class AwpClient
         return $this;
     }
 
-    private function buildClient(): Client
-    {
-        return new Client([
-            'timeout' => $this->timeout,
-            'base_uri' => $this->apiHost.$this->getBaseUri(),
-        ]);
-    }
-
     private function getBaseUri(): string
     {
         return '/api/';
-    }
-
-    public function setDisconnectCallback(callable $callback): self
-    {
-        $this->disconnectCallback = $callback;
-
-        return $this;
     }
 }

@@ -53,7 +53,6 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
   const { notify } = useNotifications();
   const client = new AwpClient( page.access_token ).setBaseUrl( page.api_host );
   const userProfileUrl = page.api_host + '/dashboard';
-  const { adminRequest } = useAdminRoute();
 
   function getStreamUrl( user_request_id: string ): string {
     return client.getStreamUrl( user_request_id );
@@ -95,8 +94,6 @@ export function ClientProvider( { children }: { children: React.ReactNode } ) {
       () => update( updatedSettings ),
       () => update( settings ),
     );
-
-    await adminRequest.post( '/update_site_settings', updatedSettings );
   }
 
   async function getSettings() {

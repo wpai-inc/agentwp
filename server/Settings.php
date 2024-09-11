@@ -18,8 +18,6 @@ class Settings
 {
     use GeneralSettingsData;
 
-    public const SLUG = 'agentwp';
-
     public $data;
 
     public array $general_settings = [
@@ -31,11 +29,16 @@ class Settings
 
     public function __construct()
     {
-        $data = get_option(self::SLUG.'_settings');
+        $data = get_option($this->getOptionKey());
         if (! is_array($data)) {
             $data = [];
         }
         $this->data = $data;
+    }
+
+    public function getOptionKey(): string
+    {
+        return Main::SLUG.'_settings';
     }
 
     public function __get($name)
@@ -45,7 +48,6 @@ class Settings
 
     public function set($key, $value = null): bool
     {
-
         if (is_array($key)) {
             $this->data = array_merge($this->data ?? [], $key);
         } elseif ($value === null) {
@@ -54,7 +56,7 @@ class Settings
             $this->data[$key] = $value;
         }
 
-        return update_option(self::SLUG.'_settings', $this->data);
+        return update_option($this->getOptionKey(), $this->data);
     }
 
     public function delete($key): bool
@@ -71,7 +73,7 @@ class Settings
             }
         }
 
-        return update_option(self::SLUG.'_settings', $this->data);
+        return update_option($this->getOptionKey(), $this->data);
     }
 
     public function has($key): bool
