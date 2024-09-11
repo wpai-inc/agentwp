@@ -15,9 +15,9 @@ class AccountSettings
     {
         $response = $this->client->getSiteSettings();
 
-        // if ($response['response']['code'] < 300) {
-        //     return $response['response']['response'];
-        // }
+        if ($response['response']['code'] < 300) {
+            return json_decode($response['body']);
+        }
 
         return [];
     }
