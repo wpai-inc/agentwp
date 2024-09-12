@@ -59,70 +59,75 @@ export default class AwpClient {
   }
 
   getStreamUrl( userRequestId: string ) {
-    return `${ this.baseUrl }/api/request/${ userRequestId }/stream`;
+    return `${ this.baseUrl }/api/v1/request/${ userRequestId }/stream`;
   }
 
   async getConversation( since?: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/convo`, {
+    return this.request( 'GET', `${ this.baseUrl }/api/v1/convo`, {
       since,
     } );
   }
 
   async getSuggestions( pageCtx?: any ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/convo/suggestions`, {
+    return this.request( 'POST', `${ this.baseUrl }/api/v1/convo/suggestions`, {
       context: pageCtx,
     } );
   }
 
   async clearConversation(): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/convo/clear` );
+    return this.request( 'POST', `${ this.baseUrl }/api/v1/convo/clear` );
   }
 
   async unclearConversation( since: string ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/convo/unclear`, {}, { since } );
+    return this.request( 'POST', `${ this.baseUrl }/api/v1/convo/unclear`, {}, { since } );
   }
 
   async getHistory( since?: string ): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/convo/history`, {
+    return this.request( 'GET', `${ this.baseUrl }/api/v1/convo/history`, {
       since,
     } );
   }
 
   async getDocIndexStatus(): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/docs/status/` );
+    return this.request( 'GET', `${ this.baseUrl }/api/v1/docs/status/` );
   }
 
   async storeAgentResult( actionId: string, data: object ): Promise< AxiosResponse > {
     return this.request(
       'POST',
-      `${ this.baseUrl }/api/action/${ actionId }/result`,
+      `${ this.baseUrl }/api/v1/action/${ actionId }/result`,
       {},
       { result: data },
     );
   }
 
   async storeAgentError( actionId: string, data: { message: string } ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/action/${ actionId }/error`, {}, data );
+    return this.request( 'POST', `${ this.baseUrl }/api/v1/action/${ actionId }/error`, {}, data );
   }
 
   async abortUserRequest( userRequestId: string ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/request/${ userRequestId }/abort`, {}, {} );
+    return this.request(
+      'POST',
+      `${ this.baseUrl }/api/v1/request/${ userRequestId }/abort`,
+      {},
+      {},
+    );
   }
 
   async getSettings(): Promise< AxiosResponse > {
-    return this.request( 'GET', `${ this.baseUrl }/api/site/settings` );
+    return this.request( 'GET', `${ this.baseUrl }/api/v1/site/settings` );
   }
 
   async updateSetting( name: string, value: any ): Promise< AxiosResponse > {
-    return this.request( 'PUT', `${ this.baseUrl }/api/site/settings`, {}, { name, value } );
+    return this.request( 'PUT', `${ this.baseUrl }/api/v1/site/settings`, {}, { name, value } );
   }
 
   async storeConversation( data: object ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/convo`, {}, data );
+    return this.request( 'POST', `${ this.baseUrl }/api/v1/convo`, {}, data );
   }
 
   async deleteConversation( convoId: number ): Promise< AxiosResponse > {
-    return this.request( 'DELETE', `${ this.baseUrl }/api/convo/${ convoId }` );
+    return this.request( 'DELETE', `${ this.baseUrl }/api/v1/convo/${ convoId }` );
   }
 
   async refreshToken(): Promise< AxiosResponse > {
@@ -130,17 +135,17 @@ export default class AwpClient {
   }
 
   async postEscalation( escalationId: string ): Promise< AxiosResponse > {
-    return this.request( 'POST', `${ this.baseUrl }/api/escalation/${ escalationId }` );
+    return this.request( 'POST', `${ this.baseUrl }/api/v1/escalation/${ escalationId }` );
   }
 
   async removeUserRequest( userRequestId: string ): Promise< AxiosResponse > {
-    return this.request( 'DELETE', `${ this.baseUrl }/api/request/${ userRequestId }` );
+    return this.request( 'DELETE', `${ this.baseUrl }/api/v1/request/${ userRequestId }` );
   }
 
   async feedback( userRequestId: string, data: FeedbackType ): Promise< AxiosResponse > {
     return this.request(
       'POST',
-      `${ this.baseUrl }/api/request/${ userRequestId }/feedback`,
+      `${ this.baseUrl }/api/v1/request/${ userRequestId }/feedback`,
       {},
       data,
     );

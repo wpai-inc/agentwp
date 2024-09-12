@@ -3,8 +3,8 @@
 namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Factories\ClientFactory;
+use WpAi\AgentWp\Http\WpAwpClient;
 use WpAi\AgentWp\Services\AccountSettings;
-use WpAi\AgentWp\Services\AwpClient;
 
 /**
  * Main plugin class
@@ -16,6 +16,8 @@ use WpAi\AgentWp\Services\AwpClient;
  */
 class Main
 {
+    private static $instance = null;
+
     const SLUG = 'agentwp';
 
     const PLUGIN_VERSION = '0.1.0';
@@ -47,6 +49,18 @@ class Main
         $this->settingsPage = admin_url('admin.php?page=agentwp-admin-settings');
         $this->registerSchedules();
         $this->registerAdminStyles();
+    }
+
+    /**
+     * Singleton Accessor
+     */
+    public static function getInstance($file = null)
+    {
+        if (self::$instance === null && $file !== null) {
+            self::$instance = new self($file);
+        }
+
+        return self::$instance;
     }
 
     public function buildPath(): string
@@ -104,9 +118,9 @@ class Main
         return Helper::config('AGENT_WP_CLIENT_BASE_URL') ?? $this->runtimeApiHost();
     }
 
-    public function client($checkUserAccessRights = true): AwpClient
+    public function client(): WpAwpClient
     {
-        return ClientFactory::make($this, $checkUserAccessRights);
+        return new WpAwpClient(ClientFactory::make($this));
     }
 
     public function accountSettings(): AccountSettings

@@ -16,7 +16,7 @@
  */
 defined('ABSPATH') || exit;
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
@@ -39,9 +39,10 @@ add_action('plugins_loaded', 'agentwp_bootstrap');
  */
 function agentwp_bootstrap(): void
 {
-    (new \WpAi\AgentWp\ProviderRegistry(
-        new \WpAi\AgentWp\Main(__FILE__)
-    ))->register([
+    $main = \WpAi\AgentWp\Main::getInstance(__FILE__);
+    $registry = (new \WpAi\AgentWp\ProviderRegistry($main));
+
+    $registry->register([
         \WpAi\AgentWp\Installer::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
