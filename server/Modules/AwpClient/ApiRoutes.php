@@ -41,7 +41,7 @@ class ApiRoutes
             }
         }
 
-        throw new \Exception("Route $name not found");
+        throw new RouteDoesNotExistException($name);
     }
 
     public function hasRoute(string $name): bool

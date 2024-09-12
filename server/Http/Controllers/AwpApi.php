@@ -10,16 +10,13 @@ class AwpApi extends BaseController
 
     public function __invoke()
     {
-        $data = json_decode($this->request->getContent());
-        $endpoint = $data->endpoint;
+        $data = json_decode($this->request->getContent(), true);
+        $endpoint = $data['endpoint'];
+        unset($data['endpoint']);
+        $params = $data;
+        return $this->main->client()->$endpoint($params);
 
-        try {
-            print_r($endpoint);
-            exit();
-            $response = $this->main->client()->getClient()->$endpoint();
-            echo $response->getBody()->getContents();
-        } catch (\Exception $e) {
-            $this->respondWithError($e->getMessage(), 500);
-        }
+        // WP Rest Response
+        // $this->respond($response); 
     }
 }

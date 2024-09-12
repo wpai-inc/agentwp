@@ -2,7 +2,9 @@
 
 namespace WpAi\AgentWp\Http;
 
+use GuzzleHttp\Exception\ClientException;
 use WpAi\AgentWp\Modules\AwpClient\Client;
+use WpAi\AgentWp\Modules\AwpClient\RouteDoesNotExistException;
 
 /**
  * Wrapper around the AwpClient that integrates
@@ -19,12 +21,21 @@ class WpAwpClient
 
     public function __call(string $name, array $arguments)
     {
+        $params = $arguments[0];
         try {
-            $response = $this->client->$name(...$arguments);
-
+            $response = $this->client->$name($params);
             return json_decode($response->getBody()->getContents(), true);
+        } catch (ClientException $e) {
+            $error = json_decode($e->getResponse()->getBody()->getContents());
+            return new \WP_Error(
+                $e->getCode(),
+                $error->message
+            );
         } catch (\Exception $e) {
-            return new \WP_Error($e->getMessage());
+            return new \WP_Error(
+                'api_request_error',
+                $e->getMessage()
+            );
         }
     }
 

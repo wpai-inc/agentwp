@@ -32,18 +32,16 @@ class Client
     /**
      * Calls the API route by its defined name in ApiRoutes.
      */
-    public function __call(string $name, array $arguments): Response
+    public function __call(string $name, array $args): Response
     {
+        $params = $args[0];
         $route = $this->routes->getRoute($name);
         $method = $route->getMethod();
-
-        $params = array_merge([
-            'site' => $this->siteId,
-        ], ...$arguments);
-
         $url = $route->getUrl($params);
 
-        return $this->getClient()->$method($url, $arguments);
+        return $this->getClient()->request($method, $url, [
+            'json' => $params,
+        ]);
     }
 
     public function setToken(?string $token): self
@@ -95,6 +93,10 @@ class Client
 
         if ($this->wpUser) {
             $defaults['X-Wp-User-Id'] = $this->wpUser->ID;
+        }
+
+        if ($this->siteId) {
+            $defaults['X-Wp-Site-Id'] = $this->siteId;
         }
 
         return array_merge($defaults, $this->getAuthHeader());

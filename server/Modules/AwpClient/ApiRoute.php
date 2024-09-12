@@ -33,15 +33,16 @@ class ApiRoute
     private function hydrateParams(string $url, array $params): string
     {
         foreach ($params as $key => $value) {
-            $url = str_replace('{' . $key . '}', $value, $url);
+            if (is_string($value)) {
+                $url = str_replace('{' . $key . '}', $value, $url);
+            }
         }
 
         $missingParams = [];
         preg_match_all('/\{([a-zA-Z1-9]+)\}/', $url, $missingParams);
 
         if (! empty($missingParams[1])) {
-            $params = implode(', ', $missingParams[1]);
-            throw new \Error("You are missing the following params in your request: $params");
+            throw new RouteParamsMissingException($missingParams[1]);
         }
 
         return $url;

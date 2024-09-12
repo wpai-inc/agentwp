@@ -42,7 +42,7 @@
     },
     {
         "key": "api.site.health",
-        "uri": "api\/v1\/sites\/{site}\/health",
+        "uri": "api\/v1\/site\/health",
         "methods": [
             "POST"
         ],
@@ -50,7 +50,7 @@
     },
     {
         "key": "api.site.summarize",
-        "uri": "api\/v1\/sites\/{site}\/summarize",
+        "uri": "api\/v1\/site\/summarize",
         "methods": [
             "POST"
         ],
@@ -58,7 +58,7 @@
     },
     {
         "key": "api.site.errors.store",
-        "uri": "api\/v1\/sites\/{site}\/errors",
+        "uri": "api\/v1\/site\/errors",
         "methods": [
             "POST"
         ],
@@ -66,7 +66,7 @@
     },
     {
         "key": "api.site.docs.store",
-        "uri": "api\/v1\/sites\/{site}\/docs",
+        "uri": "api\/v1\/site\/docs",
         "methods": [
             "POST"
         ],
@@ -74,7 +74,7 @@
     },
     {
         "key": "api.site.docs.index.status",
-        "uri": "api\/v1\/sites\/{site}\/docs\/status",
+        "uri": "api\/v1\/site\/docs\/status",
         "methods": [
             "GET",
             "HEAD"
@@ -83,7 +83,7 @@
     },
     {
         "key": "api.site.docs.status",
-        "uri": "api\/v1\/sites\/{site}\/docs\/status\/{status}",
+        "uri": "api\/v1\/site\/docs\/status\/{status}",
         "methods": [
             "GET",
             "HEAD"
@@ -92,7 +92,7 @@
     },
     {
         "key": "api.site.setting.save",
-        "uri": "api\/v1\/sites\/{site}\/settings",
+        "uri": "api\/v1\/site\/settings",
         "methods": [
             "PUT"
         ],
@@ -100,7 +100,7 @@
     },
     {
         "key": "api.site.setting.all",
-        "uri": "api\/v1\/sites\/{site}\/settings",
+        "uri": "api\/v1\/site\/settings",
         "methods": [
             "GET",
             "HEAD"
@@ -109,7 +109,7 @@
     },
     {
         "key": "api.site.disconnect",
-        "uri": "api\/v1\/sites\/{site}\/disconnect",
+        "uri": "api\/v1\/site\/disconnect",
         "methods": [
             "POST"
         ],
@@ -117,7 +117,7 @@
     },
     {
         "key": "api.site.suggestions",
-        "uri": "api\/v1\/sites\/{site}\/suggestions",
+        "uri": "api\/v1\/site\/suggestions",
         "methods": [
             "POST"
         ],
@@ -125,7 +125,7 @@
     },
     {
         "key": "api.site.request.escalate",
-        "uri": "api\/v1\/sites\/{site}\/escalation\/{escalation}",
+        "uri": "api\/v1\/site\/escalation\/{escalation}",
         "methods": [
             "POST"
         ],
