@@ -4,28 +4,28 @@ import axios from 'axios';
 import { useNotifications } from '@/Providers/NotificationProvider';
 import { optimistic } from '@/lib/utils';
 
-export const AdminRouteContext = createContext< any | undefined >( undefined );
+export const RestRequestContext = createContext< any | undefined >( undefined );
 
-export function useAdminRoute() {
-  const client = useContext( AdminRouteContext );
+export function useRestRequest() {
+  const client = useContext( RestRequestContext );
   if ( client === undefined ) {
-    throw new Error( 'useAdminRoute must be used within a AdminRouteProvider' );
+    throw new Error( 'useRestRequest must be used within a RestRequestProvider' );
   }
   return client;
 }
 
-export function AdminRouteProvider( { children }: { children: React.ReactNode } ) {
+export function RestRequestProvider( { children }: { children: React.ReactNode } ) {
   const { page } = usePage();
   const { notify } = useNotifications();
 
-  const adminRequest = axios.create( {
+  const restReq = axios.create( {
     baseURL: page.rest_route + page.rest_endpoint + '/',
     headers: {
       'X-WP-Nonce': page.wp_rest_nonce,
     },
   } );
 
-  adminRequest.interceptors.request.use( config => {
+  restReq.interceptors.request.use( config => {
     const nonce = page?.nonce;
     if ( nonce ) {
       config.params = {
@@ -45,8 +45,8 @@ export function AdminRouteProvider( { children }: { children: React.ReactNode } 
   ) => {
     const req =
       method === 'post'
-        ? adminRequest.post( url, dataOrParams )
-        : adminRequest.get( url, { params: dataOrParams } );
+        ? restReq.post( url, dataOrParams )
+        : restReq.get( url, { params: dataOrParams } );
     onBefore && onBefore();
 
     const catchFailure = ( e: any ) => {
@@ -58,10 +58,14 @@ export function AdminRouteProvider( { children }: { children: React.ReactNode } 
     return optimistic( async () => req, onBefore, catchFailure );
   };
 
+  const apiRequest = async ( endpoint: string, dataOrParams?: any ) => {
+    return restReq.post( 'api', { ...dataOrParams, endpoint } );
+  };
+
   return (
-    <AdminRouteContext.Provider value={ { adminRequest, tryRequest } }>
+    <RestRequestContext.Provider value={ { restReq, tryRequest, apiRequest } }>
       { children }
-    </AdminRouteContext.Provider>
+    </RestRequestContext.Provider>
   );
 }
 

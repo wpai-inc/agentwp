@@ -5,7 +5,7 @@ import { useStream } from '@/Providers/StreamProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import ChatProvider from '@/Providers/ChatProvider';
 import { useClient } from '@/Providers/ClientProvider';
-import { useAdminRoute } from './AdminRouteProvider';
+import { useRestRequest } from './RestRequestProvider';
 import { expect, jest, describe, beforeEach, it } from '@jest/globals';
 import Chat from '@/Components/Chat/Chat';
 
@@ -13,7 +13,7 @@ import Chat from '@/Components/Chat/Chat';
 jest.mock( '@/Providers/StreamProvider' );
 jest.mock( '@/Providers/UserRequestsProvider' );
 jest.mock( '@/Providers/ClientProvider' );
-jest.mock( './AdminRouteProvider' );
+jest.mock( './RestRequestProvider' );
 
 describe( 'ActionListenerProvider', () => {
   beforeEach( () => {
@@ -43,7 +43,7 @@ describe( 'ActionListenerProvider', () => {
       },
     } );
 
-    // Mock the useAdminRoute hook
+    // Mock the useRestRequest hook
     const mockGet = jest.fn().mockResolvedValue( {
       status: 'success',
       data: {
@@ -51,7 +51,7 @@ describe( 'ActionListenerProvider', () => {
       },
     } as never );
 
-    ( useAdminRoute as jest.Mock ).mockReturnValue( {
+    ( useRestRequest as jest.Mock ).mockReturnValue( {
       get: mockGet,
     } );
 

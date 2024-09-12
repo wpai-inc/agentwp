@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import IconCopy from '@material-design-icons/svg/outlined/content_copy.svg?react';
 import useCopy from '@/Hooks/copy';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import WPCode from '@/assets/wpcode.png';
 import WPCodeBox from '@/assets/wpcodebox.png';
 import CodeSnippets from '@/assets/codesnippets.png';
@@ -11,7 +11,7 @@ import { useChat } from '@/Providers/ChatProvider';
 import { ChatNotice } from '@/Components/Chat/Notices/ChatNotice';
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest } = useRestRequest();
   const { copy, copied } = useCopy();
   const [ pluginIcon, setPluginIcon ] = useState< string | null >( null );
   const { addErrors } = useError();

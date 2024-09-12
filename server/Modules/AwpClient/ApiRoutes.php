@@ -6,12 +6,21 @@ class ApiRoutes
 {
     private array $routes;
 
+    public static function fromJson(string $json): self
+    {
+        $routes = json_decode($json, true);
+        return self::fromArray($routes);
+    }
+
     public static function fromArray(array $routes): self
     {
         $instance = new self;
-        foreach ($routes as $key => $route) {
-            $method = RequestMethod::from($route['method']);
-            $instance->addRoute(new ApiRoute($key, $route['url'], $method));
+        foreach ($routes as $route) {
+            $instance->addRoute(new ApiRoute(
+                $route['name'],
+                $route['uri'],
+                $route['methods'],
+            ));
         }
 
         return $instance;

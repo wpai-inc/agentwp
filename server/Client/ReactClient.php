@@ -30,7 +30,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     public function setLocation(): void
     {
         foreach ($this->locations as $location) {
-            if ( ! class_exists($location)) {
+            if (! class_exists($location)) {
                 throw new \Error('Location class does not exist: '.$location);
             }
             $setup = new $location($this);
@@ -40,9 +40,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         }
     }
 
-    public function registrations(): void
-    {
-    }
+    public function registrations(): void {}
 
     /**
      * Register the client and anything else.
@@ -113,7 +111,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                         'Warning: AgentWP will not work properly without JavaScript, please enable it.',
                         'agentwp'
                     );
-                    ?>
+            ?>
                 </div>
             </noscript>
             <div id="<?php echo $this->slug() ?>"></div>
@@ -130,16 +128,16 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                         'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
                         'agentwp'
                     );
-                    ?>
+            ?>
                 </p>
                 <div>
                     <strong>AgentsWP Managers:</strong>
                     <ul>
                         <?php
-                        foreach ($managers as $manager) {
-                            echo "<li>{$manager->data->display_name} ({$manager->data->user_email})</li>";
-                        }
-                        ?>
+                foreach ($managers as $manager) {
+                    echo "<li>{$manager->data->display_name} ({$manager->data->user_email})</li>";
+                }
+            ?>
                     </ul>
                 </div>
             </div>
@@ -155,7 +153,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         return array_merge([
             'page' => $this->slug(),
             'url' => $this->main->url(),
-            'notice_visible' => boolval(get_option('codewpai_notice_visible', 1))
+            'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),
         ],
             $this->globalData(),
             $this->data(),
@@ -193,17 +191,12 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'nonce' => wp_create_nonce(Main::nonce()),
             'wp_rest_nonce' => wp_create_nonce('wp_rest'),
             'is_admin' => $this->main->auth->isAdmin(),
-            'access_token' => $access_token,
-            'refresh_token' => $access_token ? $this->main->auth->getRefreshToken() : '',
             'onboarding_completed' => $access_token ? $this->main->settings->onboarding_completed : false,
             'agentwp_manager' => $access_token ? $this->main->auth->isManager() : false,
             'agentwp_users_manager' => $access_token ? $this->main->auth->canManageUsers() : false,
             'agentwp_access' => $access_token ? $this->main->auth->hasAccess() : false,
-            'site_id' => $this->main->siteId(),
-            'client_id' => $this->main->settings->client_id,
-            'api_host' => $this->main->apiClientHost(),
             'user' => $current_user,
-            'account' => $this->main->client()->json('GET', '/user'),
+            'account' => $this->main->client()->siteUser(),
             'account_settings' => $this->main->accountSettings()->get(),
             'general_settings' => $this->main->settings->getGeneralSettings(),
         ];

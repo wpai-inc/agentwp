@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import type { AgentWpUser } from '@/Types/types';
 import { User } from '@/Page/Admin/Settings/Partials/User';
 import SearchUser from '@/Page/Admin/Settings/Partials/SearchUser';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import UserList from '../Partials/UserList';
 import { Card } from '@/Components/Admin/Card';
 
 export default function UsersManagement() {
-  const { adminRequest, tryRequest } = useAdminRoute();
+  const { adminRequest, tryRequest } = useRestRequest();
 
   const [ users, setUsers ] = useState< AgentWpUser[] >( [] );
   const [ searching, setSearching ] = useState( false );

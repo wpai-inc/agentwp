@@ -3,11 +3,11 @@ import CheckedText from '@/Icon/CheckedText';
 import { useEffect, useState } from 'react';
 import UserAccess from '@/Page/Admin/Settings/Wizard/UserAccess';
 import { usePage } from '@/Providers/PageProvider';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function Wizard() {
   const { page } = usePage();
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest } = useRestRequest();
 
   const [ steps, setSteps ] = useState( [
     {

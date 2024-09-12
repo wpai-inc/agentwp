@@ -4,7 +4,7 @@ import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import { PageProvider } from '@/Providers/PageProvider';
 import type { PageData } from '@/Types/types';
 import { ClientProvider } from '@/Providers/ClientProvider';
-import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
+import { RestRequestProvider } from '@/Providers/RestRequestProvider';
 import LatestConvos from './Partials/LatestConvos';
 import '@/assets/styles/app.css';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
@@ -23,7 +23,7 @@ if ( rootElement ) {
       <PageProvider page={ agentwpData }>
         <NotificationsProvider>
           <ErrorProvider>
-            <AdminRouteProvider>
+            <RestRequestProvider>
               <ClientProvider>
                 <ClientSettingsProvider>
                   <div style={ wpWidgetStyleReset }>
@@ -32,7 +32,7 @@ if ( rootElement ) {
                   </div>
                 </ClientSettingsProvider>
               </ClientProvider>
-            </AdminRouteProvider>
+            </RestRequestProvider>
           </ErrorProvider>
         </NotificationsProvider>
       </PageProvider>

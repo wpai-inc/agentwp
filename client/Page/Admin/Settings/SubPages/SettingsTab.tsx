@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { usePage } from '@/Providers/PageProvider';
 import GeneralSettings from '../Partials/GeneralSettings';
 import DataList, { DataListItem } from '@/Components/ui/dl';
@@ -9,7 +9,7 @@ export default function SettingsTab() {
   /**
    * Variables
    */
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest } = useRestRequest();
   const { page } = usePage();
   const isLoggedIn = !! page.access_token;
 

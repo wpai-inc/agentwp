@@ -1,10 +1,10 @@
 import { Tag } from '@/Components/Tag';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import type { AgentWpUser } from '@/Types/types';
 import { useState } from 'react';
 
 export function User( { user }: { user: AgentWpUser } ) {
-  const { tryRequest } = useAdminRoute();
+  const { tryRequest } = useRestRequest();
   const [ checked, setChecked ] = useState( user.agentwp_access );
 
   async function setAgentwpAccess( value: boolean ) {

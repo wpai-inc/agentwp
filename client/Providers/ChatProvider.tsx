@@ -6,7 +6,7 @@ import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
-import { useAdminRoute } from './AdminRouteProvider';
+import { useRestRequest } from './RestRequestProvider';
 import { StreamableFieldType } from '@/Types/types';
 import { optimistic } from '@/lib/utils';
 import { StreamingStatusEnum } from '@/Types/enums';
@@ -80,7 +80,7 @@ export default function ChatProvider( {
   const { startStream, cancelStream, setStreamingStatus, streamingStatus } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest } = useRestRequest();
   const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
 
   async function clearHistory() {

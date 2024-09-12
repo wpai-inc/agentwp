@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { usePage } from '@/Providers/PageProvider';
 
 export default function ConnectButton() {
   const { page } = usePage();
 
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest } = useRestRequest();
   const [ connecting, setConnecting ] = useState( false );
 
   function connect() {

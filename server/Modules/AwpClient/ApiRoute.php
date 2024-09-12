@@ -4,51 +4,46 @@ namespace WpAi\AgentWp\Modules\AwpClient;
 
 class ApiRoute
 {
-    public string $key;
+    public string $uri;
 
-    public string $url;
-
-    public string $method;
+    public array $methods;
 
     public string $name;
 
     public function __construct(
-        string $key,
-        string $url,
-        string $method
+        string $name,
+        string $uri,
+        array $methods
     ) {
-        $this->key = $key;
-        $this->url = $url;
-        $this->method = $method;
-        $this->name = $this->nameFromKey($key);
+        $this->name = $name;
+        $this->uri = $uri;
+        $this->methods = $methods;
     }
 
-    public function getUrl(string $basePath, array $params = []): string
+    public function getUrl(array $params = []): string
     {
-        $url = $this->hydrateParams($this->url, $params);
+        return $this->hydrateParams($this->uri, $params);
+    }
 
-        return $basePath.ltrim($url, '/');
+    public function getMethod(): string
+    {
+        return $this->methods[0];
     }
 
     private function hydrateParams(string $url, array $params): string
     {
         foreach ($params as $key => $value) {
-            $url = str_replace('{'.$key.'}', $value, $url);
+            $url = str_replace('{' . $key . '}', $value, $url);
+        }
+
+        $missingParams = [];
+        preg_match_all('/\{([a-zA-Z1-9]+)\}/', $url, $missingParams);
+
+        if (! empty($missingParams[1])) {
+            $params = implode(', ', $missingParams[1]);
+            throw new \Error("You are missing the following params in your request: $params");
         }
 
         return $url;
-    }
-
-    private function nameFromKey(string $key): string
-    {
-        $words = preg_split('/[^a-z]/i', $key);
-
-        if (strtolower($words[0]) === 'api') {
-            array_shift($words);
-        }
-
-        $words = array_map('ucfirst', $words);
-
-        return lcfirst(implode('', $words));
     }
 }

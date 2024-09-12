@@ -25,8 +25,8 @@ class Client
 
     public function __construct()
     {
-        $routes = include_once __DIR__.'/routes.php';
-        $this->routes = ApiRoutes::fromArray($routes);
+        $jsonRoutes = file_get_contents(__DIR__ . '/routes.json');
+        $this->routes = ApiRoutes::fromJson($jsonRoutes);
     }
 
     /**
@@ -35,13 +35,13 @@ class Client
     public function __call(string $name, array $arguments): Response
     {
         $route = $this->routes->getRoute($name);
-        $method = $route->method;
+        $method = $route->getMethod();
 
         $params = array_merge([
             'site' => $this->siteId,
-        ], $arguments);
+        ], ...$arguments);
 
-        $url = $route->getUrl($this->getBasePath(), $params);
+        $url = $route->getUrl($params);
 
         return $this->getClient()->$method($url, $arguments);
     }
@@ -126,10 +126,5 @@ class Client
         $this->version = $v;
 
         return $this;
-    }
-
-    public function getBasePath(): string
-    {
-        return '/api/'.$this->version.'/';
     }
 }

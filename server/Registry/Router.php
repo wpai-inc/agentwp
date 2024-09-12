@@ -5,6 +5,7 @@ namespace WpAi\AgentWp\Registry;
 use WpAi\AgentWp\Contracts\MiddlewareInterface;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Http\Controllers\AddCodeSnippet;
+use WpAi\AgentWp\Http\Controllers\AwpApi;
 use WpAi\AgentWp\Http\Controllers\DisconnectSite;
 use WpAi\AgentWp\Http\Controllers\GenerateUniqueVerificationKey;
 use WpAi\AgentWp\Http\Controllers\GetCodeSnippetPlugin;
@@ -31,6 +32,7 @@ class Router implements Registrable
     const REST_ROUTE_ENDPOINT = 'agentwp/v1';
 
     protected array $routes = [
+        'api' => AwpApi::class,
         'test_auth' => TestAuthResponse::class,
         'test_route' => [TestResponse::class, 'successfulResponse'],
         'test_stream_forward' => [TestResponse::class, 'stream'],

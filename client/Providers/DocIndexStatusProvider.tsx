@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createContext, FC, useContext } from 'react';
 import type { DocIndexStatusData } from '@/Types/types';
 import { useClient } from './ClientProvider';
-import { useAdminRoute } from './AdminRouteProvider';
+import { useRestRequest } from './RestRequestProvider';
 
 type ContextProps = {
   total: number;
@@ -27,7 +27,7 @@ export function useDocIndexStatus() {
 
 export function DocIndexStatusProvider( { children }: { children: React.ReactNode } ) {
   const { getDocIndexStatus } = useClient();
-  const { tryRequest } = useAdminRoute();
+  const { tryRequest } = useRestRequest();
   const [ docIndex, setDocIndex ] = useState< DocIndexStatusData[] >( [] );
   const [ hasIndexed, setHasIndexed ] = useState( true );
 
