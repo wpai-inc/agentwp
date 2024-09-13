@@ -123,7 +123,7 @@ class Settings
         return $this->data['token']['refresh_token'];
     }
 
-    public function isConnectedToAwp(): bool
+    public function isConnected(): bool
     {
         return ! empty($this->data['site_id']) && ! empty($this->data['client_id']) && ! empty($this->data['client_secret']);
     }

@@ -35,7 +35,7 @@ class Settings extends ReactClient
     public function registrations(): void
     {
         $subpages = [];
-        if ($this->settings->client_id && $this->settings->client_secret && $this->settings->onboarding_completed) {
+        if ($this->settings->isConnected() && $this->settings->onboarding_completed) {
             $subpages = [
                 [
                     'name' => 'AI Connection Manager',
