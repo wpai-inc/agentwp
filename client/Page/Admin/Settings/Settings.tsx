@@ -47,13 +47,13 @@ export default function Settings() {
           <div className="flex justify-between">
             <div>
               <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
-              { page.account?.plan.slug === 'pro' && (
+              { page.account?.plan?.slug === 'pro' && (
                 <span className="ml-3 inline-flex rounded-full items-center justify-center bg-brand-dark text-white px-3 py-2 text-sm font-bold uppercase">
                   { page.account?.plan.name }
                 </span>
               ) }
             </div>
-            { page.account?.plan.slug === 'free' && (
+            { page.account?.plan?.slug === 'free' && (
               <div className="text-right">
                 <Button variant="brand" pill={ true }>
                   <a href={ page.account?.upgrade_link }>Upgrade to Pro</a>

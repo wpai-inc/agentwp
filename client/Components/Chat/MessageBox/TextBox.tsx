@@ -8,9 +8,11 @@ import transformContentToText from './helpers/transformContentToText';
 export default function TextBox( {
   callback,
   message,
+  keyPress,
 }: {
   callback: ( text: string ) => void;
   message: string;
+  keyPress: ( e: React.KeyboardEvent< HTMLDivElement > ) => void;
 } ) {
   const editorRef = useRef< HTMLDivElement >( null );
   const [ html, setHtml ] = useState< string >( '' );
@@ -68,6 +70,8 @@ export default function TextBox( {
     if ( e.key === 'Backspace' ) {
       handleSuggestionDelete();
     }
+
+    keyPress( e );
   };
 
   const handleSelect = ( suggestion: Suggestion ) => {
