@@ -80,7 +80,7 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
     };
 
     fetchData();
-  } );
+  }, [] );
 
   return (
     <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>
