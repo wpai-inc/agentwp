@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useClient } from '@/Providers/ClientProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 import IconExpand from '@material-design-icons/svg/outlined/expand_more.svg?react';
 import IconLink from '@material-design-icons/svg/outlined/open_in_new.svg?react';
-import { HistoryResponseType } from '@/Providers/ClientProvider';
-import { HistoryData } from '@/Types/types';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/ui/collapsible';
 import { cn } from '@/lib/utils';
 import { Button } from '@/Components/ui/button';
 import { usePage } from '@/Providers/PageProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
+
+export type HistoryResponseType = {
+  [ key: string ]: App.Data.HistoryData[];
+};
 
 export default function History() {
   const [ history, setHistory ] = useState< HistoryResponseType >( {} );
-  const { getHistory } = useClient();
+  const { apiRequest } = useRestRequest();
   const { since, setSince } = useUserRequests();
   const { setChatSetting } = useChat();
   const { page } = usePage();
@@ -25,16 +27,16 @@ export default function History() {
   }, [ since ] );
 
   async function fetchHistory( since?: string ) {
-    const history = await getHistory( since );
+    const history = await apiRequest( 'convoHistory', { since } );
     setHistory( history );
     setOpenStates( { 0: true } );
   }
 
-  function HistoryList( { items }: { items: HistoryData[] } ) {
+  function HistoryList( { items }: { items: App.Data.HistoryData[] } ) {
     return items.map( convo => <HistoryItem key={ convo.conversationId } convo={ convo } /> );
   }
 
-  function HistoryItem( { convo }: { convo: HistoryData } ) {
+  function HistoryItem( { convo }: { convo: App.Data.HistoryData } ) {
     return (
       <button
         className="-mx-2 flex w-full items-center justify-between rounded p-2 text-left transition-colors hover:bg-brand-gray-20"

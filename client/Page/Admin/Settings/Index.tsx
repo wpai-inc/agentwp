@@ -6,7 +6,6 @@ import Wizard from './Wizard';
 import type { PageData } from '@/Types/types';
 import { RestRequestProvider } from '@/Providers/RestRequestProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
-import { ClientProvider } from '@/Providers/ClientProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import '@/assets/styles/app.css';
 import { AWPRootType } from '@/Types/types';
@@ -31,9 +30,7 @@ if ( rootElement ) {
         <NotificationsProvider>
           <ErrorProvider>
             <RestRequestProvider>
-              <ClientProvider>
-                { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
-              </ClientProvider>
+              { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
             </RestRequestProvider>
           </ErrorProvider>
         </NotificationsProvider>

@@ -4,7 +4,6 @@ import ActionListenerProvider from './ActionListenerProvider';
 import { useStream } from '@/Providers/StreamProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import ChatProvider from '@/Providers/ChatProvider';
-import { useClient } from '@/Providers/ClientProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { expect, jest, describe, beforeEach, it } from '@jest/globals';
 import Chat from '@/Components/Chat/Chat';
@@ -12,8 +11,7 @@ import Chat from '@/Components/Chat/Chat';
 // Mock the custom hooks
 jest.mock( '@/Providers/StreamProvider' );
 jest.mock( '@/Providers/UserRequestsProvider' );
-jest.mock( '@/Providers/ClientProvider' );
-jest.mock( './RestRequestProvider' );
+jest.mock( '@/Providers/RestRequestProvider' );
 
 describe( 'ActionListenerProvider', () => {
   beforeEach( () => {

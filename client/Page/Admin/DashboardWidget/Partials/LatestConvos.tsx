@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Spinner } from '@/Components/Spinner';
-import { HistoryData } from '@/Types/types';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function LatestConvos() {
   const { apiRequest } = useRestRequest();
   const [ isLoading, setIsLoading ] = useState< boolean >( true );
-  const [ convos, setConvos ] = useState< HistoryData[] >( [] );
+  const [ convos, setConvos ] = useState< App.Data.HistoryData[] >( [] );
 
   useEffect( () => {
     async function fetch() {
@@ -41,7 +40,7 @@ function openConvo( since: string ) {
   window.agentwp.dispatchEvent( new CustomEvent( 'awp:chat:since', { detail: { since } } ) );
 }
 
-function ConvoItem( convo: HistoryData ) {
+function ConvoItem( convo: App.Data.HistoryData ) {
   return (
     <button
       className="p-2 w-full text-left odd:bg-brand-gray-20 flex justify-between"

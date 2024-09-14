@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { createContext, FC, useContext } from 'react';
-import type { DocIndexStatusData } from '@/Types/types';
-import { useClient } from './ClientProvider';
+import { createContext, useContext } from 'react';
 import { useRestRequest } from './RestRequestProvider';
 
 type ContextProps = {
   total: number;
   indexed: number;
   percent: number;
-  current?: DocIndexStatusData;
-  remaining: DocIndexStatusData[];
+  current?: App.Data.DocIndexStatusData;
+  remaining: App.Data.DocIndexStatusData[];
   done: boolean;
   hasIndexed: boolean;
   startIndexing: () => void;
@@ -26,9 +24,8 @@ export function useDocIndexStatus() {
 }
 
 export function DocIndexStatusProvider( { children }: { children: React.ReactNode } ) {
-  const { getDocIndexStatus } = useClient();
-  const { tryRequest } = useRestRequest();
-  const [ docIndex, setDocIndex ] = useState< DocIndexStatusData[] >( [] );
+  const { tryRequest, apiRequest } = useRestRequest();
+  const [ docIndex, setDocIndex ] = useState< App.Data.DocIndexStatusData[] >( [] );
   const [ hasIndexed, setHasIndexed ] = useState( true );
 
   const total = useMemo(
@@ -62,7 +59,7 @@ export function DocIndexStatusProvider( { children }: { children: React.ReactNod
   const done: boolean = useMemo( () => docIndex.every( doc => doc.done ), [ docIndex ] );
 
   function fetchDocIndexStatus() {
-    getDocIndexStatus().then( data => {
+    apiRequest( 'siteDocsIndexStatus' ).then( data => {
       console.log( 'data', data );
       setHasIndexed( data.lastIndexedAt ? true : false );
       setDocIndex( data.statuses );

@@ -2,7 +2,6 @@ import { useState, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
@@ -63,7 +62,6 @@ export default function ChatProvider( {
   children: React.ReactNode;
   defaultOpen?: boolean;
 } ) {
-  const { client, clearConversation } = useClient();
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ message, setMessage ] = useState( '' );
@@ -80,15 +78,19 @@ export default function ChatProvider( {
   const { startStream, cancelStream, setStreamingStatus, streamingStatus } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
-  const { adminRequest } = useRestRequest();
   const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
+  const { tryRequest, apiRequest } = useRestRequest();
 
   async function clearHistory() {
-    optimistic( clearConversation, clear, ( e: any ) => {
-      console.error( 'SETTING conversation clear history' );
-      setConversation( conversation );
-      addErrors( [ e ] );
-    } );
+    optimistic(
+      async () => await apiRequest( 'convoClear' ),
+      clear,
+      ( e: any ) => {
+        console.error( 'SETTING conversation clear history' );
+        setConversation( conversation );
+        addErrors( [ e ] );
+      },
+    );
   }
 
   async function userRequest(
@@ -105,12 +107,13 @@ export default function ChatProvider( {
     if ( streamingStatus === StreamingStatusEnum.OFF ) {
       setStreamingStatus( StreamingStatusEnum.CONVO );
     }
-    const siteData = await adminRequest.get( 'site_data' );
+    const siteData = await tryRequest( 'get', 'site_data' );
     if ( siteData.data?.data ) {
       req.site_data = siteData.data.data;
     }
 
-    const response = await client.storeConversation( req );
+    const response = await apiRequest( 'userRequest', req );
+
     return response.data;
   }
 

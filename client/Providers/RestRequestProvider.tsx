@@ -14,6 +14,8 @@ type RestRequestContextType = {
     onFailure?: ( error: any ) => void,
   ) => Promise< any >;
   apiRequest: ( endpoint: string, dataOrParams?: any ) => Promise< any >;
+  requestUrl: ( name: string ) => string;
+  nonceHeader: Record< string, string >;
 };
 
 export const RestRequestContext = createContext< RestRequestContextType | undefined >( undefined );
@@ -30,12 +32,16 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
   const { page } = usePage();
   const { notify } = useNotifications();
 
-  const restReq: AxiosInstance = axios.create( {
-    baseURL: page.rest_route + page.rest_endpoint + '/',
-    headers: {
-      'X-WP-Nonce': page.wp_rest_nonce,
-    },
-  } );
+  const baseURL = page.rest_route + page.rest_endpoint + '/';
+  const nonceHeader = {
+    'X-WP-Nonce': page.wp_rest_nonce,
+  };
+
+  const restReq: AxiosInstance = axios.create( { baseURL, headers: { ...nonceHeader } } );
+
+  const requestUrl = ( name: string ) => {
+    return page.rest_route + name;
+  };
 
   restReq.interceptors.request.use( config => {
     const nonce = page?.nonce;
@@ -75,7 +81,8 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
   };
 
   return (
-    <RestRequestContext.Provider value={ { restReq, tryRequest, apiRequest } }>
+    <RestRequestContext.Provider
+      value={ { restReq, requestUrl, tryRequest, apiRequest, nonceHeader } }>
       { children }
     </RestRequestContext.Provider>
   );

@@ -1,5 +1,4 @@
 import { useState, createContext, useContext, useEffect, useMemo, useCallback } from 'react';
-import { useClient } from '@/Providers/ClientProvider';
 import {
   Graph,
   MessageAction,
@@ -15,6 +14,7 @@ import { generate as uuid } from 'ordered-uuid-v4';
 import { optimistic } from '@/lib/utils';
 import transformMentionedMessage from '@/Components/Chat/MessageBox/helpers/transformMentionedMessage';
 import getMentionsFromText from '@/Components/Chat/MessageBox/helpers/getMentionsFromText';
+import { useRestRequest } from './RestRequestProvider';
 
 export type ActionType =
   | NavigateAction
@@ -88,7 +88,7 @@ export default function UserRequestsProvider( {
   children: React.ReactNode;
 } ) {
   const { page } = usePage();
-  const { getConversation } = useClient();
+  const { apiRequest } = useRestRequest();
   const [ since, setSince ] = useState< string | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( true );
@@ -192,7 +192,7 @@ export default function UserRequestsProvider( {
 
   async function fetchConvo( since?: string | null ) {
     const items = await optimistic(
-      async () => await getConversation( since ?? undefined ),
+      async () => await apiRequest( 'convo', { since: since ?? undefined } ),
       () => setLoadingConversation( true ),
       convoLoadFailure,
     );

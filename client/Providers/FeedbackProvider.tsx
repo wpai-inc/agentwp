@@ -1,5 +1,5 @@
 import { createContext, FC, useContext, useState } from 'react';
-import { useClient } from '@/Providers/ClientProvider';
+import { useRestRequest } from './RestRequestProvider';
 
 export type FeedbackType = {
   approved?: boolean;
@@ -33,10 +33,11 @@ export const FeedbackProvider: FC< {
   const [ approved, setApproved ] = useState< boolean | undefined >( feedback?.approved );
   const [ opened, setOpened ] = useState< boolean >( false );
 
-  const { client } = useClient();
+  const { apiRequest } = useRestRequest();
 
   async function sendFeedback( approved: boolean, message?: string ) {
-    client.isAuthorized()?.feedback( userRequestId, {
+    apiRequest( 'requestFeedback', {
+      userRequest: userRequestId,
       approved,
       message,
     } );

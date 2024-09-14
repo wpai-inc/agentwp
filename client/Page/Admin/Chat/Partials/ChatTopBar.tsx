@@ -5,7 +5,6 @@ import Logo from '@/Components/Logo';
 import { useChat } from '@/Providers/ChatProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import History from '../Settings/History';
-import { useClient } from '@/Providers/ClientProvider';
 import AddIcon from '@material-design-icons/svg/outlined/add.svg?react';
 import { usePage } from '@/Providers/PageProvider';
 import { maybeUseChatUI } from '@/Components/Chat/Chat';
@@ -15,8 +14,7 @@ import type { HandleDrag } from '@/Components/Chat/Partials/ChatCore';
 export default function ChatTopBar( { handleDrag }: HandleDrag ) {
   const { setChatSetting, clearHistory, isEmptyConversation } = useChat();
   const toggle = maybeUseChatUI()?.toggle;
-  const { page } = usePage();
-  const { userProfileUrl } = useClient();
+  const { page, userProfileUrl } = usePage();
 
   function handleHistorySettings() {
     setChatSetting( {
