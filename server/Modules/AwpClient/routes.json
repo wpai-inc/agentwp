@@ -1,7 +1,7 @@
 [
     {
         "key": "api.auth.generate-token",
-        "uri": "api\/v1\/auth\/generate-token",
+        "uri": "api\/auth\/generate-token",
         "methods": [
             "POST"
         ],
@@ -9,7 +9,7 @@
     },
     {
         "key": "api.capabilities",
-        "uri": "api\/v1\/capabilities",
+        "uri": "api\/capabilities",
         "methods": [
             "GET",
             "HEAD"
@@ -18,7 +18,7 @@
     },
     {
         "key": "api.auth.renew-token",
-        "uri": "api\/v1\/auth\/renew-token",
+        "uri": "api\/auth\/renew-token",
         "methods": [
             "POST"
         ],
@@ -26,7 +26,7 @@
     },
     {
         "key": "api.auth.revoke-token",
-        "uri": "api\/v1\/auth\/revoke-token",
+        "uri": "api\/auth\/revoke-token",
         "methods": [
             "DELETE"
         ],
@@ -34,7 +34,7 @@
     },
     {
         "key": "api.auth.revoke-tokens",
-        "uri": "api\/v1\/auth\/revoke-tokens",
+        "uri": "api\/auth\/revoke-tokens",
         "methods": [
             "DELETE"
         ],
@@ -42,7 +42,7 @@
     },
     {
         "key": "api.site.health",
-        "uri": "api\/v1\/site\/health",
+        "uri": "api\/site\/health",
         "methods": [
             "POST"
         ],
@@ -50,7 +50,7 @@
     },
     {
         "key": "api.site.summarize",
-        "uri": "api\/v1\/site\/summarize",
+        "uri": "api\/site\/summarize",
         "methods": [
             "POST"
         ],
@@ -58,7 +58,7 @@
     },
     {
         "key": "api.site.errors.store",
-        "uri": "api\/v1\/site\/errors",
+        "uri": "api\/site\/errors",
         "methods": [
             "POST"
         ],
@@ -66,7 +66,7 @@
     },
     {
         "key": "api.site.docs.store",
-        "uri": "api\/v1\/site\/docs",
+        "uri": "api\/site\/docs",
         "methods": [
             "POST"
         ],
@@ -74,7 +74,7 @@
     },
     {
         "key": "api.site.docs.index.status",
-        "uri": "api\/v1\/site\/docs\/status",
+        "uri": "api\/site\/docs\/status",
         "methods": [
             "GET",
             "HEAD"
@@ -83,7 +83,7 @@
     },
     {
         "key": "api.site.docs.status",
-        "uri": "api\/v1\/site\/docs\/status\/{status}",
+        "uri": "api\/site\/docs\/status\/{status}",
         "methods": [
             "GET",
             "HEAD"
@@ -92,7 +92,7 @@
     },
     {
         "key": "api.site.setting.save",
-        "uri": "api\/v1\/site\/settings",
+        "uri": "api\/site\/settings",
         "methods": [
             "PUT"
         ],
@@ -100,7 +100,7 @@
     },
     {
         "key": "api.site.setting.all",
-        "uri": "api\/v1\/site\/settings",
+        "uri": "api\/site\/settings",
         "methods": [
             "GET",
             "HEAD"
@@ -109,7 +109,7 @@
     },
     {
         "key": "api.site.disconnect",
-        "uri": "api\/v1\/site\/disconnect",
+        "uri": "api\/site\/disconnect",
         "methods": [
             "POST"
         ],
@@ -117,7 +117,7 @@
     },
     {
         "key": "api.site.suggestions",
-        "uri": "api\/v1\/site\/suggestions",
+        "uri": "api\/site\/suggestions",
         "methods": [
             "POST"
         ],
@@ -125,7 +125,7 @@
     },
     {
         "key": "api.site.request.escalate",
-        "uri": "api\/v1\/site\/escalation\/{escalation}",
+        "uri": "api\/site\/escalation\/{escalation}",
         "methods": [
             "POST"
         ],
@@ -133,7 +133,7 @@
     },
     {
         "key": "api.user",
-        "uri": "api\/v1\/user",
+        "uri": "api\/user",
         "methods": [
             "GET",
             "HEAD"
@@ -142,7 +142,7 @@
     },
     {
         "key": "api.wpuser.update",
-        "uri": "api\/v1\/wpuser",
+        "uri": "api\/wpuser",
         "methods": [
             "PUT"
         ],
@@ -150,7 +150,7 @@
     },
     {
         "key": "api.search",
-        "uri": "api\/v1\/search",
+        "uri": "api\/search",
         "methods": [
             "POST"
         ],
@@ -158,7 +158,7 @@
     },
     {
         "key": "api.search.summarize",
-        "uri": "api\/v1\/search\/{query}\/summary",
+        "uri": "api\/search\/{query}\/summary",
         "methods": [
             "POST"
         ],
@@ -166,7 +166,7 @@
     },
     {
         "key": "api.convo",
-        "uri": "api\/v1",
+        "uri": "api",
         "methods": [
             "GET",
             "HEAD"
@@ -175,7 +175,7 @@
     },
     {
         "key": "api.convo.create",
-        "uri": "api\/v1",
+        "uri": "api",
         "methods": [
             "POST"
         ],
@@ -183,7 +183,7 @@
     },
     {
         "key": "api.convo.delete",
-        "uri": "api\/v1\/{convo}",
+        "uri": "api\/{convo}",
         "methods": [
             "DELETE"
         ],
@@ -191,7 +191,7 @@
     },
     {
         "key": "api.convo.clear",
-        "uri": "api\/v1\/clear",
+        "uri": "api\/clear",
         "methods": [
             "POST"
         ],
@@ -199,7 +199,7 @@
     },
     {
         "key": "api.convo.unclear",
-        "uri": "api\/v1\/unclear",
+        "uri": "api\/unclear",
         "methods": [
             "POST"
         ],
@@ -207,7 +207,7 @@
     },
     {
         "key": "api.convo.history",
-        "uri": "api\/v1\/history",
+        "uri": "api\/history",
         "methods": [
             "GET",
             "HEAD"
@@ -216,7 +216,7 @@
     },
     {
         "key": "api.request.feedback",
-        "uri": "api\/v1\/request\/{userRequest}\/feedback",
+        "uri": "api\/request\/{userRequest}\/feedback",
         "methods": [
             "POST"
         ],
@@ -224,7 +224,7 @@
     },
     {
         "key": "api.request.abort",
-        "uri": "api\/v1\/request\/{userRequest}\/abort",
+        "uri": "api\/request\/{userRequest}\/abort",
         "methods": [
             "POST"
         ],
@@ -232,7 +232,7 @@
     },
     {
         "key": "api.request.remove",
-        "uri": "api\/v1\/request\/{userRequest}",
+        "uri": "api\/request\/{userRequest}",
         "methods": [
             "DELETE"
         ],
@@ -240,7 +240,7 @@
     },
     {
         "key": "api.request.stream",
-        "uri": "api\/v1\/request\/{userRequest}\/stream",
+        "uri": "api\/request\/{userRequest}\/stream",
         "methods": [
             "POST"
         ],
@@ -248,7 +248,7 @@
     },
     {
         "key": "api.action.result",
-        "uri": "api\/v1\/action\/{agentAction}\/result",
+        "uri": "api\/action\/{agentAction}\/result",
         "methods": [
             "POST"
         ],
@@ -256,7 +256,7 @@
     },
     {
         "key": "api.action.error",
-        "uri": "api\/v1\/action\/{agentAction}\/error",
+        "uri": "api\/action\/{agentAction}\/error",
         "methods": [
             "POST"
         ],
