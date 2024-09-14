@@ -20,7 +20,7 @@ class ApiRoute
         $this->methods = $methods;
     }
 
-    public function getUrl(array $params = []): string
+    public function getUrl(?array $params = []): string
     {
         return $this->hydrateParams($this->uri, $params);
     }
@@ -30,11 +30,13 @@ class ApiRoute
         return $this->methods[0];
     }
 
-    private function hydrateParams(string $url, array $params): string
+    private function hydrateParams(string $url, ?array $params = []): string
     {
-        foreach ($params as $key => $value) {
-            if (is_string($value)) {
-                $url = str_replace('{' . $key . '}', $value, $url);
+        if ($params) {
+            foreach ($params as $key => $value) {
+                if (is_string($value)) {
+                    $url = str_replace('{' . $key . '}', $value, $url);
+                }
             }
         }
 

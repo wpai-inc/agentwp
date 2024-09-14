@@ -232,7 +232,7 @@
     },
     {
         "key": "api.request.remove",
-        "uri": "api\/v1\/request\/{userRequest}\/request\/{ur}",
+        "uri": "api\/v1\/request\/{userRequest}",
         "methods": [
             "DELETE"
         ],

@@ -1,10 +1,22 @@
 import { createContext, useContext } from 'react';
 import { usePage } from '@/Providers/PageProvider';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { useNotifications } from '@/Providers/NotificationProvider';
 import { optimistic } from '@/lib/utils';
 
-export const RestRequestContext = createContext< any | undefined >( undefined );
+type RestRequestContextType = {
+  restReq: AxiosInstance;
+  tryRequest: (
+    method: 'post' | 'get',
+    url: string,
+    dataOrParams?: any,
+    onBefore?: () => void,
+    onFailure?: ( error: any ) => void,
+  ) => Promise< any >;
+  apiRequest: ( endpoint: string, dataOrParams?: any ) => Promise< any >;
+};
+
+export const RestRequestContext = createContext< RestRequestContextType | undefined >( undefined );
 
 export function useRestRequest() {
   const client = useContext( RestRequestContext );
@@ -18,7 +30,7 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
   const { page } = usePage();
   const { notify } = useNotifications();
 
-  const restReq = axios.create( {
+  const restReq: AxiosInstance = axios.create( {
     baseURL: page.rest_route + page.rest_endpoint + '/',
     headers: {
       'X-WP-Nonce': page.wp_rest_nonce,
@@ -68,7 +80,3 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     </RestRequestContext.Provider>
   );
 }
-
-export type RouteRunActionQuery = {
-  results: any[];
-};

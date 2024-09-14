@@ -25,7 +25,7 @@ class SearchQuery extends BaseController
 
         $hybrid = new HybridSearch($q);
 
-        $searchRes = $this->main->client()->searchQuery([
+        $searchRes = $this->main->client()->search([
             'query' => $q,
             'wpResults' => $hybrid->searchWp(),
         ]);

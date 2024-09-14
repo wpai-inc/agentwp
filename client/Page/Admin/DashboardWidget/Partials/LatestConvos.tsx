@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useClient } from '@/Providers/ClientProvider';
 import { Spinner } from '@/Components/Spinner';
 import { HistoryData } from '@/Types/types';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function LatestConvos() {
-  const { getHistory } = useClient();
+  const { apiRequest } = useRestRequest();
   const [ isLoading, setIsLoading ] = useState< boolean >( true );
   const [ convos, setConvos ] = useState< HistoryData[] >( [] );
 
   useEffect( () => {
     async function fetch() {
-      const history = await getHistory();
+      const history = await apiRequest( 'convoHistory' );
       setConvos( history );
       setIsLoading( false );
     }

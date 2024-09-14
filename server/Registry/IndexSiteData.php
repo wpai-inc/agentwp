@@ -53,7 +53,7 @@ class IndexSiteData implements Cacheable, Registrable
             $data = SiteData::getDebugData();
         }
 
-        $this->main->client(false)->indexSite(json_encode($data));
+        $this->main->client()->siteHealth($data);
     }
 
     public function add_plugin_slugs_to_debug_info($info): array

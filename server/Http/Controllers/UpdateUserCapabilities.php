@@ -33,7 +33,7 @@ class UpdateUserCapabilities extends BaseController
 
         $this->main->client()
             ->setWpUser($user)
-            ->updateUser($user->ID);
+            ->wpuserUpdate($user->ID);
 
         $this->respond();
     }

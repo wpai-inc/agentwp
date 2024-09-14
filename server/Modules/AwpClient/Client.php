@@ -23,9 +23,15 @@ class Client
         'timeout' => 15,
     ];
 
-    public function __construct()
-    {
-        $jsonRoutes = file_get_contents(__DIR__ . '/routes.json');
+    public function __construct(
+        $siteId = null,
+        $token = null,
+        $wpUser = null
+    ) {
+        $this->siteId = $siteId;
+        $this->token = $token;
+        $this->wpUser = $wpUser;
+        $jsonRoutes = file_get_contents(__DIR__.'/routes.json');
         $this->routes = ApiRoutes::fromJson($jsonRoutes);
     }
 
@@ -34,10 +40,10 @@ class Client
      */
     public function __call(string $name, array $args): Response
     {
-        $params = $args[0];
+        $params = isset($args[0]) ? $args[0] : [];
         $route = $this->routes->getRoute($name);
         $method = $route->getMethod();
-        $url = $route->getUrl($params);
+        $url = $route->getUrl(is_array($params) ? $params : []);
 
         return $this->getClient()->request($method, $url, [
             'json' => $params,

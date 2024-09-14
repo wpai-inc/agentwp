@@ -7,12 +7,19 @@ use WpAi\AgentWp\Main;
 class IndexStatus
 {
     public int $id = 0;
+
     public string $docType;
+
     public int $total;
+
     public int $indexed;
+
     public float $percent;
+
     public bool $done;
+
     public int $status;
+
     public int $last_doc_id_indexed = 0;
 
     public static string $statusKey = 'docs_indexing_status';
@@ -28,7 +35,7 @@ class IndexStatus
     ];
 
     public function __construct(
-        int $id = 0,
+        int $id,
         string $docType,
         int $total,
         int $indexed,
@@ -64,7 +71,7 @@ class IndexStatus
 
     public static function getStatusKey(): string
     {
-        return Main::SLUG . '_' . self::$statusKey;
+        return Main::SLUG.'_'.self::$statusKey;
     }
 
     public function pause(): bool
@@ -99,6 +106,7 @@ class IndexStatus
             $data['status'],
             isset($data['last_doc_id_indexed']) ? $data['last_doc_id_indexed'] : null,
         );
+
         return $status;
     }
 
@@ -140,7 +148,7 @@ class IndexStatus
         return null;
     }
 
-    public function update(?string $key, $value = null): bool
+    public function update(?string $key = null, $value = null): bool
     {
         $arr = $this->toArray();
         if ($key) {

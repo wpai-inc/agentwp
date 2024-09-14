@@ -79,6 +79,6 @@ class ErrorIndexer implements Registrable
 
     private function sendTheErrors($error_data): void
     {
-        $this->main->client(false)->indexError(json_encode($error_data));
+        $this->main->client()->siteErrorsStore($error_data);
     }
 }
