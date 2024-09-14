@@ -77,8 +77,14 @@ export default function MessageBox() {
       handleKeyDown={ handleKeyDown }
       message={ message }
       setMessage={ setMessage }>
-      <form className="relative rounded-lg bg-brand-gray p-2" onSubmit={ submit }>
-        <TextBox callback={ handleCallback } message={ message } />
+      <form
+        className="border border-transparent focus-within:border-brand-primary transition relative rounded-lg bg-brand-gray p-2"
+        onSubmit={ submit }>
+        <TextBox
+          callback={ handleCallback }
+          message={ message }
+          keyPress={ e => handleKeyDown( e, commandMenuFocused ) }
+        />
         <textarea
           onChange={ e => setMessage( e.target.value ) }
           value={ message }

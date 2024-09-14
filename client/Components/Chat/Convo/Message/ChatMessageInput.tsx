@@ -14,7 +14,7 @@ export default function ChatMessageInput( {
 
   return (
     <>
-      { page.account?.plan.slug === 'free' && tokenUsageStatus !== TokenUsageStatus.Normal ? (
+      { page.account?.plan?.slug === 'free' && tokenUsageStatus !== TokenUsageStatus.Normal ? (
         <OverCapacity cooldownTime={ coolDownTime } tokenUsageStatus={ tokenUsageStatus } />
       ) : (
         <MessageBox />

@@ -40,7 +40,7 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
           className="hover:scale-125 transition">
           <Logo className="h-7 w-7" />
         </a>
-        { page.account?.plan.slug === 'free' && <FreeUpgrade /> }
+        { page.account?.plan?.slug === 'free' && <FreeUpgrade /> }
       </div>
       <div className="flex items-center justify-center">
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
