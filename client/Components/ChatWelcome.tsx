@@ -18,7 +18,7 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
   ] );
 
   useEffect( () => {
-    apiRequest( 'siteSuggestions' ).then( ( response: string[] ) => {
+    apiRequest< string[] >( 'siteSuggestions' ).then( ( response: string[] ) => {
       setSuggestions( response );
     } );
   }, [] );

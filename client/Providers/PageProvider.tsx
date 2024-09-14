@@ -22,7 +22,6 @@ export function usePage() {
 
 export function PageProvider( { page, children }: { page: any; children: React.ReactNode } ) {
   const [ pageData, setPageData ] = useState( page );
-
   const canAccessAgent = pageData.onboarding_completed && pageData.agentwp_access;
 
   const userProfileUrl = page.api_host + '/dashboard';

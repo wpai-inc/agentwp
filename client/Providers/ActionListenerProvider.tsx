@@ -5,18 +5,10 @@ import { useError } from './ErrorProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 
-export type StoreAgentResponse = {
-  status: string;
-  data: {
-    results: any[];
-  };
-};
-
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamingStatus, startStream } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
-  const { adminRequest } = useRestRequest();
-  const { apiRequest } = useRestRequest();
+  const { apiRequest, restReq } = useRestRequest();
   const { errors } = useError();
 
   useEffect( () => {
@@ -55,52 +47,71 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
     }
   }
 
-  async function storeActionResult( aa: AgentAction, data: any ) {
-    await apiRequest( 'siteRequestActionResult', {
+  async function storeActionResult( aa: AgentAction, data: App.Data.AgentActionResultData ) {
+    await apiRequest< App.Data.AgentActionData >( 'siteRequestActionResult', {
       agentAction: aa.id,
       ...data,
     } );
+  }
+
+  async function storeSuccessfulActionResult( aa: AgentAction, data: any[] | null = null ) {
+    const result: App.Data.AgentActionResultData = {
+      status: 'success',
+      error: null,
+      data,
+    };
+    return storeActionResult( aa, result );
+  }
+
+  async function storeUnsuccessfulActionResult( aa: AgentAction, error: string ) {
+    const result: App.Data.AgentActionResultData = {
+      status: 'error',
+      error,
+      data: null,
+    };
+    return storeActionResult( aa, result );
   }
 
   async function executeAction( aa: AgentAction ) {
     switch ( aa.action.ability ) {
       case 'query':
         try {
-          const response = await adminRequest.get( 'run_action_query', {
+          const response = await restReq.get( 'run_action_query', {
             params: {
               sql: aa.action.sql,
               args: aa.action.args,
             },
           } );
-          await storeActionResult( aa, {
-            status: 'success',
-            data: response.data.data.results,
-          } );
+
+          await storeSuccessfulActionResult( aa, response.data.data.results );
         } catch ( error ) {
-          await storeActionResult( aa, {
+          const result: App.Data.AgentActionResultData = {
             status: 'error',
             error: ( error as any ).response.data.data,
-          } );
+            data: null,
+          };
+
+          await storeActionResult( aa, result );
         }
         break;
       case 'navigate':
-        await storeActionResult( aa, { status: 'success' } );
+        await storeSuccessfulActionResult( aa );
         window.location.href = aa.action.url as string;
         return new Promise( () => {
           /* never resolve to stop further execution */
         } );
         break;
       case 'message':
-        await storeActionResult( aa, { status: 'success' } );
+        await storeSuccessfulActionResult( aa );
         break;
       case 'write_to_editor':
-        await storeActionResult( aa, { status: 'success' } );
+        await storeSuccessfulActionResult( aa );
         break;
       case 'write_to_input':
-        await storeActionResult( aa, { status: 'success' } );
+        await storeSuccessfulActionResult( aa );
         break;
       default:
-        await storeActionResult( aa, { status: 'error', message: 'Invalid ability' } );
+        await storeUnsuccessfulActionResult( aa, 'Invalid ability' );
     }
   }
 

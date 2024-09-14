@@ -13,7 +13,7 @@ type RestRequestContextType = {
     onBefore?: () => void,
     onFailure?: ( error: any ) => void,
   ) => Promise< any >;
-  apiRequest: ( endpoint: string, dataOrParams?: any ) => Promise< any >;
+  apiRequest: < T = any >( endpoint: string, dataOrParams?: any ) => Promise< T >;
   requestUrl: ( name: string ) => string;
   nonceHeader: Record< string, string >;
 };
@@ -76,8 +76,9 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     return optimistic( async () => req, onBefore, catchFailure );
   };
 
-  const apiRequest = async ( endpoint: string, dataOrParams?: any ) => {
-    return restReq.post( 'api', { ...dataOrParams, endpoint } );
+  const apiRequest = async < T = any, >( endpoint: string, dataOrParams?: any ): Promise< T > => {
+    const response = await restReq.post< T >( 'api', { ...dataOrParams, endpoint } );
+    return response.data;
   };
 
   return (

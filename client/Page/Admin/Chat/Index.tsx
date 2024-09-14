@@ -15,22 +15,20 @@ declare global {
 
 declare const agentwpData: PageData;
 
-if ( agentwpData.access_token ) {
-  const rootElement = document.getElementById( 'agentwp-admin-chat' );
-  if ( rootElement ) {
-    window.agentwp = rootElement as AWPRootType;
-    const root = ReactDOM.createRoot( rootElement );
-    root.render(
-      <React.StrictMode>
-        <NotificationsProvider>
-          <PageProvider page={ agentwpData }>
-            <ChatApp />
-          </PageProvider>
-        </NotificationsProvider>
-      </React.StrictMode>,
-    );
-  } else {
-    // Handle the case where the root element is not found
-    console.error( 'Root element not found' );
-  }
+const rootElement = document.getElementById( 'agentwp-admin-chat' );
+if ( rootElement ) {
+  window.agentwp = rootElement as AWPRootType;
+  const root = ReactDOM.createRoot( rootElement );
+  root.render(
+    <React.StrictMode>
+      <NotificationsProvider>
+        <PageProvider page={ agentwpData }>
+          <ChatApp />
+        </PageProvider>
+      </NotificationsProvider>
+    </React.StrictMode>,
+  );
+} else {
+  // Handle the case where the root element is not found
+  console.error( 'Root element not found' );
 }

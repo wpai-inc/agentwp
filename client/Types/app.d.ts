@@ -33,6 +33,11 @@ recipe_idx: number | null;
 final: boolean;
 hasExecuted: boolean;
 };
+export type AgentActionResultData = {
+status: App.Enums.AgentActionResultStatus;
+error: string | null;
+data: Array<any> | null;
+};
 export type CapabilityData = {
 slug: string;
 name: string;
@@ -47,16 +52,6 @@ convo_disabled: boolean;
 token_limit: number;
 token_limit_per_site: number;
 token_limit_per_user: number;
-};
-export type ConversationData = {
-id: string;
-message: string;
-created_at: string;
-human_created_at: string;
-wp_user_id: number;
-agent_actions: Array<App.Data.AgentActionData>;
-feedback: any | null;
-status: App.Enums.UserRequestStatus | null;
 };
 export type DocData = {
 table: string;
@@ -80,6 +75,10 @@ status: App.Enums.DocIndexState;
 export type FeedbackData = {
 approved: boolean;
 message: string;
+};
+export type HistoryChronoGroupData = {
+group: string;
+history: Array<App.Data.HistoryData>;
 };
 export type HistoryData = {
 conversationId: number;
@@ -123,7 +122,7 @@ totalResults: number;
 export type SiteSettingData = {
 name: App.Enums.SiteSettingValue;
 value: any;
-label: string;
+label: string | null;
 };
 export type TenantData = {
 slug: string;
@@ -135,6 +134,16 @@ name: string;
 email: string;
 email_verified_at: string;
 has_password: boolean;
+};
+export type UserRequestData = {
+id: string;
+message: string;
+created_at: string;
+human_created_at: string;
+wp_user_id: number;
+agent_actions: Array<App.Data.AgentActionData>;
+feedback: any | null;
+status: App.Enums.UserRequestStatus | null;
 };
 export type WpObjectData = {
 type: string;
@@ -150,9 +159,62 @@ export type WpSearchQueryData = {
 query: string;
 wpResults: Array<App.Data.WpObjectData>;
 };
+export type WpUserData = {
+id: number;
+display_name: string;
+nicename: string;
+role: string;
+};
+}
+declare namespace App.Data.Request {
+export type ActionStreamData = {
+screen: Array<any>;
+};
+export type ApiTokenData = {
+email: string;
+password: string;
+full_url: string;
+};
+export type ConvoData = {
+since: string | null;
+};
+export type StoreDocsData = {
+status: number | null;
+total: number;
+batch_amount: number;
+doc_type: string;
+docs: Array<App.Data.DocData>;
+};
+export type StoreFeedbackData = {
+approved: boolean | null;
+message: string | null;
+};
+export type StoreUserRequestData = {
+id: string | null;
+message: string;
+selected_input: Array<any> | null;
+site_data: Array<any> | null;
+};
+}
+declare namespace App.Data.Response {
+export type AccountUserData = {
+user: App.Data.UserData;
+plan: App.Data.PlanData;
+upgrade_link: string;
+config: App.Data.ConfigData;
+};
+export type ApiTokenData = {
+token: string;
+site: number | null;
+};
+export type DocIndexStatusesData = {
+lastIndexedAt: string;
+statuses: Array<App.Data.DocIndexStatusData>;
+};
 }
 declare namespace App.Enums {
 export type Ability = 'message' | 'query' | 'run' | 'code' | 'edit' | 'report' | 'navigate' | 'write_to_editor' | 'write_to_input';
+export type AgentActionResultStatus = 'success' | 'error';
 export type BillingCycle = 'monthly' | 'yearly';
 export type Command = '/gb';
 export type ConfigType = 'abilities' | 'context_awareness' | 'capabilities' | 'convo_only' | 'convo_disabled' | 'token_limit' | 'token_limit_per_site' | 'token_limit_per_user';

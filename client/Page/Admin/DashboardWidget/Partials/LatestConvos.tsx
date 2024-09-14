@@ -5,12 +5,12 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 export default function LatestConvos() {
   const { apiRequest } = useRestRequest();
   const [ isLoading, setIsLoading ] = useState< boolean >( true );
-  const [ convos, setConvos ] = useState< App.Data.HistoryData[] >( [] );
+  const [ historyGroups, setHistoryGroups ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
 
   useEffect( () => {
     async function fetch() {
-      const history = await apiRequest( 'convoHistory' );
-      setConvos( history );
+      const history = await apiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory' );
+      setHistoryGroups( history );
       setIsLoading( false );
     }
 
@@ -23,10 +23,15 @@ export default function LatestConvos() {
         <div className="min-h-10 flex items-center justify-center">
           <Spinner show={ true } />
         </div>
-      ) : convos.length > 0 ? (
+      ) : historyGroups.length > 0 ? (
         <div className="flex flex-col-reverse">
-          { convos.map( convo => (
-            <ConvoItem key={ convo.conversationCreatedAt } { ...convo } />
+          { historyGroups.map( historyGroup => (
+            <>
+              <h3>{ historyGroup.group }</h3>
+              { historyGroup.history.map( convo => (
+                <ConvoItem key={ historyGroup.group } { ...convo } />
+              ) ) }
+            </>
           ) ) }
         </div>
       ) : (
