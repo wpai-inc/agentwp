@@ -4,8 +4,6 @@ namespace WpAi\AgentWp\Http\Controllers;
 
 class TestAuthResponse extends BaseController
 {
-    protected bool $dangerNoNonce = true;
-
     public array $middleware = [
         \WpAi\AgentWp\Http\Middleware\CheckSiteConnection::class,
     ];

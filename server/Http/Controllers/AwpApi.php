@@ -6,17 +6,16 @@ class AwpApi extends BaseController
 {
     protected string $method = 'POST';
 
-    protected bool $dangerNoNonce = true;
-
     public function __invoke()
     {
         $data = json_decode($this->request->getContent(), true);
         $endpoint = $data['endpoint'];
         unset($data['endpoint']);
         $params = $data;
+
         return $this->main->client()->$endpoint($params);
 
         // WP Rest Response
-        // $this->respond($response); 
+        // $this->respond($response);
     }
 }

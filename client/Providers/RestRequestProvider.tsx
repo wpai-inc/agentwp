@@ -40,19 +40,8 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
   const restReq: AxiosInstance = axios.create( { baseURL, headers: { ...nonceHeader } } );
 
   const requestUrl = ( name: string ) => {
-    return page.rest_route + name;
+    return baseURL + name;
   };
-
-  restReq.interceptors.request.use( config => {
-    const nonce = page?.nonce;
-    if ( nonce ) {
-      config.params = {
-        ...config.params,
-        nonce,
-      };
-    }
-    return config;
-  } );
 
   const tryRequest = async (
     method: 'post' | 'get',

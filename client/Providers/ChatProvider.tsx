@@ -98,7 +98,7 @@ export default function ChatProvider( {
       req.site_data = siteData.data.data;
     }
 
-    return await apiRequest< App.Data.UserRequestData >( 'userRequest', req );
+    return await apiRequest< App.Data.UserRequestData >( 'convoCreate', req );
   }
 
   /**
@@ -141,7 +141,7 @@ export default function ChatProvider( {
 
     await optimistic(
       async () => {
-        const { user_request } = await userRequest( ur.message, ur.id, ur.mentions );
+        const user_request = await userRequest( ur.message, ur.id, ur.mentions );
         setCurrentUserRequestId( user_request.id );
         await startStream( user_request.id );
       },

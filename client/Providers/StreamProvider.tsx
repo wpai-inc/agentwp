@@ -60,11 +60,9 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
     try {
       setRetries( retries => retries + 1 );
-      await fetchEventSource( requestUrl( 'stream' ), {
+      await fetchEventSource( requestUrl( 'action_stream' ), {
         method: 'POST',
-        // @todo: integrate
-        // userRequest: user_request_id,
-        body: JSON.stringify( { screen } ),
+        body: JSON.stringify( { screen, userRequest: user_request_id } ),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

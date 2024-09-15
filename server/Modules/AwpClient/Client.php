@@ -19,6 +19,8 @@ class Client
 
     private ?\WP_User $wpUser = null;
 
+    private array $options = [];
+
     private array $defaultClientOptions = [
         'timeout' => 15,
     ];
@@ -48,6 +50,13 @@ class Client
         return $this->getClient()->request($method, $url, [
             'json' => $params,
         ]);
+    }
+
+    public function setOptions(array $options): self
+    {
+        $this->options = $options;
+
+        return $this;
     }
 
     public function setToken(?string $token): self
@@ -110,13 +119,15 @@ class Client
 
     private function getClientOptions(): array
     {
-        return array_merge(
+        $defaultOptions = array_merge(
             $this->defaultClientOptions,
             [
                 'base_uri' => $this->baseUrl,
                 'headers' => $this->getDefaultHeaders(),
             ],
         );
+
+        return array_merge_recursive($defaultOptions, $this->options);
     }
 
     public function getClient(): GuzzleHttpClient

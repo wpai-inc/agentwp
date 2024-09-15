@@ -22,6 +22,10 @@ class HttpErrors
                 'message' => __('Your site needs to be connected to AgentWP perform this action.', 'agentwp'),
                 'code' => 403,
             ],
+            'invalid_nonce' => [
+                'message' => __('Invalid nonce.', 'agentwp'),
+                'code' => 403,
+            ],
         ];
     }
 
