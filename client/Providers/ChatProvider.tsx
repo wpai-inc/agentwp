@@ -6,24 +6,10 @@ import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useRestRequest } from './RestRequestProvider';
-import { StreamableFieldType } from '@/Types/types';
 import { optimistic } from '@/lib/utils';
 import { StreamingStatusEnum } from '@/Types/enums';
 
-type CreateUserRequestResponse = {
-  stream_url: string;
-  user_request: UserRequestType;
-};
-
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
-
-type StoreRequestType = {
-  id: string | null;
-  message: string;
-  mentions: any[];
-  selected_input: StreamableFieldType | null;
-  site_data?: any[];
-};
 
 type ChatContextType = {
   conversation: UserRequestType[];
@@ -86,7 +72,6 @@ export default function ChatProvider( {
       async () => await apiRequest( 'convoClear' ),
       clear,
       ( e: any ) => {
-        console.error( 'SETTING conversation clear history' );
         setConversation( conversation );
         addErrors( [ e ] );
       },
@@ -97,12 +82,13 @@ export default function ChatProvider( {
     message: string,
     id: string | null = null,
     mentions: any[] = [],
-  ): Promise< CreateUserRequestResponse > {
-    let req: StoreRequestType = {
+  ): Promise< App.Data.UserRequestData > {
+    let req: App.Data.Request.StoreUserRequestData = {
       id,
       message,
       mentions,
       selected_input: selectedInput,
+      site_data: null,
     };
     if ( streamingStatus === StreamingStatusEnum.OFF ) {
       setStreamingStatus( StreamingStatusEnum.CONVO );
@@ -112,9 +98,7 @@ export default function ChatProvider( {
       req.site_data = siteData.data.data;
     }
 
-    const response = await apiRequest( 'userRequest', req );
-
-    return response.data;
+    return await apiRequest< App.Data.UserRequestData >( 'userRequest', req );
   }
 
   /**

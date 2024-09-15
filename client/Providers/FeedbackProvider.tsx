@@ -35,11 +35,18 @@ export const FeedbackProvider: FC< {
 
   const { apiRequest } = useRestRequest();
 
-  async function sendFeedback( approved: boolean, message?: string ) {
-    apiRequest( 'requestFeedback', {
-      userRequest: userRequestId,
+  async function sendFeedback(
+    approved: boolean,
+    message?: string,
+  ): Promise< App.Data.FeedbackData > {
+    const data: App.Data.Request.StoreFeedbackData = {
       approved,
-      message,
+      message: message || null,
+    };
+
+    return apiRequest< App.Data.FeedbackData >( 'requestFeedback', {
+      userRequest: userRequestId,
+      ...data,
     } );
   }
 

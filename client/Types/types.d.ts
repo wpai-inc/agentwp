@@ -80,20 +80,6 @@ export type GutenbergStreamType = {
   summary: string;
 };
 
-type SelectedInputType = {
-  inputPath: string;
-  inputXPath: string;
-  inputLabel: string;
-  inputName: string | null;
-  inputId: string | null;
-  inputValue: string | null;
-};
-
-type StreamableFieldType = {
-  type: string;
-  data: SelectedInputType | null;
-};
-
 type AgentWpGeneralSettings = {
   cleanup_after_deactivate: boolean;
 };

@@ -2,9 +2,8 @@ import { getElementByXpath } from '@/lib/utils';
 
 declare const wp: any;
 import { parse } from 'partial-json';
-import { StreamableFieldType } from '@/Types/types';
 
-export function WriteToCodeMirror( content: string, selectedInput: StreamableFieldType ) {
+export function WriteToCodeMirror( content: string, selectedInput: App.Data.StreamableFieldData ) {
   try {
     if ( content ) {
       const updatedInputField = parse( content ) as { content: string; summary: string };

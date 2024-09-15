@@ -30,6 +30,8 @@ class SearchQuery extends BaseController
             'wpResults' => $hybrid->searchWp(),
         ]);
 
+        print_r($searchRes);
+        exit();
         if (isset($searchRes['error'])) {
             $this->error($searchRes['error']);
         } else {

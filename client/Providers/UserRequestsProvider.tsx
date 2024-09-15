@@ -191,8 +191,9 @@ export default function UserRequestsProvider( {
   }
 
   async function fetchConvo( since?: string | null ) {
+    const data: App.Data.Request.ConvoData = { since: since ?? null };
     const items = await optimistic(
-      async () => await apiRequest( 'convo', { since: since ?? undefined } ),
+      async () => await apiRequest< App.Data.UserRequestData[] >( 'convo', data ),
       () => setLoadingConversation( true ),
       convoLoadFailure,
     );

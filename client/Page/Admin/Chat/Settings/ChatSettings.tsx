@@ -13,18 +13,20 @@ export default function ChatSettings() {
   const [ settings, setSettings ] = useState< App.Data.SiteSettingData[] >( account_settings );
   const { apiRequest } = useRestRequest();
 
-  async function handleChange( name: string, checked: boolean ) {
+  async function handleChange( name: App.Enums.SiteSettingValue, checked: boolean ) {
     const prevSettings = settings;
     const updatedSettings = settings.map( setting =>
       name === setting.name ? { ...setting, checked } : setting,
     );
 
+    const setting: App.Data.SiteSettingData = {
+      name,
+      value: checked,
+      label: null,
+    };
+
     optimistic(
-      async () =>
-        await apiRequest( 'siteSettingSave', {
-          name,
-          value: checked,
-        } ),
+      async () => await apiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', setting ),
       () => setSettings( updatedSettings ),
       () => setSettings( prevSettings ),
     );

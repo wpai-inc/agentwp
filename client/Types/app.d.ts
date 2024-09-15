@@ -119,10 +119,22 @@ export type SearchResultsData = {
 results: Array<App.Data.SearchResultData>;
 totalResults: number;
 };
+export type SelectedInputData = {
+inputPath: string;
+inputXPath: string;
+inputLabel: string;
+inputName: string | null;
+inputId: string | null;
+inputValue: string | null;
+};
 export type SiteSettingData = {
 name: App.Enums.SiteSettingValue;
 value: any;
 label: string | null;
+};
+export type StreamableFieldData = {
+type: string;
+data: App.Data.SelectedInputData;
 };
 export type TenantData = {
 slug: string;
@@ -192,7 +204,8 @@ message: string | null;
 export type StoreUserRequestData = {
 id: string | null;
 message: string;
-selected_input: Array<any> | null;
+mentions: Array<any> | null;
+selected_input: App.Data.StreamableFieldData | null;
 site_data: Array<any> | null;
 };
 }

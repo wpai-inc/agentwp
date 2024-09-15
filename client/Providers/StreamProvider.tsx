@@ -127,7 +127,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   async function abortRequest( userRequestId: string ) {
     setRequestAborted( userRequestId );
-    await apiRequest( 'requestAbort', { userRequest: userRequestId } );
+    await apiRequest< App.Data.UserRequestData >( 'requestAbort', { userRequest: userRequestId } );
     setStreamingStatus( StreamingStatusEnum.OFF );
   }
 
