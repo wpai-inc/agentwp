@@ -14,8 +14,5 @@ class AwpApi extends BaseController
         $params = $data;
 
         return $this->main->client()->$endpoint($params);
-
-        // WP Rest Response
-        // $this->respond($response);
     }
 }

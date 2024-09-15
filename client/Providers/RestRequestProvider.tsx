@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { usePage } from '@/Providers/PageProvider';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 import { useNotifications } from '@/Providers/NotificationProvider';
 import { optimistic } from '@/lib/utils';
 
@@ -66,8 +66,16 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
   };
 
   const apiRequest = async < T = any, >( endpoint: string, dataOrParams?: any ): Promise< T > => {
-    const response = await restReq.post< T >( 'api', { ...dataOrParams, endpoint } );
-    return response.data;
+    try {
+      const response = await restReq.post< T >( 'api', { ...dataOrParams, endpoint } );
+      return response.data;
+    } catch ( error: any ) {
+      const axiosErr = error as AxiosError;
+      const errorMsg = axiosErr.response?.data?.message || 'An unexpected error occurred';
+      notify.error( errorMsg );
+
+      throw new Error( errorMsg );
+    }
   };
 
   return (

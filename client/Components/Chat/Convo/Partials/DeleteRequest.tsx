@@ -5,16 +5,16 @@ import { optimistic } from '@/lib/utils';
 
 export default function DeleteRequest( { userRequest }: { userRequest: UserRequestType } ) {
   const { apiRequest } = useRestRequest();
-  const { removeUserRequest, addUserRequest } = useChat();
+  const { removeUserRequest, reloadConversation } = useChat();
 
   function handleDelete() {
     optimistic(
       async () =>
-        apiRequest( 'requestRemove', {
+        await apiRequest( 'requestRemove', {
           userRequest: userRequest.id,
         } ),
       () => removeUserRequest( userRequest ),
-      () => addUserRequest( userRequest ),
+      reloadConversation,
     );
   }
 

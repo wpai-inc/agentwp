@@ -13,9 +13,12 @@ class WpAwpClient
 {
     private Client $client;
 
+    private HttpErrors $errors;
+
     public function __construct(Client $client)
     {
         $this->client = $client;
+        $this->errors = new HttpErrors;
     }
 
     public function __call(string $name, array $arguments = [])
@@ -33,10 +36,9 @@ class WpAwpClient
                 $error->message
             );
         } catch (\Exception $e) {
-            return new \WP_Error(
-                'api_request_error',
-                $e->getMessage()
-            );
+            error_log($e->getMessage());
+
+            return $this->errors->get('api_request_error')->toWpError();
         }
     }
 

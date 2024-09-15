@@ -26,6 +26,10 @@ class HttpErrors
                 'message' => __('Invalid nonce.', 'agentwp'),
                 'code' => 403,
             ],
+            'api_request_error' => [
+                'message' => __('An unknown error occurred.', 'agentwp'),
+                'code' => 500,
+            ],
         ];
     }
 

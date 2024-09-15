@@ -62,7 +62,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       setRetries( retries => retries + 1 );
       await fetchEventSource( requestUrl( 'action_stream' ), {
         method: 'POST',
-        body: JSON.stringify( { screen, userRequest: user_request_id } ),
+        body: JSON.stringify( { userRequest: user_request_id, screen } ),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

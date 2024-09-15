@@ -29,6 +29,7 @@ type ChatContextType = {
   messageSubmitted: boolean;
   addUserRequest: ( ur: UserRequestType ) => void;
   removeUserRequest: ( ur: UserRequestType ) => void;
+  reloadConversation: () => void;
 };
 
 const ChatContext = createContext< ChatContextType | undefined >( undefined );
@@ -131,6 +132,10 @@ export default function ChatProvider( {
     setConversation( [ ur, ...conversation ] );
   }
 
+  function reloadConversation() {
+    setConversation( conversation );
+  }
+
   function removeUserRequest( ur: UserRequestType ) {
     setConversation( conversation.filter( item => item.id !== ur.id ) );
   }
@@ -188,6 +193,7 @@ export default function ChatProvider( {
         setSnippetPlugin,
         addUserRequest,
         removeUserRequest,
+        reloadConversation,
       } }>
       { children }
     </ChatContext.Provider>

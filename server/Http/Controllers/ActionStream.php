@@ -8,10 +8,14 @@ class ActionStream extends BaseController
 
     public function __invoke()
     {
-        // Set headers to make sure the response is treated as a stream
+        print_r($this->request->toArray(), true);
+
+        ignore_user_abort(true);
+
         header('Content-Type: text/event-stream');
-        header('Cache-Control: no-cache');
+        header('Cache-Control: no-store');
         header('Connection: keep-alive');
+        header('X-Accel-Buffering: no');
 
         ob_start();
 
@@ -24,6 +28,10 @@ class ActionStream extends BaseController
                 'timeout' => 30,
             ];
 
+            error_log(print_r([
+                'userRequest' => $this->request->get('userRequest'),
+                'screen' => $this->request->get('screen'),
+            ], true));
             $client = $this->main->client()->getClient();
             $response = $client->setOptions($options)->requestStream([
                 'userRequest' => $this->request->get('userRequest'),
@@ -38,6 +46,7 @@ class ActionStream extends BaseController
                 flush();
             }
         } catch (\Exception $e) {
+            error_log('Error: '.$e->getMessage());
             echo 'Error: '.$e->getMessage();
         }
 
