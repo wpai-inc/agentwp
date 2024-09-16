@@ -17,12 +17,6 @@ class ActionStream extends BaseController
         header('Connection: keep-alive');
         header('X-Accel-Buffering: no');
 
-        // Start output buffering to prevent sending incomplete chunks
-        ini_set('zlib.output_compression', 'Off');
-        while (ob_get_level() > 0) {
-            ob_end_clean();
-        }
-
         try {
             $options = [
                 'headers' => [
@@ -41,7 +35,7 @@ class ActionStream extends BaseController
                 echo Utils::readLine($response->getBody());
                 ob_flush();
                 flush();
-                usleep(50000); // Add a 50ms delay to allow real-time streaming
+                usleep(5000);
             }
 
         } catch (\Exception $e) {
