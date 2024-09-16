@@ -4,12 +4,12 @@ import OpenNewIcon from '@material-design-icons/svg/outlined/open_in_new.svg?rea
 import { WpUser } from '@/Types/types';
 import { useChat } from '@/Providers/ChatProvider';
 import { motion } from 'framer-motion';
-import { useClient } from '@/Providers/ClientProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function ChatWelcome( { user }: { user: WpUser } ) {
   const name = user.display_name;
   const { sendMessage } = useChat();
-  const { getSuggestions } = useClient();
+  const { apiRequest } = useRestRequest();
   const [ suggestions, setSuggestions ] = useState< ( string | null )[] >( [
     null,
     null,
@@ -18,7 +18,7 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
   ] );
 
   useEffect( () => {
-    getSuggestions().then( ( response: string[] ) => {
+    apiRequest< string[] >( 'siteSuggestions' ).then( ( response: string[] ) => {
       setSuggestions( response );
     } );
   }, [] );

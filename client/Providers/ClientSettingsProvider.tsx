@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useEffect, useState } from 'react';
+import { createContext, FC, useContext, useEffect, useState, Dispatch } from 'react';
 import { getStorage, setStorage } from '@/lib/utils';
 import { TwoDCoord } from '@/Hooks/position';
 
@@ -18,7 +18,7 @@ type ClientSettingValue = string | boolean | number | null | object;
 
 interface ContextProps {
   settings: ClientSettings;
-  setSettings: React.Dispatch;
+  setSettings: Dispatch< ClientSettings >;
   updateSetting: ( key: keyof ClientSettings, value: ClientSettingValue ) => void;
 }
 
@@ -50,7 +50,7 @@ export const useClientSettings = () => {
   return context;
 };
 
-export const ClientSettingsProvider: FC = ( { children } ) => {
+export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
   const [ settings, setSettings ] = useState< ClientSettings >( {
     chatOpen: getLocalStorage( 'chatOpen', false ) as boolean,
     chatMaximized: getLocalStorage( 'chatMaximized', false ) as boolean,

@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toJpeg } from 'html-to-image';
-import type { StreamableFieldType } from '@/Types/types';
 import { usePage } from './PageProvider';
 
 type postContentType = {
@@ -14,7 +13,7 @@ type ScreenType = {
   links: string[];
   screenshot?: string;
   post?: postContentType;
-  selectedInput?: StreamableFieldType;
+  selectedInput?: App.Data.StreamableFieldData;
 };
 
 type ScreenContextType = {

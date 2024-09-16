@@ -1,8 +1,11 @@
 import { useInputSelect } from '@/Providers/InputSelectProvider';
 import { ChatNotice } from './ChatNotice';
-import type { StreamableFieldType } from '@/Types/types';
 
-export default function NoticeContext( { selectedInput }: { selectedInput: StreamableFieldType } ) {
+export default function NoticeContext( {
+  selectedInput,
+}: {
+  selectedInput: App.Data.StreamableFieldData;
+} ) {
   const { setSelectedInput } = useInputSelect();
 
   return (

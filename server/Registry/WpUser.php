@@ -24,7 +24,7 @@ class WpUser implements Registrable
     public function updateUser(): void
     {
         if ($this->main->auth()->hasAccess()) {
-            $this->main->client()->updateUser();
+            $this->main->client()->wpuserUpdate();
         }
     }
 
@@ -32,7 +32,11 @@ class WpUser implements Registrable
     {
         $userAuth = new UserAuth($user);
         if ($userAuth->hasAccess()) {
-            $this->main->client()->setWpUser($user)->updateUser($user->ID);
+            $this->main->client()->setWpUser($user)->wpuserUpdate([
+                'display_name' => $user->display_name,
+                'nicename' => $user->user_nicename,
+                'role' => $user->roles[0],
+            ]);
         }
     }
 }

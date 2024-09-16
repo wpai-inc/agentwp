@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import {
   Command,
   CommandEmpty,
@@ -18,7 +18,7 @@ export default function PostEdit( { handleKeyDown, message, focused }: CommandPo
     }
   }, [ focused ] );
 
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest } = useRestRequest();
   const searchQuery = message.replace( /\/edit /g, '' );
   const [ foundPosts, setFoundPosts ] = useState< any[] >( [] );
 

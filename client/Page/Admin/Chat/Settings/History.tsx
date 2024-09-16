@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useClient } from '@/Providers/ClientProvider';
 import LoadingScreen from '@/Components/Chat/LoadingScreen';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useChat } from '@/Providers/ChatProvider';
 import IconExpand from '@material-design-icons/svg/outlined/expand_more.svg?react';
 import IconLink from '@material-design-icons/svg/outlined/open_in_new.svg?react';
-import { HistoryResponseType } from '@/Providers/ClientProvider';
-import { HistoryData } from '@/Types/types';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/ui/collapsible';
 import { cn } from '@/lib/utils';
 import { Button } from '@/Components/ui/button';
 import { usePage } from '@/Providers/PageProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function History() {
-  const [ history, setHistory ] = useState< HistoryResponseType >( {} );
-  const { getHistory } = useClient();
+  const [ history, setHistory ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
+  const { apiRequest } = useRestRequest();
   const { since, setSince } = useUserRequests();
   const { setChatSetting } = useChat();
   const { page } = usePage();
@@ -25,16 +23,19 @@ export default function History() {
   }, [ since ] );
 
   async function fetchHistory( since?: string ) {
-    const history = await getHistory( since );
+    const history = await apiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory', {
+      since,
+    } );
+    console.log( 'history', history );
     setHistory( history );
     setOpenStates( { 0: true } );
   }
 
-  function HistoryList( { items }: { items: HistoryData[] } ) {
-    return items.map( convo => <HistoryItem key={ convo.conversationId } convo={ convo } /> );
+  function HistoryList( { items }: { items: App.Data.HistoryData[] } ) {
+    return items.map( item => <HistoryItem key={ item.conversationId } { ...item } /> );
   }
 
-  function HistoryItem( { convo }: { convo: HistoryData } ) {
+  function HistoryItem( convo: App.Data.HistoryData ) {
     return (
       <button
         className="-mx-2 flex w-full items-center justify-between rounded p-2 text-left transition-colors hover:bg-brand-gray-20"
@@ -57,13 +58,11 @@ export default function History() {
     setChatSetting( null );
   }
 
-  const timeframes = Object.keys( history );
-
-  return timeframes.length === 0 ? (
+  return history.length === 0 ? (
     <LoadingScreen />
   ) : (
     <div className="flex h-full flex-col">
-      { timeframes.map( ( timeframe, idx ) => {
+      { history.map( ( chronoGroup, idx ) => {
         const isOpen = !! openStates[ idx ];
         return (
           <Collapsible
@@ -73,10 +72,10 @@ export default function History() {
             className="mb-6">
             <CollapsibleTrigger className="mb-2 flex w-full items-center gap-1">
               <IconExpand className={ cn( 'h-5 w-6', { 'rotate-180': isOpen } ) } />
-              { timeframe }
+              { chronoGroup.group }
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <HistoryList items={ history[ timeframe ] } />
+              <HistoryList items={ chronoGroup.history } />
             </CollapsibleContent>
           </Collapsible>
         );

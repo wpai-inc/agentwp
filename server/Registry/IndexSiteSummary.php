@@ -49,7 +49,7 @@ class IndexSiteSummary implements Cacheable, Registrable
 
     public function send(array $data): void
     {
-        $this->main->client(false)->summarizeSite(json_encode($data));
+        $this->main->client()->siteSummarize($data);
     }
 
     public function checkCache(): void

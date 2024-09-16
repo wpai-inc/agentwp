@@ -1,9 +1,9 @@
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { useEffect, useState } from 'react';
 import { SuggestionBoxProps } from './helpers/types';
 
 export default function SuggestionsBox( { show, keyword, onSelect }: SuggestionBoxProps ) {
-  const { adminRequest } = useAdminRoute();
+  const { adminRequest } = useRestRequest();
   const [ suggestions, setSuggestions ] = useState< any[] >( [] );
 
   useEffect( () => {

@@ -2,23 +2,19 @@
 
 namespace WpAi\AgentWp\Services;
 
+use WpAi\AgentWp\Http\WpAwpClient;
+
 class AccountSettings
 {
-    private AwpClient $client;
+    private WpAwpClient $client;
 
-    public function __construct(AwpClient $client)
+    public function __construct(WpAwpClient $client)
     {
         $this->client = $client;
     }
 
     public function get(): array
     {
-        $response = $this->client->getSiteSettings();
-
-        if ($response['response']['code'] < 300) {
-            return json_decode($response['body']);
-        }
-
-        return [];
+        return $this->client->siteSettingAll();
     }
 }

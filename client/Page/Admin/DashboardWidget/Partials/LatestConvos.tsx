@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useClient } from '@/Providers/ClientProvider';
 import { Spinner } from '@/Components/Spinner';
-import { HistoryData } from '@/Types/types';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function LatestConvos() {
-  const { getHistory } = useClient();
+  const { apiRequest } = useRestRequest();
   const [ isLoading, setIsLoading ] = useState< boolean >( true );
-  const [ convos, setConvos ] = useState< HistoryData[] >( [] );
+  const [ historyGroups, setHistoryGroups ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
 
   useEffect( () => {
     async function fetch() {
-      const history = await getHistory();
-      setConvos( history );
+      const history = await apiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory' );
+      setHistoryGroups( history );
       setIsLoading( false );
     }
 
@@ -24,10 +23,15 @@ export default function LatestConvos() {
         <div className="min-h-10 flex items-center justify-center">
           <Spinner show={ true } />
         </div>
-      ) : convos.length > 0 ? (
+      ) : historyGroups.length > 0 ? (
         <div className="flex flex-col-reverse">
-          { convos.map( convo => (
-            <ConvoItem key={ convo.conversationCreatedAt } { ...convo } />
+          { historyGroups.map( historyGroup => (
+            <>
+              <h3>{ historyGroup.group }</h3>
+              { historyGroup.history.map( convo => (
+                <ConvoItem key={ historyGroup.group } { ...convo } />
+              ) ) }
+            </>
           ) ) }
         </div>
       ) : (
@@ -41,7 +45,7 @@ function openConvo( since: string ) {
   window.agentwp.dispatchEvent( new CustomEvent( 'awp:chat:since', { detail: { since } } ) );
 }
 
-function ConvoItem( convo: HistoryData ) {
+function ConvoItem( convo: App.Data.HistoryData ) {
   return (
     <button
       className="p-2 w-full text-left odd:bg-brand-gray-20 flex justify-between"

@@ -3,23 +3,16 @@
 namespace WpAi\AgentWp\Factories;
 
 use WpAi\AgentWp\Main;
-use WpAi\AgentWp\Services\AwpClient;
+use WpAi\AgentWp\Modules\AwpClient\Client;
 
 class ClientFactory
 {
-    public static function make(Main $main, bool $checkUserAccessRights = true): AwpClient
+    public static function make(Main $main): Client
     {
-        $client = new AwpClient;
-        if (! $checkUserAccessRights && $access_token = $main->settings->getAccessToken()) {
-            $client->setToken($access_token);
-        } elseif ($access_token = $main->auth()->getAccessToken()) {
-            $client->setToken($access_token);
-        }
-
-        $client->setWpUser(wp_get_current_user())
+        return (new Client)
+            ->setToken($main->settings->getAccessToken())
+            ->setWpUser(wp_get_current_user())
             ->setSiteId($main->siteId())
-            ->setApiHost($main->apiHost());
-
-        return $client;
+            ->setBaseUrl($main->apiHost());
     }
 }

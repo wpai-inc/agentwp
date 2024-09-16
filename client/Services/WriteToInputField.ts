@@ -2,9 +2,8 @@ import { getElementByXpath } from '@/lib/utils';
 
 declare const wp: any;
 import { parse } from 'partial-json';
-import { StreamableFieldType } from '@/Types/types';
 
-export function WriteToInputField( content: string, selectedInput: StreamableFieldType ) {
+export function WriteToInputField( content: string, selectedInput: App.Data.StreamableFieldData ) {
   try {
     if ( content ) {
       const updatedInputField = parse( content ) as { content: string; summary: string };
@@ -53,7 +52,7 @@ export function WriteToInputField( content: string, selectedInput: StreamableFie
   }
 }
 
-export function CleanInputFieldContent( selectedInput: StreamableFieldType ) {
+export function CleanInputFieldContent( selectedInput: App.Data.StreamableFieldData ) {
   try {
     // clear the input field content
     const inputPath = selectedInput?.data?.inputPath || '';

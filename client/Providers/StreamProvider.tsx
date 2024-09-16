@@ -1,12 +1,11 @@
 import { createContext, useContext, useState, useRef, useCallback, useEffect } from 'react';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useUserRequests } from './UserRequestsProvider';
-import { useClient } from '@/Providers/ClientProvider';
 import { AgentAction } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
-import { usePage } from '@/Providers/PageProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
+import { useRestRequest } from './RestRequestProvider';
 
 export const StreamContext = createContext< any | undefined >( undefined );
 
@@ -38,8 +37,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     currentUserRequestId,
   } = useUserRequests();
   const { addErrors } = useError();
-  const { client, getStreamUrl } = useClient();
-  const { page } = usePage();
+  const { requestUrl, nonceHeader, apiRequest } = useRestRequest();
   const ctrl = useRef< AbortController >( new AbortController() );
   const [ streamingStatus, setStreamingStatus ] = useState( StreamingStatusEnum.OFF );
   const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
@@ -50,8 +48,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       return;
     }
     setStreamingStatus( StreamingStatusEnum.PENDING );
-
-    const stream_url = getStreamUrl( user_request_id );
     setCurrentUserRequestId( user_request_id );
     liveAction.current = null;
 
@@ -64,17 +60,13 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
     try {
       setRetries( retries => retries + 1 );
-      await fetchEventSource( stream_url, {
+      await fetchEventSource( requestUrl( 'action_stream' ), {
         method: 'POST',
-        body: JSON.stringify( { screen } ),
+        body: JSON.stringify( { userRequest: user_request_id, screen } ),
         headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + client.token,
-          'X-WP-AGENT-VERSION': client.agentWpVersion,
-          'X-Wp-Agent-Version': client.agentWpVersion,
-          'X-Wp-User-Id': page.user.ID,
-          'X-Wp-Site-Id': page.site_id,
+          'Accept': 'text/event-stream',
           'Content-Type': 'application/json',
+          ...nonceHeader,
         },
         signal: ctrl.current.signal,
         openWhenHidden: true,
@@ -133,7 +125,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   async function abortRequest( userRequestId: string ) {
     setRequestAborted( userRequestId );
-    await client.abortUserRequest( userRequestId );
+    await apiRequest< App.Data.UserRequestData >( 'requestAbort', { userRequest: userRequestId } );
     setStreamingStatus( StreamingStatusEnum.OFF );
   }
 

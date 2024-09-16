@@ -49,13 +49,14 @@ class IndexSiteDocs implements Registrable
         $status = IndexStatus::get();
         $this->docs->setStatus($status);
 
-        $response = $this->main->client(false)->indexDocs(
+        $response = $this->main->client()->siteDocsStore(
             $this->docs->data()
         );
 
         if (isset($response['error'])) {
             error_log(print_r($response['error'], true));
             $status->fail();
+
             return false;
         }
 

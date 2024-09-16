@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { Switch } from '@/Components/ui/switch';
 import { usePage } from '@/Providers/PageProvider';
 import { DataListItem } from '@/Components/ui/dl';
 
 export default function GeneralSettings() {
-  const { tryRequest } = useAdminRoute();
+  const { tryRequest } = useRestRequest();
   const { page } = usePage();
   const [ generalSettings, setGeneralSettings ] = useState( page.general_settings );
 

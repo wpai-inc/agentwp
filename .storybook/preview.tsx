@@ -10,8 +10,7 @@ import ActionListenerProvider from '../client/Providers/ActionListenerProvider';
 import UserRequestsProvider from '../client/Providers/UserRequestsProvider';
 import { PageProvider } from '../client/Providers/PageProvider';
 import type { PageData } from '../client/Types/types';
-import { ClientProvider } from '../client/Providers/ClientProvider';
-import { AdminRouteProvider } from '../client/Providers/AdminRouteProvider';
+import { RestRequestProvider } from '../client/Providers/RestRequestProvider';
 import { NotificationsProvider } from '../client/Providers/NotificationProvider';
 import { ErrorProvider } from '../client/Providers/ErrorProvider';
 
@@ -77,23 +76,21 @@ const preview: Preview = {
           <NotificationsProvider>
             <AppProvider>
               <ErrorProvider>
-                <AdminRouteProvider>
-                  <ClientProvider>
-                    <ClientSettingsProvider>
-                      <ScreenProvider>
-                        <UserRequestsProvider messages={ parameters.messages }>
-                          <StreamProvider>
-                            <ActionListenerProvider>
-                              <ChatProvider defaultOpen={ parameters.open }>
-                                <Story />
-                              </ChatProvider>
-                            </ActionListenerProvider>
-                          </StreamProvider>
-                        </UserRequestsProvider>
-                      </ScreenProvider>
-                    </ClientSettingsProvider>
-                  </ClientProvider>
-                </AdminRouteProvider>
+                <RestRequestProvider>
+                  <ClientSettingsProvider>
+                    <ScreenProvider>
+                      <UserRequestsProvider messages={ parameters.messages }>
+                        <StreamProvider>
+                          <ActionListenerProvider>
+                            <ChatProvider defaultOpen={ parameters.open }>
+                              <Story />
+                            </ChatProvider>
+                          </ActionListenerProvider>
+                        </StreamProvider>
+                      </UserRequestsProvider>
+                    </ScreenProvider>
+                  </ClientSettingsProvider>
+                </RestRequestProvider>
               </ErrorProvider>
             </AppProvider>
           </NotificationsProvider>

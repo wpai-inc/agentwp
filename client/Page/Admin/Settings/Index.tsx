@@ -4,9 +4,8 @@ import { PageProvider } from '@/Providers/PageProvider';
 import Settings from './Settings';
 import Wizard from './Wizard';
 import type { PageData } from '@/Types/types';
-import { AdminRouteProvider } from '@/Providers/AdminRouteProvider';
+import { RestRequestProvider } from '@/Providers/RestRequestProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
-import { ClientProvider } from '@/Providers/ClientProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import '@/assets/styles/app.css';
 import { AWPRootType } from '@/Types/types';
@@ -30,11 +29,9 @@ if ( rootElement ) {
       <PageProvider page={ agentwpData }>
         <NotificationsProvider>
           <ErrorProvider>
-            <AdminRouteProvider>
-              <ClientProvider>
-                { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
-              </ClientProvider>
-            </AdminRouteProvider>
+            <RestRequestProvider>
+              { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
+            </RestRequestProvider>
           </ErrorProvider>
         </NotificationsProvider>
       </PageProvider>

@@ -2,29 +2,14 @@ import { useState, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
-import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
-import { useAdminRoute } from './AdminRouteProvider';
-import { StreamableFieldType } from '@/Types/types';
+import { useRestRequest } from './RestRequestProvider';
 import { optimistic } from '@/lib/utils';
 import { StreamingStatusEnum } from '@/Types/enums';
 
-type CreateUserRequestResponse = {
-  stream_url: string;
-  user_request: UserRequestType;
-};
-
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
-
-type StoreRequestType = {
-  id: string | null;
-  message: string;
-  mentions: any[];
-  selected_input: StreamableFieldType | null;
-  site_data?: any[];
-};
 
 type ChatContextType = {
   conversation: UserRequestType[];
@@ -44,6 +29,7 @@ type ChatContextType = {
   messageSubmitted: boolean;
   addUserRequest: ( ur: UserRequestType ) => void;
   removeUserRequest: ( ur: UserRequestType ) => void;
+  reloadConversation: () => void;
 };
 
 const ChatContext = createContext< ChatContextType | undefined >( undefined );
@@ -63,7 +49,6 @@ export default function ChatProvider( {
   children: React.ReactNode;
   defaultOpen?: boolean;
 } ) {
-  const { client, clearConversation } = useClient();
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ message, setMessage ] = useState( '' );
@@ -80,38 +65,41 @@ export default function ChatProvider( {
   const { startStream, cancelStream, setStreamingStatus, streamingStatus } = useStream();
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
-  const { adminRequest } = useAdminRoute();
   const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
+  const { tryRequest, apiRequest } = useRestRequest();
 
   async function clearHistory() {
-    optimistic( clearConversation, clear, ( e: any ) => {
-      console.error( 'SETTING conversation clear history' );
-      setConversation( conversation );
-      addErrors( [ e ] );
-    } );
+    optimistic(
+      async () => await apiRequest( 'convoClear' ),
+      clear,
+      ( e: any ) => {
+        setConversation( conversation );
+        addErrors( [ e ] );
+      },
+    );
   }
 
   async function userRequest(
     message: string,
     id: string | null = null,
     mentions: any[] = [],
-  ): Promise< CreateUserRequestResponse > {
-    let req: StoreRequestType = {
+  ): Promise< App.Data.UserRequestData > {
+    let req: App.Data.Request.StoreUserRequestData = {
       id,
       message,
       mentions,
       selected_input: selectedInput,
+      site_data: null,
     };
     if ( streamingStatus === StreamingStatusEnum.OFF ) {
       setStreamingStatus( StreamingStatusEnum.CONVO );
     }
-    const siteData = await adminRequest.get( 'site_data' );
+    const siteData = await tryRequest( 'get', 'site_data' );
     if ( siteData.data?.data ) {
       req.site_data = siteData.data.data;
     }
 
-    const response = await client.storeConversation( req );
-    return response.data;
+    return await apiRequest< App.Data.UserRequestData >( 'convoCreate', req );
   }
 
   /**
@@ -144,6 +132,10 @@ export default function ChatProvider( {
     setConversation( [ ur, ...conversation ] );
   }
 
+  function reloadConversation() {
+    setConversation( conversation );
+  }
+
   function removeUserRequest( ur: UserRequestType ) {
     setConversation( conversation.filter( item => item.id !== ur.id ) );
   }
@@ -154,7 +146,7 @@ export default function ChatProvider( {
 
     await optimistic(
       async () => {
-        const { user_request } = await userRequest( ur.message, ur.id, ur.mentions );
+        const user_request = await userRequest( ur.message, ur.id, ur.mentions );
         setCurrentUserRequestId( user_request.id );
         await startStream( user_request.id );
       },
@@ -201,6 +193,7 @@ export default function ChatProvider( {
         setSnippetPlugin,
         addUserRequest,
         removeUserRequest,
+        reloadConversation,
       } }>
       { children }
     </ChatContext.Provider>

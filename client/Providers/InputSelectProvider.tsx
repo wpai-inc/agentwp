@@ -8,15 +8,14 @@ import {
   getSelectedPostTitle,
   getSelectedWysiwyg,
 } from '@/Services/SelectedFields';
-import type { StreamableFieldType } from '@/Types/types';
 import { useScreen } from '@/Providers/ScreenProvider';
 import type { Editor } from 'tinymce';
 
 declare const wp: any;
 
 type ContextProps = {
-  selectedInput: StreamableFieldType | null;
-  setSelectedInput: React.Dispatch< React.SetStateAction< StreamableFieldType | null > >;
+  selectedInput: App.Data.StreamableFieldData | null;
+  setSelectedInput: React.Dispatch< React.SetStateAction< App.Data.StreamableFieldData | null > >;
 };
 export const InputSelectContext = createContext< ContextProps | undefined >( undefined );
 
@@ -31,7 +30,9 @@ export const useInputSelect = () => {
 };
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
-  const [ selectedInput, setSelectedInput ] = useState< StreamableFieldType | null >( null );
+  const [ selectedInput, setSelectedInput ] = useState< App.Data.StreamableFieldData | null >(
+    null,
+  );
   const selectedInputRef = useRef<
     null | HTMLInputElement | HTMLTextAreaElement | HTMLElement | Editor
   >( null );

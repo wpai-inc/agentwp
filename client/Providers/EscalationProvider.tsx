@@ -1,7 +1,7 @@
 import React, { createContext, FC, useContext, useState } from 'react';
 import { MessageActionEscalation } from '@wpai/schemas';
-import { useClient } from '@/Providers/ClientProvider';
 import { useError } from '@/Providers/ErrorProvider';
+import { useRestRequest } from './RestRequestProvider';
 
 interface ContextProps {
   createEscalation: () => Promise< void >;
@@ -26,11 +26,13 @@ export const EscalationProvider: FC< {
   const [ created, setCreated ] = useState< boolean >( false );
   const [ loading, setLoading ] = useState< boolean >( false );
 
-  const { client } = useClient();
+  const { apiRequest } = useRestRequest();
   const { addErrors } = useError();
 
   async function escalationRequest( data: MessageActionEscalation ): Promise< void > {
-    const response = await client.isAuthorized()?.postEscalation( data.id );
+    const response = await apiRequest( 'siteRequestEscalate', {
+      escalation: data.id,
+    } );
 
     return response.data;
   }

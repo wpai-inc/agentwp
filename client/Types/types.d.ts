@@ -28,10 +28,10 @@ export type PageData = {
   rest_endpoint: string;
   user: WpUser;
   account: {
-    user: UserData;
-    plan: PlanData;
+    user: App.Data.UserData;
+    plan: App.Data.PlanData;
     upgrade_link: string;
-    config: ConfigData;
+    config: App.Data.ConfigData;
   };
   is_admin: boolean;
   agentwp_manager: boolean;
@@ -40,7 +40,7 @@ export type PageData = {
   access_token: string;
   onboarding_completed: boolean;
   general_settings: AgentWpGeneralSettings;
-  account_settings: SiteSettingData[];
+  account_settings: App.Data.SiteSettingData[];
 };
 
 export type WpUser = {
@@ -80,76 +80,8 @@ export type GutenbergStreamType = {
   summary: string;
 };
 
-type SelectedInputType = {
-  inputPath: string;
-  inputXPath: string;
-  inputLabel: string;
-  inputName: string | null;
-  inputId: string | null;
-  inputValue: string | null;
-};
-
-type StreamableFieldType = {
-  type: string;
-  data: SelectedInputType | null;
-};
-
 type AgentWpGeneralSettings = {
   cleanup_after_deactivate: boolean;
-};
-
-/** Copied from awp/resources/js/types/generated.d.ts */
-export type HistoryData = {
-  conversationId: number;
-  userRequestId: number;
-  siteId: string;
-  userId: number;
-  wpUserId: number;
-  message: string;
-  conversationCreatedAt: string;
-  userRequestCreatedAt: string;
-  humanCreatedAt: string;
-};
-
-export type DocIndexStatusData = {
-  id: number;
-  docType: string;
-  total: number;
-  indexed: number;
-  percent: number;
-  done: boolean;
-};
-
-export type PlanData = {
-  name: string;
-  slug: string;
-  priceYearly: number;
-  priceMonthly: number;
-};
-
-export type SiteSettingValue = 'convoOnly' | 'webEnabled' | 'visionEnabled';
-
-export type SiteSettingData = {
-  name: SiteSettingValue;
-  value: any;
-  label: string;
-};
-
-export type ConfigData = {
-  abilities: [];
-  context_awareness: [];
-  capabilities: [];
-  convo_only: boolean;
-  convo_disabled: boolean;
-  token_limit: number;
-  token_limit_per_site: number;
-  token_limit_per_user: number;
-};
-
-export type UserData = {
-  name: string;
-  email: string;
-  email_verified_at: string;
 };
 
 export type WpPost = {

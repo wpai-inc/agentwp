@@ -1,5 +1,5 @@
 import { createContext, FC, useContext, useState } from 'react';
-import { useAdminRoute } from './AdminRouteProvider';
+import { useRestRequest } from './RestRequestProvider';
 import { AxiosResponse } from 'axios';
 
 type ContextProps = {
@@ -40,7 +40,7 @@ type SearchQueryResponseType = {
 };
 
 export const SearchProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
-  const { tryRequest } = useAdminRoute();
+  const { tryRequest } = useRestRequest();
   const [ query, setQuery ] = useState< string >( '' );
   const [ results, setResults ] = useState< SearchQueryResponseType | null >( null );
   const [ pending, setPending ] = useState< boolean >( false );
@@ -48,7 +48,7 @@ export const SearchProvider: FC< { children: React.ReactNode } > = ( { children 
   async function search( query: string ) {
     setQuery( query );
     setPending( true );
-    const res: AxiosResponse< SearchQueryResponseType > = await tryRequest( 'get', 'search_query', {
+    const res: AxiosResponse = await tryRequest( 'get', 'search_query', {
       query,
     } );
     setResults( res.data );

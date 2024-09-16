@@ -2,24 +2,30 @@
 
 namespace WpAi\AgentWp\Registry;
 
+use WpAi\AgentWp\Contracts\MiddlewareInterface;
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Controllers\AddCodeSnippet;
-use WpAi\AgentWp\Controllers\DisconnectSite;
-use WpAi\AgentWp\Controllers\GenerateUniqueVerificationKey;
-use WpAi\AgentWp\Controllers\GetCodeSnippetPlugin;
-use WpAi\AgentWp\Controllers\GetMentionItems;
-use WpAi\AgentWp\Controllers\GetUsers;
-use WpAi\AgentWp\Controllers\Logout;
-use WpAi\AgentWp\Controllers\MakeOnboardingAsCompleted;
-use WpAi\AgentWp\Controllers\ManuallyActivateAgent;
-use WpAi\AgentWp\Controllers\QueryActionController;
-use WpAi\AgentWp\Controllers\RefreshToken;
-use WpAi\AgentWp\Controllers\SaveConnection;
-use WpAi\AgentWp\Controllers\SiteDataController;
-use WpAi\AgentWp\Controllers\TestResponse;
-use WpAi\AgentWp\Controllers\UpdateGeneralSettings;
-use WpAi\AgentWp\Controllers\UpdateUserCapabilities;
-use WpAi\AgentWp\Controllers\ValidateWebsite;
+use WpAi\AgentWp\Http\Controllers\ActionStream;
+use WpAi\AgentWp\Http\Controllers\AddCodeSnippet;
+use WpAi\AgentWp\Http\Controllers\AwpApi;
+use WpAi\AgentWp\Http\Controllers\DisconnectSite;
+use WpAi\AgentWp\Http\Controllers\GenerateUniqueVerificationKey;
+use WpAi\AgentWp\Http\Controllers\GetCodeSnippetPlugin;
+use WpAi\AgentWp\Http\Controllers\GetMentionItems;
+use WpAi\AgentWp\Http\Controllers\GetUsers;
+use WpAi\AgentWp\Http\Controllers\IndexSiteDocs;
+use WpAi\AgentWp\Http\Controllers\Logout;
+use WpAi\AgentWp\Http\Controllers\MakeOnboardingAsCompleted;
+use WpAi\AgentWp\Http\Controllers\ManuallyActivateAgent;
+use WpAi\AgentWp\Http\Controllers\QueryActionController;
+use WpAi\AgentWp\Http\Controllers\RefreshToken;
+use WpAi\AgentWp\Http\Controllers\SaveConnection;
+use WpAi\AgentWp\Http\Controllers\SearchQuery;
+use WpAi\AgentWp\Http\Controllers\SiteDataController;
+use WpAi\AgentWp\Http\Controllers\TestAuthResponse;
+use WpAi\AgentWp\Http\Controllers\TestResponse;
+use WpAi\AgentWp\Http\Controllers\UpdateGeneralSettings;
+use WpAi\AgentWp\Http\Controllers\UpdateUserCapabilities;
+use WpAi\AgentWp\Http\Controllers\ValidateWebsite;
 use WpAi\AgentWp\Main;
 
 class Router implements Registrable
@@ -27,7 +33,11 @@ class Router implements Registrable
     const REST_ROUTE_ENDPOINT = 'agentwp/v1';
 
     protected array $routes = [
-        'test_route' => TestResponse::class,
+        'api' => AwpApi::class,
+        'action_stream' => ActionStream::class,
+        'test_auth' => TestAuthResponse::class,
+        'test_route' => [TestResponse::class, 'successfulResponse'],
+        'test_stream_forward' => [TestResponse::class, 'stream'],
         'agentwp_users' => GetUsers::class,
         'site_data' => SiteDataController::class,
         'update_user' => UpdateUserCapabilities::class,
@@ -44,8 +54,8 @@ class Router implements Registrable
         'mention_items' => GetMentionItems::class,
         'disconnect_site' => DisconnectSite::class,
         'run_action_query' => QueryActionController::class,
-        'index_site_docs' => \WpAi\AgentWp\Controllers\IndexSiteDocs::class,
-        'search_query' => \WpAi\AgentWp\Controllers\SearchQuery::class,
+        'index_site_docs' => IndexSiteDocs::class,
+        'search_query' => SearchQuery::class,
     ];
 
     private Main $main;
@@ -71,9 +81,24 @@ class Router implements Registrable
                 $callback = [$controller, $callback[1]];
             }
 
-            register_rest_route(self::REST_ROUTE_ENDPOINT, '/' . $route, [
+            register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
                 'methods' => $controller->method(),
-                'callback' => $callback,
+                'callback' => function (\WP_REST_Request $request) use ($controller, $callback) {
+                    // Run middleware checks before the controller action
+                    foreach ($controller->middleware as $middlewareClass) {
+                        $middleware = new $middlewareClass($this->main);
+
+                        if ($middleware instanceof MiddlewareInterface) {
+                            $result = $middleware->handle($request);
+
+                            if (is_wp_error($result)) {
+                                return $result;
+                            }
+                        }
+                    }
+
+                    return call_user_func($callback, $request);
+                },
                 'permission_callback' => [$controller, 'check_permission'],
             ]);
         }

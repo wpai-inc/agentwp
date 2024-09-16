@@ -3,10 +3,10 @@ import { Button } from '@/Components/ui/button';
 import Textarea from '@/Components/ui/Textarea';
 import * as Form from '@radix-ui/react-form';
 import { usePage } from '@/Providers/PageProvider';
-import { useAdminRoute } from '@/Providers/AdminRouteProvider';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export function ManualAwpActivation() {
-  const { adminRequest, tryRequest } = useAdminRoute();
+  const { adminRequest, tryRequest } = useRestRequest();
   const { page } = usePage();
 
   const [ fieldsVisible, setFieldsVisible ] = useState( false );
