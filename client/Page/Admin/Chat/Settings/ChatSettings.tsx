@@ -15,8 +15,9 @@ export default function ChatSettings() {
 
   async function handleChange( name: App.Enums.SiteSettingValue, checked: boolean ) {
     const prevSettings = settings;
+
     const updatedSettings = settings.map( setting =>
-      name === setting.name ? { ...setting, checked } : setting,
+      name === setting.name ? { ...setting, value: checked } : setting,
     );
 
     const setting: App.Data.SiteSettingData = {
