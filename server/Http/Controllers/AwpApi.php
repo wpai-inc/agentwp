@@ -8,10 +8,9 @@ class AwpApi extends BaseController
 
     public function __invoke()
     {
-        $data = json_decode($this->request->getContent(), true);
-        $endpoint = $data['endpoint'];
-        unset($data['endpoint']);
-        $params = $data;
+        $params = json_decode($this->request->getContent(), true);
+        $endpoint = $params['endpoint'];
+        unset($params['endpoint']);
 
         return $this->main->client()->$endpoint($params);
     }

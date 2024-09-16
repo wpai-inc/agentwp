@@ -64,7 +64,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         method: 'POST',
         body: JSON.stringify( { userRequest: user_request_id, screen } ),
         headers: {
-          'Accept': 'application/json',
+          'Accept': 'text/event-stream',
           'Content-Type': 'application/json',
           ...nonceHeader,
         },

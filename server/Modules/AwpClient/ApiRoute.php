@@ -20,7 +20,7 @@ class ApiRoute
         $this->methods = $methods;
     }
 
-    public function getUrl(?array $params = []): string
+    public function getUrl(?array $params = []): array
     {
         return $this->hydrateParams($this->uri, $params);
     }
@@ -30,23 +30,26 @@ class ApiRoute
         return $this->methods[0];
     }
 
-    private function hydrateParams(string $url, ?array $params = []): string
+    private function hydrateParams(string $url, ?array $params = []): array
     {
-        if ($params) {
+        if (! empty($params)) {
             foreach ($params as $key => $value) {
-                if (is_string($value)) {
-                    $url = str_replace('{' . $key . '}', $value, $url);
+                // Check if the placeholder exists in the URL
+                if (strpos($url, '{'.$key.'}') !== false) {
+                    // Replace the placeholder with the actual value
+                    $url = str_replace('{'.$key.'}', $value, $url);
+
+                    // Remove the used parameter from the array
+                    unset($params[$key]);
                 }
             }
         }
 
-        $missingParams = [];
-        preg_match_all('/\{([a-zA-Z1-9]+)\}/', $url, $missingParams);
-
-        if (! empty($missingParams[1])) {
+        // Find any missing parameters still in the URL
+        if (preg_match_all('/\{([a-zA-Z1-9]+)\}/', $url, $missingParams) && ! empty($missingParams[1])) {
             throw new RouteParamsMissingException($missingParams[1]);
         }
 
-        return $url;
+        return [$url, $params];
     }
 }

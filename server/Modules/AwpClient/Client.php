@@ -42,10 +42,10 @@ class Client
      */
     public function __call(string $name, array $args): Response
     {
-        $params = isset($args[0]) ? $args[0] : [];
+        $args = isset($args[0]) ? $args[0] : [];
         $route = $this->routes->getRoute($name);
         $method = $route->getMethod();
-        $url = $route->getUrl(is_array($params) ? $params : []);
+        [$url, $params] = $route->getUrl(is_array($args) ? $args : []);
 
         return $this->getClient()->request($method, $url, [
             'json' => $params,
@@ -119,15 +119,20 @@ class Client
 
     private function getClientOptions(): array
     {
-        $defaultOptions = array_merge(
-            $this->defaultClientOptions,
-            [
-                'base_uri' => $this->baseUrl,
-                'headers' => $this->getDefaultHeaders(),
-            ],
+        $headers = array_merge(
+            $this->getDefaultHeaders(),
+            $this->options['headers'] ?? []
         );
 
-        return array_merge_recursive($defaultOptions, $this->options);
+        $defaultOptions = array_merge(
+            $this->defaultClientOptions,
+            ['base_uri' => $this->baseUrl],
+        );
+
+        $options = array_merge($defaultOptions, $this->options);
+        $options['headers'] = $headers;
+
+        return $options;
     }
 
     public function getClient(): GuzzleHttpClient

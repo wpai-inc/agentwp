@@ -48,7 +48,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   }
 
   async function storeActionResult( aa: AgentAction, data: App.Data.AgentActionResultData ) {
-    await apiRequest< App.Data.AgentActionData >( 'siteRequestActionResult', {
+    await apiRequest< App.Data.AgentActionData >( 'actionResult', {
       agentAction: aa.id,
       ...data,
     } );
