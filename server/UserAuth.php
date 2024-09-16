@@ -48,7 +48,7 @@ class UserAuth
 
     public function isManager(): bool
     {
-        if ($this->settings->isConnectedToAwp()) {
+        if ($this->settings->isConnected()) {
             return $this->user->has_cap(self::CAP_MANAGE_AGENTWP_CONNECTION);
         }
 
@@ -66,7 +66,7 @@ class UserAuth
 
     public function canManageUsers(): bool
     {
-        if ($this->settings->isConnectedToAwp()) {
+        if ($this->settings->isConnected()) {
             return $this->user->has_cap(self::CAP_MANAGE_AGENTWP_USERS);
         }
 
