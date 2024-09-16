@@ -5,19 +5,22 @@ import SearchResponse from './SearchResponse';
 import { SearchProvider } from '@/Providers/SearchProvider';
 import DocIndexStatus from './Partials/DocIndexStatus';
 import { DocIndexStatusProvider } from '@/Providers/DocIndexStatusProvider';
+import WaitlistTab from '../Tabs/WaitlistTab';
 
 export default function SearchTab() {
   return (
     <TabContainer>
-      <SearchProvider>
-        <DocIndexStatusProvider>
-          <DocIndexStatus />
-        </DocIndexStatusProvider>
-        <InnerContainer>
-          <SearchResponse />
-        </InnerContainer>
-        <SearchInput />
-      </SearchProvider>
+      <WaitlistTab>
+        <SearchProvider>
+          <DocIndexStatusProvider>
+            <DocIndexStatus />
+          </DocIndexStatusProvider>
+          <InnerContainer>
+            <SearchResponse />
+          </InnerContainer>
+          <SearchInput />
+        </SearchProvider>
+      </WaitlistTab>
     </TabContainer>
   );
 }
