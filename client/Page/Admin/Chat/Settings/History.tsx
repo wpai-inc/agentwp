@@ -13,6 +13,7 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 export default function History() {
   const [ history, setHistory ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
   const { apiRequest } = useRestRequest();
+  const [ loading, setLoading ] = useState( true );
   const { since, setSince } = useUserRequests();
   const { setChatSetting } = useChat();
   const { page } = usePage();
@@ -26,9 +27,9 @@ export default function History() {
     const history = await apiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory', {
       since,
     } );
-    console.log( 'history', history );
     setHistory( history );
     setOpenStates( { 0: true } );
+    setLoading( false );
   }
 
   function HistoryList( { items }: { items: App.Data.HistoryData[] } ) {
@@ -58,28 +59,32 @@ export default function History() {
     setChatSetting( null );
   }
 
-  return history.length === 0 ? (
+  return loading ? (
     <LoadingScreen />
   ) : (
     <div className="flex h-full flex-col">
-      { history.map( ( chronoGroup, idx ) => {
-        const isOpen = !! openStates[ idx ];
-        return (
-          <Collapsible
-            open={ isOpen }
-            onOpenChange={ () => handleToggle( idx ) }
-            key={ idx }
-            className="mb-6">
-            <CollapsibleTrigger className="mb-2 flex w-full items-center gap-1">
-              <IconExpand className={ cn( 'h-5 w-6', { 'rotate-180': isOpen } ) } />
-              { chronoGroup.group }
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <HistoryList items={ chronoGroup.history } />
-            </CollapsibleContent>
-          </Collapsible>
-        );
-      } ) }
+      { history.length > 0 ? (
+        history.map( ( chronoGroup, idx ) => {
+          const isOpen = !! openStates[ idx ];
+          return (
+            <Collapsible
+              open={ isOpen }
+              onOpenChange={ () => handleToggle( idx ) }
+              key={ idx }
+              className="mb-6">
+              <CollapsibleTrigger className="mb-2 flex w-full items-center gap-1">
+                <IconExpand className={ cn( 'h-5 w-6', { 'rotate-180': isOpen } ) } />
+                { chronoGroup.group }
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <HistoryList items={ chronoGroup.history } />
+              </CollapsibleContent>
+            </Collapsible>
+          );
+        } )
+      ) : (
+        <p className="text-center">No history found</p>
+      ) }
       <Button className="mt-auto" asChild>
         <a href={ page.settings_page }>
           View all history <IconLink className="ml-1 h-4 w-4" />
