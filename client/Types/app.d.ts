@@ -132,6 +132,10 @@ name: App.Enums.SiteSettingValue;
 value: any;
 label: string | null;
 };
+export type SiteSupportRequestData = {
+type: string;
+message: string;
+};
 export type StreamableFieldData = {
 type: string;
 data: App.Data.SelectedInputData;

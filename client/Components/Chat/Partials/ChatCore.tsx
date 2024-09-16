@@ -11,7 +11,7 @@ export type HandleDrag = { handleDrag?: ( e: MouseEvent ) => void };
 type PageComponents = Record< TabKey, JSX.Element >;
 
 export default function ChatCore( { handleDrag }: HandleDrag ) {
-  const [ tab, setTab ] = useState< TabKey >( 'convo' );
+  const [ tab, setTab ] = useState< TabKey >( 'support' );
 
   const pages = useMemo< PageComponents >(
     () => ( {
