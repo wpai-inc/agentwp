@@ -10,17 +10,18 @@ import WaitlistTab from '../Tabs/WaitlistTab';
 export default function SearchTab() {
   return (
     <TabContainer>
-      <WaitlistTab>
-        <SearchProvider>
-          <DocIndexStatusProvider>
-            <DocIndexStatus />
-          </DocIndexStatusProvider>
-          <InnerContainer>
-            <SearchResponse />
-          </InnerContainer>
-          <SearchInput />
-        </SearchProvider>
-      </WaitlistTab>
+      <WaitlistTab />
     </TabContainer>
+    // <TabContainer>
+    //     <SearchProvider>
+    //       <DocIndexStatusProvider>
+    //         <DocIndexStatus />
+    //       </DocIndexStatusProvider>
+    //       <InnerContainer>
+    //         <SearchResponse />
+    //       </InnerContainer>
+    //       <SearchInput />
+    //     </SearchProvider>
+    // </TabContainer>
   );
 }
