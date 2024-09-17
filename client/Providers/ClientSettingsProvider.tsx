@@ -12,6 +12,7 @@ export type ClientSettings = {
   height: number;
   offset: TwoDCoord;
   updateDismissed: boolean;
+  betaDismissed: boolean;
 };
 
 type ClientSettingValue = string | boolean | number | null | object;
@@ -61,6 +62,7 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
     height: getLocalStorage( 'height', 800 ) as number,
     offset: getLocalStorage( 'offset', { x: 0, y: 0 } ) as TwoDCoord,
     updateDismissed: getLocalStorage( 'updateDismissed', false ) as boolean,
+    betaDismissed: getLocalStorage( 'betaDismissed', false ) as boolean,
   } );
 
   function updateSetting( key: keyof ClientSettings, value: ClientSettingValue ) {

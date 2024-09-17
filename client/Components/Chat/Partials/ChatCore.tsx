@@ -4,6 +4,7 @@ import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import UpdateNotification from '@/Components/Chat/Partials/UpdateNotification';
 import ChatNav from '@/Components/Chat/Partials/ChatNav';
 import { ConversationTab, SearchTab, SupportTab, SettingsTab } from '@/Components/Chat/Tabs';
+import BetaNotice from './BetaNotice';
 
 export type TabKey = 'convo' | 'search' | 'support' | 'settings';
 export type HandleDrag = { handleDrag?: ( e: MouseEvent ) => void };
@@ -26,6 +27,7 @@ export default function ChatCore( { handleDrag }: HandleDrag ) {
     <div className="flex flex-col h-full">
       <ChatTopBar handleDrag={ handleDrag } />
       <UpdateNotification />
+      <BetaNotice />
       { pages[ tab ] }
       <ChatNav tab={ tab } setTab={ setTab } />
       <ChatOverlay />

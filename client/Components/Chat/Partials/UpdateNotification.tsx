@@ -13,7 +13,7 @@ type ChangelogUpdate = {
 
 export default function UpdateNotification() {
   const { settings, updateSetting } = useClientSettings();
-  const feedUrl = 'https://agentwp.com/wp-json/wp/v2/posts/';
+  const feedUrl = 'https://agentwp.com/wp-json/wp/v2/change/';
   const [ update, setUpdate ] = useState< ChangelogUpdate | null >( null );
 
   useEffect( function () {
@@ -30,11 +30,11 @@ export default function UpdateNotification() {
     fetchUpdate();
   }, [] );
 
-  async function getChangelog(): Promise<AxiosPromise<WpPost[]> | undefined> {
+  async function getChangelog(): Promise< AxiosPromise< WpPost[] > | undefined > {
     try {
-      return await axios.get(feedUrl);
-    } catch (error) {
-      console.error(error);
+      return await axios.get( feedUrl );
+    } catch ( error ) {
+      console.error( error );
     }
   }
 
