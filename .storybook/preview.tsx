@@ -21,7 +21,6 @@ const page = {
   wp_rest_nonce: 'b6548995e0',
   site_id: '9c088a0d-d543-4148-9e55-fe1d38eae2e4',
   client_id: '9c088a0d-d953-498e-b9a7-5b9cf7001ce1',
-  api_host: 'http://localhost',
   rest_route: 'http://localhost:8080/index.php?rest_route=/',
   rest_endpoint: 'agentwp/v1',
   user: {
