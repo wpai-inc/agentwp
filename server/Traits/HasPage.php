@@ -11,15 +11,6 @@ trait HasPage
         return $this;
     }
 
-    public function registerPage()
-    {
-        $page = $_GET['page'] ?? null;
-
-        if ($this->slug() !== $page) {
-            $this->active = false;
-        }
-    }
-
     public function updateFooter(): string
     {
         return <<<HTML

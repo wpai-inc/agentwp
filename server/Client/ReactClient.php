@@ -31,7 +31,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     {
         foreach ($this->locations as $location) {
             if (! class_exists($location)) {
-                throw new \Error('Location class does not exist: ' . $location);
+                throw new \Error('Location class does not exist: '.$location);
             }
             $setup = new $location($this);
             if ($setup && $setup->active()) {
@@ -66,7 +66,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
      */
     public function clientPage(): string
     {
-        return 'Page/' . $this->pageName . '/Index.tsx';
+        return 'Page/'.$this->pageName.'/Index.tsx';
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
      */
     public function slug($sep = '-'): string
     {
-        return str_replace('-', $sep, $this->main::SLUG) . $sep . str_replace('/', $sep, \strtolower($this->pageName));
+        return str_replace('-', $sep, $this->main::SLUG).$sep.str_replace('/', $sep, \strtolower($this->pageName));
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
      */
     public function bodyClass(string $classes): string
     {
-        $classes .= ' ' . $this->slug();
+        $classes .= ' '.$this->slug();
 
         return $classes;
     }
@@ -103,41 +103,41 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     public function appRoot(): void
     {
         if ($this->main->auth()->hasAccess()) {
-?>
+            ?>
             <noscript>
                 <div class="no-js">
                     <?php
-                    echo esc_html__(
-                        'Warning: AgentWP will not work properly without JavaScript, please enable it.',
-                        'agentwp'
-                    );
-                    ?>
+                                echo esc_html__(
+                                    'Warning: AgentWP will not work properly without JavaScript, please enable it.',
+                                    'agentwp'
+                                );
+            ?>
                 </div>
             </noscript>
             <div id="<?php echo $this->slug() ?>"></div>
         <?php
         } else {
             $managers = $this->main->auth->managers();
-        ?>
+            ?>
             <div>
                 <h1>AgentWP</h1>
                 <div>
                     <p>
                         <?php
-                        echo esc_html__(
-                            'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
-                            'agentwp'
-                        );
-                        ?>
+                            echo esc_html__(
+                                'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
+                                'agentwp'
+                            );
+            ?>
                     </p>
                     <div>
                         <strong>AgentsWP Managers:</strong>
                         <ul>
                             <?php
-                            foreach ($managers as $manager) {
-                                echo "<li>{$manager->data->display_name} ({$manager->data->user_email})</li>";
-                            }
-                            ?>
+                foreach ($managers as $manager) {
+                    echo "<li>{$manager->data->display_name} ({$manager->data->user_email})</li>";
+                }
+            ?>
                         </ul>
                     </div>
                 </div>
@@ -163,7 +163,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
     public function registerPageProps()
     {
-        wp_localize_script($this->slug('-'), $this->main::SLUG . 'Data', $this->pageProps());
+        wp_localize_script($this->slug('-'), $this->main::SLUG.'Data', $this->pageProps());
     }
 
     public function globalData()
