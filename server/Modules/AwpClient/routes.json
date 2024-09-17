@@ -132,6 +132,14 @@
         "name": "siteRequestEscalate"
     },
     {
+        "key": "api.site.support",
+        "uri": "api\/site\/support",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteSupport"
+    },
+    {
         "key": "api.user",
         "uri": "api\/user",
         "methods": [

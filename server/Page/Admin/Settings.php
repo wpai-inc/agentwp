@@ -52,7 +52,7 @@ class Settings extends ReactClient
             ];
         }
 
-        $this->hasFooter()->registerPage();
+        $this->hasFooter();
         $this
             ->icon($this->main->staticAsset('icon.svg'))
             ->position(4)
