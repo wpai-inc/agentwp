@@ -7,7 +7,7 @@ import UserList from '../Partials/UserList';
 import { Card } from '@/Components/Admin/Card';
 
 export default function UsersManagement() {
-  const { adminRequest, tryRequest } = useRestRequest();
+  const { restReq, tryRequest } = useRestRequest();
 
   const [ users, setUsers ] = useState< AgentWpUser[] >( [] );
   const [ searching, setSearching ] = useState( false );
@@ -31,7 +31,7 @@ export default function UsersManagement() {
 
   function searchUsers( value: string ) {
     setSearching( true );
-    adminRequest
+    restReq
       .get( 'agentwp_users', {
         params: {
           search: value,

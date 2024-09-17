@@ -18,7 +18,7 @@ export default function PostEdit( { handleKeyDown, message, focused }: CommandPo
     }
   }, [ focused ] );
 
-  const { adminRequest } = useRestRequest();
+  const { restReq } = useRestRequest();
   const searchQuery = message.replace( /\/edit /g, '' );
   const [ foundPosts, setFoundPosts ] = useState< any[] >( [] );
 
@@ -27,7 +27,7 @@ export default function PostEdit( { handleKeyDown, message, focused }: CommandPo
   }
 
   function searchPost( search: string ) {
-    return adminRequest
+    return restReq
       .get( `/wp/v2/search`, {
         params: {
           search,

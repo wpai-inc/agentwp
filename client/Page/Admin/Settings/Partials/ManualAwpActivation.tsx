@@ -6,7 +6,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export function ManualAwpActivation() {
-  const { adminRequest, tryRequest } = useRestRequest();
+  const { restReq, tryRequest } = useRestRequest();
   const { page } = usePage();
 
   const [ fieldsVisible, setFieldsVisible ] = useState( false );

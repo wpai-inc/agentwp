@@ -183,23 +183,24 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         $access_token = $this->main->auth->getAccessToken();
 
         return [
-            'home_url' => home_url(),
-            'plugin_url' => $this->main->pluginUrl,
-            'settings_page' => $this->main->settingsPage,
-            'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
-            'rest_route' => rest_url(),
-            'admin_route' => admin_url(),
             'nonce' => wp_create_nonce(Main::nonce()),
             'wp_rest_nonce' => wp_create_nonce('wp_rest'),
+            'rest_route' => rest_url(),
+            'rest_endpoint' => AwpRestRoute::REST_ROUTE_ENDPOINT,
+            'home_url' => home_url(),
+            'admin_route' => admin_url(),
+            'plugin_url' => $this->main->pluginUrl,
+            'settings_page' => $this->main->settingsPage,
             'is_admin' => $this->main->auth->isAdmin(),
             'onboarding_completed' => $access_token ? $this->main->settings->onboarding_completed : false,
-            'agentwp_manager' => $access_token ? $this->main->auth->isManager() : false,
-            'agentwp_users_manager' => $access_token ? $this->main->auth->canManageUsers() : false,
-            'agentwp_access' => $access_token ? $this->main->auth->hasAccess() : false,
+            'site_id' => $this->main->siteId(),
             'user' => $current_user,
             'account' => $this->main->client()->user(),
             'account_settings' => $this->main->accountSettings()->get(),
             'general_settings' => $this->main->settings->getGeneralSettings(),
+            'agentwp_manager' => $access_token ? $this->main->auth->isManager() : false,
+            'agentwp_users_manager' => $access_token ? $this->main->auth->canManageUsers() : false,
+            'agentwp_access' => $access_token ? $this->main->auth->hasAccess() : false,
         ];
     }
 

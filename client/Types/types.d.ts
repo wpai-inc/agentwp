@@ -12,20 +12,17 @@ export type AWPRootType = HTMLElement & {
 };
 
 export type PageData = {
-  page: string;
-  url: string;
-  notice_visible: string;
+  nonce: string;
+  wp_rest_nonce: string;
+  rest_route: string;
+  rest_endpoint: string;
+  admin_route: string;
   home_url: string;
   plugin_url: string;
   settings_page: string;
-  admin_route: string;
-  nonce: string;
-  wp_rest_nonce: string;
+  is_admin: boolean;
+  onboarding_completed: boolean;
   site_id: string;
-  client_id: string;
-  api_host: string;
-  rest_route: string;
-  rest_endpoint: string;
   user: WpUser;
   account: {
     user: App.Data.UserData;
@@ -33,14 +30,11 @@ export type PageData = {
     upgrade_link: string;
     config: App.Data.ConfigData;
   };
-  is_admin: boolean;
+  account_settings: App.Data.SiteSettingData[];
+  general_settings: AgentWpGeneralSettings;
   agentwp_manager: boolean;
   agentwp_users_manager: boolean;
   agentwp_access: boolean;
-  access_token: string;
-  onboarding_completed: boolean;
-  general_settings: AgentWpGeneralSettings;
-  account_settings: App.Data.SiteSettingData[];
 };
 
 export type WpUser = {

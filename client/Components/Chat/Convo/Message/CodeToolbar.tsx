@@ -11,7 +11,7 @@ import { useChat } from '@/Providers/ChatProvider';
 import { ChatNotice } from '@/Components/Chat/Notices/ChatNotice';
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
-  const { adminRequest } = useRestRequest();
+  const { restReq } = useRestRequest();
   const { copy, copied } = useCopy();
   const [ pluginIcon, setPluginIcon ] = useState< string | null >( null );
   const { addErrors } = useError();
@@ -44,7 +44,7 @@ export default function CodeToolbar( { code, language }: { code: string; languag
 
   const getActiveCodeSnippetPlugin = async () => {
     try {
-      const result = await adminRequest.get( 'code_snippet_plugin' );
+      const result = await restReq.get( 'code_snippet_plugin' );
       setSnippetPlugin( result.data.data );
     } catch ( e ) {
       // Do nothing
@@ -60,7 +60,7 @@ export default function CodeToolbar( { code, language }: { code: string; languag
     };
 
     try {
-      const result = await adminRequest.post( 'add_snippet', data );
+      const result = await restReq.post( 'add_snippet', data );
       if ( result.data.success ) {
         window.location.href = result.data.data;
       } else {

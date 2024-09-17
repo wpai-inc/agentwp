@@ -9,9 +9,9 @@ export default function SettingsTab() {
   /**
    * Variables
    */
-  const { adminRequest } = useRestRequest();
+  const { restReq } = useRestRequest();
   const { page } = usePage();
-  const isLoggedIn = !! page.access_token;
+  const isLoggedIn = page.account;
 
   /**
    * States
@@ -38,7 +38,7 @@ export default function SettingsTab() {
     setConnecting( true );
     // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
     // this will return the url that AWP can use to get the initial website data
-    adminRequest.get( 'get_unique_verification_key' ).then( ( response: any ) => {
+    restReq.get( 'get_unique_verification_key' ).then( ( response: any ) => {
       // prettier-ignore
       document.location = `${page.api_host}/connect_site?website=${encodeURIComponent(response.data.data.home_url)}&user_email=${page.user.user_email}&verification_key=${response.data.data.key}`;
     } );
@@ -48,7 +48,7 @@ export default function SettingsTab() {
     setDisconnecting( true );
     // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
     // this will return the url that AWP can use to get the initial website data
-    adminRequest.get( 'disconnect_site' ).then( () => {
+    restReq.get( 'disconnect_site' ).then( () => {
       setDisconnecting( false );
       setLoggedIn( false );
       window.location.reload();
@@ -57,14 +57,21 @@ export default function SettingsTab() {
 
   return (
     <div>
-      { ! page.site_id && (
-        <Button onClick={ connect } variant="brand" disabled={ connecting } isBusy={ connecting }>
-          { connecting ? 'Connecting to awp. Please wait...' : 'Connect To AWP' }
-        </Button>
-      ) }
       <DataList>
+        { ! page.account && (
+          <DataListItem label="Connect Your Site">
+            <Button
+              onClick={ connect }
+              variant="brand"
+              disabled={ connecting }
+              isBusy={ connecting }>
+              { connecting ? 'Connecting to awp. Please wait...' : 'Connect To AWP' }
+            </Button>
+          </DataListItem>
+        ) }
+
         <GeneralSettings />
-        { page.site_id && loggedIn && (
+        { page.account && loggedIn && (
           <DataListItem
             label={ <p>Your site is connected to agentwp. Your site ID is { page.site_id }</p> }>
             <Button
@@ -78,7 +85,7 @@ export default function SettingsTab() {
         ) }
       </DataList>
 
-      { page.site_id && ! loggedIn && (
+      { page.account && ! loggedIn && (
         <div className="flex gap-4">
           <Button
             onClick={ authorize }

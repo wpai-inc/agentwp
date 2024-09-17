@@ -7,7 +7,7 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function Wizard() {
   const { page } = usePage();
-  const { adminRequest } = useRestRequest();
+  const { restReq } = useRestRequest();
 
   const [ steps, setSteps ] = useState( [
     {
@@ -32,7 +32,7 @@ export default function Wizard() {
   }
 
   function goToAboutPage() {
-    adminRequest.post( `onboarding_completed` ).then( () => {
+    restReq.post( `onboarding_completed` ).then( () => {
       document.location.reload();
     } );
   }

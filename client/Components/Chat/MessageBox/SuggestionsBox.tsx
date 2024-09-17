@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { SuggestionBoxProps } from './helpers/types';
 
 export default function SuggestionsBox( { show, keyword, onSelect }: SuggestionBoxProps ) {
-  const { adminRequest } = useRestRequest();
+  const { restReq } = useRestRequest();
   const [ suggestions, setSuggestions ] = useState< any[] >( [] );
 
   useEffect( () => {
@@ -14,7 +14,7 @@ export default function SuggestionsBox( { show, keyword, onSelect }: SuggestionB
 
   const getSuggestions = async () => {
     try {
-      const result = await adminRequest.get( 'mention_items', { params: { keyword } } );
+      const result = await restReq.get( 'mention_items', { params: { keyword } } );
       setSuggestions( result.data.data );
     } catch ( e ) {
       // Do nothing
