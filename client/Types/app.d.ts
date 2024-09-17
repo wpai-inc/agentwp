@@ -135,6 +135,7 @@ label: string | null;
 export type SiteSupportRequestData = {
 type: string;
 message: string;
+email: string;
 };
 export type StreamableFieldData = {
 type: string;
