@@ -15,6 +15,8 @@ class AccountSettings
 
     public function get(): array
     {
-        return $this->client->siteSettingAll();
+        $res = $this->client->siteSettingAll();
+
+        return is_array($res) ? $res : [];
     }
 }
