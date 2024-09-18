@@ -23,6 +23,7 @@ use WpAi\AgentWp\Http\Controllers\SearchQuery;
 use WpAi\AgentWp\Http\Controllers\SiteDataController;
 use WpAi\AgentWp\Http\Controllers\TestAuthResponse;
 use WpAi\AgentWp\Http\Controllers\TestResponse;
+use WpAi\AgentWp\Http\Controllers\Tools;
 use WpAi\AgentWp\Http\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Http\Controllers\UpdateUserCapabilities;
 use WpAi\AgentWp\Http\Controllers\ValidateWebsite;
@@ -56,6 +57,7 @@ class Router implements Registrable
         'run_action_query' => QueryActionController::class,
         'index_site_docs' => IndexSiteDocs::class,
         'search_query' => SearchQuery::class,
+        'tools_summarize' => [Tools::class, 'summarize'],
     ];
 
     private Main $main;

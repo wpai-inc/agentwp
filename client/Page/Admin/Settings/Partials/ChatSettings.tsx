@@ -35,7 +35,9 @@ export default function ChatSettings() {
   return (
     <>
       { settings.map( setting => (
-        <DataListItem key={ setting.name } label={ setting.label }>
+        <DataListItem
+          key={ setting.name }
+          label={ <label className="font-bold">{ setting.label }</label> }>
           <Switch
             id={ setting.name }
             checked={ setting.value }

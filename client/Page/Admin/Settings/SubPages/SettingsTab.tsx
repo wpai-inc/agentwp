@@ -58,9 +58,38 @@ export default function SettingsTab() {
   }
 
   return (
-    <div className="space-y-12">
-      <div>
+    <div className="grid lg:grid-cols-3 gap-6">
+      <Section header="Plugin Settings">
         <DataList>
+          { page.account && ! loggedIn && (
+            <DataListItem label={ <label className="font-bold">Login to AWP</label> }>
+              <Button
+                onClick={ authorize }
+                variant="brand"
+                disabled={ authorizing }
+                isBusy={ authorizing }>
+                Login
+              </Button>
+            </DataListItem>
+          ) }
+
+          { page.account && (
+            <DataListItem
+              label={
+                <div>
+                  <h3 className="font-bold">Site Connection</h3>
+                  <p className="text-sm">Your connected site ID is { page.site_id }</p>
+                </div>
+              }>
+              <Button
+                onClick={ disconnect }
+                variant="brand"
+                disabled={ disconnecting }
+                isBusy={ disconnecting }>
+                Disconnect Site
+              </Button>
+            </DataListItem>
+          ) }
           { ! page.account && (
             <DataListItem label="Connect Your Site">
               <Button
@@ -72,46 +101,34 @@ export default function SettingsTab() {
               </Button>
             </DataListItem>
           ) }
-
           <GeneralSettings />
-          { page.account && loggedIn && (
-            <DataListItem
-              label={ <p>Your site is connected to agentwp. Your site ID is { page.site_id }</p> }>
-              <Button
-                onClick={ disconnect }
-                variant="brand"
-                disabled={ disconnecting }
-                isBusy={ disconnecting }>
-                Disconnect your website from AWP
-              </Button>
-            </DataListItem>
-          ) }
+        </DataList>
+      </Section>
+
+      <Section header="Conversation Settings">
+        <DataList>
           <ChatSettings />
+        </DataList>
+      </Section>
+
+      <Section header="Tools">
+        <DataList>
           <Tools />
         </DataList>
-      </div>
-      { page.account && ! loggedIn && (
-        <div className="flex gap-4">
-          <Button
-            onClick={ authorize }
-            variant="brand"
-            disabled={ authorizing }
-            isBusy={ authorizing }>
-            Login to AWP
-          </Button>
-          <Button
-            onClick={ disconnect }
-            variant="brand"
-            disabled={ disconnecting }
-            isBusy={ disconnecting }>
-            Disconnect your website from AWP
-          </Button>
-        </div>
-      ) }
+      </Section>
     </div>
   );
 }
 
-function Header( { children }: { children: React.ReactNode } ) {
-  return <h2 className="text-2xl text-center mb-4">{ children }</h2>;
+function SectionHeader( { children }: { children: React.ReactNode } ) {
+  return <h2 className="text-xl p-4 border-b border-brand-gray">{ children }</h2>;
+}
+
+function Section( { children, header }: { children: React.ReactNode; header: string } ) {
+  return (
+    <div className="space-y-4 border border-brand-gray rounded-xl bg-white">
+      <SectionHeader>{ header }</SectionHeader>
+      <div className="p-4">{ children }</div>
+    </div>
+  );
 }

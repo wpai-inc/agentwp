@@ -22,7 +22,13 @@ export default function GeneralSettings() {
   }
 
   return (
-    <DataListItem label={ <label>Clean up agentwp plugin data after deactivation</label> }>
+    <DataListItem
+      label={
+        <div>
+          <label className="font-bold">Cleanup Data</label>
+          <p className="text-sm">Clean up AgentWP plugin data after deactivation</p>
+        </div>
+      }>
       <Switch
         id="cleanup_after_deactivate"
         checked={ generalSettings?.cleanup_after_deactivate }
