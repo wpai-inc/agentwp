@@ -28,7 +28,7 @@ export default function Wizard() {
   ] );
 
   function isConnected() {
-    return !! page.access_token;
+    return !! page.account;
   }
 
   function goToAboutPage() {
