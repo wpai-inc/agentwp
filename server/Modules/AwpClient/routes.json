@@ -1,11 +1,11 @@
 [
     {
-        "key": "api.auth.generate-token",
-        "uri": "api\/auth\/generate-token",
+        "key": "passport.token",
+        "uri": "oauth\/token",
         "methods": [
             "POST"
         ],
-        "name": "authGenerateToken"
+        "name": "passportToken"
     },
     {
         "key": "api.capabilities",
@@ -15,30 +15,6 @@
             "HEAD"
         ],
         "name": "capabilities"
-    },
-    {
-        "key": "api.auth.renew-token",
-        "uri": "api\/auth\/renew-token",
-        "methods": [
-            "POST"
-        ],
-        "name": "authRenewToken"
-    },
-    {
-        "key": "api.auth.revoke-token",
-        "uri": "api\/auth\/revoke-token",
-        "methods": [
-            "DELETE"
-        ],
-        "name": "authRevokeToken"
-    },
-    {
-        "key": "api.auth.revoke-tokens",
-        "uri": "api\/auth\/revoke-tokens",
-        "methods": [
-            "DELETE"
-        ],
-        "name": "authRevokeTokens"
     },
     {
         "key": "api.site.health",

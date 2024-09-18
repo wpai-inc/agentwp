@@ -23,13 +23,13 @@ class RefreshApiToken
                 return null;
             }
             $response = $this->main->client()
-                ->request('POST', 'oauth/token', [], json_encode([
+                ->passportToken([
                     'grant_type' => 'refresh_token',
                     'refresh_token' => $refresh_token,
                     'client_id' => $this->main->settings->client_id,
                     'client_secret' => $this->main->settings->client_secret,
                     'scope' => 'site_connection',
-                ]));
+                ]);
 
             $this->main->settings->setAccessToken($response);
 
