@@ -4,6 +4,7 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { usePage } from '@/Providers/PageProvider';
 import GeneralSettings from '../Partials/GeneralSettings';
 import DataList, { DataListItem } from '@/Components/ui/dl';
+import ChatSettings from '../Partials/ChatSettings';
 
 export default function SettingsTab() {
   /**
@@ -56,35 +57,37 @@ export default function SettingsTab() {
   }
 
   return (
-    <div>
-      <DataList>
-        { ! page.account && (
-          <DataListItem label="Connect Your Site">
-            <Button
-              onClick={ connect }
-              variant="brand"
-              disabled={ connecting }
-              isBusy={ connecting }>
-              { connecting ? 'Connecting to awp. Please wait...' : 'Connect To AWP' }
-            </Button>
-          </DataListItem>
-        ) }
+    <div className="space-y-12">
+      <div>
+        <DataList>
+          { ! page.account && (
+            <DataListItem label="Connect Your Site">
+              <Button
+                onClick={ connect }
+                variant="brand"
+                disabled={ connecting }
+                isBusy={ connecting }>
+                { connecting ? 'Connecting to awp. Please wait...' : 'Connect To AWP' }
+              </Button>
+            </DataListItem>
+          ) }
 
-        <GeneralSettings />
-        { page.account && loggedIn && (
-          <DataListItem
-            label={ <p>Your site is connected to agentwp. Your site ID is { page.site_id }</p> }>
-            <Button
-              onClick={ disconnect }
-              variant="brand"
-              disabled={ disconnecting }
-              isBusy={ disconnecting }>
-              Disconnect your website from AWP
-            </Button>
-          </DataListItem>
-        ) }
-      </DataList>
-
+          <GeneralSettings />
+          { page.account && loggedIn && (
+            <DataListItem
+              label={ <p>Your site is connected to agentwp. Your site ID is { page.site_id }</p> }>
+              <Button
+                onClick={ disconnect }
+                variant="brand"
+                disabled={ disconnecting }
+                isBusy={ disconnecting }>
+                Disconnect your website from AWP
+              </Button>
+            </DataListItem>
+          ) }
+          <ChatSettings />
+        </DataList>
+      </div>
       { page.account && ! loggedIn && (
         <div className="flex gap-4">
           <Button
@@ -105,4 +108,8 @@ export default function SettingsTab() {
       ) }
     </div>
   );
+}
+
+function Header( { children }: { children: React.ReactNode } ) {
+  return <h2 className="text-2xl text-center mb-4">{ children }</h2>;
 }

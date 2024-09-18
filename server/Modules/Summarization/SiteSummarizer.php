@@ -27,7 +27,7 @@ class SiteSummarizer implements Cacheable
     {
         $cache = $this->cache($this->data());
 
-        return $cache->miss();
+        return ! $cache->hit();
     }
 
     public function data(): array
@@ -35,7 +35,7 @@ class SiteSummarizer implements Cacheable
         $data = [];
 
         foreach ($this->sources as $source) {
-            $source = new $source();
+            $source = new $source;
             if ($source->isActive()) {
                 $data[$source->name()] = $source->getData();
             }
