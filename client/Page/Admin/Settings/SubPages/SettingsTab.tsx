@@ -5,6 +5,7 @@ import { usePage } from '@/Providers/PageProvider';
 import GeneralSettings from '../Partials/GeneralSettings';
 import DataList, { DataListItem } from '@/Components/ui/dl';
 import ChatSettings from '../Partials/ChatSettings';
+import Tools from '../Partials/Tools';
 
 export default function SettingsTab() {
   /**
@@ -86,6 +87,7 @@ export default function SettingsTab() {
             </DataListItem>
           ) }
           <ChatSettings />
+          <Tools />
         </DataList>
       </div>
       { page.account && ! loggedIn && (
