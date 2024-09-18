@@ -21,6 +21,10 @@ class IndexSiteSummary implements Cacheable, Registrable
     {
         $this->main = $main;
         $this->summarizer = new SiteSummarizer;
+
+        if (! function_exists('is_plugin_active')) {
+            require_once ABSPATH.'wp-admin/includes/plugin.php';
+        }
     }
 
     public function register(): void

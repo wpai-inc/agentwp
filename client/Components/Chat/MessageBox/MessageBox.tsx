@@ -6,7 +6,7 @@ import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import CommandMenu from '../Commands/CommandMenu';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
-import ChatSettings from '@/Page/Admin/Chat/Settings/ChatSettings';
+import ChatSettings from '@/Page/Admin/Settings/Partials/ChatSettings';
 import { useStream } from '@/Providers/StreamProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 import { useError } from '@/Providers/ErrorProvider';
@@ -94,24 +94,7 @@ export default function MessageBox() {
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
         />
-        <div className="flex items-center justify-between">
-          <AgentTooltip content="Conversation Settings">
-            <Button
-              type="button"
-              onClick={ () =>
-                setChatSetting( { component: <ChatSettings />, header: 'Settings' } )
-              }
-              variant="ghost"
-              size="icon"
-              disabled={
-                ! page.onboarding_completed ||
-                ! page.agentwp_access ||
-                streamingStatus === StreamingStatusEnum.SHOULD_ABORT
-              }
-              className="text-brand-gray-50 hover:bg-inherit">
-              <TuneIcon className="h-6 w-6" />
-            </Button>
-          </AgentTooltip>
+        <div className="flex items-center justify-end">
           <Button
             type={ streamingStatus === StreamingStatusEnum.OFF ? 'submit' : 'button' }
             variant="brand"
