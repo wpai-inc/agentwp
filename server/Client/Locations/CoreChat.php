@@ -18,7 +18,7 @@ class CoreChat implements ClientSetupLocationInterface
     {
         $page = $_GET['page'] ?? null;
 
-        return is_admin() && $this->client->main->auth()->hasAccess() && ! in_array($page, ['agentwp-admin-settings']);
+        return is_admin() && $this->client->main->auth()->hasAccess() && ! in_array($page, [$this->client->main::SETTINGS_PAGE]);
     }
 
     public function setup(): void
@@ -29,5 +29,4 @@ class CoreChat implements ClientSetupLocationInterface
         add_filter('admin_body_class', [$this->client, 'bodyClass']);
         add_action('wp_ajax_'.$this->client->slug('_'), [$this->client, 'registerControllers']);
     }
-
 }

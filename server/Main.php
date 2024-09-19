@@ -26,6 +26,8 @@ class Main
 
     const ASSET_DIR = 'static';
 
+    const SETTINGS_PAGE = 'agentwp-admin-settings';
+
     public string $companyName = 'AgentWP';
 
     public string $attributionUrl = 'https://agentwp.com';
@@ -36,7 +38,7 @@ class Main
 
     public string $pluginUrl;
 
-    public string $settingsPage;
+    public string $settingsPageUrl;
 
     private string $file;
 
@@ -46,7 +48,7 @@ class Main
         $this->settings = new Settings;
         $this->auth = new UserAuth;
         $this->pluginUrl = plugin_dir_url($this->file);
-        $this->settingsPage = admin_url('admin.php?page=agentwp-admin-settings');
+        $this->settingsPageUrl = admin_url('admin.php?page='.self::SETTINGS_PAGE);
         $this->registerSchedules();
         $this->registerAdminStyles();
     }
