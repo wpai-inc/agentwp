@@ -196,6 +196,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'is_connected' => (bool) $access_token,
             'site_id' => $this->main->siteId(),
             'user' => $current_user,
+            'api_host' => $this->main->apiHost(),
             'account' => $this->main->client()->user(),
             'account_settings' => $this->main->accountSettings()->get(),
             'general_settings' => $this->main->settings->getGeneralSettings(),
