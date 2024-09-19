@@ -31,6 +31,10 @@ class RefreshApiToken
                     'scope' => 'site_connection',
                 ]);
 
+            if (is_a($response, 'WP_Error')) {
+                throw new \Exception($response->get_error_message());
+            }
+
             $this->main->settings->setAccessToken($response);
 
             return $response;
@@ -38,5 +42,7 @@ class RefreshApiToken
             // Do nothing
             error_log($e->getMessage());
         }
+
+        return null;
     }
 }
