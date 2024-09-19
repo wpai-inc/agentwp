@@ -55,6 +55,7 @@ export const usePosition = ( {
     height: settings.height,
   } );
   const [ offset, setOffset ] = useState< TwoDCoord >( { x: 0, y: 0 } );
+  const minSize = { width: 400, height: 400 };
 
   /**
    * Calculate boundaries based on parent element and window size
@@ -165,14 +166,19 @@ export const usePosition = ( {
             break;
           case 'b':
             newHeight = Math.max( elementStartPos.y + dy, 0 );
-            setOffset( offset => ( { ...offset, y: dy } ) );
+            if ( newHeight > minSize.height ) {
+              setOffset( offset => ( { ...offset, y: dy } ) );
+            }
+
             break;
           case 'l':
             newWidth = Math.max( elementStartPos.x - dx, 0 );
             break;
           case 'r':
             newWidth = Math.max( elementStartPos.x + dx, 0 );
-            setOffset( offset => ( { ...offset, x: dx } ) );
+            if ( newWidth > minSize.width ) {
+              setOffset( offset => ( { ...offset, x: dx } ) );
+            }
             break;
           case 'tl':
             newWidth = Math.max( elementStartPos.x - dx, 0 );
@@ -181,17 +187,26 @@ export const usePosition = ( {
           case 'tr':
             newWidth = Math.max( elementStartPos.x + dx, 0 );
             newHeight = Math.max( elementStartPos.y - dy, 0 );
-            setOffset( offset => ( { ...offset, x: dx } ) );
+            if ( newWidth > minSize.width ) {
+              setOffset( offset => ( { ...offset, x: dx } ) );
+            }
             break;
           case 'bl':
             newWidth = Math.max( elementStartPos.x - dx, 0 );
             newHeight = Math.max( elementStartPos.y + dy, 0 );
-            setOffset( offset => ( { ...offset, y: dy } ) );
+            if ( newHeight > minSize.height ) {
+              setOffset( offset => ( { ...offset, y: dy } ) );
+            }
             break;
           case 'br':
             newWidth = Math.max( elementStartPos.x + dx, 0 );
             newHeight = Math.max( elementStartPos.y + dy, 0 );
-            setOffset( { y: dy, x: dx } );
+            if ( newHeight > minSize.height ) {
+              setOffset( offset => ( { ...offset, y: dy } ) );
+            }
+            if ( newWidth > minSize.width ) {
+              setOffset( offset => ( { ...offset, x: dx } ) );
+            }
             break;
         }
 
@@ -295,5 +310,6 @@ export const usePosition = ( {
     restoreWindow,
     isMaximized,
     offset,
+    minSize,
   };
 };

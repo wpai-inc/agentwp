@@ -79,6 +79,7 @@ export default function Chat() {
     maximizeWindow,
     isMaximized,
     restoreWindow,
+    minSize,
   } = usePosition( {
     chatWindowRef: scope,
   } );
@@ -93,8 +94,8 @@ export default function Chat() {
     const styles = {
       scale: 1,
       borderRadius: '0.75rem',
-      width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
-      height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
+      width: `max(min(${ size.width }px, 100vw), ${ minSize.width }px)`,
+      height: `max(min(${ size.height }px, 100vh), ${ minSize.height }px)`,
       right: position.right + 'px',
       bottom: position.bottom + 'px',
       transform: `translate(${ offset.x }px, ${ offset.y }px)`,
