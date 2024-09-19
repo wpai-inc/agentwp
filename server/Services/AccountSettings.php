@@ -13,7 +13,10 @@ class AccountSettings
         $this->client = $client;
     }
 
-    public function get(): array
+    /**
+     * @return array|\WP_Error
+     */
+    public function get()
     {
         $res = $this->client->siteSettingAll();
 
