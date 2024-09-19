@@ -1,6 +1,5 @@
 import { createContext, FC, useContext, useEffect, useState, Dispatch } from 'react';
 import { getStorage, setStorage } from '@/lib/utils';
-import { TwoDCoord } from '@/Hooks/position';
 
 export type ClientSettings = {
   chatOpen: boolean;
@@ -10,7 +9,6 @@ export type ClientSettings = {
   bottom: number;
   width: number;
   height: number;
-  offset: TwoDCoord;
   updateDismissed: boolean;
   betaDismissed: boolean;
 };
@@ -60,7 +58,6 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
     bottom: getLocalStorage( 'bottom', 16 ) as number,
     width: getLocalStorage( 'width', 400 ) as number,
     height: getLocalStorage( 'height', 800 ) as number,
-    offset: getLocalStorage( 'offset', { x: 0, y: 0 } ) as TwoDCoord,
     updateDismissed: getLocalStorage( 'updateDismissed', false ) as boolean,
     betaDismissed: getLocalStorage( 'betaDismissed', false ) as boolean,
   } );
