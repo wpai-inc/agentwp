@@ -151,9 +151,6 @@ export const usePosition = ( {
   const handleResize = useCallback(
     ( e: MouseEvent ) => {
       e.preventDefault();
-      if ( chatWindowEl ) {
-        console.log( 'chatWindowEl Right side', chatWindowEl.getBoundingClientRect() );
-      }
       if ( isResizing && chatWindowContainer && mouseStartPos && elementStartPos ) {
         const dx = e.clientX - mouseStartPos.x;
         const dy = e.clientY - mouseStartPos.y;
@@ -184,11 +181,12 @@ export const usePosition = ( {
           case 'tr':
             newWidth = Math.max( elementStartPos.x + dx, 0 );
             newHeight = Math.max( elementStartPos.y - dy, 0 );
-            setOffset( { y: dy, x: dx } );
+            setOffset( offset => ( { ...offset, x: dx } ) );
             break;
           case 'bl':
             newWidth = Math.max( elementStartPos.x - dx, 0 );
             newHeight = Math.max( elementStartPos.y + dy, 0 );
+            setOffset( offset => ( { ...offset, y: dy } ) );
             break;
           case 'br':
             newWidth = Math.max( elementStartPos.x + dx, 0 );
@@ -219,13 +217,14 @@ export const usePosition = ( {
    */
   useEffect( () => {
     if ( ! isResizing ) {
-      setPosition( position => ( {
+      const offsetPosition = {
         right: position.right - offset.x,
         bottom: position.bottom - offset.y,
-      } ) );
+      };
+      setPosition( offsetPosition );
       setOffset( { x: 0, y: 0 } );
     }
-  }, [ offset, setPosition, isResizing ] );
+  }, [ offset, setPosition, setOffset, isResizing, position ] );
 
   /**
    * Functions
