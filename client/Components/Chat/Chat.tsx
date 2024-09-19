@@ -72,12 +72,14 @@ export default function Chat() {
   const {
     position,
     size,
+    offset,
     onDrag,
     isDragging,
     onChatWindowResize,
     maximizeWindow,
     isMaximized,
     restoreWindow,
+    minSize,
   } = usePosition( {
     chatWindowRef: scope,
   } );
@@ -92,11 +94,11 @@ export default function Chat() {
     const styles = {
       scale: 1,
       borderRadius: '0.75rem',
-      width: 'max(min(' + size.width + 'px' + ', 100vw), 400px)',
-      height: 'max(min(' + size.height + 'px' + ', 100vh), 400px)',
+      width: `max(min(${ size.width }px, 100vw), ${ minSize.width }px)`,
+      height: `max(min(${ size.height }px, 100vh), ${ minSize.height }px)`,
       right: position.right + 'px',
       bottom: position.bottom + 'px',
-      transform: `translate(${ size.offset.x }px, ${ size.offset.y }px)`,
+      transform: `translate(${ offset.x }px, ${ offset.y }px)`,
     };
 
     if ( scope.current ) {
@@ -113,7 +115,6 @@ export default function Chat() {
       borderRadius: '12px',
       width: 0,
       height: 0,
-      transform: `translate(0, 0)`,
       ...triggerPosition,
     } ),
     [ triggerPosition ],
