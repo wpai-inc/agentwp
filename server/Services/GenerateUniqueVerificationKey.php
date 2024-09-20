@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp\Services;
 
+use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Settings;
 
 class GenerateUniqueVerificationKey
@@ -10,7 +11,7 @@ class GenerateUniqueVerificationKey
 
     public function get(): string
     {
-        $key = uniqid('agentwp-', true);
+        $key = uniqid(Main::SLUG, true);
         $this->settings->set('verification_key', $key);
 
         return $key;

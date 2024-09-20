@@ -245,5 +245,14 @@
             "POST"
         ],
         "name": "actionError"
+    },
+    {
+        "key": "oauth.connect-site",
+        "uri": "connect_site",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "oauthConnectSite"
     }
 ]

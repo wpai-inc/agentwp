@@ -149,8 +149,8 @@ created_at: string;
 export type UserData = {
 name: string;
 email: string;
-email_verified_at: string;
-has_password: boolean;
+email_verified_at: string | null;
+has_password: boolean | null;
 };
 export type UserRequestData = {
 id: string;
@@ -205,6 +205,11 @@ docs: Array<App.Data.DocData>;
 export type StoreFeedbackData = {
 approved: boolean | null;
 message: string | null;
+};
+export type StoreSiteConnect = {
+website: string;
+verification_key: string;
+user_email: string;
 };
 export type StoreUserRequestData = {
 id: string | null;

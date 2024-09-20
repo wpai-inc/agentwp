@@ -29,16 +29,12 @@ export default function SettingsTab() {
   async function authorize() {
     setAuthorizing( true );
     const authorize_url = await tryRequest( 'get', 'oauth_authorize' );
-    console.log( authorize_url );
-
     window.location = authorize_url.data.url;
   }
 
   async function connect() {
     setConnecting( true );
     const connect_url = await tryRequest( 'get', 'oauth_connect' );
-    console.log( connect_url );
-
     window.location = connect_url.data.url;
   }
 
