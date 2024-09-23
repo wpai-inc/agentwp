@@ -16,7 +16,7 @@ class OauthConnect extends BaseController
 
         $connect_url_query_strings = [
             'website' => home_url(),
-            'email' => $current_user->data->user_email,
+            'user_email' => $current_user->data->user_email,
             'verification_key' => $verification_key,
         ];
 

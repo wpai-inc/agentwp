@@ -28,7 +28,7 @@ export default function Wizard() {
   ] );
 
   function isConnected() {
-    return !! page.account;
+    return ! page.account?.errors;
   }
 
   function goToAboutPage() {
