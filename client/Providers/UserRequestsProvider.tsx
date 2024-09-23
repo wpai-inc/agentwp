@@ -50,8 +50,14 @@ export type UserRequestType = {
   status?: string;
 };
 
+export type ConvoPagination = {
+  current: number | null;
+  next: boolean;
+};
+
 type UserRequestsContextType = {
   conversation: UserRequestType[];
+  pagination: ConvoPagination;
   setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
   clearConversation: () => void;
   createUserRequest: ( message: string ) => UserRequestType;
@@ -60,6 +66,7 @@ type UserRequestsContextType = {
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
   fetchConvo: ( since: string | null ) => Promise< void >;
+  fetchMore: () => Promise< void >;
   refreshConvo: () => void;
   loadingConversation: boolean;
   since: string | null;
@@ -91,6 +98,7 @@ export default function UserRequestsProvider( {
   const { apiRequest } = useRestRequest();
   const [ since, setSince ] = useState< string | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
+  const [ pagination, setPagination ] = useState< ConvoPagination >( { current: 1, next: false } );
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( true );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ refresh, setRefresh ] = useState< boolean >( false );
@@ -177,7 +185,9 @@ export default function UserRequestsProvider( {
       message: transformMentionedMessage( message ),
       mentions: getMentionsFromText( message ),
       user: {
+        // @ts-ignore
         name: page.user.name,
+        // @ts-ignore
         email: page.user.email,
       },
       created_at: new Date().toISOString(),
@@ -191,19 +201,36 @@ export default function UserRequestsProvider( {
   }
 
   async function fetchConvo( since?: string | null ) {
-    const data: App.Data.Request.ConvoData = { since: since ?? null };
+    const data: App.Data.Request.ConvoData = { since: since ?? null, page: 1 };
     const items = await optimistic(
       async () => await apiRequest< App.Data.UserRequestData[] >( 'convo', data ),
       () => setLoadingConversation( true ),
       convoLoadFailure,
     );
 
-    if ( items && items.length > 0 ) {
+    if ( items && items.data && items.data.length > 0 ) {
       setLoadingConversation( false );
-      setCurrentUserRequestId( items[ 0 ]?.id );
-      setConversation( items );
+      setCurrentUserRequestId( items.data[ 0 ]?.id );
+      setConversation( items.data );
+      setPagination( { current: items.current_page, next: items.next_page_url !== null } );
     } else {
       convoLoadFailure();
+    }
+  }
+
+  async function fetchMore() {
+    const data: App.Data.Request.ConvoData = {
+      since: since ?? null,
+      page: pagination.current ? pagination.current + 1 : 1,
+    };
+
+    const items = await optimistic(
+      async () => await apiRequest< App.Data.UserRequestData[] >( 'convo', data ),
+    );
+
+    if ( items && items.data && items.data.length > 0 ) {
+      setConversation( [ ...conversation, ...items.data ] );
+      setPagination( { current: items.current_page, next: items.next_page_url !== null } );
     }
   }
 
@@ -217,6 +244,7 @@ export default function UserRequestsProvider( {
     <UserRequestsContext.Provider
       value={ {
         conversation,
+        pagination,
         setConversation,
         clearConversation,
         createUserRequest,
@@ -225,6 +253,7 @@ export default function UserRequestsProvider( {
         setCurrentUserRequestId,
         currentAction,
         fetchConvo,
+        fetchMore,
         refreshConvo,
         loadingConversation,
         since,
