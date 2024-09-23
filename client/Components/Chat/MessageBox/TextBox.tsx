@@ -84,9 +84,9 @@ export default function TextBox( {
     );
 
     const span = document.createElement( 'span' );
-    span.className = 'bg-[#d6ebf2] rounded px-1 mention';
+    span.className = 'bg-brand-gray-50/50 text-brand-gray-70 rounded-full py-1 px-2 mention';
     span.id = suggestion.type + '___' + suggestion.id;
-    span.textContent = '@' + suggestion.type + ':' + suggestion.title;
+    span.innerHTML = `<strong>@${ suggestion.type }</strong>:${ suggestion.title }`;
     const spanHTML = span.outerHTML;
 
     const newText =
@@ -176,16 +176,13 @@ export default function TextBox( {
   return (
     <>
       <div
-        className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:outline-none message-box overflow-y-auto"
+        className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:outline-none message-box overflow-y-auto whitespace-pre-wrap"
         onInput={ e => handleInput( e ) }
         ref={ editorRef }
         contentEditable
         suppressContentEditableWarning={ true }
         onKeyDown={ e => handleKeyDown( e ) }
-        style={ {
-          whiteSpace: 'pre-wrap',
-        } }></div>
-
+      />
       <SuggestionsBox show={ mention.mode } keyword={ mention.text } onSelect={ handleSelect } />
     </>
   );

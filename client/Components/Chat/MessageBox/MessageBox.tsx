@@ -76,7 +76,7 @@ export default function MessageBox() {
       message={ message }
       setMessage={ setMessage }>
       <form
-        className="border border-transparent focus-within:border-brand-primary transition relative rounded-lg bg-brand-gray p-2"
+        className="ring-brand-primary-muted/60 ring-inset focus-within:ring-2 transition relative rounded-lg bg-brand-gray p-2"
         onSubmit={ submit }>
         <TextBox
           callback={ handleCallback }
@@ -84,12 +84,9 @@ export default function MessageBox() {
           keyPress={ e => handleKeyDown( e, commandMenuFocused ) }
         />
         <textarea
-          onChange={ e => setMessage( e.target.value ) }
           value={ message }
           ref={ textAreaRef }
-          className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:bg-white transition hidden"
-          placeholder="Message..."
-          onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
+          className="hidden"
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
         />
         <div className="flex items-center justify-end gap-3">
