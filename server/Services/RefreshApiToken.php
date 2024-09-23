@@ -15,34 +15,27 @@ class RefreshApiToken
 
     public function refresh()
     {
-        try {
-            $refresh_token = $this->main->settings->getRefreshToken();
-            $client_id = $this->main->settings->client_id;
-            $client_secret = $this->main->settings->client_secret;
-            if (! $refresh_token || ! $client_id || ! $client_secret) {
-                return null;
-            }
-            $response = $this->main->client()
-                ->passportToken([
-                    'grant_type' => 'refresh_token',
-                    'refresh_token' => $refresh_token,
-                    'client_id' => $this->main->settings->client_id,
-                    'client_secret' => $this->main->settings->client_secret,
-                    'scope' => 'site_connection',
-                ]);
+        $refresh_token = $this->main->settings->getRefreshToken();
+        $client_id = $this->main->settings->client_id;
+        $client_secret = $this->main->settings->client_secret;
+        if (! $refresh_token || ! $client_id || ! $client_secret) {
+            return null;
+        }
+        $response = $this->main->client()
+            ->passportToken([
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $refresh_token,
+                'client_id' => $this->main->settings->client_id,
+                'client_secret' => $this->main->settings->client_secret,
+                'scope' => 'site_connection',
+            ]);
 
-            if (is_a($response, 'WP_Error')) {
-                throw new \Exception($response->get_error_message());
-            }
-
-            $this->main->settings->setAccessToken($response);
-
+        if (is_a($response, 'WP_Error')) {
             return $response;
-        } catch (\Exception $e) {
-            // Do nothing
-            error_log($e->getMessage());
         }
 
-        return null;
+        $this->main->settings->setAccessToken($response);
+
+        return $response;
     }
 }
