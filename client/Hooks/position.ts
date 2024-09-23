@@ -236,10 +236,15 @@ export const usePosition = ( {
         right: position.right - offset.x,
         bottom: position.bottom - offset.y,
       };
-      setPosition( offsetPosition );
+
+      // Only update the position if it has actually changed
+      if ( offsetPosition.right !== position.right || offsetPosition.bottom !== position.bottom ) {
+        setPosition( offsetPosition );
+      }
+
       setOffset( { x: 0, y: 0 } );
     }
-  }, [ offset, setPosition, setOffset, isResizing, position ] );
+  }, [ offset, isResizing, position ] );
 
   /**
    * Functions
