@@ -145,6 +145,24 @@ export default function TextBox( {
     }
   };
 
+  const handlePaste = ( e: ClipboardEvent ) => {
+    e.preventDefault();
+    const text = e.clipboardData?.getData( 'text/plain' );
+    document.execCommand( 'insertText', false, text );
+  };
+
+  useEffect( () => {
+    const editor = editorRef.current;
+    if ( editor ) {
+      editor.addEventListener( 'paste', handlePaste );
+    }
+    return () => {
+      if ( editor ) {
+        editor.removeEventListener( 'paste', handlePaste );
+      }
+    };
+  }, [] );
+
   useEffect( () => {
     callback( transformContentToText( editorRef.current?.innerHTML as string ) );
   }, [ html, suggestions ] );
