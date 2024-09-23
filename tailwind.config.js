@@ -42,7 +42,10 @@ module.exports = {
       },
       colors: {
         brand: {
-          primary: '#4991F7',
+          primary: {
+            DEFAULT: '#4991F7',
+            muted: '#63ABFD',
+          },
           secondary: {
             DEFAULT: '#FF70A6',
             muted: '#E3AFD0',
