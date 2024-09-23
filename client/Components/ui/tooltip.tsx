@@ -38,7 +38,10 @@ const AgentTooltip = ( {
   content,
   children,
   ...props
-}: React.ComponentPropsWithoutRef< typeof TooltipContent > ) => {
+}: {
+  content: React.ReactNode;
+  children: React.ReactNode;
+} ) => {
   return (
     <TooltipProvider delayDuration={ 500 }>
       <Tooltip>

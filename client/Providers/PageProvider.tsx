@@ -31,9 +31,11 @@ export function PageProvider( { page, children }: { page: any; children: React.R
     return currentPage.indexOf( pageContains ) === -1;
   };
 
-  function getAccountSetting( name: App.Enums.SiteSettingValue ) {
-    return pageData.account_settings.find(
-      ( setting: App.Data.SiteSettingData ) => setting.name === name,
+  function getAccountSetting( name: App.Enums.SiteSettingValue, defaultValue: any = null ) {
+    return (
+      pageData.account_settings.find(
+        ( setting: App.Data.SiteSettingData ) => setting.name === name,
+      ) || defaultValue
     );
   }
 

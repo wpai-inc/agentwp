@@ -2,19 +2,17 @@ import { useState, useRef } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useChat } from '@/Providers/ChatProvider';
 import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?react';
-import TuneIcon from '@material-design-icons/svg/outlined/tune.svg?react';
 import CommandMenu from '../Commands/CommandMenu';
-import { AgentTooltip } from '@/Components/ui/tooltip';
 import { usePage } from '@/Providers/PageProvider';
-import ChatSettings from '@/Page/Admin/Settings/Partials/ChatSettings';
 import { useStream } from '@/Providers/StreamProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 import { useError } from '@/Providers/ErrorProvider';
 import { LoaderIcon } from 'lucide-react';
 import TextBox from './TextBox';
+import ToggleVision from './partials/ToggleVision';
 
 export default function MessageBox() {
-  const { sendMessage, setChatSetting, message, setMessage, cancelMessage } = useChat();
+  const { sendMessage, message, setMessage, cancelMessage } = useChat();
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
@@ -94,7 +92,8 @@ export default function MessageBox() {
           onKeyDown={ e => handleKeyDown( e, commandMenuFocused ) }
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
         />
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-3">
+          <ToggleVision />
           <Button
             type={ streamingStatus === StreamingStatusEnum.OFF ? 'submit' : 'button' }
             variant="brand"
