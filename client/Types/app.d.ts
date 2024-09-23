@@ -149,8 +149,8 @@ declare namespace App.Data {
   export type UserData = {
     name: string;
     email: string;
-    email_verified_at: string;
-    has_password: boolean;
+    email_verified_at: string | null;
+    has_password: boolean | null;
   };
   export type UserRequestData = {
     id: string;
@@ -194,7 +194,6 @@ declare namespace App.Data.Request {
   };
   export type ConvoData = {
     since: string | null;
-    page: number;
   };
   export type StoreDocsData = {
     status: number | null;
@@ -206,6 +205,11 @@ declare namespace App.Data.Request {
   export type StoreFeedbackData = {
     approved: boolean | null;
     message: string | null;
+  };
+  export type StoreSiteConnect = {
+    website: string;
+    verification_key: string;
+    user_email: string;
   };
   export type StoreUserRequestData = {
     id: string | null;

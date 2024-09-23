@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp\Modules\AwpClient;
 
 use GuzzleHttp\Client as GuzzleHttpClient;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 
 class Client
@@ -39,17 +40,34 @@ class Client
 
     /**
      * Calls the API route by its defined name in ApiRoutes.
+     * @throws RouteDoesNotExistException|GuzzleException
      */
     public function __call(string $name, array $args): Response
     {
         $args = isset($args[0]) ? $args[0] : [];
-        $route = $this->routes->getRoute($name);
+        $route = $this->getRoute($name);
         $method = $route->getMethod();
         [$url, $params] = $route->getUrl(is_array($args) ? $args : []);
 
         return $this->getClient()->request($method, $url, [
             'json' => $params,
         ]);
+    }
+
+    /**
+     * @throws RouteDoesNotExistException
+     */
+    public function getRoute(string $name): ApiRoute
+    {
+        return $this->routes->getRoute($name);
+    }
+
+    public function getUrl($name, $params = []): string
+    {
+        $route = $this->getRoute($name);
+        [$url, $params] = $route->getUrl($params);
+
+        return $this->baseUrl.$url.($params ? '?'.http_build_query($params) : '');
     }
 
     public function setOptions(array $options): self

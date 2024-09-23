@@ -75,14 +75,14 @@ class Settings extends ReactClient
     {
         $screen = get_current_screen();
 
-        if ($screen->id === 'toplevel_page_agentwp-admin-settings' && isset($_GET['code'])) {
+        if ($screen->id === 'toplevel_page_'.$this->main::SETTINGS_PAGE && isset($_GET['code'])) {
             $code = sanitize_text_field($_GET['code']);
             $response_raw = wp_remote_post($this->main->apiHost().'/oauth/token', [
                 'body' => [
                     'grant_type' => 'authorization_code',
                     'client_id' => $this->main->settings->client_id,
                     'client_secret' => $this->main->settings->client_secret,
-                    'redirect_uri' => $this->main->settingsPage,
+                    'redirect_uri' => $this->main->settingsPageUrl,
                     'code' => $code,
                 ],
             ]);
@@ -97,7 +97,7 @@ class Settings extends ReactClient
             if ($response['access_token']) {
                 $this->main->settings->setAccessToken($response);
             }
-            wp_redirect(admin_url('admin.php?page=agentwp-admin-settings'));
+            wp_redirect($this->main->settingsPageUrl);
         }
     }
 }

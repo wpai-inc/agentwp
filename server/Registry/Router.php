@@ -8,7 +8,6 @@ use WpAi\AgentWp\Http\Controllers\ActionStream;
 use WpAi\AgentWp\Http\Controllers\AddCodeSnippet;
 use WpAi\AgentWp\Http\Controllers\AwpApi;
 use WpAi\AgentWp\Http\Controllers\DisconnectSite;
-use WpAi\AgentWp\Http\Controllers\GenerateUniqueVerificationKey;
 use WpAi\AgentWp\Http\Controllers\GetCodeSnippetPlugin;
 use WpAi\AgentWp\Http\Controllers\GetMentionItems;
 use WpAi\AgentWp\Http\Controllers\GetUsers;
@@ -16,6 +15,8 @@ use WpAi\AgentWp\Http\Controllers\IndexSiteDocs;
 use WpAi\AgentWp\Http\Controllers\Logout;
 use WpAi\AgentWp\Http\Controllers\MakeOnboardingAsCompleted;
 use WpAi\AgentWp\Http\Controllers\ManuallyActivateAgent;
+use WpAi\AgentWp\Http\Controllers\OauthAuthorize;
+use WpAi\AgentWp\Http\Controllers\OauthConnect;
 use WpAi\AgentWp\Http\Controllers\QueryActionController;
 use WpAi\AgentWp\Http\Controllers\RefreshToken;
 use WpAi\AgentWp\Http\Controllers\SaveConnection;
@@ -43,7 +44,6 @@ class Router implements Registrable
         'site_data' => SiteDataController::class,
         'update_user' => UpdateUserCapabilities::class,
         'onboarding_completed' => MakeOnboardingAsCompleted::class,
-        'get_unique_verification_key' => GenerateUniqueVerificationKey::class,
         'validate_website' => ValidateWebsite::class,
         'save_connection' => SaveConnection::class,
         'logout' => Logout::class,
@@ -57,6 +57,8 @@ class Router implements Registrable
         'run_action_query' => QueryActionController::class,
         'index_site_docs' => IndexSiteDocs::class,
         'search_query' => SearchQuery::class,
+        'oauth_authorize' => OauthAuthorize::class,
+        'oauth_connect' => OauthConnect::class,
         'tools_summarize' => [Tools::class, 'summarize'],
     ];
 

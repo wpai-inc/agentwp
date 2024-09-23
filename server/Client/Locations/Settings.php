@@ -16,7 +16,7 @@ class Settings implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return is_admin() && $this->client->main->auth()->hasAccess() && isset($_GET['page']) && in_array($_GET['page'], ['agentwp-admin-settings']);
+        return is_admin() && $this->client->main->auth()->hasAccess() && isset($_GET['page']) && in_array($_GET['page'], [$this->client->main::SETTINGS_PAGE]);
     }
 
     public function setup(): void

@@ -11,14 +11,14 @@ export default function SettingsTab() {
   /**
    * Variables
    */
-  const { restReq } = useRestRequest();
+  const { restReq, tryRequest } = useRestRequest();
   const { page } = usePage();
   const isLoggedIn = page.account;
 
   /**
    * States
    */
-  const [ loggedIn, setLoggedIn ] = useState( isLoggedIn );
+  const [ loggedIn, setLoggedIn ] = useState< boolean >( !! isLoggedIn );
   const [ authorizing, setAuthorizing ] = useState( false );
   const [ connecting, setConnecting ] = useState( false );
   const [ disconnecting, setDisconnecting ] = useState( false );
@@ -26,30 +26,20 @@ export default function SettingsTab() {
   /**
    * Methods
    */
-  function authorize() {
-    const redirectUri = encodeURIComponent(
-      page.admin_route + 'admin.php?page=agentwp-admin-settings',
-    );
-
+  async function authorize() {
     setAuthorizing( true );
-    document.location = `${ page.api_host }/oauth/authorize?client_id=${ page.client_id }&redirect_uri=${ redirectUri }&response_type=code&scope=site_connection`;
-    setAuthorizing( false );
+    const authorize_url = await tryRequest( 'get', 'oauth_authorize' );
+    window.location = authorize_url.data.url;
   }
 
-  function connect() {
+  async function connect() {
     setConnecting( true );
-    // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
-    // this will return the url that AWP can use to get the initial website data
-    restReq.get( 'get_unique_verification_key' ).then( ( response: any ) => {
-      // prettier-ignore
-      document.location = `${page.api_host}/connect_site?website=${encodeURIComponent(response.data.data.home_url)}&user_email=${page.user.user_email}&verification_key=${response.data.data.key}`;
-    } );
+    const connect_url = await tryRequest( 'get', 'oauth_connect' );
+    window.location = connect_url.data.url;
   }
 
   function disconnect() {
     setDisconnecting( true );
-    // make a fetch request that will generate the uniqueue url is generated. From that url AWP can get the initial website data
-    // this will return the url that AWP can use to get the initial website data
     restReq.get( 'disconnect_site' ).then( () => {
       setDisconnecting( false );
       setLoggedIn( false );

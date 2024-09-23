@@ -19,8 +19,10 @@ export type PageData = {
   admin_route: string;
   home_url: string;
   plugin_url: string;
+  api_host: string;
   settings_page: string;
   is_admin: boolean;
+  is_connected: boolean;
   onboarding_completed: boolean;
   site_id: string;
   user: WpUser;

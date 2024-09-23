@@ -13,6 +13,10 @@ class RefreshToken extends BaseController
     {
         $new_api_token = (new RefreshApiToken($this->main))->refresh();
 
-        $this->respond(['api_token' => $new_api_token]);
+        if (! is_a($new_api_token, 'WP_Error')) {
+            $this->respondWithError($new_api_token->get_error_message(), $new_api_token->get_error_code());
+        }
+
+        $this->respond(['message' => 'Token refreshed successfully']);
     }
 }

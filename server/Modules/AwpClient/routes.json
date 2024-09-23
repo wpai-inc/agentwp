@@ -1,200 +1,258 @@
 [
-  {
-    "key": "api.auth.generate-token",
-    "uri": "api/auth/generate-token",
-    "methods": [ "POST" ],
-    "name": "authGenerateToken"
-  },
-  {
-    "key": "api.capabilities",
-    "uri": "api/capabilities",
-    "methods": [ "GET", "HEAD" ],
-    "name": "capabilities"
-  },
-  {
-    "key": "api.auth.renew-token",
-    "uri": "api/auth/renew-token",
-    "methods": [ "POST" ],
-    "name": "authRenewToken"
-  },
-  {
-    "key": "api.auth.revoke-token",
-    "uri": "api/auth/revoke-token",
-    "methods": [ "DELETE" ],
-    "name": "authRevokeToken"
-  },
-  {
-    "key": "api.auth.revoke-tokens",
-    "uri": "api/auth/revoke-tokens",
-    "methods": [ "DELETE" ],
-    "name": "authRevokeTokens"
-  },
-  {
-    "key": "api.site.health",
-    "uri": "api/site/health",
-    "methods": [ "POST" ],
-    "name": "siteHealth"
-  },
-  {
-    "key": "api.site.summarize",
-    "uri": "api/site/summarize",
-    "methods": [ "POST" ],
-    "name": "siteSummarize"
-  },
-  {
-    "key": "api.site.errors.store",
-    "uri": "api/site/errors",
-    "methods": [ "POST" ],
-    "name": "siteErrorsStore"
-  },
-  {
-    "key": "api.site.docs.store",
-    "uri": "api/site/docs",
-    "methods": [ "POST" ],
-    "name": "siteDocsStore"
-  },
-  {
-    "key": "api.site.docs.index.status",
-    "uri": "api/site/docs/status",
-    "methods": [ "GET", "HEAD" ],
-    "name": "siteDocsIndexStatus"
-  },
-  {
-    "key": "api.site.docs.status",
-    "uri": "api/site/docs/status/{status}",
-    "methods": [ "GET", "HEAD" ],
-    "name": "siteDocsStatus"
-  },
-  {
-    "key": "api.site.setting.save",
-    "uri": "api/site/settings",
-    "methods": [ "PUT" ],
-    "name": "siteSettingSave"
-  },
-  {
-    "key": "api.site.setting.all",
-    "uri": "api/site/settings",
-    "methods": [ "GET", "HEAD" ],
-    "name": "siteSettingAll"
-  },
-  {
-    "key": "api.site.disconnect",
-    "uri": "api/site/disconnect",
-    "methods": [ "POST" ],
-    "name": "siteDisconnect"
-  },
-  {
-    "key": "api.site.suggestions",
-    "uri": "api/site/suggestions",
-    "methods": [ "POST" ],
-    "name": "siteSuggestions"
-  },
-  {
-    "key": "api.site.request.escalate",
-    "uri": "api/site/escalation/{escalation}",
-    "methods": [ "POST" ],
-    "name": "siteRequestEscalate"
-  },
-  {
-    "key": "api.site.support",
-    "uri": "api/site/support",
-    "methods": [ "POST" ],
-    "name": "siteSupport"
-  },
-  {
-    "key": "api.user",
-    "uri": "api/user",
-    "methods": [ "GET", "HEAD" ],
-    "name": "user"
-  },
-  {
-    "key": "api.wpuser.update",
-    "uri": "api/wpuser",
-    "methods": [ "PUT" ],
-    "name": "wpuserUpdate"
-  },
-  {
-    "key": "api.search",
-    "uri": "api/search",
-    "methods": [ "POST" ],
-    "name": "search"
-  },
-  {
-    "key": "api.search.summarize",
-    "uri": "api/search/{query}/summary",
-    "methods": [ "POST" ],
-    "name": "searchSummarize"
-  },
-  {
-    "key": "api.convo",
-    "uri": "api",
-    "methods": [ "GET", "HEAD" ],
-    "name": "convo"
-  },
-  {
-    "key": "api.convo.create",
-    "uri": "api",
-    "methods": [ "POST" ],
-    "name": "convoCreate"
-  },
-  {
-    "key": "api.convo.delete",
-    "uri": "api/{convo}",
-    "methods": [ "DELETE" ],
-    "name": "convoDelete"
-  },
-  {
-    "key": "api.convo.clear",
-    "uri": "api/clear",
-    "methods": [ "POST" ],
-    "name": "convoClear"
-  },
-  {
-    "key": "api.convo.unclear",
-    "uri": "api/unclear",
-    "methods": [ "POST" ],
-    "name": "convoUnclear"
-  },
-  {
-    "key": "api.convo.history",
-    "uri": "api/history",
-    "methods": [ "GET", "HEAD" ],
-    "name": "convoHistory"
-  },
-  {
-    "key": "api.request.feedback",
-    "uri": "api/request/{userRequest}/feedback",
-    "methods": [ "POST" ],
-    "name": "requestFeedback"
-  },
-  {
-    "key": "api.request.abort",
-    "uri": "api/request/{userRequest}/abort",
-    "methods": [ "POST" ],
-    "name": "requestAbort"
-  },
-  {
-    "key": "api.request.remove",
-    "uri": "api/request/{userRequest}",
-    "methods": [ "DELETE" ],
-    "name": "requestRemove"
-  },
-  {
-    "key": "api.request.stream",
-    "uri": "api/request/{userRequest}/stream",
-    "methods": [ "POST" ],
-    "name": "requestStream"
-  },
-  {
-    "key": "api.action.result",
-    "uri": "api/action/{agentAction}/result",
-    "methods": [ "POST" ],
-    "name": "actionResult"
-  },
-  {
-    "key": "api.action.error",
-    "uri": "api/action/{agentAction}/error",
-    "methods": [ "POST" ],
-    "name": "actionError"
-  }
+    {
+        "key": "passport.token",
+        "uri": "oauth\/token",
+        "methods": [
+            "POST"
+        ],
+        "name": "passportToken"
+    },
+    {
+        "key": "api.capabilities",
+        "uri": "api\/capabilities",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "capabilities"
+    },
+    {
+        "key": "api.site.health",
+        "uri": "api\/site\/health",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteHealth"
+    },
+    {
+        "key": "api.site.summarize",
+        "uri": "api\/site\/summarize",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteSummarize"
+    },
+    {
+        "key": "api.site.errors.store",
+        "uri": "api\/site\/errors",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteErrorsStore"
+    },
+    {
+        "key": "api.site.docs.store",
+        "uri": "api\/site\/docs",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteDocsStore"
+    },
+    {
+        "key": "api.site.docs.index.status",
+        "uri": "api\/site\/docs\/status",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "siteDocsIndexStatus"
+    },
+    {
+        "key": "api.site.docs.status",
+        "uri": "api\/site\/docs\/status\/{status}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "siteDocsStatus"
+    },
+    {
+        "key": "api.site.setting.save",
+        "uri": "api\/site\/settings",
+        "methods": [
+            "PUT"
+        ],
+        "name": "siteSettingSave"
+    },
+    {
+        "key": "api.site.setting.all",
+        "uri": "api\/site\/settings",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "siteSettingAll"
+    },
+    {
+        "key": "api.site.disconnect",
+        "uri": "api\/site\/disconnect",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteDisconnect"
+    },
+    {
+        "key": "api.site.suggestions",
+        "uri": "api\/site\/suggestions",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteSuggestions"
+    },
+    {
+        "key": "api.site.request.escalate",
+        "uri": "api\/site\/escalation\/{escalation}",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteRequestEscalate"
+    },
+    {
+        "key": "api.site.support",
+        "uri": "api\/site\/support",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteSupport"
+    },
+    {
+        "key": "api.user",
+        "uri": "api\/user",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "user"
+    },
+    {
+        "key": "api.wpuser.update",
+        "uri": "api\/wpuser",
+        "methods": [
+            "PUT"
+        ],
+        "name": "wpuserUpdate"
+    },
+    {
+        "key": "api.search",
+        "uri": "api\/search",
+        "methods": [
+            "POST"
+        ],
+        "name": "search"
+    },
+    {
+        "key": "api.search.summarize",
+        "uri": "api\/search\/{query}\/summary",
+        "methods": [
+            "POST"
+        ],
+        "name": "searchSummarize"
+    },
+    {
+        "key": "api.convo",
+        "uri": "api",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "convo"
+    },
+    {
+        "key": "api.convo.create",
+        "uri": "api",
+        "methods": [
+            "POST"
+        ],
+        "name": "convoCreate"
+    },
+    {
+        "key": "api.convo.delete",
+        "uri": "api\/{convo}",
+        "methods": [
+            "DELETE"
+        ],
+        "name": "convoDelete"
+    },
+    {
+        "key": "api.convo.clear",
+        "uri": "api\/clear",
+        "methods": [
+            "POST"
+        ],
+        "name": "convoClear"
+    },
+    {
+        "key": "api.convo.unclear",
+        "uri": "api\/unclear",
+        "methods": [
+            "POST"
+        ],
+        "name": "convoUnclear"
+    },
+    {
+        "key": "api.convo.history",
+        "uri": "api\/history",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "convoHistory"
+    },
+    {
+        "key": "api.request.feedback",
+        "uri": "api\/request\/{userRequest}\/feedback",
+        "methods": [
+            "POST"
+        ],
+        "name": "requestFeedback"
+    },
+    {
+        "key": "api.request.abort",
+        "uri": "api\/request\/{userRequest}\/abort",
+        "methods": [
+            "POST"
+        ],
+        "name": "requestAbort"
+    },
+    {
+        "key": "api.request.remove",
+        "uri": "api\/request\/{userRequest}",
+        "methods": [
+            "DELETE"
+        ],
+        "name": "requestRemove"
+    },
+    {
+        "key": "api.request.stream",
+        "uri": "api\/request\/{userRequest}\/stream",
+        "methods": [
+            "POST"
+        ],
+        "name": "requestStream"
+    },
+    {
+        "key": "api.action.result",
+        "uri": "api\/action\/{agentAction}\/result",
+        "methods": [
+            "POST"
+        ],
+        "name": "actionResult"
+    },
+    {
+        "key": "api.action.error",
+        "uri": "api\/action\/{agentAction}\/error",
+        "methods": [
+            "POST"
+        ],
+        "name": "actionError"
+    },
+    {
+        "key": "oauth.connect-site",
+        "uri": "connect_site",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "oauthConnectSite"
+    }
 ]
