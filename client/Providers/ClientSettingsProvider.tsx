@@ -9,7 +9,7 @@ export type ClientSettings = {
   bottom: number;
   width: number;
   height: number;
-  updateDismissed: boolean;
+  updateDismissed: string | null;
   betaDismissed: boolean;
 };
 
@@ -58,7 +58,7 @@ export const ClientSettingsProvider: FC< { children: React.ReactNode } > = ( { c
     bottom: getLocalStorage( 'bottom', 16 ) as number,
     width: getLocalStorage( 'width', 400 ) as number,
     height: getLocalStorage( 'height', 800 ) as number,
-    updateDismissed: getLocalStorage( 'updateDismissed', false ) as boolean,
+    updateDismissed: getLocalStorage( 'updateDismissed' ) as string,
     betaDismissed: getLocalStorage( 'betaDismissed', false ) as boolean,
   } );
 

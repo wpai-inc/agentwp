@@ -3,7 +3,7 @@ import IconComment from '@material-design-icons/svg/outlined/comment.svg?react';
 
 export default function ConvoOnlyNotice() {
   return (
-    <div className="px-2">
+    <div className="px-2 mt-2">
       <ChatNotice
         size="sm"
         variant={ 'brand' }

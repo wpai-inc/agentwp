@@ -15,6 +15,8 @@ export default function UpdateNotification() {
   const { settings, updateSetting } = useClientSettings();
   const feedUrl = 'https://agentwp.com/wp-json/wp/v2/change/';
   const [ update, setUpdate ] = useState< ChangelogUpdate | null >( null );
+  const isDismissed =
+    settings.updateDismissed !== null && settings.updateDismissed === update?.link;
 
   useEffect( function () {
     async function fetchUpdate() {
@@ -39,12 +41,14 @@ export default function UpdateNotification() {
   }
 
   function dismiss() {
-    updateSetting( 'updateDismissed', true );
+    if ( update ) {
+      updateSetting( 'updateDismissed', update.link );
+    }
   }
 
   return (
     <AnimatePresence>
-      { ! settings.updateDismissed && update !== null && (
+      { ! isDismissed && update && (
         <motion.div
           initial={ { opacity: 0, y: '-100%' } }
           animate={ { opacity: 1, y: 0 } }

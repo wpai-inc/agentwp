@@ -84,7 +84,7 @@ export default function MessageBox() {
           keyPress={ e => handleKeyDown( e, commandMenuFocused ) }
         />
         <textarea
-          value={ message }
+          defaultValue={ message }
           ref={ textAreaRef }
           className="hidden"
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
