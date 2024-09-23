@@ -10,6 +10,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { maybeUseChatUI } from '@/Components/Chat/Chat';
 import { Button } from '@/Components/ui/button';
 import type { HandleDrag } from '@/Components/Chat/Partials/ChatCore';
+import ConvoOnlyToggle from './ConvoOnlyToggle';
 
 export default function ChatTopBar( { handleDrag }: HandleDrag ) {
   const { setChatSetting, clearHistory, isEmptyConversation } = useChat();
@@ -41,6 +42,7 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
           <Logo className="h-7 w-7" />
         </a>
         { page.account?.plan?.slug === 'free' && <FreeUpgrade /> }
+        <ConvoOnlyToggle />
       </div>
       <div className="flex items-center justify-center">
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
@@ -51,12 +53,6 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
             </Button>
           </AgentTooltip>
         ) }
-        { /* <AgentTooltip content="Convo-only mode restricts conversation to chat only, instead of attempting to execute actions.">
-          <label>
-            <Switch checked={ true } />
-            Convo Only
-          </label>
-        </AgentTooltip> */ }
         <AgentTooltip content="View history">
           <Button onClick={ handleHistorySettings } variant="ghost" size="sm">
             <HistoryIcon className="h-5 w-5" />
