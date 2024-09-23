@@ -199,48 +199,42 @@ export default function Chat() {
             <ChatCore handleDrag={ onDrag } />
             <ResizeHandles resizeHandler={ onChatWindowResize } />
           </ChatContainer>
-          <ChatTrigger />
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
+                  </TooltipTrigger>
+                  <TooltipContent side="right" align="center">
+                    <p>
+                      { open ? (
+                        <>
+                          Click to minimize
+                          <br /> AgentWP.
+                        </>
+                      ) : (
+                        <>
+                          AgentWP is hidden.
+                          <br /> Click to show.
+                        </>
+                      ) }
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </ContextMenuTrigger>
+            <ContextMenuContent>
+              <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
+                <ContextMenuIcon>
+                  <PowerOffIcon />
+                </ContextMenuIcon>
+                Turn off
+              </ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
         </HotKeyProvider>
       </ChatUIContext.Provider>
     )
   );
-
-  function ChatTrigger() {
-    return (
-      <ContextMenu>
-        <ContextMenuTrigger>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <ToggleButton ref={ chatTriggerRef } open={ open } onClick={ toggle } />
-              </TooltipTrigger>
-              <TooltipContent side="right" align="center">
-                <p>
-                  { open ? (
-                    <>
-                      Click to minimize
-                      <br /> AgentWP.
-                    </>
-                  ) : (
-                    <>
-                      AgentWP is hidden.
-                      <br /> Click to show.
-                    </>
-                  ) }
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem onClick={ () => handleTurnOff() } className={ 'text-sm' }>
-            <ContextMenuIcon>
-              <PowerOffIcon />
-            </ContextMenuIcon>
-            Turn off
-          </ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-    );
-  }
 }

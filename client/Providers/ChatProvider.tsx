@@ -1,6 +1,10 @@
 import { useState, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
-import type { UserRequestType, AgentAction } from '@/Providers/UserRequestsProvider';
+import type {
+  UserRequestType,
+  AgentAction,
+  ConvoPagination,
+} from '@/Providers/UserRequestsProvider';
 import { useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useError } from '@/Providers/ErrorProvider';
 import { useInputSelect } from './InputSelectProvider';
@@ -30,6 +34,8 @@ type ChatContextType = {
   addUserRequest: ( ur: UserRequestType ) => void;
   removeUserRequest: ( ur: UserRequestType ) => void;
   reloadConversation: () => void;
+  fetchMore: () => Promise< void >;
+  pagination: ConvoPagination;
 };
 
 const ChatContext = createContext< ChatContextType | undefined >( undefined );
@@ -61,6 +67,8 @@ export default function ChatProvider( {
     createUserRequest,
     currentUserRequestId,
     setCurrentUserRequestId,
+    fetchMore,
+    pagination,
   } = useUserRequests();
   const { startStream, cancelStream, setStreamingStatus, streamingStatus } = useStream();
   const { selectedInput } = useInputSelect();
@@ -194,6 +202,8 @@ export default function ChatProvider( {
         addUserRequest,
         removeUserRequest,
         reloadConversation,
+        fetchMore,
+        pagination,
       } }>
       { children }
     </ChatContext.Provider>

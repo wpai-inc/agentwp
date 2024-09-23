@@ -145,6 +145,24 @@ export default function TextBox( {
     }
   };
 
+  const handlePaste = ( e: ClipboardEvent ) => {
+    e.preventDefault();
+    const text = e.clipboardData?.getData( 'text/plain' );
+    document.execCommand( 'insertText', false, text );
+  };
+
+  useEffect( () => {
+    const editor = editorRef.current;
+    if ( editor ) {
+      editor.addEventListener( 'paste', handlePaste );
+    }
+    return () => {
+      if ( editor ) {
+        editor.removeEventListener( 'paste', handlePaste );
+      }
+    };
+  }, [] );
+
   useEffect( () => {
     callback( transformContentToText( editorRef.current?.innerHTML as string ) );
   }, [ html, suggestions ] );
@@ -158,7 +176,7 @@ export default function TextBox( {
   return (
     <>
       <div
-        className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:outline-none message-box"
+        className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:outline-none message-box overflow-y-auto"
         onInput={ e => handleInput( e ) }
         ref={ editorRef }
         contentEditable
