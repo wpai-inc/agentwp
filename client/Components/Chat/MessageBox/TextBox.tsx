@@ -158,7 +158,7 @@ export default function TextBox( {
   return (
     <>
       <div
-        className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:outline-none message-box"
+        className="h-24 w-full resize-none p-2 text-base bg-transparent focus:ring-0 focus:outline-none message-box overflow-y-auto"
         onInput={ e => handleInput( e ) }
         ref={ editorRef }
         contentEditable
