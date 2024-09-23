@@ -83,11 +83,7 @@ export default function TextBox( {
       ( mention.position as number ) + ( mention.text as string ).length,
     );
 
-    const span = document.createElement( 'span' );
-    span.className = 'bg-brand-gray-50/50 text-brand-gray-70 rounded-full py-1 px-2 mention';
-    span.id = suggestion.type + '___' + suggestion.id;
-    span.innerHTML = `<strong>@${ suggestion.type }</strong>:${ suggestion.title }`;
-    const spanHTML = span.outerHTML;
+    const spanHTML = getMentionHTML( suggestion );
 
     const newText =
       handleSuggestionReplace( beforeSuggestion as string ) +
@@ -108,15 +104,21 @@ export default function TextBox( {
 
   const handleSuggestionReplace = ( text: string ) => {
     suggestions.forEach( item => {
-      const span = document.createElement( 'span' );
-      span.className = 'bg-[#d6ebf2] rounded px-1 mention';
-      span.id = item.type + '___' + item.id;
-      span.textContent = '@' + item.type + ':' + item.title;
-      const spanHTML = span.outerHTML;
+      const spanHTML = getMentionHTML( item );
       text = text.replace( '@' + item.type + ':' + item.title, spanHTML );
     } );
 
     return text;
+  };
+
+  const getMentionHTML = ( suggestion: Suggestion ) => {
+    const span = document.createElement( 'span' );
+    span.className =
+      'bg-brand-gray-50/50 text-brand-gray-70 rounded-full py-1 px-2 mention inline-block';
+    span.id = suggestion.type + '___' + suggestion.id;
+    span.innerHTML = `<strong>@${ suggestion.type }</strong>:${ suggestion.title }`;
+    const spanHTML = span.outerHTML;
+    return spanHTML;
   };
 
   const handleSuggestionDelete = () => {
