@@ -17,6 +17,15 @@
         "name": "capabilities"
     },
     {
+        "key": "api.streamTest",
+        "uri": "api\/stream\/test",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "streamTest"
+    },
+    {
         "key": "api.site.health",
         "uri": "api\/site\/health",
         "methods": [
@@ -229,6 +238,15 @@
             "POST"
         ],
         "name": "requestStream"
+    },
+    {
+        "key": "api.request.retry",
+        "uri": "api\/request\/{userRequest}\/retry",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "requestRetry"
     },
     {
         "key": "api.action.result",

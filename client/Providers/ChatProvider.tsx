@@ -91,7 +91,7 @@ export default function ChatProvider( {
     message: string,
     id: string | null = null,
     mentions: any[] = [],
-  ): Promise< App.Data.UserRequestData > {
+  ): Promise< App.Data.Response.StoreUserRequestData > {
     let req: App.Data.Request.StoreUserRequestData = {
       id,
       message,
@@ -107,7 +107,7 @@ export default function ChatProvider( {
       req.site_data = siteData.data.data;
     }
 
-    return await apiRequest< App.Data.UserRequestData >( 'convoCreate', req );
+    return await apiRequest< App.Data.Response.StoreUserRequestData >( 'convoCreate', req );
   }
 
   /**
@@ -154,10 +154,10 @@ export default function ChatProvider( {
 
     await optimistic(
       async () => {
-        const user_request = await userRequest( ur.message, ur.id, ur.mentions );
+        const res = await userRequest( ur.message, ur.id, ur.mentions );
 
-        setCurrentUserRequestId( user_request.id );
-        await startStream( user_request.id );
+        setCurrentUserRequestId( res.user_request.id );
+        await startStream( res );
       },
       () => {
         setMessage( '' );
