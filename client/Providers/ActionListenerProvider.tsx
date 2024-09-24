@@ -6,13 +6,13 @@ import { useRestRequest } from './RestRequestProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
-  const { streamingStatus, startStream } = useStream();
+  const { streamingStatus, retryStream } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
   const { apiRequest, restReq } = useRestRequest();
   const { errors } = useError();
 
   useEffect( () => {
-    if ( currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
+    if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
       if ( currentAction.action ) {
         executeAndContinueAction( currentAction, currentUserRequestId );
         return;
@@ -27,7 +27,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         currentAction.action &&
         errors.length < 2
       ) {
-        startStream( currentUserRequestId );
+        retryStream( currentUserRequestId );
       }
     }
   }, [ currentAction, streamingStatus, currentUserRequestId ] );
@@ -43,7 +43,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
     if ( reqId && ! aa.final && aa.hasExecuted ) {
-      await startStream( reqId );
+      await retryStream( reqId );
     }
   }
 

@@ -40,16 +40,15 @@ class Client
 
     /**
      * Calls the API route by its defined name in ApiRoutes.
+     *
      * @throws RouteDoesNotExistException|GuzzleException
      */
     public function __call(string $name, array $args): Response
     {
         $args = isset($args[0]) ? $args[0] : [];
-        $route = $this->getRoute($name);
-        $method = $route->getMethod();
-        [$url, $params] = $route->getUrl(is_array($args) ? $args : []);
+        extract($this->getUrl($name, $args));
 
-        return $this->getClient()->request($method, $url, [
+        return $this->getClient()->request($method, $path, [
             'json' => $params,
         ]);
     }
@@ -62,12 +61,18 @@ class Client
         return $this->routes->getRoute($name);
     }
 
-    public function getUrl($name, $params = []): string
+    public function getUrl($name, $params = []): array
     {
         $route = $this->getRoute($name);
-        [$url, $params] = $route->getUrl($params);
+        $method = $route->getMethod();
+        [$url, $leftOverParams] = $route->getUrl($params);
 
-        return $this->baseUrl.$url.($params ? '?'.http_build_query($params) : '');
+        return [
+            'path' => $url,
+            'url' => $this->baseUrl.'/'.$url,
+            'method' => $method,
+            'params' => $leftOverParams,
+        ];
     }
 
     public function setOptions(array $options): self
@@ -151,6 +156,11 @@ class Client
         $options['headers'] = $headers;
 
         return $options;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->getClientOptions()['headers'];
     }
 
     public function getClient(): GuzzleHttpClient

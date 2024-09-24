@@ -7,7 +7,16 @@ import { useScreen } from '@/Providers/ScreenProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 import { useRestRequest } from './RestRequestProvider';
 
-export const StreamContext = createContext< any | undefined >( undefined );
+type StreamContextType = {
+  startStream: ( data: App.Data.Response.StoreUserRequestData ) => Promise< void >;
+  retryStream: ( userRequestId: string ) => Promise< void >;
+  cancelStream: ( userRequestId: string ) => void;
+  liveAction: AgentAction | null;
+  streamingStatus: StreamingStatusEnum;
+  setStreamingStatus: ( status: StreamingStatusEnum ) => void;
+};
+
+export const StreamContext = createContext< StreamContextType | undefined >( undefined );
 
 export function useStream() {
   const stream = useContext( StreamContext );
@@ -37,18 +46,24 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     currentUserRequestId,
   } = useUserRequests();
   const { addErrors } = useError();
-  const { requestUrl, nonceHeader, apiRequest } = useRestRequest();
+  const { apiRequest } = useRestRequest();
   const ctrl = useRef< AbortController >( new AbortController() );
   const [ streamingStatus, setStreamingStatus ] = useState( StreamingStatusEnum.OFF );
   const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
 
-  async function startStream( user_request_id: string ) {
+  async function startStream( {
+    user_request,
+    stream_url,
+    access_token,
+    site_id,
+    wp_user_id,
+  }: App.Data.Response.StoreUserRequestData ) {
     if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
       setStreamingStatus( StreamingStatusEnum.ABORT );
       return;
     }
     setStreamingStatus( StreamingStatusEnum.PENDING );
-    setCurrentUserRequestId( user_request_id );
+    setCurrentUserRequestId( user_request.id );
     liveAction.current = null;
 
     if ( retries > 2 ) {
@@ -60,13 +75,15 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
     try {
       setRetries( retries => retries + 1 );
-      await fetchEventSource( requestUrl( 'action_stream' ), {
+      await fetchEventSource( stream_url, {
         method: 'POST',
-        body: JSON.stringify( { userRequest: user_request_id, screen } ),
+        body: JSON.stringify( { userRequest: user_request.id, screen } ),
         headers: {
           'Accept': 'text/event-stream',
           'Content-Type': 'application/json',
-          ...nonceHeader,
+          'Authorization': `Bearer ${ access_token }`,
+          'X-Wp-Site-Id': site_id,
+          'X-Wp-User-Id': wp_user_id.toString(),
         },
         signal: ctrl.current.signal,
         openWhenHidden: true,
@@ -90,7 +107,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             throw new Error( `Error when processing message: ${ aar.reason }` );
           }
           if ( ev.event === 'close' && liveAction.current ) {
-            addActionToCurrentRequest( user_request_id, liveAction.current );
+            addActionToCurrentRequest( user_request.id, liveAction.current );
             // setStreamClosed( true );
             setStreamingStatus( StreamingStatusEnum.OFF );
             return;
@@ -134,6 +151,14 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     addErrors( [ e ] );
   }
 
+  async function retryStream( userRequestId: string ) {
+    const data = await apiRequest< App.Data.Response.StoreUserRequestData >( 'requestRetry', {
+      userRequest: userRequestId,
+    } );
+
+    await startStream( data );
+  }
+
   useEffect( () => {
     latestStreamingStatus.current = streamingStatus;
   }, [ streamingStatus ] );
@@ -155,6 +180,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     <StreamContext.Provider
       value={ {
         startStream,
+        retryStream,
         cancelStream,
         liveAction: liveAction.current,
         streamingStatus,

@@ -4,7 +4,6 @@ namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\MiddlewareInterface;
 use WpAi\AgentWp\Contracts\Registrable;
-use WpAi\AgentWp\Http\Controllers\ActionStream;
 use WpAi\AgentWp\Http\Controllers\AddCodeSnippet;
 use WpAi\AgentWp\Http\Controllers\AwpApi;
 use WpAi\AgentWp\Http\Controllers\DisconnectSite;
@@ -36,7 +35,6 @@ class Router implements Registrable
 
     protected array $routes = [
         'api' => AwpApi::class,
-        'action_stream' => ActionStream::class,
         'test_auth' => TestAuthResponse::class,
         'test_route' => [TestResponse::class, 'successfulResponse'],
         'test_stream_forward' => [TestResponse::class, 'stream'],
