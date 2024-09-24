@@ -12,7 +12,6 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { optimistic } from '@/lib/utils';
 import { StreamingStatusEnum } from '@/Types/enums';
-import { useApp } from './AppProvider';
 
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
@@ -56,7 +55,6 @@ export default function ChatProvider( {
   children: React.ReactNode;
   defaultOpen?: boolean;
 } ) {
-  const { restartPLog, pLog } = useApp();
   const { settings } = useClientSettings();
   const [ open, setOpen ] = useState( settings.chatOpen ?? defaultOpen );
   const [ message, setMessage ] = useState( '' );
@@ -154,16 +152,12 @@ export default function ChatProvider( {
     const ur = createUserRequest( message );
     setMessageSubmitted( true );
 
-    restartPLog();
     await optimistic(
       async () => {
-        pLog( 'start message submission' );
         const user_request = await userRequest( ur.message, ur.id, ur.mentions );
-        pLog( 'user request made' );
 
         setCurrentUserRequestId( user_request.id );
         await startStream( user_request.id );
-        pLog( 'stream finished' );
       },
       () => {
         setMessage( '' );
