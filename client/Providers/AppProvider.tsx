@@ -8,6 +8,8 @@ const AppContext = createContext( {
   setCooldownTime: ( _cooldownTime: Date ) => {},
   setTurnedOff: ( _turnedOff: boolean ) => {},
   setTokenUsageStatus: ( _usageStatus: TokenUsageStatus ) => {},
+  restartPLog: () => {},
+  pLog: ( _name: string ) => {},
 } );
 
 export function useApp() {
@@ -19,12 +21,22 @@ export function useApp() {
 }
 
 export default function AppProvider( { children }: { children: React.ReactNode } ) {
+  const [ pStart, setPStart ] = useState( performance.now() );
   const [ cooldownTime, setCooldownTime ] = useAppStorage( 'cooldownTime', null );
   const [ turnedOff, setTurnedOff ] = useAppStorage( 'turnedOff', false );
   const [ tokenUsageStatus, setTokenUsageStatus ] = useAppStorage(
     'tokenUsageStatus',
     TokenUsageStatus.Normal,
   );
+
+  function pLog( name: string ) {
+    const endTime = performance.now();
+    console.log( 'Time trace:', name, endTime - pStart );
+  }
+
+  function restartPLog() {
+    setPStart( performance.now() );
+  }
 
   useEffect( () => {
     if ( cooldownTime && new Date( cooldownTime ) < new Date() ) {
@@ -42,6 +54,8 @@ export default function AppProvider( { children }: { children: React.ReactNode }
         setCooldownTime,
         setTurnedOff,
         setTokenUsageStatus,
+        restartPLog,
+        pLog,
       } }>
       { children }
     </AppContext.Provider>

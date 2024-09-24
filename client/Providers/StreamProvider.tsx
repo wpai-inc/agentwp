@@ -6,6 +6,7 @@ import { useError } from '@/Providers/ErrorProvider';
 import { useScreen } from '@/Providers/ScreenProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 import { useRestRequest } from './RestRequestProvider';
+import { useApp } from './AppProvider';
 
 export const StreamContext = createContext< any | undefined >( undefined );
 
@@ -26,6 +27,7 @@ const useForceUpdate = () => {
 };
 
 export default function StreamProvider( { children }: { children: React.ReactNode } ) {
+  const { pLog } = useApp();
   const { screen } = useScreen();
   const forceUpdate = useForceUpdate();
   const liveAction = useRef< AgentAction | null >( null );
@@ -43,6 +45,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
 
   async function startStream( user_request_id: string ) {
+    pLog( 'startStream' );
     if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
       setStreamingStatus( StreamingStatusEnum.ABORT );
       return;
