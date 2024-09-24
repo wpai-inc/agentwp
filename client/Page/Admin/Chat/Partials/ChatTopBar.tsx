@@ -48,7 +48,7 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
           <AgentTooltip content="New conversation">
             <Button onClick={ clearHistory } className="uppercase">
-              New Chat
+              <span className="hidden @lg:inline">New Chat</span>
               <AddIcon className="h-4 w-4" />
             </Button>
           </AgentTooltip>
@@ -72,7 +72,7 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
   function FreeUpgrade() {
     return (
       <>
-        <Button asChild variant="brand" className="h-full">
+        <Button asChild variant="brand" className="h-full hidden @md:inline-flex">
           <span>{ page.account?.plan.name }</span>
         </Button>
         <Button asChild variant="dark" className="h-full">

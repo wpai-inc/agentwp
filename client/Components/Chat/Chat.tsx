@@ -185,10 +185,13 @@ export default function Chat() {
         <HotKeyProvider>
           <ChatContainer
             ref={ scope }
-            className={ cn( 'group/chat fixed bottom-4 right-4 z-[10000] origin-top-left', {
-              'user-select-none': isDragging,
-              'overflow-hidden': isOpening || isClosing,
-            } ) }>
+            className={ cn(
+              'group/chat fixed bottom-4 right-4 z-[10000] origin-top-left @container',
+              {
+                'user-select-none': isDragging,
+                'overflow-hidden': isOpening || isClosing,
+              },
+            ) }>
             <WindowActions
               toggle={ toggle }
               handleDrag={ onDrag }

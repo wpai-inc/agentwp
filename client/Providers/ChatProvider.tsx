@@ -152,11 +152,17 @@ export default function ChatProvider( {
     const ur = createUserRequest( message );
     setMessageSubmitted( true );
 
+    const timeTrace = Date.now();
+    console.log( 'start message submission', timeTrace );
     await optimistic(
       async () => {
         const user_request = await userRequest( ur.message, ur.id, ur.mentions );
+
+        console.log( 'user request made', Date.now() - timeTrace );
+
         setCurrentUserRequestId( user_request.id );
         await startStream( user_request.id );
+        console.log( 'stream started', Date.now() - timeTrace );
       },
       () => {
         setMessage( '' );
@@ -170,6 +176,7 @@ export default function ChatProvider( {
     );
 
     setMessageSubmitted( false );
+    console.log( 'end message submission', Date.now() - timeTrace );
   }
 
   function cancelMessage() {

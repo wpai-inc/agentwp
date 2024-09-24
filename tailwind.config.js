@@ -69,5 +69,9 @@ module.exports = {
   //   // These are readded in the base layer under app.css
   //   preflight: false,
   // },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/container-queries')
+  ],
 };
