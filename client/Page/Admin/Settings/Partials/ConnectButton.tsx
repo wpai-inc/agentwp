@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
-import { usePage } from '@/Providers/PageProvider';
 
 export default function ConnectButton() {
   const { tryRequest } = useRestRequest();

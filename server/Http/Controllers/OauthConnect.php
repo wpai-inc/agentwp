@@ -10,8 +10,7 @@ class OauthConnect extends BaseController
 
     public function __invoke()
     {
-
-        $verification_key = (new GenerateUniqueVerificationKey($this->main->settings))->get();
+        $verification_key = GenerateUniqueVerificationKey::get();
         $current_user = wp_get_current_user();
 
         $connect_url_query_strings = [
@@ -20,8 +19,12 @@ class OauthConnect extends BaseController
             'verification_key' => $verification_key,
         ];
 
-        $this->respond(['url' => $this->main->apiHost().'/connect_site?'.http_build_query($connect_url_query_strings)]);
+        $req = $this->main->client()->getClient()
+            ->setBaseUrl($this->main->apiClientHost())
+            ->getUrl('oauthConnectSite');
 
+        $query = http_build_query($connect_url_query_strings);
+        $this->respond(['url' => $req['url'].'?'.$query]);
     }
 
     public function check_permission(): bool
