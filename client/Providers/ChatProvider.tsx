@@ -12,6 +12,7 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { optimistic } from '@/lib/utils';
 import { StreamingStatusEnum } from '@/Types/enums';
+import type { WpResponse } from '@/Types/types';
 
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
@@ -91,7 +92,7 @@ export default function ChatProvider( {
     message: string,
     id: string | null = null,
     mentions: any[] = [],
-  ): Promise< App.Data.Response.StoreUserRequestData > {
+  ): Promise< WpResponse< App.Data.Response.StoreUserRequestData > > {
     let req: App.Data.Request.StoreUserRequestData = {
       id,
       message,
@@ -102,12 +103,12 @@ export default function ChatProvider( {
     if ( streamingStatus === StreamingStatusEnum.OFF ) {
       setStreamingStatus( StreamingStatusEnum.CONVO );
     }
-    const siteData = await tryRequest( 'get', 'site_data' );
-    if ( siteData.data?.data ) {
-      req.site_data = siteData.data.data;
+    const { data } = await tryRequest( 'get', 'site_data' );
+    if ( data ) {
+      req.site_data = data;
     }
 
-    return await apiRequest< App.Data.Response.StoreUserRequestData >( 'convoCreate', req );
+    return await tryRequest( 'post', 'create_request', req );
   }
 
   /**
@@ -154,10 +155,9 @@ export default function ChatProvider( {
 
     await optimistic(
       async () => {
-        const res = await userRequest( ur.message, ur.id, ur.mentions );
-
-        setCurrentUserRequestId( res.user_request.id );
-        await startStream( res );
+        const { data } = await userRequest( ur.message, ur.id, ur.mentions );
+        setCurrentUserRequestId( data.user_request.id );
+        await startStream( data );
       },
       () => {
         setMessage( '' );

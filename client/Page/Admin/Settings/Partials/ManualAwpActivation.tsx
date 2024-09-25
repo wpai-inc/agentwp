@@ -6,8 +6,8 @@ import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export function ManualAwpActivation() {
-  const { restReq, tryRequest } = useRestRequest();
-  const { page } = usePage();
+  const { tryRequest } = useRestRequest();
+  const { page, getApiUrl } = usePage();
 
   const [ fieldsVisible, setFieldsVisible ] = useState( false );
   const [ apiKey, setApiKey ] = useState( '' );
@@ -23,7 +23,7 @@ export function ManualAwpActivation() {
   async function saveManualToken( event: FormEvent< HTMLFormElement > ) {
     event.preventDefault();
 
-    const data = await tryRequest(
+    const res = await tryRequest< { settings: any[] } >(
       'post',
       'manual_activation',
       { apiKey },
@@ -37,9 +37,9 @@ export function ManualAwpActivation() {
       },
     );
 
-    if ( ! data.data?.success ) {
-      setServerErrors( { ...serverErrors, apiKey: data.data.message } );
-      console.error( data.data.message );
+    if ( ! res.success ) {
+      setServerErrors( { ...serverErrors, apiKey: '' } );
+      console.error( res.message );
     } else {
       document.location.reload();
     }
@@ -71,7 +71,7 @@ export function ManualAwpActivation() {
                 target="_blank"
                 className="underline"
                 // prettier-ignore
-                href={`${page.api_host}/manually_connect_site?url=${encodeURIComponent(page.home_url)}`}>
+                href={`${getApiUrl('oauthManuallyConnectSite')}?url=${encodeURIComponent(page.home_url)}`}>
                 Get your api key
               </a>
             }></Textarea>

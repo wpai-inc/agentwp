@@ -48,10 +48,10 @@ export const SearchProvider: FC< { children: React.ReactNode } > = ( { children 
   async function search( query: string ) {
     setQuery( query );
     setPending( true );
-    const res: AxiosResponse = await tryRequest( 'get', 'search_query', {
+    const { data } = await tryRequest( 'get', 'search_query', {
       query,
     } );
-    setResults( res.data );
+    setResults( data );
     setPending( false );
   }
 

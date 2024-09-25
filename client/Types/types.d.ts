@@ -11,6 +11,12 @@ export type AWPRootType = HTMLElement & {
   ) => void;
 };
 
+export type WpResponse< T = any > = {
+  success: boolean;
+  data: T;
+  message?: string;
+};
+
 export interface PageData {
   nonce: string;
   wp_rest_nonce: string;

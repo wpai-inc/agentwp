@@ -35,6 +35,7 @@ class Router implements Registrable
 
     protected array $routes = [
         'api' => AwpApi::class,
+        'create_request' => [AwpApi::class, 'createRequest'],
         'test_auth' => TestAuthResponse::class,
         'test_route' => [TestResponse::class, 'successfulResponse'],
         'test_stream_forward' => [TestResponse::class, 'stream'],

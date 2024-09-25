@@ -14,9 +14,7 @@ class ManuallyActivateAgent extends BaseController
         $data = json_decode(base64_decode($data['apiKey']), true);
 
         if (! $data['site_id'] || ! $data['client_id'] || ! $data['client_secret'] || ! $data['token']['access_token'] || ! $data['token']['expires_in']) {
-            $this->error([
-                'message' => 'Invalid data',
-            ]);
+            $this->error('failed_site_verification');
         }
 
         $this->main->settings->set([

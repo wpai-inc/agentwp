@@ -100,6 +100,17 @@ export type IntentData = {
 message: string;
 embedding?: Array<any>;
 };
+export type OAuthClientData = {
+client_id: string;
+client_secret: string;
+site_id: string;
+token: App.Data.OAuthClientTokenData;
+};
+export type OAuthClientTokenData = {
+access_token: string;
+token_type: string;
+expires_in: number;
+};
 export type PlanData = {
 name: string;
 slug: string;
@@ -237,7 +248,6 @@ statuses: Array<App.Data.DocIndexStatusData>;
 export type StoreUserRequestData = {
 user_request: App.Data.UserRequestData;
 stream_url: string;
-access_token: string;
 wp_user_id: number;
 site_id: string;
 };

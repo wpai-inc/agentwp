@@ -28,14 +28,14 @@ export default function SettingsTab() {
    */
   async function authorize() {
     setAuthorizing( true );
-    const authorize_url = await tryRequest( 'get', 'oauth_authorize' );
-    window.location = authorize_url.data.url;
+    const { data } = await tryRequest( 'get', 'oauth_authorize' );
+    window.location = data.url;
   }
 
   async function connect() {
     setConnecting( true );
-    const connect_url = await tryRequest( 'get', 'oauth_connect' );
-    window.location = connect_url.data.url;
+    const { data } = await tryRequest( 'get', 'oauth_connect' );
+    window.location = data.url;
   }
 
   function disconnect() {

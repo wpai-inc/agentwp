@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import UserAccess from '@/Page/Admin/Settings/Wizard/UserAccess';
 import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import type { SettingsPageData } from '@/Types/types';
 
 export default function Wizard() {
-  const { page } = usePage();
+  const { page } = usePage< SettingsPageData >();
   const { restReq } = useRestRequest();
 
   const [ steps, setSteps ] = useState( [
@@ -27,10 +28,6 @@ export default function Wizard() {
     },
   ] );
 
-  function isConnected() {
-    return ! page.account?.errors;
-  }
-
   function goToAboutPage() {
     restReq.post( `onboarding_completed` ).then( () => {
       document.location.reload();
@@ -38,7 +35,7 @@ export default function Wizard() {
   }
 
   useEffect( () => {
-    if ( isConnected() ) {
+    if ( page.is_connected ) {
       setSteps( [
         {
           text: 'Install Plugin',

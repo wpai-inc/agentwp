@@ -3,16 +3,17 @@ import { usePage } from '@/Providers/PageProvider';
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { useNotifications } from '@/Providers/NotificationProvider';
 import { optimistic } from '@/lib/utils';
+import { WpResponse } from '@/Types/types';
 
 type RestRequestContextType = {
   restReq: AxiosInstance;
-  tryRequest: (
+  tryRequest: < T = any >(
     method: 'post' | 'get',
     url: string,
     dataOrParams?: any,
     onBefore?: () => void,
     onFailure?: ( error: any ) => void,
-  ) => Promise< any >;
+  ) => Promise< WpResponse< T > >;
   apiRequest: < T = any >( endpoint: string, dataOrParams?: any ) => Promise< T >;
   requestUrl: ( name: string ) => string;
   nonceHeader: Record< string, string >;
@@ -43,13 +44,13 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     return baseURL + name;
   };
 
-  const tryRequest = async (
+  const tryRequest = async < T = any, >(
     method: 'post' | 'get',
     url: string,
     dataOrParams?: any,
     onBefore?: () => void,
     onFailure?: ( error: any ) => void,
-  ) => {
+  ): Promise< WpResponse< T > > => {
     const req =
       method === 'post'
         ? restReq.post( url, dataOrParams )
@@ -62,7 +63,14 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
       onFailure && onFailure( msg );
     };
 
-    return optimistic( async () => req, onBefore, catchFailure );
+    return optimistic(
+      async () => {
+        const response = await req;
+        return response.data;
+      },
+      onBefore,
+      catchFailure,
+    );
   };
 
   const apiRequest = async < T = any, >( endpoint: string, dataOrParams?: any ): Promise< T > => {

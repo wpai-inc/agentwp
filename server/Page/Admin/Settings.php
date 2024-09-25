@@ -79,17 +79,21 @@ class Settings extends ReactClient
 
         if ($screen->id === 'toplevel_page_'.$this->main::SETTINGS_PAGE && isset($_GET['code'])) {
             $code = sanitize_text_field($_GET['code']);
-            $response_raw = wp_remote_post($this->main->apiHost().'/oauth/token', [
-                'body' => [
-                    'grant_type' => 'authorization_code',
-                    'client_id' => $this->main->settings->client_id,
-                    'client_secret' => $this->main->settings->client_secret,
-                    'redirect_uri' => $this->main->settingsPageUrl,
-                    'code' => $code,
-                ],
+
+            $response = $this->main->client()->passportToken([
+                'grant_type' => 'authorization_code',
+                'client_id' => $this->main->settings->client_id,
+                'client_secret' => $this->main->settings->client_secret,
+                'redirect_uri' => $this->main->settingsPageUrl,
+                'code' => $code,
             ]);
 
-            $response = json_decode($response_raw['body'], true);
+            if (\is_wp_error($response)) {
+                wp_redirect($this->main->settingsPageUrl);
+                error_log(print_r($response, true));
+
+                return;
+            }
 
             $response['expires_in'] = $response['expires_in'] * 1000;
 

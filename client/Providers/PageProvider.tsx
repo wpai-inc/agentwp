@@ -1,5 +1,7 @@
 import { createContext, useContext, ReactNode } from 'react';
 import type { PageData } from '@/Types/types';
+import routes from '../../server/Modules/AwpClient/routes.json';
+import { get } from 'http';
 
 // Define a generic type that extends PageData
 interface PageProviderProps< T extends PageData > {
@@ -14,6 +16,7 @@ interface PageContextType< T extends PageData > {
   isPage: ( pageContains: string ) => boolean;
   getAccountSetting: ( name: App.Enums.SiteSettingValue, defaultValue: any ) => any;
   userProfileUrl: string;
+  getApiUrl: ( name: string ) => string;
 }
 
 // Create a context with the generic type
@@ -28,6 +31,15 @@ export function usePage< T extends PageData >() {
   return context; // Directly return the context since it holds the generic page
 }
 
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+type Route = {
+  key: string;
+  name: string;
+  methods: HttpMethod[];
+  uri: string;
+};
+
 // Update the PageProvider to pass the generic type
 export function PageProvider< T extends PageData >( { page, children }: PageProviderProps< T > ) {
   const canAccessAgent = page.onboarding_completed && page.agentwp_access;
@@ -38,6 +50,14 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
     const currentPage = window.location.href;
     return currentPage.indexOf( pageContains ) === -1;
   };
+
+  function getApiRoute( name: string ) {
+    return routes.find( ( route: Route ) => route.name === name );
+  }
+
+  function getApiUrl( name: string ) {
+    return page.api_host + '/' + getApiRoute( name ).uri;
+  }
 
   function getAccountSetting( name: App.Enums.SiteSettingValue, defaultValue: any = null ) {
     return (
@@ -55,6 +75,7 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
         isPage,
         getAccountSetting,
         userProfileUrl,
+        getApiUrl,
       } }>
       { children }
     </PageContext.Provider>
