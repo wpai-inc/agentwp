@@ -8,19 +8,15 @@ class ValidateWebsite extends BaseController
 
     public function __invoke(): void
     {
-        $key = sanitize_text_field($_REQUEST['verification_key']);
+        $key = sanitize_text_field($_GET['verification_key']);
         if (
             $this->main->settings->verification_key
             && ! empty($key)
             && $key === $this->main->settings->verification_key
         ) {
-            $this->respond([
-                'status' => 'success',
-            ]);
+            $this->respond(['status' => 'success']);
         } else {
-            $this->error([
-                'status' => 'failed',
-            ]);
+            $this->error('failed_site_verification');
         }
     }
 }

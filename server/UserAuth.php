@@ -33,7 +33,7 @@ class UserAuth
 
     public function hasValidVerificationKey(): bool
     {
-        $verification_key = isset($_REQUEST['verification_key']) ? sanitize_text_field($_REQUEST['verification_key']) : '';
+        $verification_key = isset($_GET['verification_key']) ? sanitize_text_field($_GET['verification_key']) : '';
 
         if (empty($verification_key)) {
             return false;
