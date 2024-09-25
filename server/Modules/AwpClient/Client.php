@@ -23,7 +23,7 @@ class Client
     private array $options = [];
 
     private array $defaultClientOptions = [
-        'timeout' => 15,
+        'timeout' => 3, // 3 second timeout.
     ];
 
     public function __construct(
