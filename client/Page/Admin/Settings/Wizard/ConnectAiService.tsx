@@ -1,13 +1,17 @@
 import ConnectButton from '@/Page/Admin/Settings/Partials/ConnectButton';
 import { ManualAwpActivation } from '@/Page/Admin/Settings/Partials/ManualAwpActivation';
 import Logo from '@/Components/Logo';
+import { usePage } from '@/Providers/PageProvider';
+import { SettingsPageData } from '@/Types/types';
 
 export default function ConnectAiService() {
+  const { page } = usePage< SettingsPageData >();
+
   return (
     <div className="max-w-[380px] mx-auto text-base mt-12">
       <Logo className="mx-auto w-14 h-14" />
       <div className="text-4xl font-bold text-center leading-10">
-        Connect Example Site to AgentWP Services
+        Connect { page.site_title } Site to AgentWP Services
       </div>
       <div className="text-lg mt-4">
         To begin using AgentWP, connect it to the Al services. If this is your first time connecting

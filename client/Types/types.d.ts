@@ -11,7 +11,7 @@ export type AWPRootType = HTMLElement & {
   ) => void;
 };
 
-export type PageData = {
+export interface PageData {
   nonce: string;
   wp_rest_nonce: string;
   rest_route: string;
@@ -37,7 +37,11 @@ export type PageData = {
   agentwp_manager: boolean;
   agentwp_users_manager: boolean;
   agentwp_access: boolean;
-};
+}
+
+export interface SettingsPageData extends PageData {
+  site_title: string;
+}
 
 export type WpUser = {
   ID: string;

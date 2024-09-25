@@ -68,7 +68,9 @@ class Settings extends ReactClient
 
     public function data(): array
     {
-        return [];
+        return [
+            'site_title' => get_bloginfo('name'),
+        ];
     }
 
     public function maybe_get_token(): void

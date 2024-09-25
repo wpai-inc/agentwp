@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { PageProvider } from '@/Providers/PageProvider';
 import Settings from './Settings';
 import Wizard from './Wizard';
-import type { PageData } from '@/Types/types';
+import type { PageData, SettingsPageData } from '@/Types/types';
 import { RestRequestProvider } from '@/Providers/RestRequestProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
@@ -18,7 +18,7 @@ declare global {
 
 const rootElement = document.getElementById( 'agentwp-admin-settings' );
 
-declare const agentwpData: PageData;
+declare const agentwpData: SettingsPageData;
 
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
