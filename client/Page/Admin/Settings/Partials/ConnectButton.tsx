@@ -9,8 +9,8 @@ export default function ConnectButton() {
 
   async function connect() {
     setConnecting( true );
-    const connect_url = await tryRequest( 'get', 'oauth_connect' );
-    window.location = connect_url.data.data.url;
+    const { data } = await tryRequest( 'get', 'oauth_connect' );
+    window.location = data.url;
   }
 
   return (

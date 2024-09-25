@@ -30,6 +30,10 @@ class HttpErrors
                 'message' => __('An unknown error occurred.', 'agentwp'),
                 'code' => 500,
             ],
+            'failed_site_verification' => [
+                'message' => __('Your site could not be verified.', 'agentwp'),
+                'code' => 403,
+            ],
         ];
     }
 

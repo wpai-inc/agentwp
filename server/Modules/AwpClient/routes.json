@@ -272,5 +272,14 @@
             "HEAD"
         ],
         "name": "oauthConnectSite"
+    },
+    {
+        "key": "oauth.manually-connect-site",
+        "uri": "manually_connect_site",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "oauthManuallyConnectSite"
     }
 ]

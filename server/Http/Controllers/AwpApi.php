@@ -14,4 +14,13 @@ class AwpApi extends BaseController
 
         return $this->main->client()->$endpoint($params);
     }
+
+    public function createRequest()
+    {
+        $response = $this->main->client()->convoCreate($this->request->toArray());
+
+        $response['access_token'] = $this->main->auth()->getAccessToken();
+
+        $this->respond($response);
+    }
 }

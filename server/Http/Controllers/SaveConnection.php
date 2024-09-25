@@ -12,16 +12,13 @@ class SaveConnection extends BaseController
 
     public function __invoke(): void
     {
-
         $key = sanitize_text_field($_REQUEST['verification_key'] ?? '');
         if (
             ! $this->main->settings->verification_key
             || empty($key)
                && $key !== $this->main->settings->verification_key
         ) {
-            $this->error([
-                'status' => 'failed',
-            ]);
+            $this->error('failed_site_verification');
         }
 
         $this->main->settings->delete('verification_key');

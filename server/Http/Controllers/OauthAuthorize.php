@@ -18,8 +18,6 @@ class OauthAuthorize extends BaseController
             'scope' => 'site_connection',
         ];
 
-        @ray($connect_url_query_strings);
-
         return ['url' => $this->main->apiHost().'/connect_site?'.http_build_query($connect_url_query_strings)];
     }
 }

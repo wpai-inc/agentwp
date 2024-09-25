@@ -13,7 +13,7 @@ export default function UsersManagement() {
   const [ searching, setSearching ] = useState( false );
 
   async function getUsers() {
-    const response = await tryRequest(
+    const { data } = await tryRequest(
       'get',
       'agentwp_users',
       null,
@@ -21,7 +21,7 @@ export default function UsersManagement() {
       () => setSearching( false ),
     );
 
-    setUsers( response.data.data );
+    setUsers( data );
     setSearching( false );
   }
 
