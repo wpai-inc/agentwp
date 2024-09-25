@@ -41,6 +41,7 @@ class Installer implements Registrable
         (new IndexSiteData($this->main))->scheduleNow('autoUpdate');
 
         set_transient('agentwp_installing', 'yes', MINUTE_IN_SECONDS * 10);
+
         if (! defined('WP_CLI') || ! WP_CLI) {
             add_action('shutdown', [$this, 'redirect']);
         }
@@ -65,7 +66,13 @@ class Installer implements Registrable
         delete_option($key.'_summary');
         delete_option($key.'_site_data');
         global $wpdb;
-        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '%{$key}%' option_name LIKE '%_transient%'");
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->options WHERE option_name LIKE %s AND option_name LIKE %s",
+                '%'.$wpdb->esc_like($key).'%',
+                '%_transient%'
+            )
+        );
     }
 
     public function redirect(): void
