@@ -110,16 +110,6 @@ class Main
         return self::SLUG;
     }
 
-    public function apiHost()
-    {
-        return Helper::config('AGENT_WP_SERVER_BASE_URL') ?? $this->runtimeApiHost();
-    }
-
-    public function apiClientHost()
-    {
-        return Helper::config('AGENT_WP_CLIENT_BASE_URL') ?? $this->runtimeApiHost();
-    }
-
     public function client(): WpAwpClient
     {
         return new WpAwpClient(ClientFactory::make($this));
@@ -138,6 +128,16 @@ class Main
     public function accountSettings(): AccountSettings
     {
         return new AccountSettings($this->client());
+    }
+
+    public function apiHost()
+    {
+        return defined('AGENT_WP_SERVER_BASE_URL') ? AGENT_WP_SERVER_BASE_URL : $this->runtimeApiHost();
+    }
+
+    public function apiClientHost()
+    {
+        return defined('AGENT_WP_CLIENT_BASE_URL') ? AGENT_WP_CLIENT_BASE_URL : $this->runtimeApiHost();
     }
 
     private function runtimeApiHost()
