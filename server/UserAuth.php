@@ -33,10 +33,12 @@ class UserAuth
 
     public function hasValidVerificationKey(): bool
     {
-        if (empty($_REQUEST['verification_key'])) {
+        $verification_key = isset($_REQUEST['verification_key']) ? sanitize_text_field($_REQUEST['verification_key']) : '';
+
+        if (empty($verification_key)) {
             return false;
         }
-        $verification_key = sanitize_text_field($_REQUEST['verification_key']);
+
         $local_verification_key = $this->settings->verification_key;
 
         return ! empty($local_verification_key) && $verification_key === $local_verification_key;
