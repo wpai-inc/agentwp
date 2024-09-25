@@ -7,8 +7,10 @@ import { useScreen } from '@/Providers/ScreenProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 import { useRestRequest } from './RestRequestProvider';
 
+export type StreamRequestType = App.Data.Response.StoreUserRequestData & { access_token: string };
+
 type StreamContextType = {
-  startStream: ( data: App.Data.Response.StoreUserRequestData ) => Promise< void >;
+  startStream: ( data: StreamRequestType ) => Promise< void >;
   retryStream: ( userRequestId: string ) => Promise< void >;
   cancelStream: ( userRequestId: string ) => void;
   liveAction: AgentAction | null;
@@ -46,7 +48,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     currentUserRequestId,
   } = useUserRequests();
   const { addErrors } = useError();
-  const { apiRequest } = useRestRequest();
+  const { apiRequest, tryRequest } = useRestRequest();
   const ctrl = useRef< AbortController >( new AbortController() );
   const [ streamingStatus, setStreamingStatus ] = useState( StreamingStatusEnum.OFF );
   const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
@@ -57,7 +59,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     access_token,
     site_id,
     wp_user_id,
-  }: App.Data.Response.StoreUserRequestData ) {
+  }: StreamRequestType ) {
     if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
       setStreamingStatus( StreamingStatusEnum.ABORT );
       return;
@@ -152,7 +154,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   }
 
   async function retryStream( userRequestId: string ) {
-    const data = await apiRequest< App.Data.Response.StoreUserRequestData >( 'requestRetry', {
+    const { data } = await tryRequest< StreamRequestType >( 'post', 'retry_request', {
       userRequest: userRequestId,
     } );
 

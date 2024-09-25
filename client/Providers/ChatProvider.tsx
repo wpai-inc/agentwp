@@ -1,5 +1,5 @@
 import { useState, createContext, useContext } from 'react';
-import { useStream } from '@/Providers/StreamProvider';
+import { StreamRequestType, useStream } from '@/Providers/StreamProvider';
 import type {
   UserRequestType,
   AgentAction,
@@ -92,7 +92,7 @@ export default function ChatProvider( {
     message: string,
     id: string | null = null,
     mentions: any[] = [],
-  ): Promise< WpResponse< App.Data.Response.StoreUserRequestData > > {
+  ): Promise< WpResponse< StreamRequestType > > {
     let req: App.Data.Request.StoreUserRequestData = {
       id,
       message,

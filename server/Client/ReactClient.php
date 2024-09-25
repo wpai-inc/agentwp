@@ -180,7 +180,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'roles' => wp_get_current_user()->roles,
         ];
 
-        $access_token = $this->main->auth->getAccessToken();
+        $access_token = $this->main->getAccessToken();
 
         return [
             'nonce' => wp_create_nonce(Main::nonce()),

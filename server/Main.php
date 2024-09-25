@@ -125,6 +125,16 @@ class Main
         return new WpAwpClient(ClientFactory::make($this));
     }
 
+    /**
+     * @todo: This should maybe be under UserAuth to
+     * control access to the access token.
+     */
+    public function getAccessToken(): ?string
+    {
+        // return $this->auth->getAccessToken();
+        return $this->settings->getAccessToken();
+    }
+
     public function accountSettings(): AccountSettings
     {
         return new AccountSettings($this->client());

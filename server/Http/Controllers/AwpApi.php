@@ -19,7 +19,17 @@ class AwpApi extends BaseController
     {
         $response = $this->main->client()->convoCreate($this->request->toArray());
 
-        $response['access_token'] = $this->main->auth()->getAccessToken();
+        $response['access_token'] = $this->main->getAccessToken();
+
+        $this->respond($response);
+    }
+
+    public function retryRequest()
+    {
+        error_log(print_r($this->request->toArray(), true));
+        $response = $this->main->client()->requestRetry($this->request->toArray());
+
+        $response['access_token'] = $this->main->getAccessToken();
 
         $this->respond($response);
     }

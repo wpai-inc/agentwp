@@ -40,7 +40,7 @@ class ErrorIndexer implements Registrable
         array $error_context = []
     ): bool {
         $siteId = $this->main->siteId();
-        $token = $this->main->settings->getAccessToken();
+        $token = $this->main->getAccessToken();
         if (! $siteId || ! $token) {
             return false;
         }
