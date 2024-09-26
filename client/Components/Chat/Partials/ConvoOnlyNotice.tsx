@@ -12,12 +12,12 @@ export default function ConvoOnlyNotice() {
             href="https://agentwp.com/convo-only-mode/"
             target="_blank"
             rel="noreferrer noopener"
-            className="ml-auto inline-block underline underline-offset-2">
+            className="underline underline-offset-2">
             Learn More
           </a>
         }>
         <span className="flex gap-1">
-          <IconComment className="h-4 w-4 mr-2" />
+          <IconComment className="mr-2 h-4 w-4" />
           <span>Conversation Only Mode (no Agent)</span>
         </span>
       </ChatNotice>
