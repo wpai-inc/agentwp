@@ -7,13 +7,10 @@ import Rate from '@/Components/Chat/Feedback/Rate';
 import ActionComponent from '../Actions/ActionComponent';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { logoUrl } from '@/Components/Logo';
-import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { useFeedback } from '@/Providers/FeedbackProvider';
 import Reason from '@/Components/Chat/Feedback/Reason';
-import MessageMeta from '@/Components/Chat/Convo/Message/MessageMeta';
 import { AnimatePresence, motion } from 'framer-motion';
 import ActionAborted from '@/Components/Chat/Convo/Actions/ActionAborted';
-import { ContextMenu, ContextMenuItem } from '@/Components/ui/context-menu';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,28 +44,6 @@ export default function AgentResponse( {
   const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
 
   const { opened } = useFeedback();
-  {
-    /* <MessageMeta
-                meta={ [
-                  {
-                    label: 'Responding Actions',
-                    onClick: () => alert( agentActions?.length ?? 0 ),
-                  },
-                  {
-                    label: 'Show Message ID',
-                    onClick: () => alert( userRequestId ),
-                  },
-                  {
-                    label: 'Copy',
-                    onClick: () => alert( userRequestId ),
-                  },
-                  {
-                    label: 'Create Post',
-                    onClick: () => alert( userRequestId ),
-                  },
-                ] }
-              /> */
-  }
 
   return (
     <div className="text-black/60">
