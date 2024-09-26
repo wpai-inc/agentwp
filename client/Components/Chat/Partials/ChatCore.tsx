@@ -33,13 +33,9 @@ export default function ChatCore( { handleDrag }: HandleDrag ) {
   return (
     <div className="flex h-full flex-col">
       <ChatTopBar handleDrag={ handleDrag } />
-      <div className="space-y-2">
-        <div>
-          { /* <BetaNotice /> */ }
-          <UpdateNotification />
-        </div>
-        { convoOnly && <ConvoOnlyNotice /> }
-      </div>
+      { /* <BetaNotice /> */ }
+      <UpdateNotification />
+      { convoOnly && <ConvoOnlyNotice /> }
       { pages[ tab ] }
       <ChatNav tab={ tab } setTab={ setTab } />
       <ChatOverlay />
