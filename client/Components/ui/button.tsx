@@ -19,7 +19,7 @@ const buttonVariants = cva(
         'ghost':
           'hover:bg-slate-100 hover:text-brand-dark dark:hover:bg-slate-800 dark:hover:text-slate-50',
         'link': 'text-brand-dark underline-offset-4 hover:underline dark:text-slate-50',
-        'brand': 'text-white bg-brand-primary border-brand-primary',
+        'brand': 'text-white bg-brand-primary border-brand-primary hover:bg-brand-primary-muted',
         'dark': 'text-white bg-brand-dark hover:bg-brand-primary',
         'brand-outline': 'text-brand-gray-30 bg-white border border-brand-gray-30',
         'brand-gray': 'text-brand-gray-70 bg-brand-gray-20',
@@ -27,7 +27,7 @@ const buttonVariants = cva(
       size: {
         default: 'py-1 px-3 text-sm',
         sm: 'py-1 px-1.5 text-xs',
-        lg: 'text-lg',
+        lg: 'text-xl py-2 px-4 rounded-lg',
         icon: 'h-10 w-10',
       },
       isBusy: {

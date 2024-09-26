@@ -14,15 +14,14 @@ export default function ConnectButton() {
   }
 
   return (
-    <>
-      <Button
-        disabled={ connecting }
-        onClick={ connect }
-        className=" w-full"
-        variant="brand"
-        isBusy={ connecting }>
-        Connect AI Services
-      </Button>
-    </>
+    <Button
+      disabled={ connecting }
+      onClick={ connect }
+      className="w-full"
+      variant="brand"
+      size="lg"
+      isBusy={ connecting }>
+      Connect AI Services
+    </Button>
   );
 }
