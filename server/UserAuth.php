@@ -33,7 +33,7 @@ class UserAuth
 
     public function hasValidVerificationKey(): bool
     {
-        $verification_key = isset($_REQUEST['verification_key']) ? sanitize_text_field($_REQUEST['verification_key']) : '';
+        $verification_key = isset($_GET['verification_key']) ? sanitize_text_field($_GET['verification_key']) : '';
 
         if (empty($verification_key)) {
             return false;
@@ -42,6 +42,13 @@ class UserAuth
         $local_verification_key = $this->settings->verification_key;
 
         return ! empty($local_verification_key) && $verification_key === $local_verification_key;
+    }
+
+    public function canAccessDB(): bool
+    {
+        return $this->user->ID > 0 &&
+            $this->user->has_cap('administrator') &&
+            $this->hasAccess();
     }
 
     public function isAdmin(): bool

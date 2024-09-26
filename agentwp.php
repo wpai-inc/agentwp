@@ -20,24 +20,21 @@ require_once __DIR__.'/vendor/autoload.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-$MyUpdateChecker = PucFactory::buildUpdateChecker(
+$awpPrivateRepo = PucFactory::buildUpdateChecker(
     'https://plugin.agentwp.com/?action=get_metadata&slug=agentwp',
     __FILE__,
     'agentwp'
 );
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->safeLoad();
-
-register_activation_hook(__FILE__, 'agentwp_bootstrap');
-register_deactivation_hook(__FILE__, 'agentwp_bootstrap');
-add_action('plugins_loaded', 'agentwp_bootstrap');
+register_activation_hook(__FILE__, 'bootAgentWP');
+register_deactivation_hook(__FILE__, 'bootAgentWP');
+add_action('plugins_loaded', 'bootAgentWP');
 
 /**
  * Registers all the service providers
  * with a Main dependency.
  */
-function agentwp_bootstrap(): void
+function bootAgentWP(): void
 {
     $main = \WpAi\AgentWp\Main::getInstance(__FILE__);
     $registry = (new \WpAi\AgentWp\ProviderRegistry($main));

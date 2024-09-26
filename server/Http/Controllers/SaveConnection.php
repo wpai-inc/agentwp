@@ -12,7 +12,7 @@ class SaveConnection extends BaseController
 
     public function __invoke(): void
     {
-        $key = sanitize_text_field($_REQUEST['verification_key'] ?? '');
+        $key = sanitize_text_field($_GET['verification_key'] ?? '');
         if (
             ! $this->main->settings->verification_key
             || empty($key)
@@ -23,7 +23,7 @@ class SaveConnection extends BaseController
 
         $this->main->settings->delete('verification_key');
 
-        $data = json_decode(file_get_contents('php://input'), true);
+        $data = $this->getContent();
 
         $this->main->settings->set([
             'site_id' => sanitize_text_field($data['site_id']),

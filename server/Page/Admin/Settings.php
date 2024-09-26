@@ -61,11 +61,6 @@ class Settings extends ReactClient
             ->registerMenu();
     }
 
-    public function openChatListener(): void
-    {
-        wp_enqueue_script('agentwp-admin', $this->main->staticAsset('/admin.js'), [], $this->main::PLUGIN_VERSION, true);
-    }
-
     public function data(): array
     {
         return [

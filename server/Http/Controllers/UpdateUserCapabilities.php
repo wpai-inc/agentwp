@@ -12,8 +12,7 @@ class UpdateUserCapabilities extends BaseController
 
     public function __invoke(): void
     {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $user_id = sanitize_text_field($data['user']);
+        $user_id = sanitize_text_field($this->getContent('user'));
         $user = new \WP_User($user_id);
         if (isset($data['agentwp_access'])) {
             $agentwp_access = sanitize_text_field($data['agentwp_access']);
