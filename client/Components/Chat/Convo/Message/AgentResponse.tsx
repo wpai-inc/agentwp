@@ -13,6 +13,17 @@ import Reason from '@/Components/Chat/Feedback/Reason';
 import MessageMeta from '@/Components/Chat/Convo/Message/MessageMeta';
 import { AnimatePresence, motion } from 'framer-motion';
 import ActionAborted from '@/Components/Chat/Convo/Actions/ActionAborted';
+import { ContextMenu, ContextMenuItem } from '@/Components/ui/context-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/Components/ui/dropdown-menu';
+import CopyAgentResponse from '../Partials/CopyAgentResponse';
+import CreatePostFromAgentResponse from '../Partials/CreatePostFromAgentResponse';
 
 export default function AgentResponse( {
   agentActions,
@@ -36,6 +47,28 @@ export default function AgentResponse( {
   const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
 
   const { opened } = useFeedback();
+  {
+    /* <MessageMeta
+                meta={ [
+                  {
+                    label: 'Responding Actions',
+                    onClick: () => alert( agentActions?.length ?? 0 ),
+                  },
+                  {
+                    label: 'Show Message ID',
+                    onClick: () => alert( userRequestId ),
+                  },
+                  {
+                    label: 'Copy',
+                    onClick: () => alert( userRequestId ),
+                  },
+                  {
+                    label: 'Create Post',
+                    onClick: () => alert( userRequestId ),
+                  },
+                ] }
+              /> */
+  }
 
   return (
     <div className="text-black/60">
@@ -58,25 +91,45 @@ export default function AgentResponse( {
         />
         <div className="flex items-center gap-4">
           { ! incomplete && <Rate /> }
-          <Popover>
-            <PopoverTrigger>
-              <IconMore className="text-brand-gray-15" />
-            </PopoverTrigger>
-            <PopoverContent>
-              <MessageMeta
-                meta={ [
-                  {
-                    label: 'Responding Actions',
-                    value: agentActions?.length ?? 0,
-                  },
-                  {
-                    label: 'Message ID',
-                    value: userRequestId,
-                  },
-                ] }
-              />
-            </PopoverContent>
-          </Popover>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button>
+                <IconMore className="text-brand-gray-15" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Information</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <span className="flex gap-2">
+                  Responding Actions: <strong>{ agentActions?.length ?? 0 }</strong>
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <span className="flex gap-2">
+                  Message ID:{ ' ' }
+                  <strong className="font-mono text-sm font-semibold inline-block max-w-24 truncate">
+                    { userRequestId }
+                  </strong>
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              { messageAction && (
+                <>
+                  <DropdownMenuItem>
+                    <CopyAgentResponse message={ ( messageAction.action?.text as string ) ?? '' } />
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CreatePostFromAgentResponse
+                      message={ ( messageAction.action?.text as string ) ?? '' }
+                    />
+                  </DropdownMenuItem>
+                </>
+              ) }
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </MessageHeader>
 
