@@ -23,7 +23,7 @@ class SaveConnection extends BaseController
 
         $this->main->settings->delete('verification_key');
 
-        $data = json_decode(file_get_contents('php://input'), true);
+        $data = $this->getContent();
 
         $this->main->settings->set([
             'site_id' => sanitize_text_field($data['site_id']),

@@ -44,6 +44,13 @@ class UserAuth
         return ! empty($local_verification_key) && $verification_key === $local_verification_key;
     }
 
+    public function canAccessDB(): bool
+    {
+        return $this->user->ID > 0 &&
+            $this->user->has_cap('administrator') &&
+            $this->hasAccess();
+    }
+
     public function isAdmin(): bool
     {
         return in_array($this->getRole(), ['administrator', 'super_admin']);

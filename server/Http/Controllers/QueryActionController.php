@@ -6,7 +6,10 @@ class QueryActionController extends BaseController
 {
     public function __invoke(): void
     {
-        $this->hasAccessToDatabase();
+        if (! $this->main->auth->canAccessDB()) {
+            $this->error('access_denied');
+            exit;
+        }
 
         global $wpdb;
 
@@ -98,16 +101,5 @@ class QueryActionController extends BaseController
 
         // If all checks pass, return the original query
         return $sql;
-    }
-
-    private function hasAccessToDatabase()
-    {
-        // user should be authenticated and to be an admin
-        $user = wp_get_current_user();
-        if ($user->ID === 0 || ! $user->has_cap('administrator') || ! $this->main->auth->hasAccess()) {
-            throw new \Exception('You do not have access to the database');
-        }
-
-        return true;
     }
 }

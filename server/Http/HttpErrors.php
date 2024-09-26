@@ -34,6 +34,10 @@ class HttpErrors
                 'message' => __('Your site could not be verified.', 'agentwp'),
                 'code' => 403,
             ],
+            'access_denied' => [
+                'message' => __('Access denied.', 'agentwp'),
+                'code' => 403,
+            ],
         ];
     }
 
