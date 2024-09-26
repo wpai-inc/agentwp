@@ -6,6 +6,7 @@ import GeneralSettings from '../Partials/GeneralSettings';
 import DataList, { DataListItem } from '@/Components/ui/dl';
 import ChatSettings from '../Partials/ChatSettings';
 import Tools from '../Partials/Tools';
+import RestrictURLsSettings from '../Partials/RestrictURLsSettings';
 
 export default function SettingsTab() {
   /**
@@ -92,6 +93,7 @@ export default function SettingsTab() {
             </DataListItem>
           ) }
           <GeneralSettings />
+          <RestrictURLsSettings />
         </DataList>
       </Section>
 

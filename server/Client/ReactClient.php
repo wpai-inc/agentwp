@@ -29,6 +29,10 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
     public function setLocation(): void
     {
+        if (method_exists($this, 'onLocations')) {
+            $this->onLocations();
+        }
+
         foreach ($this->locations as $location) {
             if (! class_exists($location)) {
                 throw new \Error('Location class does not exist: '.$location);

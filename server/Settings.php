@@ -25,6 +25,10 @@ class Settings
             'type' => 'boolean',
             'default' => true,
         ],
+        'restricted_urls' => [
+            'type' => 'string',
+            'default' => '',
+        ],
     ];
 
     public function __construct()
