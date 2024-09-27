@@ -2,8 +2,12 @@
 
 namespace WpAi\AgentWp\Http\Controllers;
 
+use WpAi\AgentWp\Traits\HasMentions;
+
 class AwpApi extends BaseController
 {
+    use HasMentions;
+
     protected string $method = 'POST';
 
     public function __invoke()
@@ -17,7 +21,7 @@ class AwpApi extends BaseController
 
     public function createRequest()
     {
-        $response = $this->main->client()->convoCreate($this->request->toArray());
+        $response = $this->main->client()->convoCreate($this->handleMentions($this->request->toArray()));
 
         $response['access_token'] = $this->main->getAccessToken();
 
