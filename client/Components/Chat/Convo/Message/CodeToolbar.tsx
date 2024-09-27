@@ -75,17 +75,18 @@ export default function CodeToolbar( { code, language }: { code: string; languag
     <>
       <ChatNotice
         noInitialAnimation={ true }
-        className="mb-2"
+        className="mb-2 font-sans"
+        size="sm"
         action={
           <a
             href="https://kb.agentwp.com/testing-code"
             target="_blank"
-            rel="noreferrer"
-            className="text-base uppercase underline underline-offset-2">
-            Learn How
+            rel="noreferrer noopener"
+            className="underline underline-offset-2">
+            Learn More
           </a>
         }>
-        <p>Test code before using</p>
+        Test code before using
       </ChatNotice>
 
       <div className="flex justify-between rounded-t-xl bg-brand-gray-25 p-2 text-brand-gray-70">

@@ -38,16 +38,18 @@ export function ChatNotice( {
           exit={ { opacity: 0, y: '100%', scaleY: 0 } }>
           <Alert variant={ variant } size={ size } className={ cn( 'not-prose', className ) }>
             <AlertDescription>{ children }</AlertDescription>
-            { dismissable && (
-              <button onClick={ dismiss } className="text-base underline underline-offset-2">
-                { typeof dismissable === 'string' ? (
-                  dismissable
-                ) : (
-                  <CloseIcon className="h-4 w-4" />
-                ) }
-              </button>
-            ) }
-            { action && action }
+            <span className="flex items-center gap-2">
+              { action && action }
+              { ( dismissable || onDismiss ) && (
+                <button onClick={ dismiss } className="text-base underline underline-offset-2">
+                  { typeof dismissable === 'string' ? (
+                    dismissable
+                  ) : (
+                    <CloseIcon className="h-4 w-4" />
+                  ) }
+                </button>
+              ) }
+            </span>
           </Alert>
         </motion.div>
       ) }

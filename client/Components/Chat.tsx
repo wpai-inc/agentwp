@@ -1,43 +1,21 @@
 import AppProvider from '@/Providers/AppProvider';
 import AppWrapper from '@/Page/Admin/Chat/Partials/AppWrapper';
-import Chat from '@/Components/Chat/Chat';
-import StaticChat from '@/Components/Chat/StaticChat';
-import ChatProvider from '@/Providers/ChatProvider';
-import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
-import ScreenProvider from '@/Providers/ScreenProvider';
-import StreamProvider from '@/Providers/StreamProvider';
-import ActionListenerProvider from '@/Providers/ActionListenerProvider';
-import UserRequestsProvider from '@/Providers/UserRequestsProvider';
-import { RestRequestProvider } from '@/Providers/RestRequestProvider';
-import { ErrorProvider } from '@/Providers/ErrorProvider';
-import { InputSelectProvider } from '@/Providers/InputSelectProvider';
-import StreamListenerProvider from '@/Providers/StreamListenerProvider';
+import ChatConnected from './Chat/ChatConnected';
+import { usePage } from '@/Providers/PageProvider';
+import { PageData } from '@/Types/types';
+import ChatDisconnected from './Chat/ChatDisconnected';
 
 export default function ChatApp( { inline = false }: { inline?: boolean } ) {
+  const { page } = usePage< PageData >();
+
   return (
     <AppProvider>
       <AppWrapper>
-        <ErrorProvider>
-          <RestRequestProvider>
-            <ClientSettingsProvider>
-              <ScreenProvider>
-                <UserRequestsProvider>
-                  <StreamProvider>
-                    <ActionListenerProvider>
-                      <InputSelectProvider>
-                        <ChatProvider>
-                          <StreamListenerProvider>
-                            { inline ? <StaticChat /> : <Chat /> }
-                          </StreamListenerProvider>
-                        </ChatProvider>
-                      </InputSelectProvider>
-                    </ActionListenerProvider>
-                  </StreamProvider>
-                </UserRequestsProvider>
-              </ScreenProvider>
-            </ClientSettingsProvider>
-          </RestRequestProvider>
-        </ErrorProvider>
+        { page.is_connected ? (
+          <ChatConnected inline={ inline } />
+        ) : (
+          <ChatDisconnected inline={ inline } />
+        ) }
       </AppWrapper>
     </AppProvider>
   );

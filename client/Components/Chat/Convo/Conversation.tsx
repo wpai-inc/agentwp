@@ -26,7 +26,7 @@ export default function Conversation() {
             onScrollToTop={ fetchMore }
           />
           <div className="relative mx-auto w-full max-w-screen-md p-2 pb-0">
-            <DialogFade />
+            { /* <DialogFade /> */ }
             <div className="mb-2 space-y-2">
               <ChatNotices />
               <ChatMessageUtilityBar />

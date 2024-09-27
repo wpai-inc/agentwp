@@ -23,7 +23,7 @@ function Tab( { value, title }: { value: string; title: string } ) {
 
 function TabContent( { value, children }: { value: string; children: ReactNode } ) {
   return (
-    <Tabs.Content className="grow p-5 rounded-b-md outline-none" value={ value }>
+    <Tabs.Content className="p-5 flex-1" value={ value }>
       { children }
     </Tabs.Content>
   );
@@ -40,58 +40,15 @@ export default function Settings() {
     window.history.pushState( {}, '', url );
   }
 
-  return (
-    <div className="-ml-5">
-      <Tabs.Root defaultValue={ initialTab } onValueChange={ value => handleTabChange( value ) }>
-        <div className="bg-white p-6 pb-0">
-          <div className="flex justify-between">
-            <div>
-              <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
-              { page.account?.plan?.slug === 'pro' && (
-                <span className="ml-3 inline-flex rounded-full items-center justify-center bg-brand-dark text-white px-3 py-2 text-sm font-bold uppercase">
-                  { page.account?.plan.name }
-                </span>
-              ) }
-            </div>
-            { page.account?.plan?.slug === 'free' && (
-              <div className="text-right">
-                <Button variant="brand" pill={ true }>
-                  <a href={ page.account?.upgrade_link }>Upgrade to Pro</a>
-                </Button>
-              </div>
-            ) }
-          </div>
-          <div className="flex flex-col-reverse md:flex-row items-center md:items-end justify-center md:justify-between">
-            <Tabs.List className="flex mt-5" aria-label="Manage your account">
-              <Tab value="dashboard" title="Dashboard" />
-              { page.agentwp_users_manager && <Tab value="users" title="Access" /> }
-              <Tab value="history" title="History" />
-              <AgentTooltip content="Coming soon" side="top">
-                <button className={ tabClasses } disabled>
-                  Integrations
-                </button>
-              </AgentTooltip>
-              <AgentTooltip content="Coming soon" side="top">
-                <button className={ tabClasses } disabled>
-                  Tasks
-                </button>
-              </AgentTooltip>
+  window.agentwp.classList.add( 'h-full' );
 
-              { page.agentwp_manager && <Tab value="settings" title="Settings" /> }
-            </Tabs.List>
-            <Tabs.List className="flex mt-5 justify-end" aria-label="Manage your account">
-              <a className={ tabClasses } href="https://app.agentwp.com/support">
-                Support
-              </a>
-              <a className={ tabClasses } href="https://agentwp.com/blog">
-                What's New?
-              </a>
-              <a className={ tabClasses } href="https://app.agentwp.com/dashboard">
-                Account
-              </a>
-            </Tabs.List>
-          </div>
-        </div>
+  return (
+    <div className="-ml-5 h-full">
+      <Tabs.Root
+        defaultValue={ initialTab }
+        onValueChange={ value => handleTabChange( value ) }
+        className="flex flex-col h-full">
+        <SettingsHeader />
         <TabContent value="dashboard">
           <Dashboard />
         </TabContent>
@@ -110,4 +67,58 @@ export default function Settings() {
       </Tabs.Root>
     </div>
   );
+
+  function SettingsHeader() {
+    return (
+      <div className="bg-white p-6 pb-0 sticky top-8 z-50">
+        <div className="flex justify-between">
+          <div>
+            <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
+            { page.account?.plan?.slug === 'pro' && (
+              <span className="ml-3 inline-flex rounded-full items-center justify-center bg-brand-dark text-white px-3 py-2 text-sm font-bold uppercase">
+                { page.account?.plan.name }
+              </span>
+            ) }
+          </div>
+          { page.account?.plan?.slug === 'free' && (
+            <div className="text-right">
+              <Button variant="brand" pill={ true }>
+                <a href={ page.account?.upgrade_link }>Upgrade to Pro</a>
+              </Button>
+            </div>
+          ) }
+        </div>
+        <div className="flex flex-col-reverse md:flex-row items-center md:items-end justify-center md:justify-between">
+          <Tabs.List className="flex mt-5" aria-label="Manage your account">
+            <Tab value="dashboard" title="Dashboard" />
+            { page.agentwp_users_manager && <Tab value="users" title="Access" /> }
+            <Tab value="history" title="History" />
+            <AgentTooltip content="Coming soon" side="top">
+              <button className={ tabClasses } disabled>
+                Integrations
+              </button>
+            </AgentTooltip>
+            <AgentTooltip content="Coming soon" side="top">
+              <button className={ tabClasses } disabled>
+                Tasks
+              </button>
+            </AgentTooltip>
+
+            { page.agentwp_manager && <Tab value="settings" title="Settings" /> }
+          </Tabs.List>
+          <Tabs.List className="flex mt-5 justify-end" aria-label="Manage your account">
+            <a className={ tabClasses } href="https://app.agentwp.com/support">
+              Support
+            </a>
+            <a className={ tabClasses } href="https://agentwp.com/blog">
+              What's New?
+            </a>
+            <a className={ tabClasses } href="https://app.agentwp.com/dashboard">
+              Account
+            </a>
+          </Tabs.List>
+        </div>
+      </div>
+    );
+  }
 }

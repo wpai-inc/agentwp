@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import type { AxiosPromise } from 'axios';
 import type { WpPost } from '@/Types/types';
+import { ChatNotice } from '../Notices/ChatNotice';
 
 type ChangelogUpdate = {
   title: string;
@@ -47,24 +48,21 @@ export default function UpdateNotification() {
   }
 
   return (
-    <AnimatePresence>
-      { ! isDismissed && update && (
-        <motion.div
-          initial={ { opacity: 0, y: '-100%' } }
-          animate={ { opacity: 1, y: 0 } }
-          exit={ { opacity: 0, y: '-100%' } }
-          className="bg-brand-secondary-muted flex items-center justify-between px-4 py-1.5 text-sm font-medium text-white">
-          <h2 className="text-white">New: { update.title }</h2>
-          <div className="flex items-center gap-2">
+    ! isDismissed &&
+    update && (
+      <div className="mx-2 mb-2">
+        <ChatNotice
+          variant="informative"
+          onDismiss={ dismiss }
+          size="sm"
+          action={
             <a href={ update.link } target="_blank" className="underline underline-offset-2">
               Learn More
             </a>
-            <button className="rounded p-1 transition hover:bg-white/20" onClick={ dismiss }>
-              <IconClose className="h-5 w-5" />
-            </button>
-          </div>
-        </motion.div>
-      ) }
-    </AnimatePresence>
+          }>
+          <span>New: { update.title }</span>
+        </ChatNotice>
+      </div>
+    )
   );
 }

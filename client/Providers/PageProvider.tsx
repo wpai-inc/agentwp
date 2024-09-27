@@ -1,7 +1,6 @@
 import { createContext, useContext, ReactNode } from 'react';
 import type { PageData } from '@/Types/types';
 import routes from '../../server/Modules/AwpClient/routes.json';
-import { get } from 'http';
 
 // Define a generic type that extends PageData
 interface PageProviderProps< T extends PageData > {
@@ -14,7 +13,7 @@ interface PageContextType< T extends PageData > {
   page: T;
   canAccessAgent: boolean;
   isPage: ( pageContains: string ) => boolean;
-  getAccountSetting: ( name: App.Enums.SiteSettingValue, defaultValue: any ) => any;
+  getAccountSetting: ( name: App.Enums.SiteSettingValue, defaultValue?: any ) => any;
   userProfileUrl: string;
   getApiUrl: ( name: string ) => string;
 }

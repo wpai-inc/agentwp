@@ -6,6 +6,7 @@ use WpAi\AgentWp\Contracts\MiddlewareInterface;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Http\Controllers\AddCodeSnippet;
 use WpAi\AgentWp\Http\Controllers\AwpApi;
+use WpAi\AgentWp\Http\Controllers\CreatePost;
 use WpAi\AgentWp\Http\Controllers\DisconnectSite;
 use WpAi\AgentWp\Http\Controllers\GetCodeSnippetPlugin;
 use WpAi\AgentWp\Http\Controllers\GetMentionItems;
@@ -52,6 +53,7 @@ class Router implements Registrable
         'update_general_settings' => UpdateGeneralSettings::class,
         'code_snippet_plugin' => GetCodeSnippetPlugin::class,
         'add_snippet' => AddCodeSnippet::class,
+        'create_post' => CreatePost::class,
         'mention_items' => GetMentionItems::class,
         'disconnect_site' => DisconnectSite::class,
         'run_action_query' => QueryActionController::class,

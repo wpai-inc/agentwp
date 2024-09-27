@@ -4,7 +4,7 @@
  * Plugin Name: AgentWP
  * Plugin URI: https://codewp.ai
  * Description: Adds a AI Agent to your WordPress installation.
- * Version: 0.1.17
+ * Version: 0.1.18
  * Author: WPAI Inc.
  * Author URI: https://codewp.ai
  * License: GPL2
@@ -47,7 +47,6 @@ function bootAgentWP(): void
         \WpAi\AgentWp\Registry\IndexSiteData::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,
         \WpAi\AgentWp\Registry\IndexSiteDocs::class,
-        \WpAi\AgentWp\Registry\ErrorIndexer::class,
         \WpAi\AgentWp\Registry\Router::class,
         \WpAi\AgentWp\Registry\WpUser::class,
     ]);

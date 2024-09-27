@@ -16,8 +16,8 @@ export default function BetaNotice() {
           initial={ { opacity: 0, y: '-100%' } }
           animate={ { opacity: 1, y: 0 } }
           exit={ { opacity: 0, y: '-100%' } }
-          className="bg-brand-gray flex items-center justify-between px-4 py-1.5 text-sm font-medium text-brand-gray-70">
-          <h2 className="uppercase">Beta Testing – Read Only Mode</h2>
+          className="flex items-center justify-between bg-brand-gray px-4 py-1.5 text-sm font-medium text-brand-gray-70">
+          <h2>Beta Testing – Read Only Mode</h2>
           <div className="flex items-center gap-2">
             <a
               href="https://agentwp.com/beta"

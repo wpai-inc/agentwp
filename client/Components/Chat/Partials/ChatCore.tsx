@@ -4,14 +4,16 @@ import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import UpdateNotification from '@/Components/Chat/Partials/UpdateNotification';
 import ChatNav from '@/Components/Chat/Partials/ChatNav';
 import { ConversationTab, SearchTab, SupportTab, SettingsTab } from '@/Components/Chat/Tabs';
-import BetaNotice from './BetaNotice';
+// import BetaNotice from './BetaNotice';
 import ConvoOnlyNotice from './ConvoOnlyNotice';
 import { usePage } from '@/Providers/PageProvider';
 
 export type TabKey = 'convo' | 'search' | 'support' | 'settings';
 export type HandleDrag = { handleDrag?: ( e: MouseEvent ) => void };
 
-type PageComponents = Record< TabKey, JSX.Element >;
+type PageComponents = {
+  [ key in TabKey ]: JSX.Element;
+};
 
 export default function ChatCore( { handleDrag }: HandleDrag ) {
   const [ tab, setTab ] = useState< TabKey >( 'convo' );
@@ -29,14 +31,10 @@ export default function ChatCore( { handleDrag }: HandleDrag ) {
   );
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="space-y-2">
-        <div>
-          <ChatTopBar handleDrag={ handleDrag } />
-          <UpdateNotification />
-        </div>
-        <BetaNotice />
-      </div>
+    <div className="flex h-full flex-col">
+      <ChatTopBar handleDrag={ handleDrag } />
+      { /* <BetaNotice /> */ }
+      <UpdateNotification />
       { convoOnly && <ConvoOnlyNotice /> }
       { pages[ tab ] }
       <ChatNav tab={ tab } setTab={ setTab } />
