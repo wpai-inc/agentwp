@@ -20,7 +20,7 @@ class Chat extends ReactClient
 
         $matched = false;
         foreach ($this->restrictedUrls() as $pattern) {
-            if (preg_match('#' . str_replace('#', '\#', $pattern) . '#', $_SERVER['REQUEST_URI'])) {
+            if (preg_match('#' . str_replace('#', '\#', $pattern) . '#', esc_url_raw($_SERVER['REQUEST_URI']))) {
                 $matched = true;
                 break;
             }
