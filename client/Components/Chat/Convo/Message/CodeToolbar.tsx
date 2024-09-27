@@ -9,6 +9,20 @@ import WoodySnippets from '@/assets/woodysnippets.png';
 import { useError } from '@/Providers/ErrorProvider';
 import { useChat } from '@/Providers/ChatProvider';
 import { ChatNotice } from '@/Components/Chat/Notices/ChatNotice';
+import { AgentTooltip } from '@/Components/ui/tooltip';
+import PHP from '@/assets/svgs/php.svg';
+import JS from '@/assets/svgs/js.svg';
+import CSS from '@/assets/svgs/css.svg';
+import HTML from '@/assets/svgs/html.svg';
+
+const languageIcons: {
+  [ key: string ]: string;
+} = {
+  php: PHP,
+  js: JS,
+  css: CSS,
+  html: HTML,
+};
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
   const { restReq } = useRestRequest();
@@ -72,7 +86,7 @@ export default function CodeToolbar( { code, language }: { code: string; languag
   };
 
   return (
-    <>
+    <div className="not-prose">
       <ChatNotice
         noInitialAnimation={ true }
         className="mb-2 font-sans"
@@ -90,19 +104,41 @@ export default function CodeToolbar( { code, language }: { code: string; languag
       </ChatNotice>
 
       <div className="flex justify-between rounded-t-xl bg-brand-gray-25 p-2 text-brand-gray-70">
-        <span className="text-sm uppercase">{ language }</span>
+        <span className="text-sm uppercase">
+          { languageIcons[ language.toLowerCase() ] ? (
+            <img
+              src={ languageIcons[ language.toLowerCase() ] }
+              className="w-6 h-6"
+              alt={ language }
+            />
+          ) : (
+            language
+          ) }
+        </span>
         <div className="flex items-center justify-end gap-3">
-          <button className="hover:text-brand-gray-100 ml-2 text-xs" onClick={ () => copy( code ) }>
-            { copied ? 'Copied!' : <IconCopy className="h-4 w-4" /> }
-          </button>
+          <AgentTooltip content="Copy code to clipboard.">
+            <button
+              className="hover:text-brand-gray-100 ml-2 text-xs"
+              onClick={ () => copy( code ) }>
+              { copied ? 'Copied!' : <IconCopy className="h-5 w-5" /> }
+            </button>
+          </AgentTooltip>
 
           { pluginIcon && (
-            <button onClick={ addSnippet }>
-              <img src={ pluginIcon } alt="WordPress Code Snippet" className="m-0 w-6" />
-            </button>
+            <AgentTooltip
+              content="Make snippet from code in Code Snippets plugin."
+              maxWidth={ 200 }>
+              <button onClick={ addSnippet }>
+                <img
+                  src={ pluginIcon }
+                  alt="WordPress Code Snippet"
+                  className="w-5 h-5 grayscale hover:grayscale-0 transition"
+                />
+              </button>
+            </AgentTooltip>
           ) }
         </div>
       </div>
-    </>
+    </div>
   );
 }

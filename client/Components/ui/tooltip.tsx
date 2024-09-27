@@ -37,16 +37,20 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 const AgentTooltip = ( {
   content,
   children,
+  maxWidth = 250,
   ...props
 }: {
   content: React.ReactNode;
   children: React.ReactNode;
+  maxWidth?: number;
 } ) => {
   return (
     <TooltipProvider delayDuration={ 500 }>
       <Tooltip>
         <TooltipTrigger asChild>{ children }</TooltipTrigger>
-        <TooltipContent { ...props }>{ content }</TooltipContent>
+        <TooltipContent { ...props } style={ { maxWidth } }>
+          { content }
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
