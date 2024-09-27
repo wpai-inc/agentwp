@@ -88,6 +88,7 @@ export type GutenbergStreamType = {
 
 type AgentWpGeneralSettings = {
   cleanup_after_deactivate: boolean;
+  restricted_urls: string;
 };
 
 export type WpPost = {
