@@ -24,7 +24,7 @@ export default function LatestConvos() {
           <Spinner show={ true } />
         </div>
       ) : historyGroups.length > 0 ? (
-        <div className="flex flex-col-reverse">
+        <div className="flex flex-col">
           { historyGroups.map( historyGroup => (
             <>
               <h3>{ historyGroup.group }</h3>
