@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b43cefb0a9aa5bd9d8a4af526a3ca5d9",
+    "content-hash": "a993cb505e7fbfd61e8c585589277bbe",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -332,45 +332,6 @@
             "time": "2024-07-18T11:15:46+00:00"
         },
         {
-            "name": "kucrut/vite-for-wp",
-            "version": "v0.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kucrut/vite-for-wp.git",
-                "reference": "bce4607bb57f4892da93492908caeb75ce2782a2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kucrut/vite-for-wp/zipball/bce4607bb57f4892da93492908caeb75ce2782a2",
-                "reference": "bce4607bb57f4892da93492908caeb75ce2782a2",
-                "shasum": ""
-            },
-            "require-dev": {
-                "wp-coding-standards/wpcs": "^3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "vite-for-wp.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-only"
-            ],
-            "authors": [
-                {
-                    "name": "Dzikri Aziz"
-                }
-            ],
-            "description": "Vite integration for WordPress plugins and themes development.",
-            "support": {
-                "issues": "https://github.com/kucrut/vite-for-wp/issues",
-                "source": "https://github.com/kucrut/vite-for-wp/tree/v0.8.0"
-            },
-            "time": "2023-11-15T04:30:52+00:00"
-        },
-        {
             "name": "psr/http-client",
             "version": "1.0.3",
             "source": {
@@ -643,16 +604,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v5.4.42",
+            "version": "v5.4.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "9c375b2abef0b657aa0b7612b763df5c12a465ab"
+                "reference": "ae0d217e5932aa0b70ddb4cf7822cc76d48aee53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/9c375b2abef0b657aa0b7612b763df5c12a465ab",
-                "reference": "9c375b2abef0b657aa0b7612b763df5c12a465ab",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/ae0d217e5932aa0b70ddb4cf7822cc76d48aee53",
+                "reference": "ae0d217e5932aa0b70ddb4cf7822cc76d48aee53",
                 "shasum": ""
             },
             "require": {
@@ -699,7 +660,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v5.4.42"
+                "source": "https://github.com/symfony/http-foundation/tree/v5.4.44"
             },
             "funding": [
                 {
@@ -715,7 +676,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-26T11:59:59+00:00"
+            "time": "2024-09-15T07:55:06+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",

@@ -2,11 +2,11 @@
 
 namespace WpAi\AgentWp\Client;
 
-use Kucrut\Vite;
 use WpAi\AgentWp\Contracts\ClientAppInterface;
 use WpAi\AgentWp\Contracts\ClientSetupLocationInterface;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
+use WpAi\AgentWp\Modules\Vite\Vite;
 use WpAi\AgentWp\Services\AwpRestRoute;
 
 abstract class ReactClient implements ClientAppInterface, Registrable
@@ -93,7 +93,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
     public function enqueue_client_assets()
     {
-        Vite\enqueue_asset(
+        (new Vite)->enqueue_asset(
             $this->main->buildPath(),
             $this->clientPage(),
             [
