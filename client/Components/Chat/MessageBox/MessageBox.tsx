@@ -94,7 +94,6 @@ export default function MessageBox() {
           <Button
             type={ streamingStatus === StreamingStatusEnum.OFF ? 'submit' : 'button' }
             variant="brand"
-            size="lg"
             onClick={ streamingStatus > StreamingStatusEnum.OFF ? handleCancelMessage : undefined }
             className="rounded bg-brand-primary h-10 w-10"
             disabled={

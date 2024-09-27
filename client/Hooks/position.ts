@@ -143,7 +143,6 @@ export const usePosition = ( {
           y: chatWindowEl.offsetHeight,
         } );
         setResizeSide( side );
-        setMaximization( undefined );
       }
     },
     [ chatWindowEl ],
