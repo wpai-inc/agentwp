@@ -13,14 +13,12 @@ class Chat extends ReactClient
 
     /**
      * Setup locations.
-     * 
-     * @return void
      */
-    public function onLocations() {
-
+    public function onLocations(): void
+    {
         $matched = false;
         foreach ($this->restrictedUrls() as $pattern) {
-            if (preg_match('#' . str_replace('#', '\#', $pattern) . '#', esc_url_raw($_SERVER['REQUEST_URI']))) {
+            if (preg_match('#'.str_replace('#', '\#', $pattern).'#', esc_url_raw($_SERVER['REQUEST_URI']))) {
                 $matched = true;
                 break;
             }
@@ -41,21 +39,19 @@ class Chat extends ReactClient
 
     /**
      * Get restricted urls.
-     * 
-     * @return array
      */
     public function restrictedUrls(): array
     {
-        $data = $this->globalData();
-        $data = ! empty( $data ) && isset( $data['general_settings'] ) ? $data['general_settings'] : [];
-        $data = isset( $data['restricted_urls'] ) ? $data['restricted_urls'] : [];
-        $data = explode( "\n", $data );
+        $data = $this->main->settings->getGeneralSettings();
+        $data = isset($data['restricted_urls']) ? $data['restricted_urls'] : [];
+        $data = explode("\n", $data);
 
-        foreach ( $data as $key => $value ) {
-            $data[ $key ] = str_ireplace( home_url(), '', $value );
+        foreach ($data as $key => $value) {
+            $data[$key] = str_ireplace(home_url(), '', $value);
         }
 
-        $data = array_filter( array_unique( $data ) );
+        $data = array_filter(array_unique($data));
+
         return $data;
     }
 
