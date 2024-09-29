@@ -15,7 +15,6 @@ type RestRequestContextType = {
     onFailure?: ( error: any ) => void,
   ) => Promise< WpResponse< T > >;
   proxyApiRequest: < T = any >( endpoint: string, dataOrParams?: any ) => Promise< T >;
-  apiRequest: < T = any >( endpoint: string, dataOrParams?: any ) => Promise< T >;
   requestUrl: ( name: string ) => string;
   nonceHeader: Record< string, string >;
 };
@@ -31,7 +30,7 @@ export function useRestRequest() {
 }
 
 export function RestRequestProvider( { children }: { children: React.ReactNode } ) {
-  const { page, getApiUrl } = usePage();
+  const { page } = usePage();
   const { notify } = useNotifications();
 
   const baseURL = page.rest_route + page.rest_endpoint + '/';
@@ -60,7 +59,7 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
 
     const catchFailure = ( e: any ) => {
       const msg = e.response.data.data;
-      notify.error( msg );
+      notify( msg );
       onFailure && onFailure( msg );
     };
 
@@ -74,15 +73,6 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     );
   };
 
-  /**
-   * @todo: Direct API requests, similar to Proxy
-   * @param endpoint
-   * @param dataOrParams
-   */
-  const apiRequest = async < T = any, >( endpoint: string, dataOrParams?: any ) => {
-    console.log( dataOrParams );
-  };
-
   const proxyApiRequest = async < T = any, >(
     endpoint: string,
     dataOrParams?: any,
@@ -93,7 +83,7 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     } catch ( error: any ) {
       const axiosErr = error as AxiosError;
       const errorMsg = axiosErr.response?.data?.message || 'An unexpected error occurred';
-      notify.error( errorMsg );
+      notify( errorMsg );
 
       throw new Error( errorMsg );
     }
@@ -101,7 +91,7 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
 
   return (
     <RestRequestContext.Provider
-      value={ { restReq, requestUrl, tryRequest, apiRequest, proxyApiRequest, nonceHeader } }>
+      value={ { restReq, requestUrl, tryRequest, proxyApiRequest, nonceHeader } }>
       { children }
     </RestRequestContext.Provider>
   );

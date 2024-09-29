@@ -3,7 +3,7 @@ import { Toaster } from '@/Components/ui/sonner';
 import { toast } from 'sonner';
 
 type NotificationContext = {
-  notify: typeof toast;
+  notify: ( msg: string ) => void;
 };
 
 export const NotificationsContext = createContext< NotificationContext | undefined >( undefined );
@@ -16,11 +16,40 @@ export const useNotifications = () => {
   return notifications;
 };
 
+type NotificationType = 'error' | 'success' | 'info' | 'warning';
+
 export const NotificationsProvider = ( { children }: { children: ReactNode } ) => {
+  function notify( msg: string, type: NotificationType = 'error' ) {
+    const title = 'AgentWP';
+
+    if ( type === 'error' ) {
+      toast.error( title, {
+        description: msg,
+      } );
+    } else {
+      toast.info( title, {
+        description: msg,
+      } );
+    }
+  }
+
   return (
-    <NotificationsContext.Provider value={ { notify: toast } }>
+    <NotificationsContext.Provider value={ { notify } }>
       { children }
-      <Toaster position="bottom-right" richColors closeButton />
+      <Toaster
+        toastOptions={ {
+          // unstyled: true,
+          classNames: {
+            toast: 'rounded-none',
+            title: 'text-white/50',
+            description: 'text-white/80',
+            closeButton: 'ring-1 ring-white/60',
+          },
+        } }
+        position="bottom-right"
+        richColors
+        closeButton
+      />
     </NotificationsContext.Provider>
   );
 };
