@@ -12,7 +12,7 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function History() {
   const [ history, setHistory ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const [ loading, setLoading ] = useState( true );
   const { since, setSince } = useUserRequests();
   const { setChatSetting } = useChat();
@@ -24,7 +24,7 @@ export default function History() {
   }, [ since ] );
 
   async function fetchHistory( since?: string ) {
-    const history = await apiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory', {
+    const history = await proxyApiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory', {
       since,
     } );
     setHistory( history );

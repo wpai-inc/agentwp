@@ -26,6 +26,14 @@
         "name": "streamTest"
     },
     {
+        "key": "api.accept-terms",
+        "uri": "api\/accept-terms",
+        "methods": [
+            "POST"
+        ],
+        "name": "acceptTerms"
+    },
+    {
         "key": "api.site.health",
         "uri": "api\/site\/health",
         "methods": [

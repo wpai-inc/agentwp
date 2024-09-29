@@ -10,7 +10,7 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function SupportTab() {
   const { page } = usePage();
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const [ submitting, setSubmitting ] = useState< boolean >( false );
   const [ message, setMessage ] = useState< string >( '' );
   const [ success, setSuccess ] = useState< boolean >( false );
@@ -25,7 +25,7 @@ export default function SupportTab() {
       email: page.user.user_email,
     };
 
-    await apiRequest( 'siteSupport', payload );
+    await proxyApiRequest( 'siteSupport', payload );
     setSuccess( true );
     setSubmitting( false );
   }

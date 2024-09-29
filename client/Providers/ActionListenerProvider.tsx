@@ -8,7 +8,7 @@ import { StreamingStatusEnum } from '@/Types/enums';
 const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamingStatus, retryStream } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
-  const { apiRequest, restReq } = useRestRequest();
+  const { proxyApiRequest, restReq } = useRestRequest();
   const { errors } = useError();
 
   useEffect( () => {
@@ -48,7 +48,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   }
 
   async function storeActionResult( aa: AgentAction, data: App.Data.AgentActionResultData ) {
-    await apiRequest< App.Data.AgentActionData >( 'actionResult', {
+    await proxyApiRequest< App.Data.AgentActionData >( 'actionResult', {
       agentAction: aa.id,
       ...data,
     } );

@@ -48,7 +48,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     currentUserRequestId,
   } = useUserRequests();
   const { addErrors } = useError();
-  const { apiRequest, tryRequest } = useRestRequest();
+  const { proxyApiRequest, tryRequest } = useRestRequest();
   const ctrl = useRef< AbortController >( new AbortController() );
   const [ streamingStatus, setStreamingStatus ] = useState( StreamingStatusEnum.OFF );
   const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
@@ -144,7 +144,9 @@ export default function StreamProvider( { children }: { children: React.ReactNod
 
   async function abortRequest( userRequestId: string ) {
     setRequestAborted( userRequestId );
-    await apiRequest< App.Data.UserRequestData >( 'requestAbort', { userRequest: userRequestId } );
+    await proxyApiRequest< App.Data.UserRequestData >( 'requestAbort', {
+      userRequest: userRequestId,
+    } );
     setStreamingStatus( StreamingStatusEnum.OFF );
   }
 

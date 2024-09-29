@@ -6,6 +6,7 @@ recipeConfidence: number;
 complexity: number;
 capabilityMatch: number;
 continuedConvo: boolean;
+convoOnly: boolean;
 shouldNavigate: number;
 sequence: Array<any> | null;
 refused: boolean;
@@ -157,6 +158,10 @@ slug: string;
 name: string;
 created_at: string;
 };
+export type TermsAcceptanceData = {
+acceptance_url: string;
+ip: string;
+};
 export type UserData = {
 name: string;
 email: string;
@@ -204,7 +209,7 @@ password: string;
 full_url: string;
 };
 export type ConvoData = {
-since: string | null;
+since: any | null;
 };
 export type StoreDocsData = {
 status: number | null;
@@ -258,7 +263,7 @@ export type AgentActionResultStatus = 'success' | 'error';
 export type BillingCycle = 'monthly' | 'yearly';
 export type Command = '/gb';
 export type ConfigType = 'abilities' | 'context_awareness' | 'capabilities' | 'convo_only' | 'convo_disabled' | 'token_limit' | 'token_limit_per_site' | 'token_limit_per_user';
-export type ContextAwareness = 'screen' | 'site_health' | 'errors' | 'db_schema' | 'wordpress_public_information' | 'post';
+export type ContextAwareness = 'screen' | 'site_health' | 'errors' | 'db_schema' | 'wordpress_public_information' | 'post' | 'mentions';
 export type DocIndexState = 0 | 1 | 2 | 3 | 4;
 export type EmbedSchema = 'posts_combined' | 'post_simple' | 'post_title' | 'post_content' | 'post_comments' | 'post_meta';
 export type LlmOption = 'json_response' | 'json_schema';

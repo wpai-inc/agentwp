@@ -24,7 +24,7 @@ export function useDocIndexStatus() {
 }
 
 export function DocIndexStatusProvider( { children }: { children: React.ReactNode } ) {
-  const { tryRequest, apiRequest } = useRestRequest();
+  const { tryRequest, proxyApiRequest } = useRestRequest();
   const [ docIndex, setDocIndex ] = useState< App.Data.DocIndexStatusData[] >( [] );
   const [ hasIndexed, setHasIndexed ] = useState( true );
 
@@ -59,7 +59,7 @@ export function DocIndexStatusProvider( { children }: { children: React.ReactNod
   const done: boolean = useMemo( () => docIndex.every( doc => doc.done ), [ docIndex ] );
 
   function fetchDocIndexStatus() {
-    apiRequest( 'siteDocsIndexStatus' ).then( data => {
+    proxyApiRequest( 'siteDocsIndexStatus' ).then( data => {
       console.log( 'data', data );
       setHasIndexed( data.lastIndexedAt ? true : false );
       setDocIndex( data.statuses );

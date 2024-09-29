@@ -1,12 +1,29 @@
+import { useState } from 'react';
 import ConnectButton from '@/Page/Admin/Settings/Partials/ConnectButton';
 import { ManualAwpActivation } from '@/Page/Admin/Settings/Partials/ManualAwpActivation';
 import { usePage } from '@/Providers/PageProvider';
 import { SettingsPageData } from '@/Types/types';
 import WizardHeader from '../Partials/WizardHeader';
 import WizardContainer from '../Partials/WizardContainer';
+import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function ConnectAiService() {
   const { page } = usePage< SettingsPageData >();
+  const [ accepted, setAccepted ] = useState( false );
+  const { tryRequest } = useRestRequest();
+
+  async function handleAccept() {
+    if ( accepted === false ) {
+      // previous state was off.
+      await tryRequest( 'post', 'accept_terms', {
+        accepted: ! accepted,
+      } );
+
+      setAccepted( ! accepted );
+    } else {
+      setAccepted( ! accepted );
+    }
+  }
 
   return (
     <WizardContainer>
@@ -37,20 +54,25 @@ export default function ConnectAiService() {
           transit.
         </p>
         <div className="mt-4">
-          <ConnectButton />
-          <ManualAwpActivation />
+          <label className="mb-4 flex gap-2">
+            <input
+              type="checkbox"
+              checked={ accepted }
+              onChange={ handleAccept }
+              className="ring-2 ring-brand-primary-muted/70 focus:ring-brand-primary"
+            />{ ' ' }
+            I agree to the{ ' ' }
+            <a href="https://agentwp.com/legal/terms/" target="_blank" className="underline">
+              Terms
+            </a>{ ' ' }
+            and{ ' ' }
+            <a href="https://agentwp.com/legal/privacy/" target="_blank" className="underline">
+              Privacy Policy
+            </a>
+          </label>
+          <ConnectButton accepted={ accepted } />
         </div>
-        <div className="mt-4 text-sm">
-          By connecting, you agree to the{ ' ' }
-          <a href="https://agentwp.com/legal/terms/" target="_blank" className="underline">
-            Terms
-          </a>{ ' ' }
-          and{ ' ' }
-          <a href="https://agentwp.com/legal/privacy/" target="_blank" className="underline">
-            Privacy Policy
-          </a>
-          .
-        </div>
+        <ManualAwpActivation />
       </div>
     </WizardContainer>
   );
@@ -74,7 +96,7 @@ function FeatureList( {
           { items && (
             <ul className="list-disc space-y-0.5 ml-4">
               { items.map( i => (
-                <li>{ i }</li>
+                <li key={ i }>{ i }</li>
               ) ) }
             </ul>
           ) }

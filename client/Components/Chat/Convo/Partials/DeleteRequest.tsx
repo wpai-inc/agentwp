@@ -4,13 +4,13 @@ import { UserRequestType } from '@/Providers/UserRequestsProvider';
 import { optimistic } from '@/lib/utils';
 
 export default function DeleteRequest( { userRequest }: { userRequest: UserRequestType } ) {
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const { removeUserRequest, reloadConversation } = useChat();
 
   function handleDelete() {
     optimistic(
       async () =>
-        await apiRequest( 'requestRemove', {
+        await proxyApiRequest( 'requestRemove', {
           userRequest: userRequest.id,
         } ),
       () => removeUserRequest( userRequest ),

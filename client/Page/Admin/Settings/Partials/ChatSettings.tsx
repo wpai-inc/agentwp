@@ -10,7 +10,7 @@ export default function ChatSettings() {
   } = usePage();
 
   const [ settings, setSettings ] = useState< App.Data.SiteSettingData[] >( account_settings );
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
 
   async function handleChange( name: App.Enums.SiteSettingValue, checked: boolean ) {
     const prevSettings = settings;
@@ -26,7 +26,7 @@ export default function ChatSettings() {
     };
 
     optimistic(
-      async () => await apiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', setting ),
+      async () => await proxyApiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', setting ),
       () => setSettings( updatedSettings ),
       () => setSettings( prevSettings ),
     );

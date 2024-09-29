@@ -26,11 +26,11 @@ export const EscalationProvider: FC< {
   const [ created, setCreated ] = useState< boolean >( false );
   const [ loading, setLoading ] = useState< boolean >( false );
 
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const { addErrors } = useError();
 
   async function escalationRequest( data: MessageActionEscalation ): Promise< void > {
-    const response = await apiRequest( 'siteRequestEscalate', {
+    const response = await proxyApiRequest( 'siteRequestEscalate', {
       escalation: data.id,
     } );
 

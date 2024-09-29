@@ -9,7 +9,7 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 export default function ChatWelcome( { user }: { user: WpUser } ) {
   const name = user.display_name;
   const { sendMessage } = useChat();
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const [ suggestions, setSuggestions ] = useState< ( string | null )[] >( [
     null,
     null,
@@ -18,7 +18,7 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
   ] );
 
   useEffect( () => {
-    apiRequest< string[] >( 'siteSuggestions' ).then( ( response: string[] ) => {
+    proxyApiRequest< string[] >( 'siteSuggestions' ).then( ( response: string[] ) => {
       setSuggestions( response );
     } );
   }, [] );

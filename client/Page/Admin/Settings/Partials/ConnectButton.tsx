@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 
-export default function ConnectButton() {
+export default function ConnectButton( { accepted }: { accepted: boolean } ) {
   const { tryRequest } = useRestRequest();
 
   const [ connecting, setConnecting ] = useState( false );
@@ -15,7 +15,7 @@ export default function ConnectButton() {
 
   return (
     <Button
-      disabled={ connecting }
+      disabled={ connecting || ! accepted }
       onClick={ connect }
       className="w-full"
       variant="brand"
