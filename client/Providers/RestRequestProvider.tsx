@@ -14,6 +14,7 @@ type RestRequestContextType = {
     onBefore?: () => void,
     onFailure?: ( error: any ) => void,
   ) => Promise< WpResponse< T > >;
+  proxyApiRequest: < T = any >( endpoint: string, dataOrParams?: any ) => Promise< T >;
   apiRequest: < T = any >( endpoint: string, dataOrParams?: any ) => Promise< T >;
   requestUrl: ( name: string ) => string;
   nonceHeader: Record< string, string >;
@@ -30,7 +31,7 @@ export function useRestRequest() {
 }
 
 export function RestRequestProvider( { children }: { children: React.ReactNode } ) {
-  const { page } = usePage();
+  const { page, getApiUrl } = usePage();
   const { notify } = useNotifications();
 
   const baseURL = page.rest_route + page.rest_endpoint + '/';
@@ -73,7 +74,19 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     );
   };
 
-  const apiRequest = async < T = any, >( endpoint: string, dataOrParams?: any ): Promise< T > => {
+  /**
+   * @todo: Direct API requests, similar to Proxy
+   * @param endpoint
+   * @param dataOrParams
+   */
+  const apiRequest = async < T = any, >( endpoint: string, dataOrParams?: any ) => {
+    console.log( dataOrParams );
+  };
+
+  const proxyApiRequest = async < T = any, >(
+    endpoint: string,
+    dataOrParams?: any,
+  ): Promise< T > => {
     try {
       const response = await restReq.post< T >( 'api', { ...dataOrParams, endpoint } );
       return response.data;
@@ -88,7 +101,7 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
 
   return (
     <RestRequestContext.Provider
-      value={ { restReq, requestUrl, tryRequest, apiRequest, nonceHeader } }>
+      value={ { restReq, requestUrl, tryRequest, apiRequest, proxyApiRequest, nonceHeader } }>
       { children }
     </RestRequestContext.Provider>
   );

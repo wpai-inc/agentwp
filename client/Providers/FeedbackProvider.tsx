@@ -33,7 +33,7 @@ export const FeedbackProvider: FC< {
   const [ approved, setApproved ] = useState< boolean | undefined >( feedback?.approved );
   const [ opened, setOpened ] = useState< boolean >( false );
 
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
 
   async function sendFeedback(
     approved: boolean,
@@ -44,7 +44,7 @@ export const FeedbackProvider: FC< {
       message: message || null,
     };
 
-    return apiRequest< App.Data.FeedbackData >( 'requestFeedback', {
+    return proxyApiRequest< App.Data.FeedbackData >( 'requestFeedback', {
       userRequest: userRequestId,
       ...data,
     } );

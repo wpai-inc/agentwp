@@ -11,7 +11,7 @@ export default function ToggleVision() {
   const setting = getAccountSetting( 'visionEnabled' );
   const [ on, setOn ] = useState< boolean >( setting?.value || false );
 
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const msg = on
     ? 'Vision is on. Click to toggle off.'
     : 'Vision is off. When turned on, AgentWP can view the current page.';
@@ -23,7 +23,7 @@ export default function ToggleVision() {
 
     optimistic(
       async () =>
-        await apiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', updatedSetting ),
+        await proxyApiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', updatedSetting ),
       () => setOn( updated ),
       () => setOn( prev ),
     );

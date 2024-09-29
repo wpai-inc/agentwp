@@ -95,7 +95,7 @@ export default function UserRequestsProvider( {
   children: React.ReactNode;
 } ) {
   const { page } = usePage();
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const [ since, setSince ] = useState< string | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
   const [ pagination, setPagination ] = useState< ConvoPagination >( { current: 1, next: false } );
@@ -203,7 +203,7 @@ export default function UserRequestsProvider( {
   async function fetchConvo( since?: string | null ) {
     const data: App.Data.Request.ConvoData = { since: since ?? null, page: 1 };
     const items = await optimistic(
-      async () => await apiRequest< App.Data.UserRequestData[] >( 'convo', data ),
+      async () => await proxyApiRequest< App.Data.UserRequestData[] >( 'convo', data ),
       () => setLoadingConversation( true ),
       convoLoadFailure,
     );
@@ -225,7 +225,7 @@ export default function UserRequestsProvider( {
     };
 
     const items = await optimistic(
-      async () => await apiRequest< App.Data.UserRequestData[] >( 'convo', data ),
+      async () => await proxyApiRequest< App.Data.UserRequestData[] >( 'convo', data ),
     );
 
     if ( items && items.data && items.data.length > 0 ) {

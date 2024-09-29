@@ -75,11 +75,11 @@ export default function ChatProvider( {
   const { selectedInput } = useInputSelect();
   const { addErrors } = useError();
   const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
-  const { tryRequest, apiRequest } = useRestRequest();
+  const { tryRequest, proxyApiRequest } = useRestRequest();
 
   async function clearHistory() {
     optimistic(
-      async () => await apiRequest( 'convoClear' ),
+      async () => await proxyApiRequest( 'convoClear' ),
       clear,
       ( e: any ) => {
         setConversation( conversation );

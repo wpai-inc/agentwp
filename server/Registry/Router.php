@@ -27,6 +27,7 @@ use WpAi\AgentWp\Http\Controllers\TestResponse;
 use WpAi\AgentWp\Http\Controllers\Tools;
 use WpAi\AgentWp\Http\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Http\Controllers\UpdateUserCapabilities;
+use WpAi\AgentWp\Http\Controllers\UserController;
 use WpAi\AgentWp\Http\Controllers\ValidateWebsite;
 use WpAi\AgentWp\Main;
 
@@ -41,6 +42,7 @@ class Router implements Registrable
         'test_auth' => TestAuthResponse::class,
         'test_route' => [TestResponse::class, 'successfulResponse'],
         'test_stream_forward' => [TestResponse::class, 'stream'],
+        'accept_terms' => [UserController::class, 'acceptTerms'],
         'agentwp_users' => GetUsers::class,
         'site_data' => SiteDataController::class,
         'update_user' => UpdateUserCapabilities::class,

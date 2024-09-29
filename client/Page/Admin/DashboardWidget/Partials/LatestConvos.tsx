@@ -3,13 +3,13 @@ import { Spinner } from '@/Components/Spinner';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 
 export default function LatestConvos() {
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
   const [ isLoading, setIsLoading ] = useState< boolean >( true );
   const [ historyGroups, setHistoryGroups ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
 
   useEffect( () => {
     async function fetch() {
-      const history = await apiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory' );
+      const history = await proxyApiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory' );
       setHistoryGroups( history );
       setIsLoading( false );
     }

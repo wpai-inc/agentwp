@@ -9,13 +9,13 @@ export default function ConvoOnlyToggle() {
   const setting = getAccountSetting( 'convoOnly' );
   const [ enabled, setEnabled ] = useState( setting?.value || false );
 
-  const { apiRequest } = useRestRequest();
+  const { proxyApiRequest } = useRestRequest();
 
   async function handleChange( checked: boolean ) {
     const updatedSetting = { ...setting, value: checked };
     optimistic(
       async () =>
-        await apiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', updatedSetting ),
+        await proxyApiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', updatedSetting ),
       () => setEnabled( checked ),
       () => setEnabled( ! checked ),
     );
