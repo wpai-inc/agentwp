@@ -6,20 +6,26 @@ import { SettingsPageData } from '@/Types/types';
 import WizardHeader from '../Partials/WizardHeader';
 import WizardContainer from '../Partials/WizardContainer';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import { useNotifications } from '@/Providers/NotificationProvider';
 
 export default function ConnectAiService() {
   const { page } = usePage< SettingsPageData >();
+  const { notify } = useNotifications();
   const [ accepted, setAccepted ] = useState( false );
   const { tryRequest } = useRestRequest();
 
   async function handleAccept() {
     if ( accepted === false ) {
       // previous state was off.
-      await tryRequest( 'post', 'accept_terms', {
-        accepted: ! accepted,
-      } );
+      try {
+        await tryRequest( 'post', 'accept_terms', {
+          accepted: ! accepted,
+        } );
 
-      setAccepted( ! accepted );
+        setAccepted( ! accepted );
+      } catch {
+        notify( 'Something went wrong.' );
+      }
     } else {
       setAccepted( ! accepted );
     }
@@ -33,8 +39,8 @@ export default function ConnectAiService() {
           To begin using AgentWP, connect it to the Al services. If this is your first time
           connecting this site, a quick indexing process will take place.
         </p>
-        <div className="bg-gray-200 rounded-xl p-6 text-base mt-4">
-          <h3 className="text-xl text-center">AgentWP will be able to see the following:</h3>
+        <div className="mt-4 rounded-xl bg-gray-200 p-6 text-base">
+          <h3 className="text-center text-xl">AgentWP will be able to see the following:</h3>
           <ul className="mt-6 space-y-6">
             <FeatureList
               icon={ <IconPlugin /> }
@@ -89,12 +95,12 @@ function FeatureList( {
 } ) {
   return (
     <li>
-      <div className="flex gap-4 items-start mx-auto">
-        <div className="w-12 flex items-center justify-center">{ icon }</div>
+      <div className="mx-auto flex items-start gap-4">
+        <div className="flex w-12 items-center justify-center">{ icon }</div>
         <div className="space-y-2 text-brand-dark/70">
           <h4 className="font-bold">{ title }</h4>
           { items && (
-            <ul className="list-disc space-y-0.5 ml-4">
+            <ul className="ml-4 list-disc space-y-0.5">
               { items.map( i => (
                 <li key={ i }>{ i }</li>
               ) ) }

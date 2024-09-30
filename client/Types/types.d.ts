@@ -47,6 +47,7 @@ export interface PageData {
 
 export interface SettingsPageData extends PageData {
   site_title: string;
+  plans: App.Data.PlanData[];
 }
 
 export type WpUser = {

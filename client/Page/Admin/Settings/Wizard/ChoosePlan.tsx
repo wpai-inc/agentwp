@@ -4,6 +4,7 @@ import WizardContainer from '../Partials/WizardContainer';
 import { usePage } from '@/Providers/PageProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
+import { SettingsPageData } from '@/Types/types';
 
 type PlanType = {
   primary: boolean;
@@ -15,14 +16,26 @@ type PlanType = {
 };
 
 export default function ChoosePlan() {
-  const { page } = usePage();
+  const { page } = usePage< SettingsPageData >();
   const { updateSetting } = useClientSettings();
+
+  function getPlan( slug: string ) {
+    return page.plans.find( plan => plan.slug === slug ) as App.Data.PlanData;
+  }
+
+  const freePlan = getPlan( 'free' );
+  const proPlan = getPlan( 'pro' );
+
+  const money = new Intl.NumberFormat( 'en-US', {
+    style: 'currency',
+    currency: 'USD',
+  } );
 
   const plans: PlanType[] = [
     {
       primary: false,
       name: 'Free Plan',
-      price: '0.00/month',
+      price: `${ money.format( freePlan.priceMonthly ) }/month`,
       features: [ 'Lower limits', 'Less accurate AI', 'Slower responses', '1 user per website' ],
       buttonText: 'Continue on Free',
       buttonAction: () => {
@@ -32,7 +45,7 @@ export default function ChoosePlan() {
     {
       primary: true,
       name: 'Supporter Plan',
-      price: '11.99/month',
+      price: `${ money.format( proPlan.priceMonthly ) }/month`,
       features: [
         <FeatureUnlimited />,
         'More accurate AI',
@@ -51,7 +64,7 @@ export default function ChoosePlan() {
   return (
     <WizardContainer className="space-y-6">
       <WizardHeader>You've successfully connected to AI Services</WizardHeader>
-      <p className="text-xl text-center text-brand-gray-70">
+      <p className="text-center text-xl text-brand-gray-70">
         Choose a site specific plan to get started:
       </p>
       <div className="grid grid-cols-2 gap-4">
@@ -81,10 +94,10 @@ function FeatureUnlimited() {
 }
 function PlanCard( { name, features, buttonText, price, buttonAction, primary }: PlanType ) {
   return (
-    <div className="bg-white rounded-lg p-6 flex flex-col">
-      <div className="space-y-6 mb-6">
+    <div className="flex flex-col rounded-lg bg-white p-6">
+      <div className="mb-6 space-y-6">
         <h2 className="text-2xl font-bold">{ name }</h2>
-        <p className="text-xl text-brand-dark/50 font-semibold">{ price }</p>
+        <p className="text-xl font-semibold text-brand-dark/50">{ price }</p>
         <ul className="space-y-2">
           { features.map( ( feature, i ) => (
             <li key={ i }>{ feature }</li>
