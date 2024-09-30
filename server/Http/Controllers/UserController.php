@@ -14,7 +14,7 @@ class UserController extends BaseController
         ]);
 
         if (\is_wp_error($res)) {
-            return $this->error('unknown_error');
+            return $this->error('api_request_error');
         }
 
         return $this->respond($res);
