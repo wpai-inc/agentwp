@@ -32,7 +32,7 @@ export default function SupportTab() {
 
   return (
     <TabContainer>
-      <div className="max-w-lg mx-auto p-6 flex h-full justify-between flex-col">
+      <div className="mx-auto flex h-full max-w-lg flex-col justify-between p-2">
         <div className="prose mb-4">
           <h1 className="text-3xl font-semibold">General Feedback</h1>
           <p>Submit general feedback thoughts, and ideas about AgentWP.</p>
@@ -62,9 +62,9 @@ export default function SupportTab() {
                 <Label htmlFor="suggestion">Suggestion</Label>
               </div>
             </RadioGroup>
-            <div className="bg-brand-gray focus-within:ring-2 ring-brand-primary p-4 rounded mt-4">
+            <div className="mt-4 rounded bg-brand-gray p-4 ring-brand-primary focus-within:ring-2">
               <textarea
-                className="w-full mb-4 bg-transparent outline-none focus:ring-0"
+                className="mb-4 w-full bg-transparent outline-none focus:ring-0"
                 rows={ 5 }
                 placeholder="Your feedback..."
                 value={ message }
@@ -73,11 +73,10 @@ export default function SupportTab() {
                 <Button
                   type="submit"
                   variant="brand"
-                  size="lg"
-                  className="rounded bg-brand-primary h-10 w-10"
+                  className="h-10 w-10 rounded bg-brand-primary"
                   disabled={ submitting }>
                   { submitting ? (
-                    <LoaderIcon className="animate-spin h-4 w-4" />
+                    <LoaderIcon className="h-4 w-4 animate-spin" />
                   ) : (
                     <UpArrowIcon className="h-5 w-5" />
                   ) }
@@ -86,7 +85,7 @@ export default function SupportTab() {
             </div>
           </form>
         ) : (
-          <p className="text-green-900 bg-green-100 rounded-full px-3 py-1">
+          <p className="rounded-full bg-green-100 px-3 py-1 text-green-900">
             Thank you for your message!
           </p>
         ) }
