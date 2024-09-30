@@ -20,9 +20,9 @@ export default function ChatNav( {
   const { page } = usePage();
 
   return (
-    <nav className="mx-auto w-full grid grid-cols-4 gap-2 p-2 max-w-screen-md">
+    <nav className="mx-auto grid w-full max-w-screen-md grid-cols-3 gap-2 p-2">
       <Tab icon={ IconChat } active={ tab === 'convo' } onClick={ () => setTab( 'convo' ) } />
-      <Tab icon={ IconSearch } active={ tab === 'search' } onClick={ () => setTab( 'search' ) } />
+      { /* <Tab icon={ IconSearch } active={ tab === 'search' } onClick={ () => setTab( 'search' ) } /> */ }
       <Tab icon={ IconAgent } active={ tab === 'support' } onClick={ () => setTab( 'support' ) } />
       <AgentTooltip content="Settings">
         <Tab
@@ -52,7 +52,7 @@ const Tab = forwardRef<
       role="tab"
       aria-selected="true"
       className={ cn(
-        'hover:bg-brand-gray transition text-brand-gray-50 rounded-lg p-2 inline-flex items-center justify-center',
+        'inline-flex items-center justify-center rounded-lg p-2 text-brand-gray-50 transition hover:bg-brand-gray',
         {
           'bg-brand-gray': active,
         },

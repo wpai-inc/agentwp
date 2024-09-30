@@ -3,8 +3,7 @@ import ChatOverlay from '@/Components/Chat/ChatOverlay';
 import ChatTopBar from '@/Page/Admin/Chat/Partials/ChatTopBar';
 import UpdateNotification from '@/Components/Chat/Partials/UpdateNotification';
 import ChatNav from '@/Components/Chat/Partials/ChatNav';
-import { ConversationTab, SearchTab, SupportTab, SettingsTab } from '@/Components/Chat/Tabs';
-// import BetaNotice from './BetaNotice';
+import { ConversationTab, SupportTab, SettingsTab } from '@/Components/Chat/Tabs';
 import ConvoOnlyNotice from './ConvoOnlyNotice';
 import { usePage } from '@/Providers/PageProvider';
 
@@ -12,7 +11,7 @@ export type TabKey = 'convo' | 'search' | 'support' | 'settings';
 export type HandleDrag = { handleDrag?: ( e: MouseEvent ) => void };
 
 type PageComponents = {
-  [ key in TabKey ]: JSX.Element;
+  [ key in TabKey ]?: JSX.Element;
 };
 
 export default function ChatCore( { handleDrag }: HandleDrag ) {
@@ -23,7 +22,7 @@ export default function ChatCore( { handleDrag }: HandleDrag ) {
   const pages = useMemo< PageComponents >(
     () => ( {
       convo: <ConversationTab />,
-      search: <SearchTab />,
+      // search: <SearchTab />,
       support: <SupportTab />,
       settings: <SettingsTab />,
     } ),

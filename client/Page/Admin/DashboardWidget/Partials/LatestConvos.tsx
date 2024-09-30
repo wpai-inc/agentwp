@@ -18,7 +18,7 @@ export default function LatestConvos() {
   }, [] );
 
   return (
-    <div className="max-h-[calc(100vh-275px)] min-h-[calc(100%-2rem)] overflow-y-auto">
+    <div className="max-h-[calc(100vh-275px)] min-h-[calc(100%-2rem)] overflow-y-auto p-3">
       { isLoading ? (
         <div className="min-h-10 flex items-center justify-center">
           <Spinner show={ true } />

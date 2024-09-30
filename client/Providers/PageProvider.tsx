@@ -18,6 +18,7 @@ interface PageContextType< T extends PageData > {
   getApiUrl: ( name: string ) => string;
   accountSettings: App.Data.SiteSettingData[];
   setAccountSettings: Dispatch< SetStateAction< App.Data.SiteSettingData[] > >;
+  isConnected: boolean;
 }
 
 // Create a context with the generic type
@@ -47,7 +48,10 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
     page.account_settings,
   );
 
-  const canAccessAgent = page.onboarding_completed && page.agentwp_access;
+  const isOnboarded = parseInt( page.onboarding_completed ) === 1;
+  const isConnected = parseInt( page.is_connected ) === 1;
+  const hasAccess = parseInt( page.agentwp_access ) === 1;
+  const canAccessAgent = isOnboarded && hasAccess;
 
   const userProfileUrl = page.api_host + '/dashboard';
 
@@ -82,6 +86,7 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
         getApiUrl,
         accountSettings,
         setAccountSettings,
+        isConnected,
       } }>
       { children }
     </PageContext.Provider>

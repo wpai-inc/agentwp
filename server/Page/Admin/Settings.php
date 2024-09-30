@@ -65,6 +65,7 @@ class Settings extends ReactClient
     {
         return [
             'site_title' => get_bloginfo('name'),
+            'plans' => $this->main->client()->plans(),
         ];
     }
 

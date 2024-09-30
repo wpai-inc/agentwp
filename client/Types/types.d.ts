@@ -27,9 +27,9 @@ export interface PageData {
   plugin_url: string;
   api_host: string;
   settings_page: string;
-  is_admin: boolean;
-  is_connected: boolean;
-  onboarding_completed: boolean;
+  is_admin: string;
+  is_connected: string;
+  onboarding_completed: string;
   site_id: string;
   user: WpUser;
   account: {
@@ -40,13 +40,14 @@ export interface PageData {
   };
   account_settings: App.Data.SiteSettingData[];
   general_settings: AgentWpGeneralSettings;
-  agentwp_manager: boolean;
-  agentwp_users_manager: boolean;
-  agentwp_access: boolean;
+  agentwp_manager: string;
+  agentwp_users_manager: string;
+  agentwp_access: string;
 }
 
 export interface SettingsPageData extends PageData {
   site_title: string;
+  plans: App.Data.PlanData[];
 }
 
 export type WpUser = {

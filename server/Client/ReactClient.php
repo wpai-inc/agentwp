@@ -54,7 +54,13 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         $this->registrations();
 
         if ($this->location) {
-            $this->location->setup();
+            $this->location->root();
+
+            if (\method_exists($this->location, 'setup')) {
+                $this->location->setup();
+            } else {
+                $this->setup();
+            }
         }
     }
 
@@ -63,6 +69,13 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         $this->pageName = $name;
 
         return $this;
+    }
+
+    public function setup(): void
+    {
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
+        add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
+        add_filter('admin_body_class', [$this, 'bodyClass']);
     }
 
     /**
@@ -208,17 +221,5 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'agentwp_users_manager' => $access_token ? $this->main->auth->canManageUsers() : false,
             'agentwp_access' => $access_token ? $this->main->auth->hasAccess() : false,
         ];
-    }
-
-    public function registerControllers()
-    {
-        // Check the nonce for security
-        check_ajax_referer('my-plugin-ajax-nonce', 'nonce');
-
-        // Perform your AJAX action here
-        $response = ['success' => true, 'message' => 'AJAX request successful'];
-
-        // Return the response
-        wp_send_json_success($response);
     }
 }

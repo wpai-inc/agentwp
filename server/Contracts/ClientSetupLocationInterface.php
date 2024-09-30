@@ -10,5 +10,5 @@ interface ClientSetupLocationInterface
 
     public function active(): bool;
 
-    public function setup(): void;
+    public function root(): void;
 }
