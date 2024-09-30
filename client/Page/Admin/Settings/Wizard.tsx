@@ -4,6 +4,7 @@ import { usePage } from '@/Providers/PageProvider';
 import type { SettingsPageData } from '@/Types/types';
 import ChoosePlan from './Wizard/ChoosePlan';
 import Breadcrumb from './Wizard/Breadcrumb';
+import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 
 export type StepType = {
   text: string;
@@ -31,11 +32,14 @@ const steps: StepType[] = [
 
 export default function Wizard() {
   const { page } = usePage< SettingsPageData >();
+  const { settings } = useClientSettings();
 
   const currentStep = () => {
     if ( ! page.is_connected ) {
       return 1;
     }
+
+    if ( settings.planSelected && ! page.onboarding_completed ) return 3;
 
     return 2;
   };
