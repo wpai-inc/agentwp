@@ -16,12 +16,11 @@ class Dashboard implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return is_admin() &&  $this->client->main->auth()->hasAccess();
+        return is_admin() && $this->client->main->auth()->hasAccess();
     }
 
-    public function setup(): void
+    public function root(): void
     {
-        add_action('wp_dashboard_setup', [$this->client, 'dashboard_widget']);
-        add_action('wp_dashboard_setup', [$this->client, 'widget_position'], 20);
+        //
     }
 }

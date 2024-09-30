@@ -40,4 +40,13 @@ class DashboardWidget extends ReactClient
     {
         return [];
     }
+
+    public function setup(): void
+    {
+        add_action('wp_dashboard_setup', [$this, 'dashboard_widget']);
+        add_action('wp_dashboard_setup', [$this, 'widget_position'], 20);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_client_assets']);
+        add_action('admin_enqueue_scripts', [$this, 'registerPageProps']);
+        add_filter('admin_body_class', [$this, 'bodyClass']);
+    }
 }

@@ -17,13 +17,17 @@ class BricksBuilder implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return isset($_GET['bricks']) && $_GET['bricks'] === 'run' && !isset($_GET['brickspreview']) && $this->client->main->auth()->hasAccess();
+        return isset($_GET['bricks']) && $_GET['bricks'] === 'run' && ! isset($_GET['brickspreview']) && $this->client->main->auth()->hasAccess();
+    }
+
+    public function root(): void
+    {
+        add_action('wp_footer', [$this->client, 'appRoot']);
     }
 
     public function setup(): void
     {
         add_action('wp_enqueue_scripts', [$this->client, 'enqueue_client_assets']);
         add_action('wp_enqueue_scripts', [$this->client, 'registerPageProps']);
-        add_action('wp_footer', [$this->client, 'appRoot']);
     }
 }

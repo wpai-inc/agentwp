@@ -20,10 +20,14 @@ class BeaverBuilder implements ClientSetupLocationInterface
         return isset($_GET['fl_builder']) && $this->client->main->auth()->hasAccess() && class_exists('FLBuilderLoader');
     }
 
+    public function root(): void
+    {
+        add_action('wp_footer', [$this->client, 'appRoot']);
+    }
+
     public function setup(): void
     {
         add_action('wp_enqueue_scripts', [$this->client, 'enqueue_client_assets']);
         add_action('wp_enqueue_scripts', [$this->client, 'registerPageProps']);
-        add_action('wp_footer', [$this->client, 'appRoot']);
     }
 }

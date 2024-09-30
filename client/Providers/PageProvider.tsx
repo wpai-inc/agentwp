@@ -16,6 +16,7 @@ interface PageContextType< T extends PageData > {
   getAccountSetting: ( name: App.Enums.SiteSettingValue, defaultValue?: any ) => any;
   userProfileUrl: string;
   getApiUrl: ( name: string ) => string;
+  isConnected: boolean;
 }
 
 // Create a context with the generic type
@@ -41,7 +42,11 @@ type Route = {
 
 // Update the PageProvider to pass the generic type
 export function PageProvider< T extends PageData >( { page, children }: PageProviderProps< T > ) {
-  const canAccessAgent = page.onboarding_completed && page.agentwp_access;
+  const isOnboarded = parseInt( page.onboarding_completed ) === 1;
+  const isConnected = parseInt( page.is_connected ) === 1;
+  const hasAccess = parseInt( page.agentwp_access ) === 1;
+
+  const canAccessAgent = isOnboarded && hasAccess;
 
   const userProfileUrl = page.api_host + '/dashboard';
 
@@ -75,6 +80,7 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
         getAccountSetting,
         userProfileUrl,
         getApiUrl,
+        isConnected,
       } }>
       { children }
     </PageContext.Provider>

@@ -6,12 +6,12 @@ import { PageData } from '@/Types/types';
 import ChatDisconnected from './Chat/ChatDisconnected';
 
 export default function ChatApp( { inline = false }: { inline?: boolean } ) {
-  const { page } = usePage< PageData >();
+  const { isConnected } = usePage< PageData >();
 
   return (
     <AppProvider>
       <AppWrapper>
-        { page.is_connected ? (
+        { isConnected ? (
           <ChatConnected inline={ inline } />
         ) : (
           <ChatDisconnected inline={ inline } />
