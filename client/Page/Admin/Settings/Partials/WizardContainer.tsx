@@ -7,5 +7,5 @@ export default function WizardContainer( {
   children: React.ReactNode;
   className?: string;
 } ) {
-  return <div className={ cn( 'max-w-md mx-auto mt-12', className ) }>{ children }</div>;
+  return <div className={ cn( 'max-w-lg mx-auto mt-12', className ) }>{ children }</div>;
 }
