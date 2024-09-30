@@ -59,7 +59,7 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
 
     const catchFailure = ( e: any ) => {
       const msg = e.response.data.data;
-      notify( msg );
+      notify( msg.message || 'An unexpected error occured.' );
       onFailure && onFailure( msg );
     };
 
@@ -82,7 +82,8 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
       return response.data;
     } catch ( error: any ) {
       const axiosErr = error as AxiosError;
-      const errorMsg = axiosErr.response?.data?.message || 'An unexpected error occurred';
+      const errorRes = axiosErr.response?.data as any;
+      const errorMsg = errorRes?.message || 'An unexpected error occurred';
       notify( errorMsg );
 
       throw new Error( errorMsg );

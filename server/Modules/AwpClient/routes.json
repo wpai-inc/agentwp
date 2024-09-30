@@ -17,6 +17,15 @@
         "name": "capabilities"
     },
     {
+        "key": "api.plans",
+        "uri": "api\/plans",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "plans"
+    },
+    {
         "key": "api.streamTest",
         "uri": "api\/stream\/test",
         "methods": [
@@ -24,14 +33,6 @@
             "HEAD"
         ],
         "name": "streamTest"
-    },
-    {
-        "key": "api.accept-terms",
-        "uri": "api\/accept-terms",
-        "methods": [
-            "POST"
-        ],
-        "name": "acceptTerms"
     },
     {
         "key": "api.site.health",
