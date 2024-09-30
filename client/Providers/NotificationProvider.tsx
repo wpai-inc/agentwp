@@ -43,11 +43,11 @@ export const NotificationsProvider = ( { children }: { children: ReactNode } ) =
             toast: 'rounded-none',
             title: 'text-white/50',
             description: 'text-white/80',
-            closeButton: 'ring-1 ring-white/60',
+            closeButton: 'ring-1 ring-white/60 bg-black',
+            error: 'bg-black/90',
           },
         } }
         position="bottom-right"
-        richColors
         closeButton
       />
     </NotificationsContext.Provider>
