@@ -3,6 +3,7 @@ import WizardHeader from '../Partials/WizardHeader';
 import WizardContainer from '../Partials/WizardContainer';
 import { usePage } from '@/Providers/PageProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import { AgentTooltip } from '@/Components/ui/tooltip';
 
 type PlanType = {
   primary: boolean;
@@ -33,9 +34,7 @@ export default function ChoosePlan() {
       name: 'Supporter Plan',
       price: '11.99/month',
       features: [
-        <>
-          Unlimited usage <abbr title="by Unlimited we mean...">*</abbr>
-        </>,
+        <FeatureUnlimited />,
         'More accurate AI',
         'Faster responses',
         '5 users per website',
@@ -64,6 +63,22 @@ export default function ChoosePlan() {
   );
 }
 
+function FeatureUnlimited() {
+  return (
+    <AgentTooltip
+      content={
+        <p>
+          Subject to our{ ' ' }
+          <a href="https://agentwp.com/legal/terms/" className="underline underline-offset-1">
+            fair use policy
+          </a>
+          .
+        </p>
+      }>
+      <p>Unlimited usage *</p>
+    </AgentTooltip>
+  );
+}
 function PlanCard( { name, features, buttonText, price, buttonAction, primary }: PlanType ) {
   return (
     <div className="bg-white rounded-lg p-6 flex flex-col">
