@@ -239,9 +239,8 @@ export const usePosition = ( {
       // Only update the position if it has actually changed
       if ( offsetPosition.right !== position.right || offsetPosition.bottom !== position.bottom ) {
         setPosition( offsetPosition );
+        setOffset( { x: 0, y: 0 } );
       }
-
-      setOffset( { x: 0, y: 0 } );
     }
   }, [ offset, isResizing, position ] );
 
