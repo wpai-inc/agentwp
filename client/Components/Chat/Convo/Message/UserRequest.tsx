@@ -3,10 +3,15 @@ import Avatar from '../../Avatar/Avatar';
 import MessageHeader from './MessageHeader';
 import IconMore from '@material-design-icons/svg/outlined/more_vert.svg?react';
 import { UserRequestType } from '@/Providers/UserRequestsProvider';
-import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { WpUser } from '@/Types/types';
-import MessageMeta from './MessageMeta';
 import DeleteRequest from '../Partials/DeleteRequest';
+import useCopy from '@/Hooks/copy';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/Components/ui/dropdown-menu';
 
 export default function UserRequest( {
   userRequest,
@@ -15,6 +20,8 @@ export default function UserRequest( {
   userRequest: UserRequestType;
   user: WpUser;
 } ) {
+  const { copy, copied } = useCopy();
+
   return (
     <div className="text-black/60">
       <MessageHeader>
@@ -23,29 +30,23 @@ export default function UserRequest( {
           image={ user.avatar_url }
           time={ userRequest.human_created_at }
         />
-        <Popover>
-          <PopoverTrigger>
-            <IconMore className="text-brand-gray-15" />
-          </PopoverTrigger>
-          <PopoverContent>
-            <MessageMeta
-              meta={ [
-                {
-                  label: 'Message ID',
-                  value: userRequest.id,
-                },
-                {
-                  label: 'User',
-                  value: user.display_name,
-                },
-                {
-                  label: 'Delete Request',
-                  value: <DeleteRequest userRequest={ userRequest } />,
-                },
-              ] }
-            />
-          </PopoverContent>
-        </Popover>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button>
+              <IconMore className="text-brand-gray-15" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <button onClick={ () => copy( userRequest.id ) }>
+                { copied ? 'Copied' : 'Copy Request ID' }
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <DeleteRequest userRequest={ userRequest } />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </MessageHeader>
       <MD content={ userRequest.message } />
     </div>
