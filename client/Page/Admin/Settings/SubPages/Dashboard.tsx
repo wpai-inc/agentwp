@@ -1,7 +1,7 @@
 import ChatApp from '@/Components/Chat';
 import LatestConvos from '../../DashboardWidget/Partials/LatestConvos';
 import { Card } from '@/Components/Admin/Card';
-import BlogFeed from '@/Components/Admin/BlogFeed';
+import ChangelogFeed from '@/Components/Admin/ChangelogFeed';
 import QuickLinks from '../Partials/QuickLinks';
 
 export default function Dashboard() {
@@ -23,7 +23,7 @@ export default function Dashboard() {
             <LatestConvos />
           </Card>
           <Card title="Changelog" className="col-span-full lg:col-span-1">
-            <BlogFeed />
+            <ChangelogFeed />
           </Card>
           <Card title="Quicklinks" className="col-span-full lg:col-span-1">
             <QuickLinks />
