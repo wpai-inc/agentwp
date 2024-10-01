@@ -5,6 +5,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { SettingsPageData } from '@/Types/types';
+import { useAccount } from '@/Providers/AccountProvider';
 
 type PlanType = {
   primary: boolean;
@@ -17,6 +18,7 @@ type PlanType = {
 
 export default function ChoosePlan() {
   const { page } = usePage< SettingsPageData >();
+  const { account } = useAccount();
   const { updateSetting } = useClientSettings();
 
   function getPlan( slug: string ) {
@@ -56,7 +58,9 @@ export default function ChoosePlan() {
       buttonText: 'Upgrade this Site to Pro',
       buttonAction: () => {
         updateSetting( 'planSelected', true );
-        window.location.href = page.account.upgrade_link;
+        if ( account ) {
+          window.location.href = account.upgrade_link;
+        }
       },
     },
   ];

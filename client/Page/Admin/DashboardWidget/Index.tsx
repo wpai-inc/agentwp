@@ -9,6 +9,7 @@ import '@/assets/styles/app.css';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import Footer from './Partials/Footer';
+import { AccountProvider } from '@/Providers/AccountProvider';
 
 const rootElement = document.getElementById( 'agentwp-admin-dashboardwidget' );
 
@@ -23,12 +24,14 @@ if ( rootElement ) {
         <NotificationsProvider>
           <ErrorProvider>
             <RestRequestProvider>
-              <ClientSettingsProvider>
-                <div style={ wpWidgetStyleReset }>
-                  <LatestConvos />
-                  <Footer />
-                </div>
-              </ClientSettingsProvider>
+              <AccountProvider>
+                <ClientSettingsProvider>
+                  <div style={ wpWidgetStyleReset }>
+                    <LatestConvos />
+                    <Footer />
+                  </div>
+                </ClientSettingsProvider>
+              </AccountProvider>
             </RestRequestProvider>
           </ErrorProvider>
         </NotificationsProvider>

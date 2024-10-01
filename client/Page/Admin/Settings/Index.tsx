@@ -10,6 +10,7 @@ import { ErrorProvider } from '@/Providers/ErrorProvider';
 import '@/assets/styles/app.css';
 import { AWPRootType } from '@/Types/types';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
+import { AccountProvider } from '@/Providers/AccountProvider';
 
 declare global {
   interface Window {
@@ -31,9 +32,11 @@ if ( rootElement ) {
         <NotificationsProvider>
           <ErrorProvider>
             <RestRequestProvider>
-              <ClientSettingsProvider>
-                { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
-              </ClientSettingsProvider>
+              <AccountProvider>
+                <ClientSettingsProvider>
+                  { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
+                </ClientSettingsProvider>
+              </AccountProvider>
             </RestRequestProvider>
           </ErrorProvider>
         </NotificationsProvider>

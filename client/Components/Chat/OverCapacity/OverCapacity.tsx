@@ -2,7 +2,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/Components/ui/alert';
 import { TokenUsageStatus } from '@/Types/enums';
 import { buttonVariants } from '@/Components/ui/button';
 import { cn } from '@/lib/utils';
-import { usePage } from '@/Providers/PageProvider';
+import { useAccount } from '@/Providers/AccountProvider';
 
 interface OverCapacityProps {
   cooldownTime: Date | null;
@@ -10,7 +10,7 @@ interface OverCapacityProps {
 }
 
 export default function OverCapacity( props: OverCapacityProps ) {
-  const { page } = usePage();
+  const { account } = useAccount();
 
   return (
     <Alert
@@ -32,16 +32,18 @@ export default function OverCapacity( props: OverCapacityProps ) {
           </AlertDescription>
         ) }
       </div>
-      <a
-        className={ cn(
-          buttonVariants( {
-            variant: 'default',
-            className: 'rounded-full bg-brand-primary px-3',
-          } ),
-        ) }
-        href={ page.account.upgrade_link }>
-        Upgrade now
-      </a>
+      { account && (
+        <a
+          className={ cn(
+            buttonVariants( {
+              variant: 'default',
+              className: 'rounded-full bg-brand-primary px-3',
+            } ),
+          ) }
+          href={ account.upgrade_link }>
+          Upgrade now
+        </a>
+      ) }
     </Alert>
   );
 }

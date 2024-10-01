@@ -1,7 +1,7 @@
 import MessageBox from '@/Components/Chat/MessageBox/MessageBox';
 import { TokenUsageStatus } from '@/Types/enums';
 import OverCapacity from '@/Components/Chat/OverCapacity';
-import { usePage } from '@/Providers/PageProvider';
+import { useAccount } from '@/Providers/AccountProvider';
 
 export default function ChatMessageInput( {
   coolDownTime,
@@ -10,11 +10,11 @@ export default function ChatMessageInput( {
   coolDownTime: Date | null;
   tokenUsageStatus: TokenUsageStatus;
 } ) {
-  const { page } = usePage();
+  const { account } = useAccount();
 
   return (
     <>
-      { page.account?.plan?.slug === 'free' && tokenUsageStatus !== TokenUsageStatus.Normal ? (
+      { account?.plan?.slug === 'free' && tokenUsageStatus !== TokenUsageStatus.Normal ? (
         <OverCapacity cooldownTime={ coolDownTime } tokenUsageStatus={ tokenUsageStatus } />
       ) : (
         <MessageBox />

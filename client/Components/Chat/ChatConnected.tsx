@@ -10,28 +10,31 @@ import { RestRequestProvider } from '@/Providers/RestRequestProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { InputSelectProvider } from '@/Providers/InputSelectProvider';
 import StreamListenerProvider from '@/Providers/StreamListenerProvider';
+import { AccountProvider } from '@/Providers/AccountProvider';
 
 export default function ChatConnected( { inline = false }: { inline?: boolean } ) {
   return (
     <ErrorProvider>
       <RestRequestProvider>
-        <ClientSettingsProvider>
-          <ScreenProvider>
-            <UserRequestsProvider>
-              <StreamProvider>
-                <ActionListenerProvider>
-                  <InputSelectProvider>
-                    <ChatProvider>
-                      <StreamListenerProvider>
-                        { inline ? <StaticChat /> : <Chat /> }
-                      </StreamListenerProvider>
-                    </ChatProvider>
-                  </InputSelectProvider>
-                </ActionListenerProvider>
-              </StreamProvider>
-            </UserRequestsProvider>
-          </ScreenProvider>
-        </ClientSettingsProvider>
+        <AccountProvider>
+          <ClientSettingsProvider>
+            <ScreenProvider>
+              <UserRequestsProvider>
+                <StreamProvider>
+                  <ActionListenerProvider>
+                    <InputSelectProvider>
+                      <ChatProvider>
+                        <StreamListenerProvider>
+                          { inline ? <StaticChat /> : <Chat /> }
+                        </StreamListenerProvider>
+                      </ChatProvider>
+                    </InputSelectProvider>
+                  </ActionListenerProvider>
+                </StreamProvider>
+              </UserRequestsProvider>
+            </ScreenProvider>
+          </ClientSettingsProvider>
+        </AccountProvider>
       </RestRequestProvider>
     </ErrorProvider>
   );
