@@ -9,12 +9,10 @@ export default function TextBox( {
   callback,
   message,
   keyPress,
-  onFocus,
 }: {
   callback: ( text: string ) => void;
   message: string;
   keyPress: ( e: React.KeyboardEvent< HTMLDivElement > ) => void;
-  onFocus: () => void;
 } ) {
   const editorRef = useRef< HTMLDivElement >( null );
   const [ html, setHtml ] = useState< string >( '' );
@@ -186,7 +184,6 @@ export default function TextBox( {
         contentEditable
         suppressContentEditableWarning={ true }
         onKeyDown={ e => handleKeyDown( e ) }
-        onFocus={ () => onFocus() }
       />
       <SuggestionsBox show={ mention.mode } keyword={ mention.text } onSelect={ handleSelect } />
     </>

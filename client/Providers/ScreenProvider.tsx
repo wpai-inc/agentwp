@@ -19,7 +19,6 @@ type ScreenType = {
 type ScreenContextType = {
   screen: ScreenType;
   setScreen: ( screen: ScreenType ) => void;
-  getScreenshot: () => void;
 };
 
 const ScreenContext = createContext< ScreenContextType >( {
@@ -30,7 +29,6 @@ const ScreenContext = createContext< ScreenContextType >( {
     screenshot: '',
   },
   setScreen: () => {},
-  getScreenshot: () => {},
 } );
 
 export function useScreen() {
@@ -41,6 +39,33 @@ export function useScreen() {
   return context;
 }
 
+async function getScreenshot(): Promise< string > {
+  const node = document.body;
+
+  if ( node ) {
+    const filter = ( node: Node ): boolean => {
+      if ( node instanceof HTMLElement ) {
+        return (
+          node.id !== 'agentwp-admin-chat' &&
+          node.id !== 'site-icon-preview' &&
+          ! node.classList.contains( 'avatar' ) &&
+          ! ( node instanceof HTMLInputElement && node.type === 'email' ) &&
+          ! ( node instanceof HTMLInputElement && node.type === 'password' )
+        );
+      }
+      return true;
+    };
+
+    return await toJpeg( node, {
+      quality: 0.5,
+      filter,
+    } );
+  } else {
+    console.error( 'Problemo.' );
+    return '';
+  }
+}
+
 export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
   const { getAccountSetting, accountSettings } = usePage();
   const [ screen, setScreen ] = useState< ScreenType >( {
@@ -49,66 +74,33 @@ export default function ScreenProvider( { children }: { children: React.ReactNod
     links: [],
     screenshot: '',
   } );
-
-  async function getScreenshot() {
-    if ( getAccountSetting( 'visionEnabled' ).value ) {
-      const node = document.body;
-
-      if ( node ) {
-        const filter = ( node: Node ): boolean => {
-          if ( node instanceof HTMLElement ) {
-            return (
-              node.id !== 'agentwp-admin-chat' &&
-              node.id !== 'site-icon-preview' &&
-              ! node.classList.contains( 'avatar' ) &&
-              ! node.classList.contains( 'editor-visual-editor' ) &&
-              ! ( node instanceof HTMLInputElement && node.type === 'email' ) &&
-              ! ( node instanceof HTMLInputElement && node.type === 'password' )
-            );
-          }
-          return true;
-        };
-
-        const screenshot = await toJpeg( node, {
-          quality: 0.5,
-          filter,
-        } ).catch( e => {
-          console.error( 'Screenshot cannot be taken', e );
-          return '';
-        } );
-
-        setScreen( { ...screen, screenshot } );
-        return screenshot;
-      } else {
-        console.error( 'Screenshot cannot be taken; document.body does not exists' );
-        setScreen( { ...screen, screenshot: '' } );
-        return '';
-      }
-    } else {
-      setScreen( { ...screen, screenshot: '' } );
-      return '';
-    }
-  }
-
-  const fetchScreenData = async () => {
+  const fetchData = async () => {
     const url = window.location.href;
     const title = document.title;
     const links = Array.from( document.links ).map( link => link.href );
+    const screenshot = getAccountSetting( 'visionEnabled' ).value
+      ? await getScreenshot().catch( err => {
+          console.error( 'Error getting screenshot:', err );
+          return '';
+        } )
+      : '';
     setScreen( {
       url,
       title,
       links,
-      screenshot: '',
+      screenshot,
     } );
   };
 
   useEffect( () => {
-    fetchScreenData();
+    fetchData();
   }, [] );
 
+  useEffect( () => {
+    fetchData();
+  }, [ accountSettings ] );
+
   return (
-    <ScreenContext.Provider value={ { screen, setScreen, getScreenshot } }>
-      { children }
-    </ScreenContext.Provider>
+    <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>
   );
 }
