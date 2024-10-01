@@ -33,7 +33,6 @@ type ChatContextType = {
   setMessage: ( message: string ) => void;
   messageSubmitted: boolean;
   addUserRequest: ( ur: UserRequestType ) => void;
-  removeUserRequest: ( ur: UserRequestType ) => void;
   reloadConversation: () => void;
   fetchMore: () => Promise< void >;
   pagination: ConvoPagination;
@@ -166,6 +165,7 @@ export default function ChatProvider( {
       ( e: any ) => {
         addErrors( [ e ] );
         setMessage( message );
+        removeUserRequest( ur );
         setStreamingStatus( StreamingStatusEnum.OFF );
       },
     );
@@ -201,7 +201,6 @@ export default function ChatProvider( {
         snippetPlugin,
         setSnippetPlugin,
         addUserRequest,
-        removeUserRequest,
         reloadConversation,
         fetchMore,
         pagination,

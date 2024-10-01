@@ -23,6 +23,10 @@ class AwpApi extends BaseController
     {
         $response = $this->main->client()->convoCreate($this->handleMentions($this->request->toArray()));
 
+        if (\is_wp_error($response)) {
+            $this->respondWithError($response->get_error_message(), $response->get_error_code());
+        }
+
         $response['access_token'] = $this->main->getAccessToken();
 
         $this->respond($response);

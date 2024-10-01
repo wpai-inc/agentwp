@@ -61,6 +61,7 @@ type UserRequestsContextType = {
   setConversation: React.Dispatch< React.SetStateAction< UserRequestType[] > >;
   clearConversation: () => void;
   createUserRequest: ( message: string ) => UserRequestType;
+  removeUserRequest: ( ur: UserRequestType ) => void;
   currentUserRequestId: string | null;
   currentUserRequest?: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
@@ -160,6 +161,13 @@ export default function UserRequestsProvider( {
     [ conversation, currentUserRequestId ],
   );
 
+  const removeUserRequest = useCallback(
+    function ( ur: UserRequestType ) {
+      setConversation( conversation.filter( item => item.id !== ur.id ) );
+    },
+    [ conversation ],
+  );
+
   const setRequestAborted = useCallback(
     function ( userRequestId: string ) {
       if ( userRequestId && currentUserRequestId === userRequestId ) {
@@ -248,6 +256,7 @@ export default function UserRequestsProvider( {
         setConversation,
         clearConversation,
         createUserRequest,
+        removeUserRequest,
         currentUserRequestId,
         currentUserRequest,
         setCurrentUserRequestId,
