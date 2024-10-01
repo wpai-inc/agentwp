@@ -29,7 +29,7 @@ export default function LatestConvos() {
             <>
               <h3>{ historyGroup.group }</h3>
               { historyGroup.history.map( convo => (
-                <ConvoItem key={ historyGroup.group } { ...convo } />
+                <ConvoItem key={ convo.conversationId } { ...convo } />
               ) ) }
             </>
           ) ) }

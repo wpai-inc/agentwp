@@ -15,9 +15,12 @@ class IndexSiteData implements Cacheable, Registrable
 
     private Main $main;
 
+    private array $accountSettings;
+
     public function __construct(Main $main)
     {
         $this->main = $main;
+        $this->accountSettings = $this->main->accountSettings()->get();
     }
 
     public static function cacheId(): string
@@ -51,6 +54,13 @@ class IndexSiteData implements Cacheable, Registrable
     {
         if (is_null($data)) {
             $data = SiteData::getDebugData();
+        }
+
+        /**
+         * Don't send anything if health is disabled.
+         */
+        if (! $this->getSetting('healthEnabled')) {
+            return;
         }
 
         $this->main->client()->siteHealth($data);
@@ -96,6 +106,13 @@ class IndexSiteData implements Cacheable, Registrable
 
     public function add_db_schema_to_debug_info($info): array
     {
+        /**
+         * Dont add db schema if it's disabled.
+         */
+        if (!$this->getSetting('dbSchemaEnabled')) {
+            return $info;
+        }
+
         global $wpdb;
         $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
         $tables = array_map('current', $tables);
@@ -109,5 +126,22 @@ class IndexSiteData implements Cacheable, Registrable
         }
 
         return $info;
+    }
+
+    /**
+     * Get the setting value.
+     * 
+     * @param string $key
+     * @return mixed
+     */
+    private function getSetting($key)
+    {
+        foreach ($this->accountSettings as $setting) {
+            if ($setting['name'] === $key) {
+                return $setting['value'];
+            }
+        }
+
+        return null;
     }
 }

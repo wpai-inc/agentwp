@@ -7,7 +7,7 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { usePage } from '@/Providers/PageProvider';
 
 export default function ToggleVision() {
-  const { getAccountSetting } = usePage();
+  const { getAccountSetting, setAccountSettings } = usePage();
   const setting = getAccountSetting( 'visionEnabled' );
   const [ on, setOn ] = useState< boolean >( setting?.value || false );
 
@@ -21,12 +21,16 @@ export default function ToggleVision() {
     const updated = ! prev;
     const updatedSetting = { ...setting, value: updated };
 
-    optimistic(
+    const accountSettings = await optimistic(
       async () =>
         await proxyApiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', updatedSetting ),
-      () => setOn( updated ),
+      () => {
+        setOn( updated );
+      },
       () => setOn( prev ),
     );
+
+    setAccountSettings( accountSettings );
   }
 
   return (
