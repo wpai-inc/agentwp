@@ -10,10 +10,12 @@ import { useError } from '@/Providers/ErrorProvider';
 import { LoaderIcon } from 'lucide-react';
 import TextBox from './TextBox';
 import ToggleVision from './partials/ToggleVision';
+import { useScreen } from '@/Providers/ScreenProvider';
 
 export default function MessageBox() {
   const { sendMessage, message, setMessage, cancelMessage } = useChat();
   const { page } = usePage();
+  const { getScreenshot } = useScreen();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
   const { streamingStatus } = useStream();
@@ -82,6 +84,9 @@ export default function MessageBox() {
           callback={ handleCallback }
           message={ message }
           keyPress={ e => handleKeyDown( e, commandMenuFocused ) }
+          onFocus={ () => {
+            getScreenshot();
+          } }
         />
         <textarea
           defaultValue={ message }
