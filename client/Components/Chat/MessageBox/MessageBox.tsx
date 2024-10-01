@@ -63,10 +63,6 @@ export default function MessageBox() {
     }
   }
 
-  const handleCallback = ( text: string ) => {
-    setMessage( text );
-  };
-
   return (
     <CommandMenu
       deactivate={ true }
@@ -79,7 +75,7 @@ export default function MessageBox() {
         className="ring-brand-primary-muted/60 ring-inset focus-within:ring-2 transition relative rounded-lg bg-brand-gray p-2"
         onSubmit={ submit }>
         <TextBox
-          callback={ handleCallback }
+          callback={ setMessage }
           message={ message }
           keyPress={ e => handleKeyDown( e, commandMenuFocused ) }
         />
