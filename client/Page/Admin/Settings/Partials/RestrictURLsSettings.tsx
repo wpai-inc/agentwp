@@ -27,7 +27,11 @@ export default function RestrictURLsSettings() {
         <div>
           <label className="font-bold">Restricted URLs and Patterns</label>
           <p className="text-sm">
-            Chat will not be available on these URLs or URL patterns. Put each on a new line.
+            Chat will not be available on these URLs or URL patterns. Put each on a new line. <a
+              className="text-blue-500 hover:underline cursor-pointer underline"
+              href="https://agentwp.com/kb/restricted-url-patterns"
+              target="_blank"
+              rel="noreferrer">Read more about URL patterns.</a>
           </p>
         </div>
       }>
