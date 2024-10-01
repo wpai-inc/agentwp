@@ -16,7 +16,13 @@ class Dashboard implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        return is_admin() && $this->client->main->auth()->hasAccess();
+        /**
+         * @todo: bad method, this should be hooked into the right hook so that
+         * get_current_screen() can be used.
+         */
+        $dashboardPage = strpos(\esc_url_raw($_SERVER['REQUEST_URI']), '/wp-admin/index.php') !== false;
+
+        return is_admin() && $this->client->main->auth()->hasAccess() && $dashboardPage;
     }
 
     public function root(): void

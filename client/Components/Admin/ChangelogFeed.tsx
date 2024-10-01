@@ -4,8 +4,8 @@ import { CardListItemProps } from './CardListItem';
 import { CardList } from './CardList';
 import type { WpPost } from '@/Types/types';
 
-export default function BlogFeed() {
-  const feedUrl = 'https://agentwp.com/wp-json/wp/v2/posts/';
+export default function ChangelogFeed() {
+  const feedUrl = 'https://agentwp.com/wp-json/wp/v2/change/';
   const [ items, setItems ] = useState< WpPost[] >( [] );
 
   useEffect( function () {
@@ -21,7 +21,7 @@ export default function BlogFeed() {
     }
   }
 
-  return items.length > 0 ? <PostList items={ items } /> : <p>Not Posts</p>;
+  return items.length > 0 ? <PostList items={ items } /> : <p>Nothing yet!</p>;
 }
 
 function PostList( { items }: { items: WpPost[] } ) {
