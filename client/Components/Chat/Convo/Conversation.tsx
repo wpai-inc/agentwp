@@ -26,7 +26,6 @@ export default function Conversation() {
             onScrollToTop={ fetchMore }
           />
           <div className="relative mx-auto w-full max-w-screen-md p-2 pb-0">
-            { /* <DialogFade /> */ }
             <div className="mb-2 space-y-2">
               <ChatNotices />
               <ChatMessageUtilityBar />
@@ -36,11 +35,5 @@ export default function Conversation() {
         </>
       ) }
     </TabContainer>
-  );
-}
-
-function DialogFade() {
-  return (
-    <div className="absolute -top-12 left-0 right-0 z-10 h-12 bg-gradient-to-t from-white to-transparent"></div>
   );
 }
