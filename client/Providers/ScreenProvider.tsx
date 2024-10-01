@@ -43,11 +43,23 @@ async function getScreenshot(): Promise< string > {
   const node = document.body;
 
   if ( node ) {
-    const filter = ( node: HTMLElement ) => {
-      return node.id !== 'agentwp-admin-chat';
+    const filter = ( node: Node ): boolean => {
+      if ( node instanceof HTMLElement ) {
+        return (
+          node.id !== 'agentwp-admin-chat' &&
+          node.id !== 'site-icon-preview' &&
+          ! node.classList.contains( 'avatar' ) &&
+          ! ( node instanceof HTMLInputElement && node.type === 'email' ) &&
+          ! ( node instanceof HTMLInputElement && node.type === 'password' )
+        );
+      }
+      return true;
     };
 
-    return await toJpeg( node, { quality: 0.5, filter } );
+    return await toJpeg( node, {
+      quality: 0.5,
+      filter,
+    } );
   } else {
     console.error( 'Problemo.' );
     return '';
@@ -55,31 +67,38 @@ async function getScreenshot(): Promise< string > {
 }
 
 export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
-  const { getAccountSetting } = usePage();
+  const { getAccountSetting, accountSettings } = usePage();
   const [ screen, setScreen ] = useState< ScreenType >( {
     url: '',
     title: '',
     links: [],
     screenshot: '',
   } );
+  const fetchData = async () => {
+    const url = window.location.href;
+    const title = document.title;
+    const links = Array.from( document.links ).map( link => link.href );
+    const screenshot = getAccountSetting( 'visionEnabled' ).value
+      ? await getScreenshot().catch( err => {
+          console.error( 'Error getting screenshot:', err );
+          return '';
+        } )
+      : '';
+    setScreen( {
+      url,
+      title,
+      links,
+      screenshot,
+    } );
+  };
 
   useEffect( () => {
-    const fetchData = async () => {
-      const url = window.location.href;
-      const title = document.title;
-      const links = Array.from( document.links ).map( link => link.href );
-      const screenshot = getAccountSetting( 'visionEnabled' ) ? await getScreenshot() : '';
-
-      setScreen( {
-        url,
-        title,
-        links,
-        screenshot,
-      } );
-    };
-
     fetchData();
   }, [] );
+
+  useEffect( () => {
+    fetchData();
+  }, [ accountSettings ] );
 
   return (
     <ScreenContext.Provider value={ { screen, setScreen } }>{ children }</ScreenContext.Provider>
