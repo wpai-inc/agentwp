@@ -7,19 +7,20 @@ import DataList, { DataListItem } from '@/Components/ui/dl';
 import ChatSettings from '../Partials/ChatSettings';
 import Tools from '../Partials/Tools';
 import RestrictURLsSettings from '../Partials/RestrictURLsSettings';
+import { useAccount } from '@/Providers/AccountProvider';
 
 export default function SettingsTab() {
   /**
    * Variables
    */
   const { restReq, tryRequest } = useRestRequest();
-  const { page } = usePage();
-  const isLoggedIn = page.account;
+  const { page, isConnected } = usePage();
+  const { account } = useAccount();
 
   /**
    * States
    */
-  const [ loggedIn, setLoggedIn ] = useState< boolean >( !! isLoggedIn );
+  const [ loggedIn, setLoggedIn ] = useState< boolean >( isConnected );
   const [ authorizing, setAuthorizing ] = useState( false );
   const [ connecting, setConnecting ] = useState( false );
   const [ disconnecting, setDisconnecting ] = useState( false );
@@ -52,7 +53,7 @@ export default function SettingsTab() {
     <div className="grid lg:grid-cols-3 gap-6">
       <Section header="Plugin Settings">
         <DataList>
-          { page.account && ! loggedIn && (
+          { account && ! loggedIn && (
             <DataListItem label={ <label className="font-bold">Login to AWP</label> }>
               <Button
                 onClick={ authorize }
@@ -64,7 +65,7 @@ export default function SettingsTab() {
             </DataListItem>
           ) }
 
-          { page.account && (
+          { loggedIn ? (
             <DataListItem
               label={
                 <div>
@@ -80,8 +81,7 @@ export default function SettingsTab() {
                 Disconnect Site
               </Button>
             </DataListItem>
-          ) }
-          { ! page.account && (
+          ) : (
             <DataListItem label="Connect Your Site">
               <Button
                 onClick={ connect }

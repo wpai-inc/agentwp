@@ -32,12 +32,6 @@ export interface PageData {
   onboarding_completed: string;
   site_id: string;
   user: WpUser;
-  account: {
-    user: App.Data.UserData;
-    plan: App.Data.PlanData;
-    upgrade_link: string;
-    config: App.Data.ConfigData;
-  };
   account_settings: App.Data.SiteSettingData[];
   general_settings: AgentWpGeneralSettings;
   agentwp_manager: string;

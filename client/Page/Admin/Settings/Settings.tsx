@@ -9,6 +9,7 @@ import LogoImg from '@/assets/awp.webp';
 import { Button } from '@/Components/ui/button';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import History from './SubPages/History';
+import { useAccount } from '@/Providers/AccountProvider';
 
 const tabClasses =
   'px-5 py-4 flex items-center justify-center text-base leading-none select-none hover:text-brand-primary data-[state=active]:text-brand-dark  data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-brand-primary outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-70';
@@ -31,6 +32,7 @@ function TabContent( { value, children }: { value: string; children: ReactNode }
 
 export default function Settings() {
   const { page } = usePage();
+  const { account } = useAccount();
 
   const url = new URL( window.location.href );
   const initialTab = url.searchParams.get( 'tab' ) || 'dashboard';
@@ -74,16 +76,16 @@ export default function Settings() {
         <div className="flex justify-between">
           <div>
             <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
-            { page.account?.plan?.slug === 'pro' && (
+            { account?.plan?.slug === 'pro' && (
               <span className="ml-3 inline-flex rounded-full items-center justify-center bg-brand-dark text-white px-3 py-2 text-sm font-bold uppercase">
-                { page.account?.plan.name }
+                { account?.plan.name }
               </span>
             ) }
           </div>
-          { page.account?.plan?.slug === 'free' && (
+          { account?.plan?.slug === 'free' && (
             <div className="text-right">
               <Button variant="brand" pill={ true }>
-                <a href={ page.account?.upgrade_link }>Upgrade to Pro</a>
+                <a href={ account?.upgrade_link }>Upgrade to Pro</a>
               </Button>
             </div>
           ) }
