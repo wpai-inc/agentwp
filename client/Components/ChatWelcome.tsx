@@ -6,21 +6,38 @@ import { useChat } from '@/Providers/ChatProvider';
 import { motion } from 'framer-motion';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 
+type SuggestionType = {
+  suggestion: string;
+  prompt: string;
+};
+
 export default function ChatWelcome( { user }: { user: WpUser } ) {
   const name = user.display_name;
   const { sendMessage } = useChat();
   const { proxyApiRequest } = useRestRequest();
-  const [ suggestions, setSuggestions ] = useState< ( string | null )[] >( [
-    null,
-    null,
-    null,
-    null,
+  const [ suggestions, setSuggestions ] = useState< SuggestionType[] >( [
+    {
+      suggestion: 'What WordPress version am I running?',
+      prompt: 'What WordPress version am I running?',
+    },
+    {
+      suggestion: 'Help me create a new blog post.',
+      prompt: 'Help me create a new blog post.',
+    },
+    {
+      suggestion: 'Make a snippet to add a new CPT',
+      prompt: 'Make a snippet to add a new CPT',
+    },
+    {
+      suggestion: 'Who are you?',
+      prompt: 'Who are you?',
+    },
   ] );
 
   useEffect( () => {
-    proxyApiRequest< string[] >( 'siteSuggestions' ).then( ( response: string[] ) => {
-      setSuggestions( response );
-    } );
+    proxyApiRequest< SuggestionType[] >( 'siteSuggestions' ).then( response =>
+      setSuggestions( response ),
+    );
   }, [] );
 
   return (
@@ -39,12 +56,12 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
       <p className="text-xl text-center text-black">Here are some things I can help you with.</p>
       <div className={ cn( 'grid grid-cols-2 gap-3 mt-3 w-full max-w-96' ) }>
         { suggestions &&
-          suggestions.map( ( msg: string | null, key: number ) => (
+          suggestions.map( ( item: SuggestionType, key: number ) => (
             <ChatOption
               key={ key }
               index={ key }
-              message={ msg }
-              onClick={ msg ? () => sendMessage( msg ) : undefined }
+              message={ item.suggestion }
+              onClick={ item ? () => sendMessage( item.prompt ) : undefined }
             />
           ) ) }
         <a
