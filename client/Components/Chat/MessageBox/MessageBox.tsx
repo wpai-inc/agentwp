@@ -82,6 +82,7 @@ export default function MessageBox() {
           callback={ handleCallback }
           message={ message }
           keyPress={ e => handleKeyDown( e, commandMenuFocused ) }
+          onFocus={ () => {} }
         />
         <textarea
           defaultValue={ message }
