@@ -2,6 +2,8 @@
 
 namespace WpAi\AgentWp\Http\Controllers;
 
+use AgentWP\Server\Services\Db;
+
 class QueryActionController extends BaseController
 {
     public function __invoke(): void
@@ -31,7 +33,7 @@ class QueryActionController extends BaseController
 
         $prepared_query = $this->filterSqlQuery($prepared_query);
 
-        $results = $wpdb->get_results($prepared_query);
+        $results = Db::getResults($prepared_query);
 
         if ($wpdb->last_error) {
             $this->respondWithError($wpdb->last_error, 422);
@@ -86,17 +88,21 @@ class QueryActionController extends BaseController
         // Check for disallowed keywords
         foreach ($disallowedKeywords as $keyword) {
             if (strpos($uppercaseSQL, $keyword) !== false) {
-                throw new \Exception("Query contains disallowed keyword: $keyword");
+                $disallowedKeywords[] = $keyword;
             }
+        }
+
+        if (! empty($disallowedKeywords)) {
+            throw new \Exception(esc_html__('Query contains disallowed keyword: ', 'agentwp').esc_html(implode(', ', $disallowedKeywords)));
         }
 
         // Additional checks
         if (preg_match('/;\s*\w/', $sql)) {
-            throw new \Exception('Multiple statements are not allowed');
+            throw new \Exception(esc_html__('Multiple statements are not allowed', 'agentwp'));
         }
 
         if (! preg_match('/^\s*SELECT\b/i', $sql)) {
-            throw new \Exception('Query must start with SELECT');
+            throw new \Exception(esc_html__('Query must start with SELECT', 'agentwp'));
         }
 
         // If all checks pass, return the original query

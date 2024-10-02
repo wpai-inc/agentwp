@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp\Registry;
 
+use AgentWP\Server\Services\Db;
 use WpAi\AgentWp\Contracts\Cacheable;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
@@ -109,15 +110,14 @@ class IndexSiteData implements Cacheable, Registrable
         /**
          * Dont add db schema if it's disabled.
          */
-        if (!$this->getSetting('dbSchemaEnabled')) {
+        if (! $this->getSetting('dbSchemaEnabled')) {
             return $info;
         }
 
-        global $wpdb;
-        $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
+        $tables = Db::getResults('SHOW TABLES', [], ARRAY_N);
         $tables = array_map('current', $tables);
         foreach ($tables as $table) {
-            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
+            $rows = Db::getResults('DESCRIBE '.$table, [], ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
             $info['db-schema']['tables'][$table] = array_map(function ($row) {
@@ -130,8 +130,8 @@ class IndexSiteData implements Cacheable, Registrable
 
     /**
      * Get the setting value.
-     * 
-     * @param string $key
+     *
+     * @param  string  $key
      * @return mixed
      */
     private function getSetting($key)

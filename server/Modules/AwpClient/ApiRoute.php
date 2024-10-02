@@ -46,8 +46,9 @@ class ApiRoute
         }
 
         // Find any missing parameters still in the URL
-        if (preg_match_all('/\{([a-zA-Z1-9]+)\}/', $url, $missingParams) && ! empty($missingParams[1])) {
-            throw new RouteParamsMissingException($missingParams[1]);
+        if (preg_match_all('/\{([a-zA-Z1-9]+)\}/', $url, $matches) && ! empty($matches[1])) {
+            $missingParamNames = implode(', ', $matches[1]);
+            throw new RouteParamsMissingException(esc_html($missingParamNames));
         }
 
         return [$url, $params];

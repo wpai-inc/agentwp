@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp;
 
+use AgentWP\Server\Services\Db;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Registry\IndexSiteData;
@@ -66,13 +67,13 @@ class Installer implements Registrable
         delete_option($key.'_summary');
         delete_option($key.'_site_data');
         global $wpdb;
-        $wpdb->query(
-            $wpdb->prepare(
-                "DELETE FROM $wpdb->options WHERE option_name LIKE %s AND option_name LIKE %s",
+
+        Db::query(
+            "DELETE FROM $wpdb->options WHERE option_name LIKE %s AND option_name LIKE %s",
+            [
                 '%'.$wpdb->esc_like($key).'%',
-                '%_transient%'
-            )
-        );
+                '%_transient%',
+            ]);
     }
 
     public function redirect(): void

@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp\Modules\SiteDocs;
 
+use AgentWP\Server\Services\Db;
 use DateTime;
 
 class DocPost extends Doc
@@ -46,7 +47,7 @@ class DocPost extends Doc
         }, $posts);
     }
 
-    public function getContent(Object $post): array
+    public function getContent(object $post): array
     {
         return [
             'title' => apply_filters('the_title', $post->post_title),
@@ -65,7 +66,7 @@ class DocPost extends Doc
     {
         global $wpdb;
 
-        return $wpdb->get_results("
+        return Db::getResults("
             SELECT p.ID, p.post_parent, p.post_date, p.post_modified, p.post_title, p.post_content
             FROM {$wpdb->posts} p
             WHERE p.post_type = 'post' AND p.post_status = 'publish'
@@ -79,7 +80,7 @@ class DocPost extends Doc
     {
         global $wpdb;
 
-        $meta = $wpdb->get_results("
+        $meta = Db::getResults("
             SELECT meta_id, meta_key, meta_value
             FROM {$wpdb->postmeta}
             WHERE post_id = {$postId}
@@ -98,7 +99,7 @@ class DocPost extends Doc
     {
         global $wpdb;
 
-        $comments = $wpdb->get_results("
+        $comments = Db::getResults("
             SELECT comment_ID, comment_content
             FROM {$wpdb->comments}
             WHERE comment_post_ID = {$postId}

@@ -1,7 +1,7 @@
 <?php
 /**
  * Snippet handler class for WPCodeBox plugin.
- * 
+ *
  * @package AgentWP
  */
 
@@ -9,50 +9,49 @@ namespace WpAi\AgentWp\Modules\CodeSnippets\Plugins;
 
 use Exception;
 use WpAi\AgentWp\Modules\CodeSnippets\SnippetInterface;
-
 use wpdb;
 
 /**
  * WPCodeBox snippet handler class.
  */
 class WPCodeBox implements SnippetInterface
-{   
+{
     /**
      * Plugin name.
-     * 
+     *
      * @var string
      */
     public string $name = 'WPCodeBox';
 
     /**
      * Table name.
-     * 
+     *
      * @var string
      */
     protected $table_name;
 
     /**
      * WPDB instance.
-     * 
+     *
      * @var wpdb
      */
     protected $wpdb;
 
     /**
      * Setup the class.
-     * 
+     *
      * @return void
      */
     public function __construct()
     {
         global $wpdb;
         $this->wpdb = $wpdb;
-        $this->table_name = $wpdb->prefix . 'wpcb_snippets';
+        $this->table_name = $wpdb->prefix.'wpcb_snippets';
     }
 
     /**
      * Plugin name.
-     * 
+     *
      * @return string
      */
     public function name(): string
@@ -72,14 +71,15 @@ class WPCodeBox implements SnippetInterface
 
     /**
      * Add a new snippet.
-     * 
-     * @param string $code The snippet code.
-     * @param string|null $title The snippet title.
-     * @param string|null $description The snippet description.
-     * @param string|null $lang The snippet language.
-     * @param string|null $scope The snippet scope.
-     * @param int|null $priority The snippet priority.
+     *
+     * @param  string  $code  The snippet code.
+     * @param  string|null  $title  The snippet title.
+     * @param  string|null  $description  The snippet description.
+     * @param  string|null  $lang  The snippet language.
+     * @param  string|null  $scope  The snippet scope.
+     * @param  int|null  $priority  The snippet priority.
      * @return string The snippet URL.
+     *
      * @throws Exception If the snippet could not be added.
      */
     public function add(string $code, ?string $title = null, ?string $description = null, ?string $lang = null, ?string $scope = null, ?int $priority = null): string
@@ -100,10 +100,10 @@ class WPCodeBox implements SnippetInterface
                 [
                     'hook' => [
                         'label' => 'Plugins Loaded (Default)',
-                        'value' => 'custom_plugins_loaded'
+                        'value' => 'custom_plugins_loaded',
                     ],
-                    'priority' => $priority
-                ]
+                    'priority' => $priority,
+                ],
             ]),
             'renderType' => 'inline',
             'minify' => 0,
@@ -119,14 +119,14 @@ class WPCodeBox implements SnippetInterface
             'errorTrace' => '',
             'errorLine' => 0,
             'devMode' => 0,
-            'lastModified' => time()
+            'lastModified' => time(),
         ];
 
         $result = $this->wpdb->insert($this->table_name, $data);
         if ($result === false) {
-            throw new Exception('Failed to add WPCodeBox snippet: ' . $this->wpdb->last_error);
+            throw new Exception(esc_html__('Failed to add WPCodeBox snippet: ', 'agentwp').esc_html($this->wpdb->last_error));
         }
 
-        return admin_url('admin.php?page=wpcb_snippets&snippet_id=' . $this->wpdb->insert_id);
+        return admin_url('admin.php?page=wpcb_snippets&snippet_id='.$this->wpdb->insert_id);
     }
 }

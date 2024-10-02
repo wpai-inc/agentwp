@@ -10,7 +10,7 @@ class SiteDocs
         'post' => DocPost::class,
     ];
 
-    public function setStatus(IndexStatus $status = null): self
+    public function setStatus(?IndexStatus $status = null): self
     {
         if ($status) {
             $this->status = $status;
@@ -24,6 +24,7 @@ class SiteDocs
         $docType = $this->getDocType();
         $doc = $this->getDoc($docType);
         IndexStatus::init($docType, $doc->getTotal());
+
         return $this;
     }
 
@@ -38,10 +39,11 @@ class SiteDocs
 
     public function getDoc(string $docType): Doc
     {
-        if (!isset($this->docTypes[$docType])) {
-            throw new \Exception("Doc type not found: $docType");
+        if (! isset($this->docTypes[$docType])) {
+            throw new \Exception(esc_html("Doc type not found: $docType"));
         }
         $docClass = $this->docTypes[$docType];
+
         return new $docClass;
     }
 
@@ -52,12 +54,13 @@ class SiteDocs
         if ($this->status) {
             $doc->setStatus($this->status);
         }
+
         return $doc->toArray();
     }
 
     /**
      * Gets the doctype key from status
-     * and if not found, returns the first key 
+     * and if not found, returns the first key
      * of $this->docTypes
      */
     private function getDocType(): string

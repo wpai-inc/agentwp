@@ -21,7 +21,7 @@ class RequestMethod
     public static function from(string $method): string
     {
         if (! in_array($method, self::all())) {
-            throw new \Exception("Invalid request method: $method");
+            throw new \Exception(esc_html("Invalid request method: $method"));
         }
 
         return $method;

@@ -6,9 +6,8 @@ use Exception;
 
 class RouteParamsMissingException extends Exception
 {
-    public function __construct(array $missing)
+    public function __construct(string $missing)
     {
-        $params = implode(', ', $missing);
-        parent::__construct("You are missing the following params in your request: $params");
+        parent::__construct(esc_html__('You are missing the following params in your request: ', 'agentwp').esc_html($missing));
     }
 }

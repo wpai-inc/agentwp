@@ -10,7 +10,7 @@ if ($user) {
     wp_set_current_user($user_id);
     wp_set_auth_cookie($user_id);
     do_action('wp_login', $user->user_login, $user);
-    echo 'Logged in successfully as '.$user->user_login;
+    echo 'Logged in successfully as '.esc_html($user->user_login);
 } else {
     echo 'User not found';
 }
@@ -23,7 +23,7 @@ $response = rest_do_request($request);
 
 // Check if the request was successful
 if ($response->is_error()) {
-    echo 'Error: '.$response->get_error_message()."\n";
+    echo 'Error: '.esc_html($response->get_error_message())."\n";
 } else {
     // Get the response data
     $data = $response->get_data();
