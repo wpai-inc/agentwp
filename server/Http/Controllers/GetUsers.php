@@ -8,7 +8,7 @@ class GetUsers extends BaseController
 
     public function __invoke(): void
     {
-        $search_term = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+        $search_term = isset($_GET['search']) ? sanitize_text_field(wp_unslash($_GET['search'])) : '';
 
         $query = new \WP_User_Query([
             'search' => "*{$search_term}*",
