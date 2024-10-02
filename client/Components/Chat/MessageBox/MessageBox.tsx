@@ -11,6 +11,11 @@ import { LoaderIcon } from 'lucide-react';
 import TextBox from './TextBox';
 import ToggleVision from './partials/ToggleVision';
 
+type ValidationRule = {
+  rule: ( text: string ) => boolean;
+  message: string;
+};
+
 export default function MessageBox() {
   const { sendMessage, message, setMessage, cancelMessage } = useChat();
   const { page } = usePage();
@@ -18,6 +23,20 @@ export default function MessageBox() {
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
   const { streamingStatus } = useStream();
   const { addErrors } = useError();
+  const [ messageError, setMessageError ] = useState< string | null >( null );
+  const validation: ValidationRule[] = [
+    {
+      rule: ( text: string ) => text.length < 3600,
+      message: 'Your message is too long',
+    },
+  ];
+
+  const isDisabled =
+    ! page.onboarding_completed ||
+    ! page.agentwp_access ||
+    streamingStatus === StreamingStatusEnum.SHOULD_ABORT ||
+    streamingStatus === StreamingStatusEnum.ABORT ||
+    messageError !== null;
 
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
@@ -63,6 +82,24 @@ export default function MessageBox() {
     }
   }
 
+  function validateInput( text: string ): boolean {
+    const valid = validation.every( rule => rule.rule( text ) );
+    if ( ! valid ) {
+      const error = validation.find( rule => ! rule.rule( text ) );
+      setMessageError( error?.message || null );
+    } else {
+      setMessageError( null );
+    }
+    return valid;
+  }
+
+  const handleMessageInput = ( text: string ) => {
+    const valid = validateInput( text );
+    if ( valid === true ) {
+      setMessage( text );
+    }
+  };
+
   return (
     <CommandMenu
       deactivate={ true }
@@ -70,12 +107,12 @@ export default function MessageBox() {
       focused={ commandMenuFocused }
       handleKeyDown={ handleKeyDown }
       message={ message }
-      setMessage={ setMessage }>
+      setMessage={ handleMessageInput }>
       <form
         className="ring-brand-primary-muted/60 ring-inset focus-within:ring-2 transition relative rounded-lg bg-brand-gray p-2"
         onSubmit={ submit }>
         <TextBox
-          callback={ setMessage }
+          callback={ handleMessageInput }
           message={ message }
           keyPress={ e => handleKeyDown( e, commandMenuFocused ) }
         />
@@ -85,27 +122,30 @@ export default function MessageBox() {
           className="hidden"
           disabled={ ! page.onboarding_completed && ! page.agentwp_access }
         />
-        <div className="flex items-center justify-end gap-3">
-          <ToggleVision />
-          <Button
-            type={ streamingStatus === StreamingStatusEnum.OFF ? 'submit' : 'button' }
-            variant="brand"
-            onClick={ streamingStatus > StreamingStatusEnum.OFF ? handleCancelMessage : undefined }
-            className="rounded bg-brand-primary h-10 w-10"
-            disabled={
-              ! page.onboarding_completed ||
-              ! page.agentwp_access ||
-              streamingStatus === StreamingStatusEnum.SHOULD_ABORT ||
-              streamingStatus === StreamingStatusEnum.ABORT
-            }>
-            { streamingStatus === StreamingStatusEnum.OFF ? (
-              <UpArrowIcon className="h-5 w-5" />
-            ) : streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ? (
-              <LoaderIcon className="animate-spin h-4 w-4" />
-            ) : (
-              <div className="h-3 w-3 bg-white"></div>
-            ) }
-          </Button>
+        <div className="flex items-center justify-between gap-3">
+          { messageError && (
+            <p className="ml-1 text-red-500 font-semibold text-sm">{ messageError }</p>
+          ) }
+
+          <div className="ml-auto flex gap-3">
+            <ToggleVision />
+            <Button
+              type={ streamingStatus === StreamingStatusEnum.OFF ? 'submit' : 'button' }
+              variant="brand"
+              onClick={
+                streamingStatus > StreamingStatusEnum.OFF ? handleCancelMessage : undefined
+              }
+              className="rounded bg-brand-primary h-10 w-10"
+              disabled={ isDisabled }>
+              { streamingStatus === StreamingStatusEnum.OFF ? (
+                <UpArrowIcon className="h-5 w-5" />
+              ) : streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ? (
+                <LoaderIcon className="animate-spin h-4 w-4" />
+              ) : (
+                <div className="h-3 w-3 bg-white"></div>
+              ) }
+            </Button>
+          </div>
         </div>
       </form>
     </CommandMenu>
