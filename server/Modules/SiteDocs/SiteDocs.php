@@ -40,7 +40,8 @@ class SiteDocs
     public function getDoc(string $docType): Doc
     {
         if (! isset($this->docTypes[$docType])) {
-            throw new \Exception(esc_html("Doc type not found: $docType"));
+            // Translators: %1$s is the doc type that was not found.
+            throw new \Exception(esc_html(printf(__('Doc type not found: %1$s', 'agentwp'), $docType)));
         }
         $docClass = $this->docTypes[$docType];
 

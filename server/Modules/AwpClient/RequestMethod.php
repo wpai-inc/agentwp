@@ -21,7 +21,8 @@ class RequestMethod
     public static function from(string $method): string
     {
         if (! in_array($method, self::all())) {
-            throw new \Exception(esc_html("Invalid request method: $method"));
+            // Translators: %1$s is the invalid request method.
+            throw new \Exception(esc_html(printf(__('Invalid request method: %1$s', 'agentwp'), $method)));
         }
 
         return $method;

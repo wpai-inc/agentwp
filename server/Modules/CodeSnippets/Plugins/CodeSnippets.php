@@ -98,7 +98,8 @@ class CodeSnippets implements SnippetInterface
 
         $result = $this->wpdb->insert($this->table_name, $data);
         if ($result === false) {
-            throw new Exception(esc_html__('Failed to add CodeSnippets snippet: ', 'text-domain').esc_html($this->wpdb->last_error));
+            // Translators: %1$s is the error message returned by the database.
+            throw new Exception(esc_html(printf(__('Failed to add CodeSnippets snippet: %1$s', 'agentwp'), $this->wpdb->last_error)));
         }
 
         return admin_url('admin.php?page=edit-snippet&id='.$this->wpdb->insert_id);

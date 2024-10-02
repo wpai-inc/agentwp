@@ -8,6 +8,11 @@ class RouteParamsMissingException extends Exception
 {
     public function __construct(string $missing)
     {
-        parent::__construct(esc_html__('You are missing the following params in your request: ', 'agentwp').esc_html($missing));
+        $message = esc_html(sprintf(
+            // Translators: %1$s is the list of missing parameters.
+            __('You are missing the following params in your request: %1$s', 'agentwp'),
+            ($missing)
+        ));
+        parent::__construct($message);
     }
 }

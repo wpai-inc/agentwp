@@ -13,15 +13,20 @@ class ProviderRegistry
         $this->main = $main;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function register(array $providers)
     {
         foreach ($providers as $class) {
             if (! class_exists($class)) {
-                throw new \Exception(esc_html("Class $class does not exist"));
+                // Translators: %1$s is the class name that does not exist.
+                throw new \Exception(esc_html(printf(__('Class %1$s does not exist', 'agentwp'), $class)));
             }
 
             if (! is_a($class, Registrable::class, true)) {
-                throw new \Exception(esc_html("Class $class does not implement Registerable"));
+                // Translators: %1$s is the class name that does not implement Registrable.
+                throw new \Exception(esc_html(printf(__('Class %1$s does not implement Registrable', 'agentwp'), $class)));
             }
 
             (new $class($this->main))->register();

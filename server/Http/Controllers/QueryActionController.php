@@ -93,7 +93,8 @@ class QueryActionController extends BaseController
         }
 
         if (! empty($disallowedKeywords)) {
-            throw new \Exception(esc_html__('Query contains disallowed keyword: ', 'agentwp').esc_html(implode(', ', $disallowedKeywords)));
+            // Translators: %1$s is a list of disallowed SQL keywords found in the query.
+            throw new \Exception(esc_html(printf(__('Query contains disallowed keyword: %1$s', 'agentwp'), implode(', ', $disallowedKeywords))));
         }
 
         // Additional checks
