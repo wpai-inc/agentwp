@@ -96,7 +96,7 @@ class WPCodeBox implements SnippetInterface
             'conditions' => '[]',
             'location' => $scope,
             'tagOptions' => '[]',
-            'hook' => json_encode([
+            'hook' => wp_json_encode([
                 [
                     'hook' => [
                         'label' => 'Plugins Loaded (Default)',
