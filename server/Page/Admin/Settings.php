@@ -74,7 +74,7 @@ class Settings extends ReactClient
         $screen = get_current_screen();
 
         if ($screen->id === 'toplevel_page_'.$this->main::SETTINGS_PAGE && isset($_GET['code'])) {
-            $code = sanitize_text_field($_GET['code']);
+            $code = sanitize_text_field(wp_unslash($_GET['code']));
 
             $response = $this->main->client()->passportToken([
                 'grant_type' => 'authorization_code',
