@@ -16,7 +16,11 @@ class CoreChat implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        $page = $_GET['page'] ?? null;
+        if (! isset($_GET['page'])) {
+            return false;
+        }
+
+        $page = sanitize_text_field(wp_unslash($_GET['page']));
 
         return is_admin() && $this->client->main->auth()->hasAccess() && ! in_array($page, [$this->client->main::SETTINGS_PAGE]);
     }
