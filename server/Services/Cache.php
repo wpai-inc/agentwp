@@ -17,7 +17,7 @@ class Cache
     {
         $this->data = $data;
         $this->key = "agentwp_{$id}";
-        $this->hash = md5(json_encode($data));
+        $this->hash = md5(wp_json_encode($data));
     }
 
     public function getKey(): string
