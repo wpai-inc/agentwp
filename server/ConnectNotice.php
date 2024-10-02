@@ -20,7 +20,11 @@ class ConnectNotice implements Registrable
 
     private function maybeAddInstallNotice()
     {
-        $current_page = esc_url_raw($_SERVER['REQUEST_URI']);
+        if (! isset($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+
+        $current_page = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI']));
         if (! $this->main->settings->isConnected() && $current_page === $this->main->settingsPageUrl) {
             add_action('admin_notices', [$this, 'admin_notice_install']);
         }
