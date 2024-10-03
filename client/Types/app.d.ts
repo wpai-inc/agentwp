@@ -7,6 +7,7 @@ complexity: number;
 capabilityMatch: number;
 continuedConvo: boolean;
 convoOnly: boolean;
+visionEnabled: boolean;
 shouldNavigate: number;
 sequence: Array<any> | null;
 refused: boolean;
@@ -269,7 +270,7 @@ export type EmbedSchema = 'posts_combined' | 'post_simple' | 'post_title' | 'pos
 export type LlmOption = 'json_response' | 'json_schema';
 export type LlmProvider = 'anthropic' | 'azure_openai' | 'cohere' | 'google_vertex' | 'openai';
 export type SiteChatSetting = 'web_enabled';
-export type SiteSettingValue = 'convoOnly' | 'webEnabled' | 'visionEnabled';
+export type SiteSettingValue = 'convoOnly' | 'webEnabled' | 'visionEnabled' | 'healthEnabled' | 'dbSchemaEnabled';
 export type TokenUsageStatus = 0 | 1 | 2 | 3;
 export type UserRequestStatus = 'pending' | 'aborted' | 'completed';
 }
