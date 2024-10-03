@@ -9,6 +9,7 @@ class ApiRoutes
     public static function fromJson(string $json): self
     {
         $routes = json_decode($json, true);
+
         return self::fromArray($routes);
     }
 
@@ -33,6 +34,9 @@ class ApiRoutes
         return $this;
     }
 
+    /**
+     * @throws RouteDoesNotExistException
+     */
     public function getRoute(string $name): ApiRoute
     {
         foreach ($this->routes as $route) {
@@ -41,7 +45,7 @@ class ApiRoutes
             }
         }
 
-        throw new RouteDoesNotExistException($name);
+        throw new RouteDoesNotExistException(esc_html($name));
     }
 
     public function hasRoute(string $name): bool

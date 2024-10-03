@@ -30,7 +30,7 @@ class YoastSeo implements SourceInterface
          * For local development, the URL may contain port number which needs to be removed.
          */
         if (strpos($rest_url, ':') !== false) {
-            $port_number = parse_url($rest_url, PHP_URL_PORT);
+            $port_number = wp_parse_url($rest_url, PHP_URL_PORT);
             $rest_url = str_replace(':'.$port_number, '', $rest_url);
         }
 

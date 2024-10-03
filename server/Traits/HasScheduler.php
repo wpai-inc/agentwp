@@ -89,11 +89,13 @@ trait HasScheduler
     protected function validateActionHook(string $action): void
     {
         if (! method_exists($this, $action)) {
-            throw new Exception("Method $action does not exist in class ".get_class($this));
+            // Translators: %1$s is the method name, %2$s is the class name.
+            throw new Exception(esc_html(printf(__('Method %1$s does not exist in class %2$s', 'agentwp'), $action, get_class($this))));
         }
 
         if ((new \ReflectionMethod($this, $action))->isPublic() === false) {
-            throw new Exception("Method $action must be public in class ".get_class($this));
+            // Translators: %1$s is the method name, %2$s is the class name.
+            throw new Exception(esc_html(printf(__('Method %1$s must be public in class %2$s', 'agentwp'), $action, get_class($this))));
         }
     }
 

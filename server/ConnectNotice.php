@@ -20,7 +20,11 @@ class ConnectNotice implements Registrable
 
     private function maybeAddInstallNotice()
     {
-        $current_page = esc_url_raw($_SERVER['REQUEST_URI']);
+        if (! isset($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+
+        $current_page = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI']));
         if (! $this->main->settings->isConnected() && $current_page === $this->main->settingsPageUrl) {
             add_action('admin_notices', [$this, 'admin_notice_install']);
         }
@@ -30,8 +34,8 @@ class ConnectNotice implements Registrable
     {
         ?>
         <div class="notice notice-info is-dismissible agentwp-notice">
-            <p><?php _e('To use AgentWP, please complete the onboarding and configuration!', 'agentwp'); ?></p>
-            <a href="<?php echo $this->main->settingsPageUrl; ?>" class="button button-primary button-large"><?php _e('Set Up AgentWP', 'agentwp'); ?></a>
+            <p><?php esc_html_e('To use AgentWP, please complete the onboarding and configuration!', 'agentwp'); ?></p>
+            <a href="<?php echo esc_url($this->main->settingsPageUrl); ?>" class="button button-primary button-large"><?php esc_html_e('Set Up AgentWP', 'agentwp'); ?></a>
         </div>
         <style>
             .agentwp-notice {

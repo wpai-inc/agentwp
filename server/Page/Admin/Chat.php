@@ -16,9 +16,14 @@ class Chat extends ReactClient
      */
     public function onLocations(): void
     {
+        if (! isset($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+
         $matched = false;
+        $requestUri = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI']));
         foreach ($this->restrictedUrls() as $pattern) {
-            if (preg_match('#'.str_replace('#', '\#', $pattern).'#', esc_url_raw($_SERVER['REQUEST_URI']))) {
+            if (preg_match('#'.str_replace('#', '\#', $pattern).'#', $requestUri)) {
                 $matched = true;
                 break;
             }

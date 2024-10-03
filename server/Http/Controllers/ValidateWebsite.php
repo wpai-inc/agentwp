@@ -8,7 +8,11 @@ class ValidateWebsite extends BaseController
 
     public function __invoke(): void
     {
-        $key = sanitize_text_field($_GET['verification_key']);
+        if (! $this->request->get('verification_key')) {
+            $this->error('verification_key_missing');
+        }
+
+        $key = $this->request->get('verification_key', true);
         if (
             $this->main->settings->verification_key
             && ! empty($key)

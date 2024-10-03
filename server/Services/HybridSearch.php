@@ -2,6 +2,8 @@
 
 namespace WpAi\AgentWp\Services;
 
+use WpAi\AgentWp\Services\Db;
+
 class HybridSearch
 {
     private string $query;
@@ -101,7 +103,7 @@ class HybridSearch
                     'type' => $objectType,
                     'id' => intval($id),
                 ];
-            }, array_column($wpdb->get_results($sql, ARRAY_A), 'id')));
+            }, array_column(Db::getResults($sql, [], ARRAY_A), 'id')));
         }
 
         return $results;

@@ -2,6 +2,8 @@
 
 namespace WpAi\AgentWp\Http\Controllers;
 
+use WpAi\AgentWp\Services\Db;
+
 class QueryActionController extends BaseController
 {
     public function __invoke(): void
@@ -14,24 +16,12 @@ class QueryActionController extends BaseController
         global $wpdb;
 
         // unescape slashes
-        $sql = stripslashes($this->request->query->get('sql'));
+        $sql = stripslashes($this->request->get('sql'));
+        $sql = $this->filterSqlQuery($sql);
 
-        // validate query and only accept SELECT queries
-        if (preg_match('/\b(INSERT|UPDATE|DELETE)\b/i', $sql)) {
-            $this->error('Only SELECT queries are allowed. The query was: '.$sql, 422);
-        }
+        $args = $this->request->all('args') ?: [];
 
-        try {
-            $args = $this->request->query->all('args');
-        } catch (\Exception $e) {
-            $args = [];
-        }
-
-        $prepared_query = $wpdb->prepare($sql, $args);
-
-        $prepared_query = $this->filterSqlQuery($prepared_query);
-
-        $results = $wpdb->get_results($prepared_query);
+        $results = Db::getResults($sql, $args);
 
         if ($wpdb->last_error) {
             $this->respondWithError($wpdb->last_error, 422);
@@ -86,17 +76,22 @@ class QueryActionController extends BaseController
         // Check for disallowed keywords
         foreach ($disallowedKeywords as $keyword) {
             if (strpos($uppercaseSQL, $keyword) !== false) {
-                throw new \Exception("Query contains disallowed keyword: $keyword");
+                $disallowedKeywords[] = $keyword;
             }
+        }
+
+        if (! empty($disallowedKeywords)) {
+            // Translators: %1$s is a list of disallowed SQL keywords found in the query.
+            throw new \Exception(esc_html(printf(__('Query contains disallowed keyword: %1$s', 'agentwp'), implode(', ', $disallowedKeywords))));
         }
 
         // Additional checks
         if (preg_match('/;\s*\w/', $sql)) {
-            throw new \Exception('Multiple statements are not allowed');
+            throw new \Exception(esc_html__('Multiple statements are not allowed', 'agentwp'));
         }
 
         if (! preg_match('/^\s*SELECT\b/i', $sql)) {
-            throw new \Exception('Query must start with SELECT');
+            throw new \Exception(esc_html__('Query must start with SELECT', 'agentwp'));
         }
 
         // If all checks pass, return the original query

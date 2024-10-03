@@ -14,7 +14,7 @@ class TestResponse extends BaseController
         $this->respond([
             'key' => $key,
             'home_url' => home_url(),
-            'foo' => $this->request->query->get('foo'),
+            'foo' => $this->request->get('foo'),
         ]);
     }
 
@@ -49,7 +49,7 @@ class TestResponse extends BaseController
 
             // Loop over the stream and echo chunks to the client
             while (! $body->eof()) {
-                echo $body->read(1024); // Read in chunks of 1024 bytes
+                echo esc_html($body->read(1024)); // Read in chunks of 1024 bytes and escape output
 
                 // Flush the output buffer to send the data immediately
                 ob_flush();
@@ -57,7 +57,7 @@ class TestResponse extends BaseController
             }
         } catch (\Exception $e) {
             // Handle errors appropriately
-            echo 'Error: '.$e->getMessage();
+            echo 'Error: '.esc_html($e->getMessage());
         }
 
         // Finish output

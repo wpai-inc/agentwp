@@ -35,7 +35,8 @@ abstract class ReactClient implements ClientAppInterface, Registrable
 
         foreach ($this->locations as $location) {
             if (! class_exists($location)) {
-                throw new \Error('Location class does not exist: '.$location);
+                // Translators: %1$s is the location class name
+                throw new \Error(esc_html(printf(__('Location class does not exist: %1$s', 'agentwp'), $location)));
             }
             $setup = new $location($this);
             if ($setup && $setup->active()) {
@@ -123,15 +124,16 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             ?>
             <noscript>
                 <div class="no-js">
-                    <?php
-                                echo esc_html__(
-                                    'Warning: AgentWP will not work properly without JavaScript, please enable it.',
-                                    'agentwp'
-                                );
-            ?>
+                <?php
+                    // Translators: This message is shown when JavaScript is disabled
+                    echo esc_html__(
+                        'Warning: AgentWP will not work properly without JavaScript, please enable it.',
+                        'agentwp'
+                    );
+                ?>
                 </div>
             </noscript>
-            <div id="<?php echo $this->slug() ?>"></div>
+            <div id="<?php echo esc_attr($this->slug()) ?>"></div>
         <?php
         } else {
             $managers = $this->main->auth->managers();
@@ -141,6 +143,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                 <div>
                     <p>
                         <?php
+                            // Translators: This message is shown when the user does not have permission to access AgentWP
                             echo esc_html__(
                                 'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
                                 'agentwp'
@@ -152,7 +155,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                         <ul>
                             <?php
                 foreach ($managers as $manager) {
-                    echo "<li>{$manager->data->display_name} ({$manager->data->user_email})</li>";
+                    echo '<li>'.esc_html($manager->data->display_name).' ('.esc_html($manager->data->user_email).')</li>';
                 }
             ?>
                         </ul>

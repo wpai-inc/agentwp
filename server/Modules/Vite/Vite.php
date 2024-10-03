@@ -47,13 +47,15 @@ class Vite
         }
 
         if (! isset($manifest_path)) {
-            throw new Exception(esc_html(sprintf('[Vite] No manifest found in %s.', $manifest_dir)));
+            // Translators: %1$s is the manifest directory path.
+            throw new Exception(esc_html(printf(__('[Vite] No manifest found in %1$s.', 'agentwp'), $manifest_dir)));
         }
 
         $manifest = wp_json_file_decode($manifest_path);
 
         if (! $manifest) {
-            throw new Exception(esc_html(sprintf('[Vite] Failed to read manifest file %s.', $manifest_path)));
+            // Translators: %1$s is the manifest file path.
+            throw new Exception(esc_html(printf(__('[Vite] Failed to read manifest file %1$s.', 'agentwp'), $manifest_path)));
         }
 
         /**
@@ -268,7 +270,8 @@ EOS;
 
         if (! isset($manifest->data->{$entry})) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                wp_die(esc_html(sprintf('[Vite] Entry %s not found.', $entry)));
+                // Translators: %1$s is the entry point name.
+                wp_die(esc_html(printf(__('[Vite] Entry %1$s not found.', 'agentwp'), $entry)));
             }
 
             return null;

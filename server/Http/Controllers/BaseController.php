@@ -2,7 +2,7 @@
 
 namespace WpAi\AgentWp\Http\Controllers;
 
-use Symfony\Component\HttpFoundation\Request;
+use WpAi\AgentWp\Http\HttpRequest;
 use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Traits\HasHttpErrors;
 
@@ -16,14 +16,14 @@ class BaseController
 
     protected string $permission = 'all';
 
-    protected Request $request;
+    protected HttpRequest $request;
 
     protected Main $main;
 
     public function __construct(Main $main)
     {
         $this->main = $main;
-        $this->request = Request::createFromGlobals();
+        $this->request = new HttpRequest;
     }
 
     public function method(): string
@@ -66,7 +66,7 @@ class BaseController
 
     protected function getContent($key = null)
     {
-        $data = json_decode($this->request->getContent(), true);
+        $data = $this->request->getJsonContent();
         if (json_last_error() !== JSON_ERROR_NONE) {
             $this->error('Invalid JSON data', 400);
         }

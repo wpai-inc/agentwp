@@ -8,6 +8,8 @@ Requires PHP: 7.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
+AgentWP is an intelligent, multilingual AI assistant designed specifically for WordPress sites.
+
 == Description ==
 
 # AgentWP - AI Assistant for WordPress
