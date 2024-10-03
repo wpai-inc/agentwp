@@ -2,7 +2,9 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
+use Symfony\Component\HttpFoundation\Request;
 use WpAi\AgentWp\Client\ReactClient;
+use WpAi\AgentWp\Http\HttpRequest;
 use WpAi\AgentWp\Main;
 use WpAi\AgentWp\Traits\HasMenu;
 use WpAi\AgentWp\Traits\HasPage;
@@ -17,11 +19,13 @@ class Settings extends ReactClient
     protected array $locations = [
         \WpAi\AgentWp\Client\Locations\Settings::class,
     ];
+    private HttpRequest $request;
 
     public function __construct(Main $main)
     {
         parent::__construct($main);
         add_action('current_screen', [$this, 'maybe_get_token']);
+        $this->request = new HttpRequest;
     }
 
     public function registrations(): void
@@ -73,8 +77,9 @@ class Settings extends ReactClient
     {
         $screen = get_current_screen();
 
-        if ($screen->id === 'toplevel_page_'.$this->main::SETTINGS_PAGE && isset($_GET['code'])) {
-            $code = sanitize_text_field(wp_unslash($_GET['code']));
+        if ($screen->id === 'toplevel_page_'.$this->main::SETTINGS_PAGE && $this->request->get('code')) {
+
+            $code = sanitize_text_field(wp_unslash($this->request->get('code', true)));
 
             $response = $this->main->client()->passportToken([
                 'grant_type' => 'authorization_code',

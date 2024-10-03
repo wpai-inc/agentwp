@@ -4,20 +4,23 @@ namespace WpAi\AgentWp\Client\Locations;
 
 use WpAi\AgentWp\Client\ReactClient;
 use WpAi\AgentWp\Contracts\ClientSetupLocationInterface;
+use WpAi\AgentWp\Http\HttpRequest;
 
 class BeaverBuilder implements ClientSetupLocationInterface
 {
     protected ReactClient $client;
 
+    protected HttpRequest $request;
+
     public function __construct(ReactClient $client)
     {
         $this->client = $client;
-
+        $this->request = new HttpRequest;
     }
 
     public function active(): bool
     {
-        return isset($_GET['fl_builder']) && $this->client->main->auth()->hasAccess() && class_exists('FLBuilderLoader');
+        return $this->request->get('fl_builder') && $this->client->main->auth()->hasAccess() && class_exists('FLBuilderLoader');
     }
 
     public function root(): void

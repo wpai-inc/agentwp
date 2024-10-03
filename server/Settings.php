@@ -169,7 +169,7 @@ class Settings
                 if ($type === 'boolean') {
                     $settings[$key] = filter_var($value, FILTER_VALIDATE_BOOLEAN);
                 } elseif ($type === 'string') {
-                    $settings[$key] = filter_var($value, FILTER_SANITIZE_STRING);
+                    $settings[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 } elseif ($type === 'int') {
                     $settings[$key] = filter_var($value, FILTER_VALIDATE_INT);
                 }

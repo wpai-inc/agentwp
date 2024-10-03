@@ -19,8 +19,7 @@ class GetMentionItems extends BaseController
 
     public function __invoke()
     {
-        $keyword = $this->request->query->get('keyword');
-        $keyword = sanitize_text_field($keyword);
+        $keyword = $this->request->get('keyword', true);
         $keyword = str_ireplace('@', '', $keyword);
 
         $post_types = get_post_types(['public' => true]);

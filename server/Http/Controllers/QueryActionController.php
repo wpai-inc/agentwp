@@ -16,24 +16,12 @@ class QueryActionController extends BaseController
         global $wpdb;
 
         // unescape slashes
-        $sql = stripslashes($this->request->query->get('sql'));
+        $sql = stripslashes($this->request->get('sql'));
+        $sql = $this->filterSqlQuery($sql);
 
-        // validate query and only accept SELECT queries
-        if (preg_match('/\b(INSERT|UPDATE|DELETE)\b/i', $sql)) {
-            $this->error('Only SELECT queries are allowed. The query was: '.$sql, 422);
-        }
+        $args = $this->request->all('args') ?: [];
 
-        try {
-            $args = $this->request->query->all('args');
-        } catch (\Exception $e) {
-            $args = [];
-        }
-
-        $prepared_query = $wpdb->prepare($sql, $args);
-
-        $prepared_query = $this->filterSqlQuery($prepared_query);
-
-        $results = Db::getResults($prepared_query);
+        $results = Db::getResults($sql, $args);
 
         if ($wpdb->last_error) {
             $this->respondWithError($wpdb->last_error, 422);

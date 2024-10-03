@@ -14,7 +14,7 @@ class TestResponse extends BaseController
         $this->respond([
             'key' => $key,
             'home_url' => home_url(),
-            'foo' => $this->request->query->get('foo'),
+            'foo' => $this->request->get('foo'),
         ]);
     }
 

@@ -10,22 +10,23 @@ class ManuallyActivateAgent extends BaseController
 
     public function __invoke()
     {
-        $data = json_decode(base64_decode($this->getContent('apiKey')), true);
+        $data = $this->request->getJsonContent();
+        $apiKey = json_decode(base64_decode($data['apiKey']), true);
 
-        if (! $data['site_id'] || ! $data['client_id'] || ! $data['client_secret'] || ! $data['token']['access_token'] || ! $data['token']['expires_in']) {
+        if (! $apiKey['site_id'] || ! $apiKey['client_id'] || ! $apiKey['client_secret'] || ! $apiKey['token']['access_token'] || ! $apiKey['token']['expires_in']) {
             $this->error('failed_site_verification');
         }
 
         $this->main->settings->set([
-            'site_id' => sanitize_text_field($data['site_id']),
-            'client_id' => sanitize_text_field($data['client_id']),
-            'client_secret' => sanitize_text_field($data['client_secret']),
+            'site_id' => sanitize_text_field($apiKey['site_id']),
+            'client_id' => sanitize_text_field($apiKey['client_id']),
+            'client_secret' => sanitize_text_field($apiKey['client_secret']),
         ]);
         $this->main->settings->setAccessToken([
-            'access_token' => sanitize_text_field($data['token']['access_token']),
+            'access_token' => sanitize_text_field($apiKey['token']['access_token']),
             'token_type' => 'Bearer',
             'refresh_token' => '',
-            'expires_in' => sanitize_text_field($data['token']['expires_in']),
+            'expires_in' => sanitize_text_field($apiKey['token']['expires_in']),
         ]);
 
         $this->respond([

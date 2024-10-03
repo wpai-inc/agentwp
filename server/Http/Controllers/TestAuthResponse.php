@@ -12,7 +12,7 @@ class TestAuthResponse extends BaseController
     {
         $this->respond([
             'only_authorized_users' => home_url(),
-            'params' => $this->request->query->all(),
+            'params' => $this->request->all(),
         ]);
     }
 }

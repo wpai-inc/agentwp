@@ -124,13 +124,13 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             ?>
             <noscript>
                 <div class="no-js">
-                    <?php
-                                // Translators: This message is shown when JavaScript is disabled
-                                echo esc_html__(
-                                    'Warning: AgentWP will not work properly without JavaScript, please enable it.',
-                                    'agentwp'
-                                );
-            ?>
+                <?php
+                    // Translators: This message is shown when JavaScript is disabled
+                    echo esc_html__(
+                        'Warning: AgentWP will not work properly without JavaScript, please enable it.',
+                        'agentwp'
+                    );
+                ?>
                 </div>
             </noscript>
             <div id="<?php echo esc_attr($this->slug()) ?>"></div>

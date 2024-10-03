@@ -12,11 +12,11 @@ class SaveConnection extends BaseController
 
     public function __invoke(): void
     {
-        if (! isset($_GET['verification_key'])) {
+        if (! $this->request->get('verification_key')) {
             $this->error('verification_key_missing');
         }
 
-        $key = sanitize_text_field(wp_unslash($_GET['verification_key']));
+        $key = $this->request->get('verification_key', true);
         if (
             ! $this->main->settings->verification_key
             || empty($key)

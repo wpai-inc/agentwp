@@ -20,7 +20,7 @@ class AddCodeSnippet extends BaseController
 
     public function __invoke()
     {
-        $params = json_decode($this->request->getContent(), true);
+        $params = $this->request->getJsonContent();
         if (! $params) {
             $this->error('Invalid request');
         }

@@ -3,6 +3,7 @@
 namespace WpAi\AgentWp;
 
 use WP_User;
+use WpAi\AgentWp\Http\HttpRequest;
 
 class UserAuth
 {
@@ -16,10 +17,13 @@ class UserAuth
 
     private WP_User $user;
 
+    private HttpRequest $request;
+
     public function __construct($user = null)
     {
         $this->user = $user ?? wp_get_current_user();
         $this->settings = new Settings;
+        $this->request = new HttpRequest;
     }
 
     public function canGenerateVerificationKey(): bool
@@ -33,7 +37,7 @@ class UserAuth
 
     public function hasValidVerificationKey(): bool
     {
-        $verification_key = isset($_GET['verification_key']) ? sanitize_text_field(wp_unslash($_GET['verification_key'])) : '';
+        $verification_key = $this->request->get('verification_key', true);
 
         if (empty($verification_key)) {
             return false;

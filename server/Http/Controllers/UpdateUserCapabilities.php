@@ -12,10 +12,12 @@ class UpdateUserCapabilities extends BaseController
 
     public function __invoke(): void
     {
-        $user_id = sanitize_text_field($this->getContent('user'));
-        $user = new \WP_User($user_id);
+        $data = $this->request->getJsonContent();
+
+        $user = new \WP_User($data['user']);
+
         if (isset($data['agentwp_access'])) {
-            $agentwp_access = sanitize_text_field($data['agentwp_access']);
+            $agentwp_access = $data['agentwp_access'];
             if ($agentwp_access) {
                 $user->add_cap(UserAuth::CAP_AGENTWP_ACCESS);
             } else {
