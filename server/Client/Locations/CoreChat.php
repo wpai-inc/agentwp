@@ -20,10 +20,6 @@ class CoreChat implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        if (! $this->request->get('page')) {
-            return false;
-        }
-
         $page = $this->request->get('page', true);
 
         return is_admin() && $this->client->main->auth()->hasAccess() && ! in_array($page, [$this->client->main::SETTINGS_PAGE]);
