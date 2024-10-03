@@ -33,3 +33,4 @@ dist-ssr
 
 *storybook.log
 storybook-static
+/plugin-builds/
