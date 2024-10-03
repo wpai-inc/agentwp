@@ -1,31 +1,5 @@
 # AgentWP Plugin
 
-## Installation and Setup
-
-### VS Code
-
-- Install PHP Intelephense
-
-The VSCode settings are already configured to run Laravel Pint.
-
-### Environment
-
-We provide a Docker configuration for easy setup of a local development environment for the plugin.
-
-### Requirements
-
-- Docker Desktop
-
-### Starting the Environment
-
-Run the following command in the root of the project:
-
-```bash
-docker-compose up -d
-```
-
-Visit http://localhost:8080 and create the DB and login.
-
 ## Usage
 
 ### Plugin Organization
@@ -41,6 +15,10 @@ The client contains all the frontend assets built with **React** using **Typescr
 The server contains the backend PHP. It consists of a "Provier Registry" which is just a collection of service provider classes that hook into WordPress.
 
 All providers must have a `register()` method that contains the WordPress Hooks necessary to run the provider's service. They must implement `Registrable` and be registered in the plugin entrypoint `agentwp.php` under the register method. They all have the `Main` plugin as a dependency which contains common configuration and methods. This is how we bootstrap the plugin and hook all of our code into WordPress's hook system (every provider class has a register method where it hooks itself).
+
+### Build
+
+To build the plugin for publishing on WordPress.org, run `pnpm run build-plugin`. This will build all files and remove source code files that shouldn't be published.
 
 ## Adding React Clients / Entrypoints
 
@@ -73,5 +51,3 @@ To add a shad/cn component, use `npx shadcn-ui@latest add [component]`
 ## Icons
 
 [Available icons](https://marella.me/material-design-icons/demo/svg/)
-
----

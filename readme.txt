@@ -59,3 +59,9 @@ For support, visit our [website](https://agentwp.ai) or contact our support team
 ## About WPAI, Inc.
 
 AgentWP is developed by WPAI, Inc., a company dedicated to enhancing WordPress functionality through AI technology.
+
+## Other Notes
+
+### Developer Notes
+
+The [plugin source code](https://github.com/wpai-inc/agentwp) is hosted on Github. It includes instructions on how to build the final hosted plugin from source.
