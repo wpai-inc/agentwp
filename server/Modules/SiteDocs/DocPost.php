@@ -2,8 +2,8 @@
 
 namespace WpAi\AgentWp\Modules\SiteDocs;
 
-use AgentWP\Server\Services\Db;
 use DateTime;
+use WpAi\AgentWp\Services\Db;
 
 class DocPost extends Doc
 {
@@ -62,7 +62,7 @@ class DocPost extends Doc
         return [];
     }
 
-    private function getPosts($batch_amount = 10, int $last_doc_id_indexed): array
+    private function getPosts($batch_amount, int $last_doc_id_indexed): array
     {
         global $wpdb;
 

@@ -2,7 +2,7 @@
 
 namespace WpAi\AgentWp\Http\Controllers;
 
-use AgentWP\Server\Services\Db;
+use WpAi\AgentWp\Services\Db;
 
 class QueryActionController extends BaseController
 {

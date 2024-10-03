@@ -2,11 +2,11 @@
 
 namespace WpAi\AgentWp;
 
-use AgentWP\Server\Services\Db;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Registry\IndexSiteData;
 use WpAi\AgentWp\Registry\IndexSiteSummary;
+use WpAi\AgentWp\Services\Db;
 
 /**
  * Handles the plugin activation, deactivation, and uninstallation.

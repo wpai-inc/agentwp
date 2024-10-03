@@ -1,6 +1,6 @@
 <?php
 
-namespace AgentWP\Server\Services;
+namespace WpAi\AgentWp\Services;
 
 class Db
 {

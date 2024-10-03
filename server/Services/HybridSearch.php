@@ -2,7 +2,7 @@
 
 namespace WpAi\AgentWp\Services;
 
-use AgentWP\Server\Services\Db;
+use WpAi\AgentWp\Services\Db;
 
 class HybridSearch
 {

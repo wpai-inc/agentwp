@@ -2,10 +2,10 @@
 
 namespace WpAi\AgentWp\Registry;
 
-use AgentWP\Server\Services\Db;
 use WpAi\AgentWp\Contracts\Cacheable;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
+use WpAi\AgentWp\Services\Db;
 use WpAi\AgentWp\SiteData;
 use WpAi\AgentWp\Traits\HasCache;
 use WpAi\AgentWp\Traits\HasScheduler;
