@@ -21,10 +21,11 @@ require_once __DIR__.'/vendor/autoload.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $awpPrivateRepo = PucFactory::buildUpdateChecker(
-    'https://plugin.agentwp.com/?action=get_metadata&slug=agentwp',
+    'https://github.com/wpai-inc/agentwp/',
     __FILE__,
     'agentwp'
 );
+$awpPrivateRepo->setBranch('main');
 
 register_activation_hook(__FILE__, 'bootAgentWP');
 register_deactivation_hook(__FILE__, 'bootAgentWP');
