@@ -5,7 +5,7 @@ import * as Form from '@radix-ui/react-form';
 import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 
-export function ManualAwpActivation() {
+export function ManualAwpActivation( { accepted }: { accepted: boolean } ) {
   const { tryRequest } = useRestRequest();
   const { page, getApiUrl } = usePage();
 
@@ -76,7 +76,12 @@ export function ManualAwpActivation() {
               </a>
             }></Textarea>
           <Form.Submit asChild>
-            <Button className="w-full mt-4" variant="brand" isBusy={ saving }>
+            <Button
+              disabled={ ! accepted }
+              className="w-full mt-2"
+              variant="brand"
+              size="lg"
+              isBusy={ saving }>
               Connect
             </Button>
           </Form.Submit>
