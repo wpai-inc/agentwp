@@ -7,6 +7,7 @@ import WizardHeader from '../Partials/WizardHeader';
 import WizardContainer from '../Partials/WizardContainer';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { useNotifications } from '@/Providers/NotificationProvider';
+import { optimistic } from '@/lib/utils';
 
 export default function ConnectAiService() {
   const { page } = usePage< SettingsPageData >();
@@ -15,20 +16,23 @@ export default function ConnectAiService() {
   const { tryRequest } = useRestRequest();
 
   async function handleAccept() {
-    if ( accepted === false ) {
-      // previous state was off.
-      try {
-        await tryRequest( 'post', 'accept_terms', {
-          accepted: ! accepted,
-        } );
+    const is_accepted = ! accepted;
 
-        setAccepted( ! accepted );
-      } catch {
-        notify( 'Something went wrong.' );
-      }
-    } else {
-      setAccepted( ! accepted );
-    }
+    await optimistic(
+      async () => {
+        if ( is_accepted ) {
+          await tryRequest( 'post', 'accept_terms', {
+            accepted: ! accepted,
+          } );
+        }
+      },
+      () => {
+        setAccepted( is_accepted );
+      },
+      msg => {
+        notify( msg );
+      },
+    );
   }
 
   return (
@@ -60,25 +64,25 @@ export default function ConnectAiService() {
           transit.
         </p>
         <div className="mt-4">
-          <label className="mb-4 flex gap-2">
+          <label className="mb-4 flex gap-1 items-center">
             <input
               type="checkbox"
               checked={ accepted }
               onChange={ handleAccept }
-              className="ring-2 ring-brand-primary-muted/70 focus:ring-brand-primary"
+              className="ring-2 ring-brand-primary-muted/70 focus:ring-brand-primary mr-2"
             />{ ' ' }
-            I agree to the{ ' ' }
+            I agree to the
             <a href="https://agentwp.com/legal/terms/" target="_blank" className="underline">
               Terms
-            </a>{ ' ' }
-            and{ ' ' }
+            </a>
+            and
             <a href="https://agentwp.com/legal/privacy/" target="_blank" className="underline">
               Privacy Policy
             </a>
           </label>
           <ConnectButton accepted={ accepted } />
         </div>
-        <ManualAwpActivation />
+        <ManualAwpActivation accepted={ accepted } />
       </div>
     </WizardContainer>
   );
