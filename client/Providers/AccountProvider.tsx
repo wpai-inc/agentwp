@@ -1,5 +1,9 @@
+/**
+ * @since 1.0.1
+ */
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { useRestRequest } from './RestRequestProvider';
+import { usePage } from './PageProvider';
 
 export type AccountType = {
   user: App.Data.UserData;
@@ -23,12 +27,15 @@ export function useAccount() {
 }
 
 export function AccountProvider( { children }: { children: ReactNode } ) {
+  const { isConnected } = usePage();
   const { proxyApiRequest } = useRestRequest();
   const [ account, setAccount ] = useState< AccountType >();
 
   useEffect( () => {
-    proxyApiRequest< AccountType >( 'user' ).then( data => setAccount( data ) );
-  }, [] );
+    if ( isConnected ) {
+      proxyApiRequest< AccountType >( 'user' ).then( data => setAccount( data ) );
+    }
+  }, [ isConnected ] );
 
   return (
     <AccountContext.Provider
