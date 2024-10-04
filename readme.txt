@@ -1,24 +1,22 @@
-=== AgentWP ===
-Contributors: codewp, ovidiu-galatan, freshbrewedweb
-Tags: ai, agent, chatbot
-Requires at least: 6.4
-Tested up to: 6.6
-Stable tag: 1.0.0
-Requires PHP: 7.4
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+=== AgentWP ===  
+Contributors: codewp, ovidiu-galatan, freshbrewedweb, isotropic
+Tags: ai, agent, chatbot  
+Requires at least: 6.4  
+Tested up to: 6.6  
+Stable tag: 1.0.0  
+Requires PHP: 7.4  
+License: GPLv3  
+License URI: http://www.gnu.org/licenses/gpl-3.0.html  
 
 AgentWP is an intelligent, multilingual AI assistant designed specifically for WordPress sites.
 
 == Description ==
 
-# AgentWP - AI Assistant for WordPress
-
-## Description
+### AgentWP - AI Assistant for WordPress
 
 AgentWP is an intelligent, multilingual AI assistant designed specifically for WordPress sites. It unlocks the full potential of your WordPress site by providing expert assistance 24/7.
 
-## Features
+### Features
 
 - **Custom-Built AI Models**: Tailored for WordPress, including writing, design, suggestions, troubleshooting, coding, and site indexing.
 - **Site-Specific Knowledge**: AgentWP indexes your site to understand its structure, content, tone, and goals.
@@ -33,11 +31,11 @@ AgentWP is an intelligent, multilingual AI assistant designed specifically for W
 
 == Installation ==
 
-1. Install AgentWP as a standard WordPress Plugin in 2 clicks.
-2. Connect AgentWP and your WordPress website to our AI.
+1. Install AgentWP as a standard WordPress plugin in two clicks.
+2. Connect AgentWP to your WordPress website.
 3. Start using the AI assistant specific to your site, anytime.
 
-## Usage
+== Usage ==
 
 Once installed and connected, you can use AgentWP to:
 
@@ -48,20 +46,20 @@ Once installed and connected, you can use AgentWP to:
 - Receive site updates
 - Make remote changes (coming soon with Agentic AI)
 
-## Pricing
+== Pricing ==
 
 AgentWP offers a free start option. For advanced features, consider upgrading to AgentWP Pro.
 
-## Support
+== Support ==
 
 For support, visit our [website](https://agentwp.ai) or contact our support team.
 
-## About WPAI, Inc.
+== About WPAI, Inc. ==
 
 AgentWP is developed by WPAI, Inc., a company dedicated to enhancing WordPress functionality through AI technology.
 
-## Other Notes
+== Other Notes ==
 
 ### Developer Notes
 
-The [plugin source code](https://github.com/wpai-inc/agentwp) is hosted on Github. It includes instructions on how to build the final hosted plugin from source.
+The [plugin source code](https://github.com/wpai-inc/agentwp) is hosted on GitHub. It includes instructions on how to build the final hosted plugin from the source.
