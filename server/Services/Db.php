@@ -25,7 +25,8 @@ class Db
         // Try to get the result from cache
         $result = wp_cache_get($cache_key, $cache_group);
         if ($result === false) {
-            $result = $wpdb->query($wpdb->prepare($query, ...$params));
+            $sql = $wpdb->prepare($query, ...$params);
+            $result = $wpdb->query($sql);
             // Store the result in cache
             wp_cache_set($cache_key, $result, $cache_group, 60);
         }
@@ -42,7 +43,8 @@ class Db
         // Try to get the result from cache
         $result = wp_cache_get($cache_key, $cache_group);
         if ($result === false) {
-            $result = $wpdb->get_results($wpdb->prepare($query, ...$params), $type);
+            $sql = $wpdb->prepare($query, ...$params);
+            $result = $wpdb->get_results($sql, $type);
             // Store the result in cache
             wp_cache_set($cache_key, $result, $cache_group, 60);
         }
