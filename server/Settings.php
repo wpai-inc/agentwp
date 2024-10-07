@@ -42,7 +42,7 @@ class Settings
 
     public function getOptionKey(): string
     {
-        return Main::SLUG.'_settings';
+        return Main::prefix('settings');
     }
 
     public function __get($name)

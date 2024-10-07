@@ -22,8 +22,6 @@ class IndexStatus
 
     public int $last_doc_id_indexed = 0;
 
-    public static string $statusKey = 'docs_indexing_status';
-
     private array $comparisonKeys = ['id', 'docType', 'total', 'indexed'];
 
     private array $states = [
@@ -71,7 +69,7 @@ class IndexStatus
 
     public static function getStatusKey(): string
     {
-        return Main::SLUG.'_'.self::$statusKey;
+        return Main::prefix('docs_indexing_status');
     }
 
     public function pause(): bool
