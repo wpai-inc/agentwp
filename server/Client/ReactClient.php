@@ -36,7 +36,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         foreach ($this->locations as $location) {
             if (! class_exists($location)) {
                 // Translators: %1$s is the location class name
-                throw new \Error(esc_html(printf(__('Location class does not exist: %1$s', 'agentwp'), $location)));
+                throw new \Error(sprintf(__('Location class does not exist: %1$s', 'agentwp'), esc_html($location)));
             }
             $setup = new $location($this);
             if ($setup && $setup->active()) {
@@ -126,7 +126,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                 <div class="no-js">
                 <?php
                     // Translators: This message is shown when JavaScript is disabled
-                    echo esc_html__(
+                    esc_html_e(
                         'Warning: AgentWP will not work properly without JavaScript, please enable it.',
                         'agentwp'
                     );
@@ -144,7 +144,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                     <p>
                         <?php
                             // Translators: This message is shown when the user does not have permission to access AgentWP
-                            echo esc_html__(
+                            esc_html_e(
                                 'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
                                 'agentwp'
                             );

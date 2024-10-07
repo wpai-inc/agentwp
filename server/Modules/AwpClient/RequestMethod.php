@@ -22,7 +22,7 @@ class RequestMethod
     {
         if (! in_array($method, self::all())) {
             // Translators: %1$s is the invalid request method.
-            throw new \Exception(esc_html(printf(__('Invalid request method: %1$s', 'agentwp'), $method)));
+            throw new \Exception(sprintf(__('Invalid request method: %1$s', 'agentwp'), \esc_attr($method)));
         }
 
         return $method;

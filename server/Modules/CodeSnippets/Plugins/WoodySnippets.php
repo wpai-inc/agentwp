@@ -1,8 +1,6 @@
 <?php
 /**
  * Snippet handler class for WPCode plugin.
- *
- * @package AgentWP
  */
 
 namespace WpAi\AgentWp\Modules\CodeSnippets\Plugins;
@@ -17,15 +15,11 @@ class WoodySnippets implements SnippetInterface
 {
     /**
      * Plugin name.
-     *
-     * @var string
      */
     public string $name = 'WoodySnippets';
 
     /**
      * Check if WPCode plugin is active.
-     *
-     * @return bool
      */
     public static function isActive(): bool
     {
@@ -34,8 +28,6 @@ class WoodySnippets implements SnippetInterface
 
     /**
      * Get the plugin name.
-     *
-     * @return string
      */
     public function name(): string
     {
@@ -74,9 +66,9 @@ class WoodySnippets implements SnippetInterface
         $post_id = wp_insert_post($data);
         if (! $post_id || is_wp_error($post_id)) {
             // Translators: %1$s is the error message returned by wp_insert_post.
-            throw new Exception(esc_html(printf(__('Failed to add Woody Snippets snippet: %1$s', 'agentwp'), $post_id->get_error_message())));
+            throw new Exception(sprintf(__('Failed to add Woody Snippets snippet: %1$s', 'agentwp'), esc_html($post_id->get_error_message())));
         }
 
-        return esc_url(admin_url('post.php?post='.$post_id.'&action=edit'));
+        return admin_url(sprintf('post.php?post=%d&action=edit', \absint($post_id)));
     }
 }
