@@ -26,7 +26,7 @@ class SearchQuery extends BaseController
         $hybrid = new HybridSearch($q);
 
         $searchRes = $this->main->client()->search([
-            'query' => $q,
+            'query' => sanitize_text_field($q),
             'wpResults' => $hybrid->searchWp(),
         ]);
 
@@ -49,9 +49,7 @@ class SearchQuery extends BaseController
                     $finalResponse['summary'] = $summarizeRes['summary'];
                 }
             } else {
-                $finalResponse['summary'] = <<<EOT
-                The query for "$q" returned no results, indicating that there are no entries or relevant data associated with that term.
-                EOT;
+                $finalResponse['summary'] = 'The query for "'.esc_textarea($q).'" returned no results, indicating that there are no entries or relevant data associated with that term.';
             }
 
             return $finalResponse;

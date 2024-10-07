@@ -20,10 +20,7 @@ class DashboardWidget extends ReactClient
     {
         wp_add_dashboard_widget(
             $this->pageName, // Widget slug.
-            <<<'EOT'
-                <!-- @todo: SVG Logo to be embedded here -->
-                AgentWP
-            EOT,
+            '<!-- @todo: SVG Logo to be embedded here --> AgentWP',
             [$this, 'appRoot']  // Display function.
         );
     }
