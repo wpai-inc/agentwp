@@ -130,7 +130,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                         'Warning: AgentWP will not work properly without JavaScript, please enable it.',
                         'agentwp'
                     );
-                ?>
+            ?>
                 </div>
             </noscript>
             <div id="<?php echo esc_attr($this->slug()) ?>"></div>
@@ -174,7 +174,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             [
                 'page' => $this->slug(),
                 'url' => $this->main->url(),
-                'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),
             ],
             $this->globalData(),
             $this->data(),

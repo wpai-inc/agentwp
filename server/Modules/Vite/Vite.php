@@ -66,7 +66,7 @@ class Vite
          * @param  string  $manifest_path  Manifest file path.
          * @param  bool  $is_dev  Whether this is a manifest for development assets.
          */
-        $manifest = apply_filters('vite_for_wp__manifest_data', $manifest, $manifest_dir, $manifest_path);
+        $manifest = apply_filters('agentwp_vite__manifest_data', $manifest, $manifest_dir, $manifest_path);
 
         $manifests[$manifest_path] = (object) [
             'data' => $manifest,
@@ -183,13 +183,13 @@ class Vite
 
         $react_refresh_script_src = $this->generate_development_asset_src($manifest, '@react-refresh');
         $script_position = 'after';
-        $script = '
-import RefreshRuntime from "'.$react_refresh_script_src.'";
+        $script = <<< EOS
+import RefreshRuntime from "{$react_refresh_script_src}";
 RefreshRuntime.injectIntoGlobalHook(window);
-window.$RefreshReg$ = () => {};
-window.$RefreshSig$ = () => (type) => type;
+window.\$RefreshReg$ = () => {};
+window.\$RefreshSig$ = () => (type) => type;
 window.__vite_plugin_react_preamble_installed__ = true;
-';
+EOS;
 
         wp_add_inline_script(self::VITE_CLIENT_SCRIPT_HANDLE, $script, $script_position);
         add_filter(
@@ -249,7 +249,7 @@ window.__vite_plugin_react_preamble_installed__ = true;
          * @param  string  $entry  Entrypoint file.
          * @param  array  $options  Enqueue options.
          */
-        $assets = apply_filters('vite_for_wp__development_assets', $assets, $manifest, $entry, $options);
+        $assets = apply_filters('agentwp_vite__development_assets', $assets, $manifest, $entry, $options);
 
         return $assets;
     }
@@ -325,7 +325,7 @@ window.__vite_plugin_react_preamble_installed__ = true;
          * @param  string  $entry  Entrypoint file.
          * @param  array  $options  Enqueue options.
          */
-        $assets = apply_filters('vite_for_wp__production_assets', $assets, $manifest, $entry, $options);
+        $assets = apply_filters('agentwp_vite__production_assets', $assets, $manifest, $entry, $options);
 
         return $assets;
     }
