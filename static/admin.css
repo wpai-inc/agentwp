@@ -28,3 +28,14 @@
 .agentwp-default-notification {
   background: #0e876a;
 }
+
+.agentwp-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+  color: #495057;
+}
