@@ -36,7 +36,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         foreach ($this->locations as $location) {
             if (! class_exists($location)) {
                 // Translators: %1$s is the location class name
-                throw new \Error(sprintf(__('Location class does not exist: %1$s', 'agentwp'), esc_html($location)));
+                throw new \Error(esc_html(sprintf(__('Location class does not exist: %1$s', 'agentwp'), $location)));
             }
             $setup = new $location($this);
             if ($setup && $setup->active()) {

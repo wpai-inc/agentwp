@@ -66,7 +66,7 @@ class WoodySnippets implements SnippetInterface
         $post_id = wp_insert_post($data);
         if (! $post_id || is_wp_error($post_id)) {
             // Translators: %1$s is the error message returned by wp_insert_post.
-            throw new Exception(sprintf(__('Failed to add Woody Snippets snippet: %1$s', 'agentwp'), esc_html($post_id->get_error_message())));
+            throw new Exception(esc_html(sprintf(__('Failed to add Woody Snippets snippet: %1$s', 'agentwp'), $post_id->get_error_message())));
         }
 
         return admin_url(sprintf('post.php?post=%d&action=edit', \absint($post_id)));

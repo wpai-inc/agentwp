@@ -48,14 +48,14 @@ class Vite
 
         if (! isset($manifest_path)) {
             // Translators: %1$s is the manifest directory path.
-            throw new Exception(sprintf(__('[Vite] No manifest found in %1$s.', 'agentwp'), esc_html($manifest_dir)));
+            throw new Exception(esc_html(sprintf(__('[Vite] No manifest found in %1$s.', 'agentwp'), $manifest_dir)));
         }
 
         $manifest = wp_json_file_decode($manifest_path);
 
         if (! $manifest) {
             // Translators: %1$s is the manifest file path.
-            throw new Exception(sprintf(__('[Vite] Failed to read manifest file %1$s.', 'agentwp'), esc_html($manifest_path)));
+            throw new Exception(esc_html(sprintf(__('[Vite] Failed to read manifest file %1$s.', 'agentwp'), $manifest_path)));
         }
 
         /**
@@ -270,7 +270,7 @@ window.__vite_plugin_react_preamble_installed__ = true;';
         if (! isset($manifest->data->{$entry})) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 // Translators: %1$s is the entry point name.
-                wp_die(sprintf(__('[Vite] Entry %1$s not found.', 'agentwp'), esc_html($entry)));
+                wp_die(esc_html(sprintf(__('[Vite] Entry %1$s not found.', 'agentwp'), $entry)));
             }
 
             return null;
