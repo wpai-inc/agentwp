@@ -69,11 +69,16 @@ class DocPost extends Doc
         return Db::getResults("
             SELECT p.ID, p.post_parent, p.post_date, p.post_modified, p.post_title, p.post_content
             FROM {$wpdb->posts} p
-            WHERE p.post_type = 'post' AND p.post_status = 'publish'
-            AND p.ID > {$last_doc_id_indexed}
+            WHERE p.post_type = %s AND p.post_status = %s
+            AND p.ID > %d
             ORDER BY p.ID ASC
-            LIMIT {$batch_amount}
-        ");
+            LIMIT %d
+        ", [
+            'post',
+            'publish',
+            $last_doc_id_indexed,
+            $batch_amount,
+        ]);
     }
 
     private function getPostMeta(int $postId): array
@@ -83,8 +88,8 @@ class DocPost extends Doc
         $meta = Db::getResults("
             SELECT meta_id, meta_key, meta_value
             FROM {$wpdb->postmeta}
-            WHERE post_id = {$postId}
-        ");
+            WHERE post_id = %d
+        ", [$postId]);
 
         return array_map(function ($meta) {
             return [
@@ -102,8 +107,8 @@ class DocPost extends Doc
         $comments = Db::getResults("
             SELECT comment_ID, comment_content
             FROM {$wpdb->comments}
-            WHERE comment_post_ID = {$postId}
-        ");
+            WHERE comment_post_ID = %d
+        ", [$postId]);
 
         return array_map(function ($comment) {
             return [
