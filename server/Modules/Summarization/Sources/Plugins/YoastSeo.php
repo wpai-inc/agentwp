@@ -2,9 +2,6 @@
 
 namespace WpAi\AgentWp\Modules\Summarization\Sources\Plugins;
 
-ini_set('allow_url_include', 1);
-ini_set('allow_url_fopen', 1);
-
 use WpAi\AgentWp\Modules\Summarization\Sources\SourceInterface;
 
 class YoastSeo implements SourceInterface
