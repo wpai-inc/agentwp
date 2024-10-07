@@ -37,18 +37,6 @@ class ConnectNotice implements Registrable
             <p><?php esc_html_e('To use AgentWP, please complete the onboarding and configuration!', 'agentwp'); ?></p>
             <a href="<?php echo esc_url($this->main->settingsPageUrl); ?>" class="button button-primary button-large"><?php esc_html_e('Set Up AgentWP', 'agentwp'); ?></a>
         </div>
-        <style>
-            .agentwp-notice {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 1rem;
-                padding: 1rem;
-                background-color: #f8f9fa;
-                border-radius: 0.25rem;
-                color: #495057;
-            }
-        </style>
-<?php
+        <?php
     }
 }
