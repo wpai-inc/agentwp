@@ -13,10 +13,8 @@ trait HasPage
 
     public function updateFooter(): string
     {
-        return <<<HTML
-            <div style="float: right; padding-left: 12px">
-            Made with love ❤️ by the <a href="{$this->main->attributionUrl}" target="_blank">{$this->main->companyName}</a>
-            </div>
-        HTML;
+        return sprintf('<div style="float: right; padding-left: 12px">
+            Made with love ❤️ by the <a href="%s" target="_blank">%s</a>
+            </div>', \esc_attr($this->main->attributionUrl), esc_html($this->main->companyName));
     }
 }

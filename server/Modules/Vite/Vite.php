@@ -183,13 +183,13 @@ class Vite
 
         $react_refresh_script_src = $this->generate_development_asset_src($manifest, '@react-refresh');
         $script_position = 'after';
-        $script = <<< EOS
-import RefreshRuntime from "{$react_refresh_script_src}";
+        $script = '
+import RefreshRuntime from "'.$react_refresh_script_src.'";
 RefreshRuntime.injectIntoGlobalHook(window);
-window.\$RefreshReg$ = () => {};
-window.\$RefreshSig$ = () => (type) => type;
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;
 window.__vite_plugin_react_preamble_installed__ = true;
-EOS;
+';
 
         wp_add_inline_script(self::VITE_CLIENT_SCRIPT_HANDLE, $script, $script_position);
         add_filter(
