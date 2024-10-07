@@ -24,7 +24,7 @@ class ConnectNotice implements Registrable
             return;
         }
 
-        $current_page = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI']));
+        $current_page = \sanitize_url(wp_unslash($_SERVER['REQUEST_URI']));
         if (! $this->main->settings->isConnected() && $current_page === $this->main->settingsPageUrl) {
             add_action('admin_notices', [$this, 'admin_notice_install']);
         }

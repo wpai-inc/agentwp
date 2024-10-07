@@ -1,8 +1,6 @@
 <?php
 /**
  * Snippet handler class for CodeSnippets plugin.
- *
- * @package AgentWP
  */
 
 namespace WpAi\AgentWp\Modules\CodeSnippets\Plugins;
@@ -18,8 +16,6 @@ class CodeSnippets implements SnippetInterface
 {
     /**
      * Plugin name.
-     *
-     * @var string
      */
     public string $name = 'CodeSnippets';
 
@@ -51,8 +47,6 @@ class CodeSnippets implements SnippetInterface
 
     /**
      * Plugin name.
-     *
-     * @return string
      */
     public function name(): string
     {
@@ -61,8 +55,6 @@ class CodeSnippets implements SnippetInterface
 
     /**
      * Check if WPCode plugin is active.
-     *
-     * @return bool
      */
     public static function isActive(): bool
     {
@@ -99,7 +91,7 @@ class CodeSnippets implements SnippetInterface
         $result = $this->wpdb->insert($this->table_name, $data);
         if ($result === false) {
             // Translators: %1$s is the error message returned by the database.
-            throw new Exception(esc_html(printf(__('Failed to add CodeSnippets snippet: %1$s', 'agentwp'), $this->wpdb->last_error)));
+            throw new Exception(esc_html(sprintf(__('Failed to add CodeSnippets snippet: %1$s', 'agentwp'), $this->wpdb->last_error)));
         }
 
         return admin_url('admin.php?page=edit-snippet&id='.$this->wpdb->insert_id);

@@ -21,12 +21,12 @@ class ProviderRegistry
         foreach ($providers as $class) {
             if (! class_exists($class)) {
                 // Translators: %1$s is the class name that does not exist.
-                throw new \Exception(esc_html(printf(__('Class %1$s does not exist', 'agentwp'), $class)));
+                throw new \Exception(esc_html(sprintf(__('Class %1$s does not exist', 'agentwp'), $class)));
             }
 
             if (! is_a($class, Registrable::class, true)) {
                 // Translators: %1$s is the class name that does not implement Registrable.
-                throw new \Exception(esc_html(printf(__('Class %1$s does not implement Registrable', 'agentwp'), $class)));
+                throw new \Exception(esc_html(sprintf(__('Class %1$s does not implement Registrable', 'agentp'), $class)));
             }
 
             (new $class($this->main))->register();
