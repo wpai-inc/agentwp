@@ -2,7 +2,6 @@
 
 namespace WpAi\AgentWp\Page\Admin;
 
-use Symfony\Component\HttpFoundation\Request;
 use WpAi\AgentWp\Client\ReactClient;
 use WpAi\AgentWp\Http\HttpRequest;
 use WpAi\AgentWp\Main;
@@ -19,6 +18,7 @@ class Settings extends ReactClient
     protected array $locations = [
         \WpAi\AgentWp\Client\Locations\Settings::class,
     ];
+
     private HttpRequest $request;
 
     public function __construct(Main $main)
@@ -56,7 +56,6 @@ class Settings extends ReactClient
             ];
         }
 
-        $this->hasFooter();
         $this
             ->icon($this->main->staticAsset('icon.svg'))
             ->position(4)

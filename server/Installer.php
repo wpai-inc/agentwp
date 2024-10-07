@@ -40,7 +40,7 @@ class Installer implements Registrable
 
         (new IndexSiteData($this->main))->scheduleNow('autoUpdate');
 
-        set_transient('agentwp_installing', 'yes', MINUTE_IN_SECONDS * 10);
+        set_transient(MAIN::prefix('installing'), 'yes', MINUTE_IN_SECONDS * 10);
 
         if (! defined('WP_CLI') || ! WP_CLI) {
             add_action('shutdown', [$this, 'redirect']);

@@ -27,15 +27,15 @@ $awpPrivateRepo = PucFactory::buildUpdateChecker(
 );
 $awpPrivateRepo->setBranch('main');
 
-register_activation_hook(__FILE__, 'bootAgentWP');
-register_deactivation_hook(__FILE__, 'bootAgentWP');
-add_action('plugins_loaded', 'bootAgentWP');
+register_activation_hook(__FILE__, 'agentwp_boot_plugin');
+register_deactivation_hook(__FILE__, 'agentwp_boot_plugin');
+add_action('plugins_loaded', 'agentwp_boot_plugin');
 
 /**
  * Registers all the service providers
  * with a Main dependency.
  */
-function bootAgentWP(): void
+function agentwp_boot_plugin(): void
 {
     $main = \WpAi\AgentWp\Main::getInstance(__FILE__);
     $registry = (new \WpAi\AgentWp\ProviderRegistry($main));

@@ -2,6 +2,8 @@
 
 namespace WpAi\AgentWp\Services;
 
+use WpAi\AgentWp\Main;
+
 class Cache
 {
     private string $hash;
@@ -16,7 +18,7 @@ class Cache
     public function __construct(string $id, $data = null)
     {
         $this->data = $data;
-        $this->key = "agentwp_{$id}";
+        $this->key = Main::prefix($id);
         $this->hash = md5(wp_json_encode($data));
     }
 

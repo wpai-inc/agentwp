@@ -36,7 +36,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         foreach ($this->locations as $location) {
             if (! class_exists($location)) {
                 // Translators: %1$s is the location class name
-                throw new \Error(esc_html(printf(__('Location class does not exist: %1$s', 'agentwp'), $location)));
+                throw new \Error(esc_html(sprintf(__('Location class does not exist: %1$s', 'agentwp'), $location)));
             }
             $setup = new $location($this);
             if ($setup && $setup->active()) {
@@ -126,11 +126,11 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                 <div class="no-js">
                 <?php
                     // Translators: This message is shown when JavaScript is disabled
-                    echo esc_html__(
+                    esc_html_e(
                         'Warning: AgentWP will not work properly without JavaScript, please enable it.',
                         'agentwp'
                     );
-                ?>
+            ?>
                 </div>
             </noscript>
             <div id="<?php echo esc_attr($this->slug()) ?>"></div>
@@ -144,7 +144,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                     <p>
                         <?php
                             // Translators: This message is shown when the user does not have permission to access AgentWP
-                            echo esc_html__(
+                            esc_html_e(
                                 'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
                                 'agentwp'
                             );
@@ -155,7 +155,8 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                         <ul>
                             <?php
                 foreach ($managers as $manager) {
-                    echo '<li>'.esc_html($manager->data->display_name).' ('.esc_html($manager->data->user_email).')</li>';
+                    echo esc_html('<li>'.
+                    $manager->data->display_name.' ('.$manager->data->user_email.')</li>');
                 }
             ?>
                         </ul>
@@ -174,7 +175,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             [
                 'page' => $this->slug(),
                 'url' => $this->main->url(),
-                'notice_visible' => boolval(get_option('codewpai_notice_visible', 1)),
             ],
             $this->globalData(),
             $this->data(),

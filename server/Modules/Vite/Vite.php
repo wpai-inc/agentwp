@@ -48,14 +48,14 @@ class Vite
 
         if (! isset($manifest_path)) {
             // Translators: %1$s is the manifest directory path.
-            throw new Exception(esc_html(printf(__('[Vite] No manifest found in %1$s.', 'agentwp'), $manifest_dir)));
+            throw new Exception(esc_html(sprintf(__('[Vite] No manifest found in %1$s.', 'agentwp'), $manifest_dir)));
         }
 
         $manifest = wp_json_file_decode($manifest_path);
 
         if (! $manifest) {
             // Translators: %1$s is the manifest file path.
-            throw new Exception(esc_html(printf(__('[Vite] Failed to read manifest file %1$s.', 'agentwp'), $manifest_path)));
+            throw new Exception(esc_html(sprintf(__('[Vite] Failed to read manifest file %1$s.', 'agentwp'), $manifest_path)));
         }
 
         /**
@@ -66,7 +66,7 @@ class Vite
          * @param  string  $manifest_path  Manifest file path.
          * @param  bool  $is_dev  Whether this is a manifest for development assets.
          */
-        $manifest = apply_filters('vite_for_wp__manifest_data', $manifest, $manifest_dir, $manifest_path);
+        $manifest = apply_filters('agentwp_vite__manifest_data', $manifest, $manifest_dir, $manifest_path);
 
         $manifests[$manifest_path] = (object) [
             'data' => $manifest,
@@ -183,13 +183,12 @@ class Vite
 
         $react_refresh_script_src = $this->generate_development_asset_src($manifest, '@react-refresh');
         $script_position = 'after';
-        $script = <<< EOS
-import RefreshRuntime from "{$react_refresh_script_src}";
+        $script = '
+import RefreshRuntime from "'.$react_refresh_script_src.'";
 RefreshRuntime.injectIntoGlobalHook(window);
-window.\$RefreshReg$ = () => {};
-window.\$RefreshSig$ = () => (type) => type;
-window.__vite_plugin_react_preamble_installed__ = true;
-EOS;
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;
+window.__vite_plugin_react_preamble_installed__ = true;';
 
         wp_add_inline_script(self::VITE_CLIENT_SCRIPT_HANDLE, $script, $script_position);
         add_filter(
@@ -249,7 +248,7 @@ EOS;
          * @param  string  $entry  Entrypoint file.
          * @param  array  $options  Enqueue options.
          */
-        $assets = apply_filters('vite_for_wp__development_assets', $assets, $manifest, $entry, $options);
+        $assets = apply_filters('agentwp_vite__development_assets', $assets, $manifest, $entry, $options);
 
         return $assets;
     }
@@ -271,7 +270,7 @@ EOS;
         if (! isset($manifest->data->{$entry})) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 // Translators: %1$s is the entry point name.
-                wp_die(esc_html(printf(__('[Vite] Entry %1$s not found.', 'agentwp'), $entry)));
+                wp_die(esc_html(sprintf(__('[Vite] Entry %1$s not found.', 'agentwp'), $entry)));
             }
 
             return null;
@@ -325,7 +324,7 @@ EOS;
          * @param  string  $entry  Entrypoint file.
          * @param  array  $options  Enqueue options.
          */
-        $assets = apply_filters('vite_for_wp__production_assets', $assets, $manifest, $entry, $options);
+        $assets = apply_filters('agentwp_vite__production_assets', $assets, $manifest, $entry, $options);
 
         return $assets;
     }

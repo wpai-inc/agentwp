@@ -2,22 +2,31 @@
 
 namespace WpAi\AgentWp\Services;
 
+use WpAi\AgentWp\Main;
+
 class Db
 {
+    public static function cacheGroup(): string
+    {
+        return Main::SLUG.'_custom_db_queries';
+    }
+
+    public static function cacheKey(string $query, array $params, string $type = ''): string
+    {
+        return md5($query.serialize($params).$type);
+    }
+
     public static function query($query, $params = [])
     {
         global $wpdb;
-        $cache_key = md5($query.serialize($params));
-        $cache_group = 'custom_db_queries';
+        $cache_key = self::cacheKey($query, $params);
+        $cache_group = self::cacheGroup();
 
         // Try to get the result from cache
         $result = wp_cache_get($cache_key, $cache_group);
         if ($result === false) {
-            if (empty($params)) {
-                $result = $wpdb->get_results($query);
-            } else {
-                $result = $wpdb->query($wpdb->prepare($query, ...$params));
-            }
+            $sql = $wpdb->prepare($query, ...$params);
+            $result = $wpdb->query($sql);
             // Store the result in cache
             wp_cache_set($cache_key, $result, $cache_group, 60);
         }
@@ -28,17 +37,14 @@ class Db
     public static function getResults($query, $params = [], $type = OBJECT)
     {
         global $wpdb;
-        $cache_key = md5($query.serialize($params).$type);
-        $cache_group = 'custom_db_queries';
+        $cache_key = self::cacheKey($query, $params, $type);
+        $cache_group = self::cacheGroup();
 
         // Try to get the result from cache
         $result = wp_cache_get($cache_key, $cache_group);
         if ($result === false) {
-            if (empty($params)) {
-                $result = $wpdb->get_results($query, $type);
-            } else {
-                $result = $wpdb->get_results($wpdb->prepare($query, ...$params), $type);
-            }
+            $sql = $wpdb->prepare($query, ...$params);
+            $result = $wpdb->get_results($sql, $type);
             // Store the result in cache
             wp_cache_set($cache_key, $result, $cache_group, 60);
         }

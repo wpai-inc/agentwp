@@ -65,6 +65,11 @@ class Main
         return self::$instance;
     }
 
+    public static function prefix(string $string): string
+    {
+        return self::SLUG.'_'.$string;
+    }
+
     public function buildPath(): string
     {
         return $this->path(self::BUILD_DIR);
