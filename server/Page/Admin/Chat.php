@@ -21,7 +21,7 @@ class Chat extends ReactClient
         }
 
         $matched = false;
-        $requestUri = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI']));
+        $requestUri = \sanitize_url(wp_unslash($_SERVER['REQUEST_URI']));
         foreach ($this->restrictedUrls() as $pattern) {
             if (preg_match('#'.str_replace('#', '\#', $pattern).'#', $requestUri)) {
                 $matched = true;
