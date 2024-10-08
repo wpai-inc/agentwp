@@ -26,6 +26,7 @@ if [ -n "$PLUGIN_FILE" ]; then
     fi
 
     cp "$PLUGIN_FILE" "$BUILDS_FOLDER/main.zip"
+    cp -f "$PLUGIN_FILE" "$CURRENT_DIR/agentwp.zip"
 
     if [ -f "$BUILDS_FOLDER/$PLUGIN_FILENAME" ]; then
         rm "$BUILDS_FOLDER/$PLUGIN_FILENAME"
