@@ -21,8 +21,7 @@
   "require": {
     "php": ">=7.4",
     "guzzlehttp/guzzle": "^7.0",
-    "symfony/http-foundation": "^5.0",
-    "yahnis-elsts/plugin-update-checker": "^5.4"
+    "symfony/http-foundation": "^5.0"
   },
   "config": {
     "platform": {

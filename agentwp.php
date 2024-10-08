@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Plugin Name: AgentWP
  * Plugin URI: https://agentwp.com
  * Description: Adds a AI Agent to your WordPress installation.
- * Version: 0.3.0
+ * Version: 1.0.0
  * Author: WPAI Inc.
  * Author URI: https://wpai.co
  * License: GPLv3
@@ -17,15 +16,6 @@
 defined('ABSPATH') || exit;
 
 require_once __DIR__.'/vendor/autoload.php';
-
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
-
-$awpPrivateRepo = PucFactory::buildUpdateChecker(
-    'https://github.com/wpai-inc/agentwp/',
-    __FILE__,
-    'agentwp'
-);
-$awpPrivateRepo->setBranch('main');
 
 register_activation_hook(__FILE__, 'agentwp_boot_plugin');
 register_deactivation_hook(__FILE__, 'agentwp_boot_plugin');
