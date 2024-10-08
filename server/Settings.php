@@ -98,8 +98,7 @@ class Settings
             $token['expires_at'] = time() + (int) $token['expires_in'];
         }
 
-        $summarizer = (new IndexSiteSummary($this->main));
-        $summarizer->scheduleNow('autoUpdate');
+        do_action('agentwp_set_access_token', []);
 
         return $this->set('token', $token);
     }
