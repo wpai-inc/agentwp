@@ -64,6 +64,7 @@ class Installer implements Registrable
         $key = Main::SLUG;
         $this->main->settings->delete('general_settings');
         delete_option($key.'_summary');
+        delete_option($key.'_site_summary');
         delete_option($key.'_site_data');
         global $wpdb;
 
