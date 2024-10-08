@@ -53,7 +53,7 @@ class Installer implements Registrable
         SiteSummarizer::invalidate();
         IndexSiteSummary::clearSchedules(['autoUpdate']);
 
-        if ($this->main->settings->get('general_settings.cleanup_after_deactivate')) {
+        if ($this->main->settings->get('general_settings.cleanup_after_deactivate') !== false) {
             $this->main->settings->disconnectSite($this->main);
             $this->cleanup_plugin_data();
         }
