@@ -1,12 +1,12 @@
-=== AgentWP ===  
+=== AgentWP ===
 Contributors: codewp, ovidiu-galatan, freshbrewedweb, isotropic
-Tags: ai, agent, chatbot  
-Requires at least: 6.4  
-Tested up to: 6.6  
-Stable tag: 0.3.0
-Requires PHP: 7.4  
-License: GPLv3  
-License URI: http://www.gnu.org/licenses/gpl-3.0.html  
+Tags: ai, agent, chatbot
+Requires at least: 6.4
+Tested up to: 6.6
+Stable tag: 0.3.1
+Requires PHP: 7.4
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 AgentWP is an intelligent, multilingual AI assistant designed specifically for WordPress sites.
 
