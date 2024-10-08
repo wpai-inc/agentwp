@@ -76,9 +76,7 @@ export default function Chat() {
     onDrag,
     isDragging,
     onChatWindowResize,
-    // maximizeWindow,
     isMaximized,
-    // restoreWindow,
     minSize,
     toggleMaximizeRestore,
   } = usePosition( {
@@ -160,26 +158,6 @@ export default function Chat() {
     }
   }
 
-  // function handleMaximize() {
-  //   setShouldAnimate( true );
-  //   maximizeWindow();
-
-  //   setTimeout( () => {
-  //     setShouldAnimate( false );
-  //   }, 500 );
-  // }
-
-  // function handleRestore() {
-  //   restoringRef.current = true;
-  //   setShouldAnimate( true );
-  //   restoreWindow();
-
-  //   setTimeout( () => {
-  //     restoringRef.current = false;
-  //     setShouldAnimate( false );
-  //   }, 500 );
-  // }
-
   function handleMaximizeRestoreToggle() {
     restoringRef.current = true;
     setShouldAnimate( true );
@@ -208,8 +186,6 @@ export default function Chat() {
               toggle={ toggle }
               handleDrag={ onDrag }
               isMaximized={ isMaximized }
-              // maximizeWindow={ handleMaximize }
-              // restoreWindow={ handleRestore }
               toggleMaximizeRestore={ handleMaximizeRestoreToggle }
             />
             <ChatCore handleDrag={ onDrag } />

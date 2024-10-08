@@ -18,16 +18,12 @@ const Corners = () => {
 export default function WindowActions( {
   toggle,
   handleDrag,
-  maximizeWindow,
-  restoreWindow,
   isMaximized,
   toggleMaximizeRestore,
   ...props
 }: {
   toggle: () => void;
   onMouseEnter?: () => void;
-  maximizeWindow?: () => void;
-  restoreWindow?: () => void;
   isMaximized?: boolean;
   toggleMaximizeRestore?: () => void;
   handleDrag: ( e: MouseEvent ) => void;

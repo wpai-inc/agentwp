@@ -245,29 +245,6 @@ export const usePosition = ( {
     }
   }, [ offset, isResizing, position ] );
 
-  /**
-   * Functions
-   */
-  // const maximizeWindow = useCallback( () => {
-  //   setMaximization( {
-  //     isMaximized: true,
-  //     position,
-  //     size,
-  //   } );
-  //   const { width, height } = calculateBoundaries();
-  //   setPosition( { right: 20, bottom: 20 } );
-  //   setSize( { width, height } );
-  // }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
-
-  // const restoreWindow = useCallback( () => {
-  //   if ( maximization ) {
-  //     const { position, size } = maximization;
-  //     setPosition( position );
-  //     setSize( size );
-  //     setMaximization( undefined );
-  //   }
-  // }, [ maximization, position ] );
-
   const toggleMaximizeRestore = useCallback( () => {
     if ( checkIsMaximized() ) {
       const { position, size } = getMinimizeParams();
@@ -321,8 +298,6 @@ export const usePosition = ( {
     setIsMaximized( checkIsMaximized() );
   }, [ size, calculateBoundaries, position ] );
 
-  // const isMaximized = maximization?.isMaximized ? true : false;
-
   /**
    * Mouse Handler Listeners
    */
@@ -364,8 +339,6 @@ export const usePosition = ( {
     isDragging,
     isResizing,
     chatWindowContainer,
-    // maximizeWindow,
-    // restoreWindow,
     isMaximized,
     offset,
     minSize,
