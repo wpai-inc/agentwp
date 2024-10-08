@@ -1,7 +1,7 @@
 {
   "name": "agentwp",
   "private": true,
-  "version": "1.0.1",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

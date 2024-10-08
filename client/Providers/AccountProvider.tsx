@@ -1,5 +1,5 @@
 /**
- * @since 1.0.1
+ * @since 0.3.0
  */
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { useRestRequest } from './RestRequestProvider';
