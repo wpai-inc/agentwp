@@ -290,7 +290,7 @@ export const usePosition = ( {
 
   const checkIsMaximized = () => {
     const { width, height } = calculateBoundaries();
-    if ( size.width >= width && size.height >= height ) {
+    if ( Math.abs( size.width - width ) <= 5 && Math.abs( size.height - height ) <= 5 ) {
       return true;
     } else {
       return false;
