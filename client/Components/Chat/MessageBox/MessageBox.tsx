@@ -59,13 +59,22 @@ export default function MessageBox() {
     }
   }
 
+  let isSubmitting = false;
   function handleMessageKeyDown( e: KeyboardEvent ) {
     if ( e.key === 'ArrowUp' || e.key === 'ArrowDown' ) {
       e.preventDefault();
       setCommandMenuFocused( true );
     } else if ( e.key === 'Enter' && ! e.metaKey && ! e.ctrlKey && ! e.shiftKey && ! e.altKey ) {
       e.preventDefault();
-      sendMessage( message );
+
+      if ( ! isSubmitting ) {
+        isSubmitting = true;
+        sendMessage( message );
+
+        setTimeout( () => {
+          isSubmitting = false;
+        }, 300 );
+      }
     } else {
       setCommandMenuFocused( false );
     }
