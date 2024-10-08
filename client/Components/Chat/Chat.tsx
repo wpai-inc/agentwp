@@ -76,10 +76,11 @@ export default function Chat() {
     onDrag,
     isDragging,
     onChatWindowResize,
-    maximizeWindow,
+    // maximizeWindow,
     isMaximized,
-    restoreWindow,
+    // restoreWindow,
     minSize,
+    toggleMaximizeRestore,
   } = usePosition( {
     chatWindowRef: scope,
   } );
@@ -159,19 +160,30 @@ export default function Chat() {
     }
   }
 
-  function handleMaximize() {
-    setShouldAnimate( true );
-    maximizeWindow();
+  // function handleMaximize() {
+  //   setShouldAnimate( true );
+  //   maximizeWindow();
 
-    setTimeout( () => {
-      setShouldAnimate( false );
-    }, 500 );
-  }
+  //   setTimeout( () => {
+  //     setShouldAnimate( false );
+  //   }, 500 );
+  // }
 
-  function handleRestore() {
+  // function handleRestore() {
+  //   restoringRef.current = true;
+  //   setShouldAnimate( true );
+  //   restoreWindow();
+
+  //   setTimeout( () => {
+  //     restoringRef.current = false;
+  //     setShouldAnimate( false );
+  //   }, 500 );
+  // }
+
+  function handleMaximizeRestoreToggle() {
     restoringRef.current = true;
     setShouldAnimate( true );
-    restoreWindow();
+    toggleMaximizeRestore();
 
     setTimeout( () => {
       restoringRef.current = false;
@@ -196,8 +208,9 @@ export default function Chat() {
               toggle={ toggle }
               handleDrag={ onDrag }
               isMaximized={ isMaximized }
-              maximizeWindow={ handleMaximize }
-              restoreWindow={ handleRestore }
+              // maximizeWindow={ handleMaximize }
+              // restoreWindow={ handleRestore }
+              toggleMaximizeRestore={ handleMaximizeRestoreToggle }
             />
             <ChatCore handleDrag={ onDrag } />
             <ResizeHandles resizeHandler={ onChatWindowResize } />

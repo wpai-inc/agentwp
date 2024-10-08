@@ -56,6 +56,7 @@ export const usePosition = ( {
   } );
   const [ offset, setOffset ] = useState< TwoDCoord >( { x: 0, y: 0 } );
   const minSize = { width: 400, height: 400 };
+  const [ isMaximized, setIsMaximized ] = useState( false );
 
   /**
    * Calculate boundaries based on parent element and window size
@@ -247,27 +248,80 @@ export const usePosition = ( {
   /**
    * Functions
    */
-  const maximizeWindow = useCallback( () => {
-    setMaximization( {
-      isMaximized: true,
-      position,
-      size,
-    } );
-    const { width, height } = calculateBoundaries();
-    setPosition( { right: 20, bottom: 20 } );
-    setSize( { width, height } );
-  }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
+  // const maximizeWindow = useCallback( () => {
+  //   setMaximization( {
+  //     isMaximized: true,
+  //     position,
+  //     size,
+  //   } );
+  //   const { width, height } = calculateBoundaries();
+  //   setPosition( { right: 20, bottom: 20 } );
+  //   setSize( { width, height } );
+  // }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
 
-  const restoreWindow = useCallback( () => {
-    if ( maximization ) {
-      const { position, size } = maximization;
+  // const restoreWindow = useCallback( () => {
+  //   if ( maximization ) {
+  //     const { position, size } = maximization;
+  //     setPosition( position );
+  //     setSize( size );
+  //     setMaximization( undefined );
+  //   }
+  // }, [ maximization, position ] );
+
+  const toggleMaximizeRestore = useCallback( () => {
+    if ( checkIsMaximized() ) {
+      const { position, size } = getMinimizeParams();
       setPosition( position );
       setSize( size );
       setMaximization( undefined );
-    }
-  }, [ maximization, position ] );
+    } else {
+      setMaximization( {
+        isMaximized: true,
+        position,
+        size,
+      } );
+      const { width, height } = calculateBoundaries();
+      console.log( width, height );
 
-  const isMaximized = maximization?.isMaximized ? true : false;
+      setPosition( { right: 20, bottom: 20 } );
+      setSize( { width, height: height } );
+    }
+  }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
+
+  const checkIsMaximized = () => {
+    const { width, height } = calculateBoundaries();
+    if ( size.width >= width && size.height >= height ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getMinimizeParams = () => {
+    const defaults = {
+      position: { right: 16, bottom: 16 },
+      size: { width: 400, height: 800 },
+    };
+
+    if ( ! maximization ) {
+      return defaults;
+    }
+
+    const { width, height } = calculateBoundaries();
+    const { size } = maximization;
+
+    if ( size.width >= width && size.height >= height ) {
+      return defaults;
+    }
+
+    return maximization;
+  };
+
+  useEffect( () => {
+    setIsMaximized( checkIsMaximized() );
+  }, [ size, calculateBoundaries, position ] );
+
+  // const isMaximized = maximization?.isMaximized ? true : false;
 
   /**
    * Mouse Handler Listeners
@@ -298,6 +352,7 @@ export const usePosition = ( {
    * Persist to local settings
    */
   useEffect( () => {
+    // @ts-ignore
     setSettings( settings => ( { ...settings, ...position, ...size } ) );
   }, [ position, setSettings, size, setSize ] );
 
@@ -309,10 +364,11 @@ export const usePosition = ( {
     isDragging,
     isResizing,
     chatWindowContainer,
-    maximizeWindow,
-    restoreWindow,
+    // maximizeWindow,
+    // restoreWindow,
     isMaximized,
     offset,
     minSize,
+    toggleMaximizeRestore,
   };
 };
