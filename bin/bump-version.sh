@@ -3,7 +3,7 @@
 # Function to display usage
 usage() {
     echo "Usage: $0 [-v version] [-u]"
-    echo "  -v version  Specify the version to use"
+    echo "  -v version  Specify the version to use. If not set, the current version will be incremented by one."
     echo "  -u          Update the version in the file"
     exit 1
 }
@@ -44,5 +44,5 @@ if [ "$UPDATE" = true ]; then
     sed -i '' "s/const PLUGIN_VERSION = '$CURRENT_VERSION';/const PLUGIN_VERSION = '$NEW_VERSION';/" server/Main.php
     echo "Version bumped to $NEW_VERSION in agentwp.php, readme.txt, package.json, and server/Main.php"
 else
-    echo "Version not updated. Use -u flag to update."
+    usage
 fi
