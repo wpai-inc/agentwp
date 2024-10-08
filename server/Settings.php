@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp;
 
+use WpAi\AgentWp\Registry\IndexSiteSummary;
 use WpAi\AgentWp\Services\RevokeApiToken;
 use WpAi\AgentWp\Traits\GeneralSettingsData;
 
@@ -96,6 +97,9 @@ class Settings
         if ($token['expires_in']) {
             $token['expires_at'] = time() + (int) $token['expires_in'];
         }
+
+        $summarizer = (new IndexSiteSummary($this->main));
+        $summarizer->scheduleNow('autoUpdate');
 
         return $this->set('token', $token);
     }
