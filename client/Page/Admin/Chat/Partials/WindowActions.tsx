@@ -18,16 +18,14 @@ const Corners = () => {
 export default function WindowActions( {
   toggle,
   handleDrag,
-  maximizeWindow,
-  restoreWindow,
   isMaximized,
+  toggleMaximizeRestore,
   ...props
 }: {
   toggle: () => void;
   onMouseEnter?: () => void;
-  maximizeWindow?: () => void;
-  restoreWindow?: () => void;
   isMaximized?: boolean;
+  toggleMaximizeRestore?: () => void;
   handleDrag: ( e: MouseEvent ) => void;
 } ) {
   return (
@@ -44,7 +42,7 @@ export default function WindowActions( {
               <Button
                 variant="ghost"
                 className="p-0 h-auto hover:bg-transparent"
-                onClick={ restoreWindow }>
+                onClick={ toggleMaximizeRestore }>
                 <ExitFullscreen
                   className={ cn( 'h-5 w-5 cursor-pointer hover:text-teal-500', 'text-gray-400' ) }
                 />
@@ -57,7 +55,7 @@ export default function WindowActions( {
               <Button
                 variant="ghost"
                 className="p-0 h-auto hover:bg-transparent"
-                onClick={ maximizeWindow }>
+                onClick={ toggleMaximizeRestore }>
                 <Fullscreen className={ cn( 'h-5 w-5 hover:text-teal-500', 'text-gray-400' ) } />
               </Button>
             </AgentTooltip>
