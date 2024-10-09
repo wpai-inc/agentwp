@@ -1,9 +1,9 @@
 name: Build Plugin and Upload Artifact
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - created # This runs when a new release is manually created
 
 jobs:
   build:
@@ -33,8 +33,21 @@ jobs:
       - name: Build Plugin
         run: npm run build-plugin
 
-      - name: Upload agentwp.zip as an artifact
-        uses: actions/upload-artifact@v3
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          name: agentwp-plugin-build
-          path: agentwp.zip
+          tag_name: ${{ github.event.release.tag_name }}
+          name: ${{ github.event.release.name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload agentwp.zip as a release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: agentwp.zip
+          tag_name: ${{ github.event.release.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
