@@ -4,7 +4,7 @@
  * Plugin Name: AgentWP
  * Plugin URI: https://agentwp.com
  * Description: Adds a AI Agent to your WordPress installation.
- * Version: 0.3.1
+ * Version: 0.3.3
  * Author: WPAI Inc.
  * Author URI: https://wpai.co
  * License: GPLv3
@@ -42,6 +42,7 @@ function agentwp_boot_plugin(): void
 
     $registry->register([
         \WpAi\AgentWp\Installer::class,
+        \WpAi\AgentWp\Registry\Hooks::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
         \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
