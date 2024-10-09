@@ -100,7 +100,11 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           }
           if ( response.status > 300 ) {
             let body = await response.json();
-            throw new Error( body?.message ?? 'Unknown error' );
+            if ( body?.action_txt && body?.action_url ) {
+              throw new Error( JSON.stringify( body ) );
+            } else {
+              throw new Error( body?.message ?? 'Unknown error' );
+            }
           }
         },
         onmessage( ev ) {
