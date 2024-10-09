@@ -34,7 +34,6 @@ class AwpApi extends BaseController
 
     public function retryRequest()
     {
-        error_log(print_r($this->request->toArray(), true));
         $response = $this->main->client()->requestRetry($this->request->toArray());
 
         $response['access_token'] = $this->main->getAccessToken();

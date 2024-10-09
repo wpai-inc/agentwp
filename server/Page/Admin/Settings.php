@@ -90,7 +90,6 @@ class Settings extends ReactClient
 
             if (\is_wp_error($response)) {
                 wp_redirect($this->main->settingsPageUrl);
-                error_log(print_r($response, true));
 
                 return;
             }
