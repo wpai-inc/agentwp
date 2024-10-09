@@ -17,7 +17,7 @@ type ValidationRule = {
 };
 
 export default function MessageBox() {
-  const { sendMessage, message, setMessage, cancelMessage } = useChat();
+  const { sendMessage, message, setMessage, cancelMessage, messageSubmitted } = useChat();
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
@@ -65,7 +65,10 @@ export default function MessageBox() {
       setCommandMenuFocused( true );
     } else if ( e.key === 'Enter' && ! e.metaKey && ! e.ctrlKey && ! e.shiftKey && ! e.altKey ) {
       e.preventDefault();
-      sendMessage( message );
+
+      if ( ! messageSubmitted ) {
+        sendMessage( message );
+      }
     } else {
       setCommandMenuFocused( false );
     }
