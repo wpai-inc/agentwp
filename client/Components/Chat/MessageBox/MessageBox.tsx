@@ -17,7 +17,7 @@ type ValidationRule = {
 };
 
 export default function MessageBox() {
-  const { sendMessage, message, setMessage, cancelMessage } = useChat();
+  const { sendMessage, message, setMessage, cancelMessage, messageSubmitted } = useChat();
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
   const textAreaRef = useRef< HTMLTextAreaElement | null >( null );
@@ -59,7 +59,6 @@ export default function MessageBox() {
     }
   }
 
-  let isSubmitting = false;
   function handleMessageKeyDown( e: KeyboardEvent ) {
     if ( e.key === 'ArrowUp' || e.key === 'ArrowDown' ) {
       e.preventDefault();
@@ -67,13 +66,8 @@ export default function MessageBox() {
     } else if ( e.key === 'Enter' && ! e.metaKey && ! e.ctrlKey && ! e.shiftKey && ! e.altKey ) {
       e.preventDefault();
 
-      if ( ! isSubmitting ) {
-        isSubmitting = true;
+      if ( ! messageSubmitted ) {
         sendMessage( message );
-
-        setTimeout( () => {
-          isSubmitting = false;
-        }, 300 );
       }
     } else {
       setCommandMenuFocused( false );
