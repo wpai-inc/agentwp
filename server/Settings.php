@@ -98,7 +98,8 @@ class Settings
             $token['expires_at'] = time() + (int) $token['expires_in'];
         }
 
-        $summarizer = (new IndexSiteSummary($this->main));
+        $main = Main::getInstance();
+        $summarizer = (new IndexSiteSummary($main));
         $summarizer->scheduleNow('autoUpdate');
 
         return $this->set('token', $token);
