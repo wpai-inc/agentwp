@@ -58,6 +58,10 @@ export default function SupportTab() {
                 <Label htmlFor="question">Question</Label>
               </div>
               <div className="flex items-center space-x-2">
+                <RadioGroupItem value="bug" id="bug" />
+                <Label htmlFor="bug">Bug</Label>
+              </div>
+              <div className="flex items-center space-x-2">
                 <RadioGroupItem value="suggestion" id="suggestion" />
                 <Label htmlFor="suggestion">Suggestion</Label>
               </div>
