@@ -4,6 +4,7 @@
 /node_modules/
 /dist/
 /agentwp
+/agentwp.zip
 
 # Logs
 logs

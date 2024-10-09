@@ -4,8 +4,7 @@
 
 To build the plugin for publishing on WordPress.org, run `pnpm run build-plugin`. This will build all files and remove source code files that shouldn't be published.
 
-The latest stable built plugin is available at:
-https://github.com/wpai-inc/agentwp/raw/refs/heads/main/agentwp.zip
+The latest release build is available here: https://github.com/wpai-inc/agentwp/releases/latest/download/agentwp.zip
 
 ## Usage
 

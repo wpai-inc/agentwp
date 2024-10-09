@@ -25,7 +25,7 @@ $awpPrivateRepo = PucFactory::buildUpdateChecker(
     __FILE__,
     'agentwp'
 );
-// $awpPrivateRepo->getVcsApi()->enableReleaseAssets();
+$awpPrivateRepo->getVcsApi()->enableReleaseAssets();
 $awpPrivateRepo->setBranch('main');
 
 register_activation_hook(__FILE__, 'agentwp_boot_plugin');
