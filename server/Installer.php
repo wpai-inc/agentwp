@@ -66,6 +66,7 @@ class Installer implements Registrable
         delete_option($key.'_summary');
         delete_option($key.'_site_summary');
         delete_option($key.'_site_data');
+        delete_option($key.'_site_theme_json');
         global $wpdb;
 
         Db::query(

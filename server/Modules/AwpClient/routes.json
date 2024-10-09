@@ -59,6 +59,14 @@
         "name": "siteSummarize"
     },
     {
+        "key": "api.site.theme-json",
+        "uri": "api\/site\/theme-json",
+        "methods": [
+            "POST"
+        ],
+        "name": "siteThemeJson"
+    },
+    {
         "key": "api.site.errors.store",
         "uri": "api\/site\/errors",
         "methods": [

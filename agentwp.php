@@ -49,6 +49,7 @@ function agentwp_boot_plugin(): void
         \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
         \WpAi\AgentWp\Registry\IndexSiteData::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,
+        \WpAi\AgentWp\Registry\IndexThemeJson::class,
         \WpAi\AgentWp\Registry\IndexSiteDocs::class,
         \WpAi\AgentWp\Registry\Router::class,
         \WpAi\AgentWp\Registry\WpUser::class,

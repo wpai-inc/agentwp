@@ -16,12 +16,16 @@ class Hooks implements Registrable
 
     public function register()
     {
-        add_action('agentwp_set_access_token', [$this, 'onSetAccessToken']);
+        add_action('agentwp_set_access_token', [$this, 'autoUpdate']);
+        add_action('switch_theme', [$this, 'autoUpdate']);
     }
 
-    public function onSetAccessToken($token)
+    public function autoUpdate()
     {
         $summarizer = (new IndexSiteSummary($this->main));
         $summarizer->scheduleNow('autoUpdate');
+
+        $themeJson = (new IndexThemeJson($this->main));
+        $themeJson->scheduleNow('autoUpdate');
     }
 }
