@@ -34,6 +34,7 @@ type ChatContextType = {
   messageSubmitted: boolean;
   addUserRequest: ( ur: UserRequestType ) => void;
   reloadConversation: () => void;
+  removeUserRequest: ( ur: UserRequestType ) => void;
   fetchMore: () => Promise< void >;
   pagination: ConvoPagination;
 };
@@ -202,6 +203,7 @@ export default function ChatProvider( {
         setSnippetPlugin,
         addUserRequest,
         reloadConversation,
+        removeUserRequest,
         fetchMore,
         pagination,
       } }>
