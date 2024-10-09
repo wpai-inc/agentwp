@@ -1,0 +1,40 @@
+name: Build Plugin and Upload Artifact
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Adjust the Node.js version as needed
+          cache: 'npm'
+
+      - name: Install Node.js dependencies
+        run: npm install
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4' # Adjust PHP version based on your project
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --prefer-dist
+
+      - name: Build Plugin
+        run: npm run build-plugin
+
+      - name: Upload agentwp.zip as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: agentwp-plugin-build
+          path: agentwp.zip
