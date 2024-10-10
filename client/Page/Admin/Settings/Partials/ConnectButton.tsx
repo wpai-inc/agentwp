@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import { cn } from '@/lib/utils';
 
-export default function ConnectButton( { accepted }: { accepted: boolean } ) {
+export default function ConnectButton( {
+  accepted,
+  className,
+  ...props
+}: { accepted: boolean; className?: string } & React.ButtonHTMLAttributes< HTMLButtonElement > ) {
   const { tryRequest } = useRestRequest();
 
   const [ connecting, setConnecting ] = useState( false );
@@ -17,10 +22,11 @@ export default function ConnectButton( { accepted }: { accepted: boolean } ) {
     <Button
       disabled={ connecting || ! accepted }
       onClick={ connect }
-      className="w-full"
+      className={ cn( 'w-full', ! accepted && 'cursor-not-allowed', className ) }
       variant="brand"
       size="lg"
-      isBusy={ connecting }>
+      isBusy={ connecting }
+      { ...props }>
       Connect AI Services
     </Button>
   );
