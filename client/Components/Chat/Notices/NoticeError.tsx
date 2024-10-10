@@ -2,8 +2,6 @@ import { ChatNotice } from './ChatNotice';
 import { ChatErrorType } from '@/Providers/ErrorProvider';
 
 export default function NoticeError( { errors }: { errors: ChatErrorType[] } ) {
-  console.log( errors );
-
   return errors.map( ( err: any ) => (
     <ChatNotice variant="destructive" size="sm" key={ err.id } dismissable="Dismiss">
       { err.actionText && err.actionUrl ? (
