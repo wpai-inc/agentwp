@@ -96,6 +96,7 @@ function FeatureUnlimited() {
     </AgentTooltip>
   );
 }
+
 function PlanCard( { name, features, buttonText, price, buttonAction, primary }: PlanType ) {
   return (
     <div className={ `rounded-lg p-6 ${ primary ? 'bg-gray-100' : 'border border-gray-100' }` }>
@@ -113,16 +114,13 @@ function PlanCard( { name, features, buttonText, price, buttonAction, primary }:
           { buttonText }
         </Button>
       ) : (
-        <div>
-          <p className="mb-2 text-lg">Or, continue with free</p>
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-full text-gray-500"
-            onClick={ buttonAction }>
-            { buttonText }
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full text-gray-500"
+          onClick={ buttonAction }>
+          Or, continue with free
+        </Button>
       ) }
     </div>
   );
