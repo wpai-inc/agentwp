@@ -32,7 +32,16 @@ export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children }
       return [
         ...prev,
         ...errors.map( ( err: any ) => {
+          try {
+            // Remove error message from the console
+            err = JSON.parse( err.message );
+          } catch ( e ) {
+            // Do nothing
+          }
+
           const message = err.response?.data?.message ?? err.message ?? err;
+          const actionText = err?.action_txt || null;
+          const actionUrl = err?.action_url || null;
           const usageCooldownTime = err.response?.data?.usage_cooldown_time;
           const usageStatus = err.response?.data?.usage_status as TokenUsageStatus;
 
@@ -44,6 +53,8 @@ export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children }
           return {
             id: err.id ?? crypto.randomUUID(),
             message: message,
+            actionText,
+            actionUrl,
           };
         } ),
       ];
