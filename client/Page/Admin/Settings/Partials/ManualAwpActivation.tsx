@@ -4,8 +4,16 @@ import Textarea from '@/Components/ui/Textarea';
 import * as Form from '@radix-ui/react-form';
 import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import { AgentTooltip } from '@/Components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
-export function ManualAwpActivation( { accepted }: { accepted: boolean } ) {
+export function ManualAwpActivation( {
+  accepted,
+  onToggleManual,
+}: {
+  accepted: boolean;
+  onToggleManual: ( isManual: boolean ) => void;
+} ) {
   const { tryRequest } = useRestRequest();
   const { page, getApiUrl } = usePage();
 
@@ -18,6 +26,7 @@ export function ManualAwpActivation( { accepted }: { accepted: boolean } ) {
 
   function showFields() {
     setFieldsVisible( ! fieldsVisible );
+    onToggleManual( ! fieldsVisible );
   }
 
   async function saveManualToken( event: FormEvent< HTMLFormElement > ) {
@@ -46,11 +55,7 @@ export function ManualAwpActivation( { accepted }: { accepted: boolean } ) {
   }
 
   return (
-    <div className="pt-4">
-      If you are on a localhost or behind a basic auth you can{ ' ' }
-      <span onClick={ showFields } className="underline cursor-pointer">
-        Manually Connect AI services
-      </span>
+    <div className="flex flex-col">
       { fieldsVisible && (
         <Form.Root
           onSubmit={ event => saveManualToken( event ) }
@@ -72,21 +77,35 @@ export function ManualAwpActivation( { accepted }: { accepted: boolean } ) {
                 className="underline"
                 // prettier-ignore
                 href={`${getApiUrl('oauthManuallyConnectSite')}?url=${encodeURIComponent(page.home_url)}`}>
-                Get your api key
+                Click here to get your API key
               </a>
             }></Textarea>
-          <Form.Submit asChild>
-            <Button
-              disabled={ ! accepted }
-              className="w-full mt-2"
-              variant="brand"
-              size="lg"
-              isBusy={ saving }>
-              Connect
-            </Button>
-          </Form.Submit>
+          { accepted ? (
+            <Form.Submit asChild>
+              <Button className="w-full mt-2" variant="brand" size="lg" isBusy={ saving }>
+                Connect
+              </Button>
+            </Form.Submit>
+          ) : (
+            <AgentTooltip content="Please accept the terms and conditions">
+              <div>
+                <Button
+                  disabled={ true }
+                  className={ cn( 'w-full mt-2', 'cursor-not-allowed' ) }
+                  variant="brand"
+                  size="lg">
+                  Connect
+                </Button>
+              </div>
+            </AgentTooltip>
+          ) }
         </Form.Root>
       ) }
+      <span
+        onClick={ showFields }
+        className="underline cursor-pointer w-full text-center mt-4 opacity-50">
+        { fieldsVisible ? 'Use auto connection (default)' : 'Or, Manually Connect AI services' }
+      </span>
     </div>
   );
 }

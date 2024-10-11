@@ -43,7 +43,7 @@ const AgentTooltip = ( {
   content: React.ReactNode;
   children: React.ReactNode;
   maxWidth?: number;
-} ) => {
+} & React.ComponentPropsWithoutRef< typeof TooltipPrimitive.Content > ) => {
   return (
     <TooltipProvider delayDuration={ 500 }>
       <Tooltip>

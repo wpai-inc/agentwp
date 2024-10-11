@@ -13,19 +13,19 @@ export type StepType = {
 
 const steps: StepType[] = [
   {
-    text: 'Install Plugin',
+    text: 'Install',
     subpage: undefined,
   },
   {
-    text: 'Connect AI',
+    text: 'Connect',
     subpage: <ConnectAiService />,
   },
   {
-    text: 'Choose Plan',
+    text: 'Plan',
     subpage: <ChoosePlan />,
   },
   {
-    text: 'User Access',
+    text: 'Access',
     subpage: <UserAccess />,
   },
 ];
