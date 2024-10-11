@@ -123,7 +123,7 @@ export const usePosition = ( {
   );
 
   const handleWindowResize = useCallback( () => {
-    if ( chatWindowEl ) {
+    if ( chatWindowEl && settings.chatOpen ) {
       const { maxRight, maxBottom } = calculateBoundaries();
 
       setPosition( position => ( {
