@@ -1,7 +1,7 @@
 export const LightTheme = {
   'pre[class*="language-"]': {
     color: '#393A34',
-    fontFamily: '"Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace',
+    fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace',
     direction: 'ltr',
     textAlign: 'left',
     whiteSpace: 'pre',
