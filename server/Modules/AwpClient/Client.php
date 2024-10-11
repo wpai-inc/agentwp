@@ -35,18 +35,7 @@ class Client
         $this->token = $token;
         $this->wpUser = $wpUser;
 
-        global $wp_filesystem;
-        if (empty($wp_filesystem)) {
-            require_once ABSPATH.'wp-admin/includes/file.php';
-            WP_Filesystem();
-        }
-
-        $file_path = __DIR__.'/routes.json';
-        if (! $wp_filesystem->exists($file_path)) {
-            throw new \Exception('routes.json file does not exist');
-        }
-
-        $jsonRoutes = $wp_filesystem->get_contents($file_path);
+        $jsonRoutes = file_get_contents(__DIR__.'/routes.json');
         if ($jsonRoutes === false) {
             throw new \Exception('Failed to read routes.json');
         }
