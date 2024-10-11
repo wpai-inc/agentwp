@@ -25,7 +25,7 @@ export default function MD( { content }: { content: string } ) {
                 <SyntaxHighlighter
                   { ...rest }
                   children={ String( children ).replace( /\n$/, '' ) }
-                  showLineNumbers={ true }
+                  showLineNumbers={ false }
                   style={ LightTheme }
                   language={ match[ 1 ] }
                   PreTag="pre"

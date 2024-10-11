@@ -108,7 +108,7 @@ export default function CodeToolbar( { code, language }: { code: string; languag
           { languageIcons[ language.toLowerCase() ] ? (
             <img
               src={ languageIcons[ language.toLowerCase() ] }
-              className="w-6 h-6"
+              className="w-8 h-8 ms-2"
               alt={ language }
             />
           ) : (
@@ -118,9 +118,10 @@ export default function CodeToolbar( { code, language }: { code: string; languag
         <div className="flex items-center justify-end gap-3">
           <AgentTooltip content="Copy code to clipboard.">
             <button
-              className="hover:text-brand-gray-100 ml-2 text-xs"
+              className="hover:text-brand-gray-100 ml-2 text-sm flex align-center gap-1 me-2 font-sans"
               onClick={ () => copy( code ) }>
-              { copied ? 'Copied!' : <IconCopy className="h-5 w-5" /> }
+              <IconCopy className="h-4 w-4 relative top-[1px]" />{ ' ' }
+              { copied ? 'Copied!' : 'Copy code' }
             </button>
           </AgentTooltip>
 
