@@ -19,6 +19,7 @@ class GetMentionItems extends BaseController
 
     public function __invoke()
     {
+        $url = $this->request->getHeader('referer', null);
         $keyword = $this->request->get('keyword', true);
         $keyword = str_ireplace('@', '', $keyword);
 
@@ -26,6 +27,16 @@ class GetMentionItems extends BaseController
         unset($post_types['attachment']);
 
         $data = [];
+        if ('this' === $keyword) {
+            $item = $this->getReferenceItem($url);
+            if ($item) {
+                $data['current_item'] = [
+                    'title' => $item['type'] === 'user' ? 'Current User' : 'Current Item',
+                    'items' => [$item],
+                ];
+            }
+        }
+
         foreach ($post_types as $post_type) {
             $items = get_posts([
                 'post_type' => $post_type,
@@ -97,5 +108,59 @@ class GetMentionItems extends BaseController
         }
 
         $this->respond($data);
+    }
+
+    /**
+     * Get this reference item.
+     * 
+     * @param string $url Current URL.
+     * @return ?array
+     */
+    public function getReferenceItem(string $url): ?array
+    {
+        if (strpos($url, 'profile.php')) {
+            $user = get_user_by('id', get_current_user_id());
+            return [
+                'id' => $user->ID,
+                'title' => $user->display_name,
+                'type' => 'user',
+            ];
+        }
+
+        $query = parse_url($url, PHP_URL_QUERY);
+        $query = wp_parse_args($query);
+
+        if (strpos($url, 'users.php') || strpos($url, 'user-edit.php')) {
+            $user_id = isset($query['user_id']) ? $query['user_id'] : null;
+            if (!$user_id) {
+                $user_id = isset($query['id']) ? $query['id'] : null;
+            }
+            $user = get_user_by('id', $user_id);
+            if (!$user) {
+                return null;
+            }
+
+            return [
+                'id' => $user->ID,
+                'title' => $user->display_name,
+                'type' => 'user',
+            ];
+        }
+
+        if (strpos($url, 'post.php')) {
+            $post_id = $query['post'] ?? null;
+            $post = get_post($post_id);
+            if (!$post) {
+                return null;
+            }
+
+            return [
+                'id' => $post->ID,
+                'title' => $post->post_title,
+                'type' => $post->post_type,
+            ];
+        }
+
+        return null;
     }
 }

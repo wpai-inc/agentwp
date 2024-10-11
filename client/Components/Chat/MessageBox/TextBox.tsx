@@ -4,6 +4,7 @@ import isMentionMode from './helpers/isMentionMode';
 import { MentionMode, Suggestion } from './helpers/types';
 import SuggestionsBox from './SuggestionsBox';
 import transformContentToText from './helpers/transformContentToText';
+import trimMentionTitle from './helpers/trimMentionTitle';
 
 export default function TextBox( {
   callback,
@@ -118,7 +119,9 @@ export default function TextBox( {
     span.className =
       'bg-brand-gray-50/50 text-brand-gray-70 rounded-full py-1 px-2 mention inline-block';
     span.id = suggestion.type + '___' + suggestion.id;
-    span.innerHTML = `<strong>@${ suggestion.type }</strong>:${ suggestion.title }`;
+    span.innerHTML = `<strong>@${ suggestion.type }</strong>:${ trimMentionTitle(
+      suggestion.title,
+    ) }`;
     const spanHTML = span.outerHTML;
     return spanHTML;
   };
