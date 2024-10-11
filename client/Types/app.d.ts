@@ -140,6 +140,13 @@ inputName: string | null;
 inputId: string | null;
 inputValue: string | null;
 };
+export type SiteData = {
+id: string;
+name: string;
+host: string;
+plan: App.Data.PlanData;
+can_upgrade: boolean;
+};
 export type SiteSettingData = {
 name: App.Enums.SiteSettingValue;
 value: any;
@@ -154,6 +161,10 @@ export type StreamableFieldData = {
 type: string;
 data: App.Data.SelectedInputData;
 };
+export type SubscriptionData = {
+on_grace_period: boolean;
+ends_at: string | null;
+};
 export type TenantData = {
 slug: string;
 name: string;
@@ -164,6 +175,7 @@ acceptance_url: string;
 ip: string;
 };
 export type UserData = {
+admin: boolean;
 name: string;
 email: string;
 email_verified_at: string | null;
