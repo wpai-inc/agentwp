@@ -45,7 +45,7 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
           className="hover:scale-125 transition">
           <Logo className="h-7 w-7" />
         </a>
-        { account?.plan?.slug === 'free' && <FreeUpgrade account={ account } /> }
+        { account?.plan.slug === 'free' && <FreeUpgrade account={ account } /> }
         <ConvoOnlyToggle />
       </div>
       <div className="flex items-center justify-center">
