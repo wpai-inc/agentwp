@@ -80,7 +80,9 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
           <span>{ account.plan.name }</span>
         </Button>
         <Button asChild variant="dark" className="h-full">
-          <a href={ account.upgrade_link }>Upgrade</a>
+          <a id="topBarUpgradeBtn" href={ account.upgrade_link }>
+            Upgrade
+          </a>
         </Button>
       </>
     );

@@ -91,11 +91,15 @@ export const usePosition = ( {
   const onDrag = useCallback(
     ( e: MouseEvent ) => {
       e.preventDefault();
-      if ( chatWindowEl ) {
-        const { right, bottom } = chatWindowEl.getBoundingClientRect();
-        setIsDragging( true );
-        setMouseStartPos( { x: e.clientX, y: e.clientY } );
-        setElementStartPos( { x: right, y: bottom } );
+
+      const target = e.target as HTMLElement;
+      if ( ! target || target.id !== 'topBarUpgradeBtn' ) {
+        if ( chatWindowEl ) {
+          const { right, bottom } = chatWindowEl.getBoundingClientRect();
+          setIsDragging( true );
+          setMouseStartPos( { x: e.clientX, y: e.clientY } );
+          setElementStartPos( { x: right, y: bottom } );
+        }
       }
     },
     [ chatWindowEl, settings, size, setPosition ],
