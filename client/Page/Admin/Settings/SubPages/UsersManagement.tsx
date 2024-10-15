@@ -4,7 +4,6 @@ import { User } from '@/Page/Admin/Settings/Partials/User';
 import SearchUser from '@/Page/Admin/Settings/Partials/SearchUser';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import UserList from '../Partials/UserList';
-import { Card } from '@/Components/Admin/Card';
 
 export default function UsersManagement() {
   const { restReq, tryRequest } = useRestRequest();
@@ -44,13 +43,13 @@ export default function UsersManagement() {
   }
 
   return (
-    <Card className="max-w-[720px]">
+    <>
       <SearchUser searchUsers={ searchUsers } searching={ searching } />
       <UserList className="mt-5">
         { users.map( user => (
           <User user={ user } key={ user.id } />
         ) ) }
       </UserList>
-    </Card>
+    </>
   );
 }

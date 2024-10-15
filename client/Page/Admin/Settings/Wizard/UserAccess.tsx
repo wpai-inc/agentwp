@@ -14,7 +14,7 @@ export default function UserAccess() {
 
   return (
     <WizardContainer className="space-y-4">
-      <WizardHeader>Choose Who Can Use AgentWP</WizardHeader>
+      <WizardHeader message="Choose Who Can Use AgentWP" />
       <UsersManagement />
       <Button variant="brand" size="lg" className="w-full" onClick={ () => goToAboutPage() }>
         Continue
