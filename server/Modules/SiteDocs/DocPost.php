@@ -3,7 +3,6 @@
 namespace WpAi\AgentWp\Modules\SiteDocs;
 
 use DateTime;
-use WpAi\AgentWp\Services\Db;
 
 class DocPost extends Doc
 {
@@ -66,30 +65,36 @@ class DocPost extends Doc
     {
         global $wpdb;
 
-        return Db::getResults("
-            SELECT p.ID, p.post_parent, p.post_date, p.post_modified, p.post_title, p.post_content
-            FROM {$wpdb->posts} p
-            WHERE p.post_type = %s AND p.post_status = %s
-            AND p.ID > %d
-            ORDER BY p.ID ASC
-            LIMIT %d
-        ", [
-            'post',
-            'publish',
-            $last_doc_id_indexed,
-            $batch_amount,
-        ]);
+        return $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT p.ID, p.post_parent, p.post_date, p.post_modified, p.post_title, p.post_content
+                FROM {$wpdb->posts} p
+                WHERE p.post_type = %s AND p.post_status = %s
+                AND p.ID > %d
+                ORDER BY p.ID ASC
+                LIMIT %d",
+                [
+                    'post',
+                    'publish',
+                    $last_doc_id_indexed,
+                    $batch_amount,
+                ]
+            )
+        );
     }
 
     private function getPostMeta(int $postId): array
     {
         global $wpdb;
 
-        $meta = Db::getResults("
-            SELECT meta_id, meta_key, meta_value
-            FROM {$wpdb->postmeta}
-            WHERE post_id = %d
-        ", [$postId]);
+        $meta = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT meta_id, meta_key, meta_value
+                FROM {$wpdb->postmeta}
+                WHERE post_id = %d",
+                [$postId]
+            )
+        );
 
         return array_map(function ($meta) {
             return [
@@ -104,11 +109,14 @@ class DocPost extends Doc
     {
         global $wpdb;
 
-        $comments = Db::getResults("
-            SELECT comment_ID, comment_content
-            FROM {$wpdb->comments}
-            WHERE comment_post_ID = %d
-        ", [$postId]);
+        $comments = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT comment_ID, comment_content
+                FROM {$wpdb->comments}
+                WHERE comment_post_ID = %d",
+                [$postId]
+            )
+        );
 
         return array_map(function ($comment) {
             return [
