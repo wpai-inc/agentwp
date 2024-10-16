@@ -26,7 +26,7 @@ class ProviderRegistry
 
             if (! is_a($class, Registrable::class, true)) {
                 // Translators: %1$s is the class name that does not implement Registrable.
-                throw new \Exception(esc_html(sprintf(__('Class %1$s does not implement Registrable', 'agentp'), $class)));
+                throw new \Exception(esc_html(sprintf(__('Class %1$s does not implement Registrable', 'agentwp'), $class)));
             }
 
             (new $class($this->main))->register();
