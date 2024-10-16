@@ -32,6 +32,7 @@ function agentwp_boot_plugin(): void
 
     $registry->register([
         \WpAi\AgentWp\Installer::class,
+        \WpAi\AgentWp\Registry\Hooks::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
         \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
