@@ -6,7 +6,6 @@ use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Registry\IndexSiteData;
 use WpAi\AgentWp\Registry\IndexSiteSummary;
-use WpAi\AgentWp\Services\Db;
 
 /**
  * Handles the plugin activation, deactivation, and uninstallation.
@@ -61,18 +60,19 @@ class Installer implements Registrable
 
     public function cleanup_plugin_data()
     {
+        global $wpdb;
         $key = Main::SLUG;
         $this->main->settings->delete('general_settings');
         delete_option($key.'_summary');
         delete_option($key.'_site_data');
-        global $wpdb;
 
-        Db::query(
-            "DELETE FROM $wpdb->options WHERE option_name LIKE %s AND option_name LIKE %s",
-            [
+        $wpdb->query(
+            $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s AND option_name LIKE %s", [
                 '%'.$wpdb->esc_like($key).'%',
                 '%_transient%',
-            ]);
+            ])
+        );
+
     }
 
     public function redirect(): void
