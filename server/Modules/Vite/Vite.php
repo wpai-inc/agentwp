@@ -184,7 +184,7 @@ class Vite
         $react_refresh_script_src = $this->generate_development_asset_src($manifest, '@react-refresh');
         $script_position = 'after';
         $script = '
-import RefreshRuntime from "'.$react_refresh_script_src.'";
+import RefreshRuntime from "'.esc_js($react_refresh_script_src).'";
 RefreshRuntime.injectIntoGlobalHook(window);
 window.$RefreshReg$ = () => {};
 window.$RefreshSig$ = () => (type) => type;
