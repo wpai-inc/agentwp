@@ -2,9 +2,6 @@
 
 namespace WpAi\AgentWp\Http\Controllers;
 
-// use WpAi\AgentWp\Services\Db;
-
-use WpAi\AgentWp\Services\Db;
 
 class QueryActionController extends BaseController
 {
@@ -23,7 +20,7 @@ class QueryActionController extends BaseController
 
         $args = $this->request->all('args') ?: [];
 
-        $results = Db::getResults($sql, $args);
+        $results = $wpdb->get_results($wpdb->prepare($sql, $args), ARRAY_A);
 
         if ($wpdb->last_error) {
             $this->respondWithError($wpdb->last_error, 422);
@@ -74,19 +71,18 @@ class QueryActionController extends BaseController
             'ROLLBACK',
             'SAVEPOINT',
         ];
-
-        $hasDisallowedKeywords = [];
-
+        $foundDisallowedKeywords = [];
         // Check for disallowed keywords
         foreach ($disallowedKeywords as $keyword) {
-            if (strpos($uppercaseSQL, $keyword) !== false) {
-                $hasDisallowedKeywords[] = $keyword;
+            if (preg_match('/\b'.preg_quote($keyword, '/').'\b/', $uppercaseSQL)) {
+                $foundDisallowedKeywords[] = $keyword;
             }
         }
 
-        if (count($hasDisallowedKeywords) > 0) {
+        if (! empty($foundDisallowedKeywords)) {
             // Translators: %1$s is a list of disallowed SQL keywords found in the query.
-            throw new \Exception(esc_html(printf(__('Query contains disallowed keyword: %1$s', 'agentwp'), implode(', ', $disallowedKeywords))));
+            throw new \Exception(esc_html(printf(__('Query contains disallowed keyword: %1$s', 'agentwp'), implode(', ', $foundDisallowedKeywords))));
+
         }
 
         // Additional checks
