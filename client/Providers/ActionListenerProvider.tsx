@@ -5,7 +5,7 @@ import { useError } from './ErrorProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 
-const ActionListenerProvider: React.FC = ( { children } ) => {
+const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { streamingStatus, retryStream } = useStream();
   const { currentAction, currentUserRequestId } = useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
