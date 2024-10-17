@@ -83,7 +83,7 @@ export default function AgentResponse( {
               <DropdownMenuItem>
                 <span className="flex gap-2">
                   Message ID:{ ' ' }
-                  <strong className="font-mono text-sm font-semibold inline-block max-w-24 truncate">
+                  <strong className="inline-block max-w-24 truncate font-mono text-sm font-semibold">
                     { userRequestId }
                   </strong>
                 </span>

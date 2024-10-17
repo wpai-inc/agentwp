@@ -34,6 +34,7 @@ result: Array<any> | null;
 recipe_idx: number | null;
 final: boolean;
 hasExecuted: boolean;
+hasError: boolean;
 };
 export type AgentActionResultData = {
 status: App.Enums.AgentActionResultStatus;

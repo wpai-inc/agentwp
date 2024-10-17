@@ -18,11 +18,10 @@ export default function Message( {
   const { currentUserRequestId } = useUserRequests();
   const sameUserRequest = userRequest.id === currentUserRequestId;
   const { streamingStatus } = useStream();
-  const pending =
-    ( sameUserRequest && streamingStatus > StreamingStatusEnum.OFF ) || submitted;
+  const pending = ( sameUserRequest && streamingStatus > StreamingStatusEnum.OFF ) || submitted;
   const isIncomplete =
     userRequest.agent_actions?.length === 0 ||
-    userRequest.agent_actions?.some( aa => ! aa.action && ! aa.result?.status );
+    userRequest.agent_actions?.some( aa => ( ! aa.action && ! aa.result?.status ) || aa.hasError );
   const isAborted =
     streamingStatus === StreamingStatusEnum.SHOULD_ABORT ||
     userRequest.agent_actions?.some( aa => aa.result?.status === 'aborted' ) ||
