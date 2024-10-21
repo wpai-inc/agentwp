@@ -76,7 +76,7 @@ status: App.Enums.DocIndexState;
 };
 export type FeedbackData = {
 approved: boolean;
-message: string | null;
+message: string;
 };
 export type HistoryChronoGroupData = {
 group: string;
@@ -246,7 +246,6 @@ message: string;
 mentions: Array<any> | null;
 selected_input: App.Data.StreamableFieldData | null;
 site_data: Array<any> | null;
-since: any | null;
 };
 }
 declare namespace App.Data.Response {

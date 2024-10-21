@@ -76,7 +76,6 @@ export default function ChatProvider( {
   const { addErrors } = useError();
   const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
   const { tryRequest, proxyApiRequest } = useRestRequest();
-  const { since } = useUserRequests();
 
   async function clearHistory() {
     optimistic(
@@ -100,7 +99,6 @@ export default function ChatProvider( {
       mentions,
       selected_input: selectedInput,
       site_data: null,
-      since,
     };
     if ( streamingStatus === StreamingStatusEnum.OFF ) {
       setStreamingStatus( StreamingStatusEnum.CONVO );
