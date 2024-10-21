@@ -5,7 +5,7 @@ import { AWPEventChatSinceType, AWPEventChatOpenType } from '@/Types/types';
 import { maybeUseChatUI } from '@/Components/Chat/Chat';
 
 const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
-  const { chatSetting, setChatSetting, cancelMessage } = useChat();
+  const { chatSetting, setChatSetting, cancelMessage, clearHistory } = useChat();
 
   const chatUI = maybeUseChatUI();
   const toggleChat = chatUI?.toggle;
@@ -47,6 +47,25 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
         window.removeEventListener( 'keydown', handleToggle );
       };
     }, [ toggleChat ] );
+  }
+
+  /**
+   * New chat with CMD + K
+   * CMD + L key
+   */
+  if ( clearHistory ) {
+    useEffect( () => {
+      const handleClearHistory = ( e: KeyboardEvent ) => {
+        if ( ( e.metaKey || e.ctrlKey ) && e.key === 'k' ) {
+          e.preventDefault();
+          clearHistory();
+        }
+      };
+      window.addEventListener( 'keydown', handleClearHistory );
+      return () => {
+        window.removeEventListener( 'keydown', handleClearHistory );
+      };
+    }, [ clearHistory ] );
   }
 
   /**
