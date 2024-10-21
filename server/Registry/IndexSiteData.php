@@ -20,8 +20,10 @@ class IndexSiteData implements Cacheable, Registrable
 
     public function __construct(Main $main)
     {
-        $this->main = $main;
-        $this->accountSettings = $this->main->accountSettings()->get();
+        if (! wp_doing_ajax()) {
+            $this->main = $main;
+            $this->accountSettings = $this->main->accountSettings()->get();
+        }
     }
 
     public static function cacheId(): string
@@ -29,13 +31,15 @@ class IndexSiteData implements Cacheable, Registrable
         return 'site_data';
     }
 
-    public function register()
+    public function register(): void
     {
-        $this->registerActionSchedules(['autoUpdate']);
+        if (! wp_doing_ajax()) {
+            $this->registerActionSchedules(['autoUpdate']);
 
-        add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
-        add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
-        add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
+            add_filter('debug_information', [$this, 'add_plugin_slugs_to_debug_info']);
+            add_filter('debug_information', [$this, 'add_db_schema_to_debug_info']);
+            add_filter('debug_information', [$this, 'add_woocommerce_settings_to_debug_info']);
+        }
     }
 
     public function autoUpdate(): void
