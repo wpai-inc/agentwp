@@ -78,7 +78,7 @@ export default function ChatProvider( {
   const { tryRequest, proxyApiRequest } = useRestRequest();
 
   async function clearHistory() {
-    optimistic(
+    await optimistic(
       async () => await proxyApiRequest( 'convoClear' ),
       clear,
       ( e: any ) => {
