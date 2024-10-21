@@ -38,6 +38,7 @@ const useForceUpdate = () => {
 
 export default function StreamProvider( { children }: { children: React.ReactNode } ) {
   const { screen } = useScreen();
+  const { since } = useUserRequests();
   const forceUpdate = useForceUpdate();
   const liveAction = useRef< AgentAction | null >( null );
   const [ retries, setRetries ] = useState< number >( -1 );
@@ -79,7 +80,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
       setRetries( retries => retries + 1 );
       await fetchEventSource( stream_url, {
         method: 'POST',
-        body: JSON.stringify( { userRequest: user_request.id, screen } ),
+        body: JSON.stringify( { userRequest: user_request.id, screen, since: since || null } ),
         headers: {
           'Accept': 'text/event-stream',
           'Content-Type': 'application/json',
