@@ -2,7 +2,6 @@
 
 namespace WpAi\AgentWp\Http\Controllers;
 
-
 class QueryActionController extends BaseController
 {
     public function __invoke(): void
@@ -82,7 +81,6 @@ class QueryActionController extends BaseController
         if (! empty($foundDisallowedKeywords)) {
             // Translators: %1$s is a list of disallowed SQL keywords found in the query.
             throw new \Exception(esc_html(printf(__('Query contains disallowed keyword: %1$s', 'agentwp'), implode(', ', $foundDisallowedKeywords))));
-
         }
 
         // Additional checks
