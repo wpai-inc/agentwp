@@ -20,10 +20,8 @@ class IndexSiteData implements Cacheable, Registrable
 
     public function __construct(Main $main)
     {
-        if (! wp_doing_ajax()) {
-            $this->main = $main;
-            $this->accountSettings = $this->main->accountSettings()->get();
-        }
+        $this->main = $main;
+        $this->accountSettings = $this->main->accountSettings()->get();
     }
 
     public static function cacheId(): string
