@@ -48,6 +48,10 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   }
 
   async function storeActionResult( aa: AgentAction, data: App.Data.AgentActionResultData ) {
+    if ( ! aa.id ) {
+      throw new Error( 'Agent action ID is not set' );
+    }
+
     await proxyApiRequest< App.Data.AgentActionData >( 'actionResult', {
       agentAction: aa.id,
       ...data,
