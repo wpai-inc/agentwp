@@ -89,13 +89,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
           await storeSuccessfulActionResult( aa, response.data.data.results );
         } catch ( error ) {
-          const result: App.Data.AgentActionResultData = {
-            status: 'error',
-            error: ( error as any ).response.data.data,
-            data: null,
-          };
-
-          await storeActionResult( aa, result );
+          await storeUnsuccessfulActionResult( aa, ( error as any )?.response?.data?.data );
         }
         break;
       case 'navigate':

@@ -137,7 +137,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     } catch ( e ) {
       await handleStreamError( e );
       setStreamingStatus( StreamingStatusEnum.OFF );
-      //   setStreamClosed( true );
     }
   }
 

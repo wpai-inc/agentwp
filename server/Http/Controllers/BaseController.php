@@ -31,8 +31,13 @@ class BaseController
         return $this->method;
     }
 
-    public function check_permission(): bool
+    public function check_permission()
     {
+        /**
+         * @todo: verify nonce for all requests (including GET)
+         */
+        // $nonce = $this->request->getHeader('X-WP-Nonce') ?: $this->request->get('nonce');
+
         if ($this->permission === 'all') {
             return true;
         }

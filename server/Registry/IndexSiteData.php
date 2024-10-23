@@ -5,7 +5,6 @@ namespace WpAi\AgentWp\Registry;
 use WpAi\AgentWp\Contracts\Cacheable;
 use WpAi\AgentWp\Contracts\Registrable;
 use WpAi\AgentWp\Main;
-use WpAi\AgentWp\Services\Db;
 use WpAi\AgentWp\SiteData;
 use WpAi\AgentWp\Traits\HasCache;
 use WpAi\AgentWp\Traits\HasScheduler;
@@ -106,6 +105,7 @@ class IndexSiteData implements Cacheable, Registrable
 
     public function add_db_schema_to_debug_info($info): array
     {
+        global $wpdb;
         /**
          * Dont add db schema if it's disabled.
          */
@@ -113,10 +113,11 @@ class IndexSiteData implements Cacheable, Registrable
             return $info;
         }
 
-        $tables = Db::getResults('SHOW TABLES', [], ARRAY_N);
+        $tables = $wpdb->get_results('SHOW TABLES', ARRAY_N);
+
         $tables = array_map('current', $tables);
         foreach ($tables as $table) {
-            $rows = Db::getResults('DESCRIBE '.$table, [], ARRAY_A);
+            $rows = $wpdb->get_results('DESCRIBE '.$table, ARRAY_A);
             $header = array_keys($rows[0]);
             array_unshift($rows, $header);
             $info['db-schema']['tables'][$table] = array_map(function ($row) {
