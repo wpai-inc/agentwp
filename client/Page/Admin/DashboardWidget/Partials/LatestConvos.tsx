@@ -29,7 +29,7 @@ export default function LatestConvos() {
             <Fragment key={ historyGroup.group }>
               <h3>{ historyGroup.group }</h3>
               { historyGroup.history.map( convo => (
-                <ConvoItem key={ convo.conversationId } { ...convo } />
+                <ConvoItem key={ convo.id } { ...convo } />
               ) ) }
             </Fragment>
           ) ) }
@@ -41,16 +41,18 @@ export default function LatestConvos() {
   );
 }
 
-function openConvo( since: string ) {
-  window.agentwp.dispatchEvent( new CustomEvent( 'awp:chat:since', { detail: { since } } ) );
+function openConvo( convoId: number ) {
+  window.agentwp.dispatchEvent( new CustomEvent( 'awp:chat:convo', { detail: { convoId } } ) );
 }
 
-function ConvoItem( convo: App.Data.HistoryData ) {
+function ConvoItem( convo: App.Data.ConversationData ) {
   return (
     <button
       className="flex w-full justify-between p-2 text-left odd:bg-brand-gray-20"
-      onClick={ () => openConvo( convo.conversationCreatedAt ) }>
-      <blockquote className="truncate">{ convo.message }</blockquote>
+      onClick={ () => openConvo( convo.id ) }>
+      <blockquote className="truncate">
+        { convo.lastMessage ? convo.lastMessage : 'Empty' }
+      </blockquote>
       <time className="ml-3 block text-nowrap text-sm font-semibold">{ convo.humanCreatedAt }</time>
     </button>
   );

@@ -183,15 +183,6 @@
         "name": "searchSummarize"
     },
     {
-        "key": "api.convo",
-        "uri": "api",
-        "methods": [
-            "GET",
-            "HEAD"
-        ],
-        "name": "convo"
-    },
-    {
         "key": "api.convo.create",
         "uri": "api",
         "methods": [
@@ -231,6 +222,15 @@
             "HEAD"
         ],
         "name": "convoHistory"
+    },
+    {
+        "key": "api.convo",
+        "uri": "api\/{conversation?}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "convo"
     },
     {
         "key": "api.request.feedback",

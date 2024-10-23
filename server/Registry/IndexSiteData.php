@@ -16,12 +16,9 @@ class IndexSiteData implements Cacheable, Registrable
 
     private Main $main;
 
-    private array $accountSettings;
-
     public function __construct(Main $main)
     {
         $this->main = $main;
-        $this->accountSettings = $this->main->accountSettings()->get();
     }
 
     public static function cacheId(): string
@@ -136,7 +133,8 @@ class IndexSiteData implements Cacheable, Registrable
      */
     private function getSetting($key)
     {
-        foreach ($this->accountSettings as $setting) {
+        $accountSettings = $this->main->accountSettings()->get();
+        foreach ($accountSettings as $setting) {
             if ($setting['name'] === $key) {
                 return $setting['value'];
             }

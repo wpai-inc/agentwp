@@ -66,12 +66,12 @@ type UserRequestsContextType = {
   currentUserRequest?: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
-  fetchConvo: ( since: string | null ) => Promise< void >;
+  fetchConvo: ( convoId: number | null ) => Promise< void >;
   fetchMore: () => Promise< void >;
   refreshConvo: () => void;
   loadingConversation: boolean;
-  since: string | null;
-  setSince: React.Dispatch< React.SetStateAction< string | null > >;
+  convoId: number | null;
+  setConvoId: React.Dispatch< React.SetStateAction< number | null > >;
   addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
   setRequestAborted: ( userRequestId: string ) => void;
 };
@@ -97,7 +97,7 @@ export default function UserRequestsProvider( {
 } ) {
   const { page } = usePage();
   const { proxyApiRequest } = useRestRequest();
-  const [ since, setSince ] = useState< string | null >( null );
+  const [ convoId, setConvoId ] = useState< number | null >( null );
   const [ conversation, setConversation ] = useState< UserRequestType[] >( messages );
   const [ pagination, setPagination ] = useState< ConvoPagination >( { current: 1, next: false } );
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( true );
@@ -109,12 +109,12 @@ export default function UserRequestsProvider( {
   };
 
   useEffect( () => {
-    fetchConvo( since );
-  }, [ since, refresh ] );
+    fetchConvo( convoId );
+  }, [ convoId, refresh ] );
 
   useEffect( () => {
     const handleRouteChange = () => {
-      fetchConvo( since );
+      fetchConvo( convoId );
     };
 
     window.addEventListener( 'popstate', handleRouteChange );
@@ -208,8 +208,8 @@ export default function UserRequestsProvider( {
     setConversation( [] );
   }
 
-  async function fetchConvo( since?: string | null ) {
-    const data: App.Data.Request.ConvoData = { since: since ?? null, page: 1 };
+  async function fetchConvo( convoId?: number | null, page: number = 1 ) {
+    const data = { conversation: convoId, page };
     const items = await optimistic(
       async () => await proxyApiRequest< App.Data.UserRequestData[] >( 'convo', data ),
       () => setLoadingConversation( true ),
@@ -227,8 +227,8 @@ export default function UserRequestsProvider( {
   }
 
   async function fetchMore() {
-    const data: App.Data.Request.ConvoData = {
-      since: since ?? null,
+    const data = {
+      conversation: convoId,
       page: pagination.current ? pagination.current + 1 : 1,
     };
 
@@ -265,8 +265,8 @@ export default function UserRequestsProvider( {
         fetchMore,
         refreshConvo,
         loadingConversation,
-        since,
-        setSince,
+        convoId,
+        setConvoId,
         addActionToCurrentRequest,
         setRequestAborted,
       } }>
