@@ -15,7 +15,7 @@ class AccountSettings
         $this->client = $client;
     }
 
-    public function get(): \WP_Error|array
+    public function get()
     {
         if (false !== ($res = get_transient('site_settings'))) {
             return $res;
