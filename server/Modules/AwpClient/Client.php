@@ -53,9 +53,6 @@ class Client
         $args = isset($args[0]) ? $args[0] : [];
         extract($this->getUrl($name, $args));
 
-        print_r([$name, $method, $params]);
-        exit();
-
         return $this->getClient()->request($method, $path, [
             'json' => $params,
         ]);
