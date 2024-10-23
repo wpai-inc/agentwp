@@ -14,34 +14,34 @@ export default function History() {
   const [ history, setHistory ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
   const { proxyApiRequest } = useRestRequest();
   const [ loading, setLoading ] = useState( true );
-  const { since, setSince } = useUserRequests();
+  const { convoId, setConvoId } = useUserRequests();
   const { setChatSetting } = useChat();
   const { page } = usePage();
   const [ openStates, setOpenStates ] = useState< { [ key: number ]: boolean } >( {} );
 
   useEffect( () => {
-    fetchHistory( since ?? undefined );
-  }, [ since ] );
+    fetchHistory( convoId ?? undefined );
+  }, [ convoId ] );
 
-  async function fetchHistory( since?: string ) {
-    const history = await proxyApiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory', {
-      since,
-    } );
+  async function fetchHistory( convoId?: number ) {
+    const history = await proxyApiRequest< App.Data.HistoryChronoGroupData[] >( 'convoHistory' );
     setHistory( history );
     setOpenStates( { 0: true } );
     setLoading( false );
   }
 
-  function HistoryList( { items }: { items: App.Data.HistoryData[] } ) {
-    return items.map( item => <HistoryItem key={ item.conversationId } { ...item } /> );
+  function HistoryList( { items }: { items: App.Data.ConversationData[] } ) {
+    return items.map( item => <HistoryItem key={ item.id } { ...item } /> );
   }
 
-  function HistoryItem( convo: App.Data.HistoryData ) {
+  function HistoryItem( convo: App.Data.ConversationData ) {
     return (
       <button
         className="-mx-2 flex w-full items-center justify-between rounded p-2 text-left transition-colors hover:bg-brand-gray-20"
-        onClick={ () => handleResume( convo.conversationCreatedAt ) }>
-        <blockquote className="flex-1 truncate">{ convo.message }</blockquote>
+        onClick={ () => handleResume( convo.id ) }>
+        <blockquote className="flex-1 truncate">
+          { convo.lastMessage ? convo.lastMessage : 'Empty' }
+        </blockquote>
         <time className="block text-nowrap font-semibold">{ convo.humanCreatedAt }</time>
       </button>
     );
@@ -54,8 +54,8 @@ export default function History() {
     } ) );
   }
 
-  function handleResume( createdAt: string ) {
-    setSince( createdAt );
+  function handleResume( convoId: number ) {
+    setConvoId( convoId );
     setChatSetting( null );
   }
 

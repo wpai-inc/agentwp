@@ -10,7 +10,7 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
   const chatUI = maybeUseChatUI();
   const toggleChat = chatUI?.toggle;
 
-  const { setSince } = useUserRequests();
+  const { setConvoId } = useUserRequests();
 
   /**
    * Close the chat setting with
@@ -68,22 +68,22 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
 
   /**
    * Custom Event Listener for Chat Since
-   * Event: awp:chat:since
+   * Event: awp:chat:convo
    * @param {CustomEvent} e
    * @returns {void}
    */
   useEffect( () => {
-    window.agentwp.addEventListener( 'awp:chat:since', ( e: AWPEventChatOpenType ) => {
-      if ( e.detail?.since ) {
+    window.agentwp.addEventListener( 'awp:chat:convo', ( e: AWPEventChatOpenType ) => {
+      if ( e.detail?.convoId ) {
         toggleChat && toggleChat();
-        setSince( e.detail.since );
+        setConvoId( e.detail.convoId );
       }
     } );
 
     window.agentwp.addEventListener( 'awp:chat:toggle', ( e: AWPEventChatSinceType ) => {
       toggleChat && toggleChat();
     } );
-  }, [ window.agentwp, setSince, toggleChat ] );
+  }, [ window.agentwp, setConvoId, toggleChat ] );
 
   return <>{ children }</>;
 };

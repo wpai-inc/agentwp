@@ -55,6 +55,12 @@ token_limit: number;
 token_limit_per_site: number;
 token_limit_per_user: number;
 };
+export type ConversationData = {
+id: number;
+createdAt: string;
+humanCreatedAt: string;
+lastMessage: string | null;
+};
 export type DocData = {
 table: string;
 id: number;
@@ -76,22 +82,11 @@ status: App.Enums.DocIndexState;
 };
 export type FeedbackData = {
 approved: boolean;
-message: string;
+message: string | null;
 };
 export type HistoryChronoGroupData = {
 group: string;
-history: Array<App.Data.HistoryData>;
-};
-export type HistoryData = {
-conversationId: number;
-userRequestId: number;
-siteId: string;
-userId: number;
-wpUserId: number;
-message: string;
-conversationCreatedAt: string;
-userRequestCreatedAt: string;
-humanCreatedAt: string;
+history: Array<App.Data.ConversationData>;
 };
 export type HybridSearchResultsData = {
 query: App.Data.SearchQueryData;
@@ -210,6 +205,7 @@ id: number;
 display_name: string;
 nicename: string;
 role: string;
+email: string | null;
 };
 }
 declare namespace App.Data.Request {
@@ -220,9 +216,6 @@ export type ApiTokenData = {
 email: string;
 password: string;
 full_url: string;
-};
-export type ConvoData = {
-since: any | null;
 };
 export type StoreDocsData = {
 status: number | null;
@@ -246,6 +239,12 @@ message: string;
 mentions: Array<any> | null;
 selected_input: App.Data.StreamableFieldData | null;
 site_data: Array<any> | null;
+};
+export type WpUserRequestData = {
+display_name: string;
+nicename: string;
+role: string;
+email: string | null;
 };
 }
 declare namespace App.Data.Response {
