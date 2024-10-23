@@ -6,6 +6,8 @@ recipeConfidence: number;
 complexity: number;
 capabilityMatch: number;
 continuedConvo: boolean;
+canAnswerDirectly: boolean;
+shouldQuery: boolean;
 convoOnly: boolean;
 visionEnabled: boolean;
 shouldNavigate: number;
@@ -34,6 +36,7 @@ result: Array<any> | null;
 recipe_idx: number | null;
 final: boolean;
 hasExecuted: boolean;
+hasError: boolean;
 };
 export type AgentActionResultData = {
 status: App.Enums.AgentActionResultStatus;
@@ -151,6 +154,7 @@ export type SiteSettingData = {
 name: App.Enums.SiteSettingValue;
 value: any;
 label: string | null;
+canUpdate: boolean | null;
 };
 export type SiteSupportRequestData = {
 type: string;
