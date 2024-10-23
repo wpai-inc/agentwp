@@ -1,8 +1,9 @@
 name: Deploy to WordPress.org
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types:
+      - released
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
