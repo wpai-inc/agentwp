@@ -111,6 +111,11 @@ class UserAuth
         return $this->settings->getRefreshToken();
     }
 
+    public function getWpUser()
+    {
+        return $this->user;
+    }
+
     private function isRole(string $role): bool
     {
         return $this->getRole() === $role;
