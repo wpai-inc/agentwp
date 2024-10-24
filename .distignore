@@ -28,6 +28,7 @@ package.json
 package-lock.json
 composer.lock
 composer.json
+components.json
 composer-plugin.json
 postcss.config.js
 psalm.xml
