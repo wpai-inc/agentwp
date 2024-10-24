@@ -3,7 +3,7 @@ Contributors: codewp, ovidiu-galatan, freshbrewedweb, isotropic
 Tags: ai, agent, chatbot
 Requires at least: 6.4
 Tested up to: 6.6
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -59,7 +59,7 @@ AgentWP offers a free start option. For advanced features, consider upgrading to
 
 == Support ==
 
-For support, visit our [website](https://agentwp.ai) or contact our support team.
+For support, visit our [website](https://agentwp.com) or contact our support team.
 
 == About WPAI, Inc. ==
 

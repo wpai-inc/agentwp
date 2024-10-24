@@ -8,12 +8,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@master
       - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - name: Build
+      - name: Build npm
         run: |
           npm install
           npm run build
@@ -22,10 +23,8 @@ jobs:
         with:
           php-version: '7.4'
           tools: composer:v2
-
       - name: Install Composer dependencies
         run: composer install --no-dev --prefer-dist
-
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
