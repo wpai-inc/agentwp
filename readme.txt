@@ -59,7 +59,7 @@ AgentWP offers a free start option. For advanced features, consider upgrading to
 
 == Support ==
 
-For support, visit our [website](https://agentwp.ai) or contact our support team.
+For support, visit our [website](https://agentwp.com) or contact our support team.
 
 == About WPAI, Inc. ==
 
