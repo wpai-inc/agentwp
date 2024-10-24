@@ -9,6 +9,7 @@
 /tinkerwell
 /.vscode
 /.storybook
+/client
 
 #Files
 .env
@@ -26,6 +27,7 @@ jsconfig.json
 package.json
 package-lock.json
 composer.lock
+composer.json
 composer-plugin.json
 postcss.config.js
 psalm.xml
