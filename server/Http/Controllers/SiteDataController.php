@@ -5,6 +5,9 @@ namespace WpAi\AgentWp\Http\Controllers;
 use WpAi\AgentWp\Services\Cache;
 use WpAi\AgentWp\SiteData;
 
+/**
+ * @since 1.1.2
+ */
 class SiteDataController extends BaseController
 {
     protected string $method = 'GET';
