@@ -7,8 +7,6 @@ use WpAi\AgentWp\SiteData;
 
 class SiteDataController extends BaseController
 {
-    protected string $permission = 'canGenerateVerificationKey';
-
     protected string $method = 'GET';
 
     public array $middleware = [
