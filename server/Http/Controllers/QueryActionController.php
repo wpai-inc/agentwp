@@ -4,6 +4,9 @@ namespace WpAi\AgentWp\Http\Controllers;
 
 class QueryActionController extends BaseController
 {
+
+    protected string $method = 'POST';
+
     public function __invoke(): void
     {
         if (! $this->main->auth->canAccessDB()) {
@@ -14,10 +17,11 @@ class QueryActionController extends BaseController
         global $wpdb;
 
         // unescape slashes
-        $sql = stripslashes($this->request->get('sql'));
+        $request = $this->request->getJsonContent();
+        $sql = stripslashes($request['sql']);
         $sql = $this->filterSqlQuery($sql);
 
-        $args = $this->request->all('args') ?: [];
+        $args = $request['args'] ?? [];
 
         $results = $wpdb->get_results($wpdb->prepare($sql, $args), ARRAY_A);
 
