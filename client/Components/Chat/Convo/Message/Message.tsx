@@ -19,9 +19,6 @@ export default function Message( {
   const sameUserRequest = userRequest.id === currentUserRequestId;
   const { streamingStatus } = useStream();
   const pending = ( sameUserRequest && streamingStatus > StreamingStatusEnum.OFF ) || submitted;
-  const isIncomplete =
-    userRequest.agent_actions?.length === 0 ||
-    userRequest.agent_actions?.some( aa => ( ! aa.action && ! aa.result?.status ) || aa.hasError );
   const isAborted =
     streamingStatus === StreamingStatusEnum.SHOULD_ABORT ||
     userRequest.agent_actions?.some( aa => aa.result?.status === 'aborted' ) ||
@@ -39,7 +36,6 @@ export default function Message( {
             time={ userRequest.human_created_at }
             agentActions={ userRequest.agent_actions }
             pending={ pending }
-            incomplete={ isIncomplete }
             aborted={ isAborted }
           />
         </div>
