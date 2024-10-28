@@ -130,4 +130,21 @@ class UserAuth
     {
         return get_users(['role' => 'agentwp_manager']);
     }
+
+    public function addCap(string $cap): void
+    {
+        $this->user->add_cap($cap);
+    }
+
+    public function removeCap(string $cap): void
+    {
+        $this->user->remove_cap($cap);
+    }
+
+    public function makeCurrentUserManager(): void
+    {
+        $this->addCap(self::CAP_MANAGE_AGENTWP_CONNECTION);
+        $this->addCap(self::CAP_MANAGE_AGENTWP_USERS);
+        $this->addCap(self::CAP_AGENTWP_ACCESS);
+    }
 }

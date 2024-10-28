@@ -104,11 +104,9 @@ export default function ActionListenerProvider( { children }: { children: React.
     switch ( aa.action.ability ) {
       case 'query':
         try {
-          const response = await restReq.get( 'run_action_query', {
-            params: {
-              sql: aa.action.sql,
-              args: aa.action.args,
-            },
+          const response = await restReq.post( 'run_action_query', {
+            sql: aa.action.sql,
+            args: aa.action.args,
           } );
 
           await storeSuccessfulActionResult( aa, response.data.data.results );

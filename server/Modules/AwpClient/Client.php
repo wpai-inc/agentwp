@@ -5,6 +5,7 @@ namespace WpAi\AgentWp\Modules\AwpClient;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
+use WpAi\AgentWp\Main;
 
 class Client
 {
@@ -132,6 +133,7 @@ class Client
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'X-Wp-Agent-Version' => $this->version,
+            'X-Wp-Plugin-Version' => Main::PLUGIN_VERSION,
         ];
 
         if ($this->wpUser) {
