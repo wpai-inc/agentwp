@@ -13,6 +13,7 @@ use WpAi\AgentWp\Http\Controllers\GetMentionItems;
 use WpAi\AgentWp\Http\Controllers\GetUsers;
 use WpAi\AgentWp\Http\Controllers\IndexSiteDocs;
 use WpAi\AgentWp\Http\Controllers\Logout;
+use WpAi\AgentWp\Http\Controllers\MakeMeAManager;
 use WpAi\AgentWp\Http\Controllers\MakeOnboardingAsCompleted;
 use WpAi\AgentWp\Http\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Http\Controllers\OauthAuthorize;
@@ -65,6 +66,7 @@ class Router implements Registrable
         'oauth_authorize' => OauthAuthorize::class,
         'oauth_connect' => OauthConnect::class,
         'tools_summarize' => [Tools::class, 'summarize'],
+        'make-me-a-manager' => MakeMeAManager::class,
     ];
 
     private Main $main;

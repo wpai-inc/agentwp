@@ -42,6 +42,10 @@ class HttpErrors
                 'message' => __('Access denied.', 'agentwp'),
                 'code' => 403,
             ],
+            'already_have_manager' => [
+                'message' => __('You already have a manager.', 'agentwp'),
+                'code' => 403,
+            ],
         ];
     }
 
