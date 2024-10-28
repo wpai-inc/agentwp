@@ -1,13 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
-import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
+import { ActionType, AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useError } from './ErrorProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 
-const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
+type ActionListenerContextType = {
+  actionNavigation: ( aa: AgentAction, confirm: boolean ) => Promise;
+};
+
+const ActionListenerContext = createContext< ActionListenerContextType | undefined >( undefined );
+
+export function useActionListener() {
+  const actionListener = useContext( ActionListenerContext );
+  if ( ! actionListener ) {
+    throw new Error( 'useActionListener must be used within a ActionListenerProvider' );
+  }
+  return actionListener;
+}
+
+export default function ActionListenerProvider( { children }: { children: React.ReactNode } ) {
   const { streamingStatus, retryStream } = useStream();
-  const { currentAction, currentUserRequestId } = useUserRequests();
+  const { currentAction, currentUserRequestId, addActionToCurrentRequest } = useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
   const { errors } = useError();
 
@@ -76,6 +90,16 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
     return storeActionResult( aa, result );
   }
 
+  async function actionNavigation( aa: AgentAction, confirm: boolean ) {
+    if ( confirm ) {
+      await storeSuccessfulActionResult( aa );
+      window.location.href = aa.action.url as string;
+    } else {
+      await storeUnsuccessfulActionResult( aa, 'User did not confirm navigation' );
+      window.location.reload();
+    }
+  }
+
   async function executeAction( aa: AgentAction ) {
     switch ( aa.action.ability ) {
       case 'query':
@@ -93,11 +117,20 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         }
         break;
       case 'navigate':
-        await storeSuccessfulActionResult( aa );
-        window.location.href = aa.action.url as string;
-        return new Promise( () => {
-          /* never resolve to stop further execution */
-        } );
+        if ( currentUserRequestId && currentAction ) {
+          const agentResponseAction: AgentAction = {
+            ...currentAction,
+            action: {
+              ...currentAction.action,
+              ability: 'navigation_confirmation',
+            } as ActionType,
+            hasExecuted: true,
+            final: true,
+          };
+
+          addActionToCurrentRequest( currentUserRequestId, agentResponseAction );
+        }
+        await new Promise( () => {} );
         break;
       case 'message':
         await storeSuccessfulActionResult( aa );
@@ -113,7 +146,12 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
     }
   }
 
-  return <>{ children }</>;
-};
-
-export default ActionListenerProvider;
+  return (
+    <ActionListenerContext.Provider
+      value={ {
+        actionNavigation: actionNavigation,
+      } }>
+      { children }
+    </ActionListenerContext.Provider>
+  );
+}

@@ -27,24 +27,28 @@ export default function AgentResponse( {
   userRequestId,
   time,
   pending = false,
-  incomplete = false,
   aborted = false,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
   time: string;
   pending?: boolean;
-  incomplete?: boolean;
   aborted?: boolean;
 } ) {
-  const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
-    | AgentAction
-    | undefined;
+  const messageAction = agentActions?.find( aa =>
+    [ 'message', 'navigation_confirmation' ].includes( aa.action?.ability ),
+  ) as AgentAction | undefined;
 
-  const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
+  const otherActions =
+    agentActions?.filter(
+      aa => ! [ 'message', 'navigation_confirmation' ].includes( aa.action?.ability ),
+    ) ?? [];
+
+  const incomplete = agentActions?.length === 0;
 
   const { opened } = useFeedback();
 
+  console.log( 'messageAction', messageAction );
   return (
     <div className="text-black/60">
       { otherActions.length > 0 ? (
@@ -122,6 +126,11 @@ export default function AgentResponse( {
       { messageAction ? (
         <ActionComponent { ...messageAction } />
       ) : (
+        // messageAction.hasError ? (
+        //   <ActionIncomplete userRequestId={ userRequestId } />
+        // ) : (
+        //   <ActionComponent { ...messageAction } />
+        // )
         <>
           { aborted && <ActionAborted /> }
           { ! aborted && pending && <ActionPending /> }

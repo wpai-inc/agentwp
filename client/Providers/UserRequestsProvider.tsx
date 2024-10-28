@@ -32,6 +32,7 @@ export type AgentAction = {
   final: boolean;
   recipe_idx: number;
   result: any;
+  hasError: boolean;
   hasExecuted: boolean;
 };
 

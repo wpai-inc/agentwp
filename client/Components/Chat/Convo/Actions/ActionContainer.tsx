@@ -16,6 +16,7 @@ export default function ActionContainer( {
   handleRetry,
   icon,
   error,
+  open = false,
 }: {
   title: string;
   pending: boolean;
@@ -24,8 +25,9 @@ export default function ActionContainer( {
   handleRetry?: () => void;
   icon?: React.ReactNode;
   error?: string;
+  open?: boolean;
 } ) {
-  const [ isOpen, setIsOpen ] = useState( false );
+  const [ isOpen, setIsOpen ] = useState( open );
   const hasError = error && error.length > 0;
 
   const iconClassName = 'opacity-40 h-5 w-5';
@@ -53,7 +55,7 @@ export default function ActionContainer( {
         className,
       ) }>
       <div className="flex justify-between items-center">
-        <div className="flex gap-2 items-center max-w-full">
+        <div className="flex gap-2 items-center w-full">
           <div>
             { pending && ! handleRetry ? (
               <Spinner show={ true } />
@@ -67,15 +69,17 @@ export default function ActionContainer( {
               icon && React.cloneElement( icon as ReactElement, { className: iconClassName } )
             ) }
           </div>
-          <p className="overflow-hidden text-ellipsis whitespace-nowrap">{ title }</p>
+          <p className="overflow-hidden text-ellipsis whitespace-nowrap flex-1">{ title }</p>
+          { ! pending && handleRetry && <IconRenew className={ iconClassName } /> }
+          { children && ! handleRetry && (
+            <CollapsibleTrigger>
+              <button>
+                { ! isOpen && <IconAdd className={ iconClassName } /> }
+                { isOpen && <IconRemove className={ iconClassName } /> }
+              </button>
+            </CollapsibleTrigger>
+          ) }
         </div>
-        { ! pending && handleRetry && <IconRenew className={ iconClassName } /> }
-        { children && ! handleRetry && (
-          <CollapsibleTrigger>
-            { ! isOpen && <IconAdd className={ iconClassName } /> }
-            { isOpen && <IconRemove className={ iconClassName } /> }
-          </CollapsibleTrigger>
-        ) }
       </div>
       { children && <CollapsibleContent className="pt-4">{ children }</CollapsibleContent> }
     </Collapsible>
