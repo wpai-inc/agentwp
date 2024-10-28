@@ -94,7 +94,11 @@ class Router implements Registrable
             register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
                 'methods' => $controller->method(),
                 'callback' => function (\WP_REST_Request $request) use ($controller, $callback, $default_middleware) {
-                    $middlewares = array_merge($default_middleware, $controller->middleware);
+                    // Only include nonce middleware if disable_nonce is not true
+                    $middlewares = empty($controller->disable_nonce) || $controller->disable_nonce === false
+                        ? array_merge($default_middleware, $controller->middleware)
+                        : $controller->middleware;
+
                     // Run middleware checks before the controller action
                     foreach ($middlewares as $middlewareClass) {
                         $middleware = new $middlewareClass($this->main);
