@@ -4,8 +4,7 @@ namespace WpAi\AgentWp\Http\Controllers;
 
 class QueryActionController extends BaseController
 {
-
-    protected string $method = 'POST';
+    protected string $method = 'GET';
 
     public function __invoke(): void
     {
