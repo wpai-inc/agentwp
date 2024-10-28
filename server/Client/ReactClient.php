@@ -155,8 +155,9 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                         <ul>
                             <?php
                 foreach ($managers as $manager) {
-                    echo esc_html('<li>'.
-                    $manager->data->display_name.' ('.$manager->data->user_email.')</li>');
+                    ?><li><?php
+                    echo esc_html($manager->data->display_name.' ('.$manager->data->user_email.')');
+                    ?></li><?php
                 }
             ?>
                         </ul>
