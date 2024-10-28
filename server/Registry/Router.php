@@ -29,6 +29,7 @@ use WpAi\AgentWp\Http\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Http\Controllers\UpdateUserCapabilities;
 use WpAi\AgentWp\Http\Controllers\UserController;
 use WpAi\AgentWp\Http\Controllers\ValidateWebsite;
+use WpAi\AgentWp\Http\Middleware\CheckRestRequestNonce;
 use WpAi\AgentWp\Main;
 
 class Router implements Registrable
@@ -80,6 +81,7 @@ class Router implements Registrable
 
     public function routes(): void
     {
+        $default_middleware = [CheckRestRequestNonce::class];
         foreach ($this->routes as $route => $callback) {
             if (is_string($callback)) {
                 $controller = new $callback($this->main);
@@ -91,9 +93,10 @@ class Router implements Registrable
 
             register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
                 'methods' => $controller->method(),
-                'callback' => function (\WP_REST_Request $request) use ($controller, $callback) {
+                'callback' => function (\WP_REST_Request $request) use ($controller, $callback, $default_middleware) {
+                    $middlewares = array_merge($default_middleware, $controller->middleware);
                     // Run middleware checks before the controller action
-                    foreach ($controller->middleware as $middlewareClass) {
+                    foreach ($middlewares as $middlewareClass) {
                         $middleware = new $middlewareClass($this->main);
 
                         if ($middleware instanceof MiddlewareInterface) {
