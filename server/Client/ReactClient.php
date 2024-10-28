@@ -151,14 +151,42 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             ?>
                     </p>
                     <div>
-                        <strong>AgentsWP Managers:</strong>
+                        <strong>AgentWP Managers:</strong>
                         <ul>
-                            <?php
-                foreach ($managers as $manager) {
-                    echo esc_html('<li>'.
-                    $manager->data->display_name.' ('.$manager->data->user_email.')</li>');
-                }
-            ?>
+                        <?php
+                        if (count($managers) > 0) {
+                            foreach ($managers as $manager) {
+                                ?><li><?php
+                                    echo esc_html($manager->data->display_name.' ('.$manager->data->user_email.')');
+                                ?></li><?php
+                            }
+                        } else { ?>
+                            <li>
+                                <?php esc_html_e('No managers found.', 'agentwp'); ?>
+                                <div style="margin-top: 10px;">
+                                    <button class="button button-primary" id="make-me-a-manager">Make me a manager</button>
+                                </div>
+                            </li>
+                            <script>
+                                document.getElementById('make-me-a-manager').addEventListener('click', function () {
+                                    fetch('<?php echo esc_url(rest_url('agentwp/v1/make-me-a-manager')); ?>', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-WP-Nonce': '<?php echo esc_attr(wp_create_nonce('wp_rest')); ?>',
+                                        },
+                                    }).then(function (response) {
+                                        return response.json();
+                                    }).then(function (responseData) {
+                                        if (responseData.success) {
+                                            window.location.reload();
+                                        }
+                                    }).catch(function (error) {
+                                        console.error('Error:', error);
+                                    });
+                                });
+                            </script>
+                        <?php } ?>
                         </ul>
                     </div>
                 </div>

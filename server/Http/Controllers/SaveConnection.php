@@ -10,6 +10,8 @@ class SaveConnection extends BaseController
 
     protected string $method = 'POST';
 
+    public bool $disable_nonce = true;
+
     public function __invoke(): void
     {
         if (! $this->request->get('verification_key')) {
