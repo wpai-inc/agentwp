@@ -5,7 +5,7 @@ import UpdateNotification from '@/Components/Chat/Partials/UpdateNotification';
 import ChatNav from '@/Components/Chat/Partials/ChatNav';
 import { ConversationTab, SupportTab, SettingsTab } from '@/Components/Chat/Tabs';
 import ConvoOnlyNotice from './ConvoOnlyNotice';
-import { usePage } from '@/Providers/PageProvider';
+import { useAccountSettings } from '@/Providers/AccountSettingsProvider';
 
 export type TabKey = 'convo' | 'search' | 'support' | 'settings';
 export type HandleDrag = { handleDrag?: ( e: MouseEvent ) => void };
@@ -16,7 +16,7 @@ type PageComponents = {
 
 export default function ChatCore( { handleDrag }: HandleDrag ) {
   const [ tab, setTab ] = useState< TabKey >( 'convo' );
-  const { getAccountSetting } = usePage();
+  const { getAccountSetting } = useAccountSettings();
   const convoOnly = getAccountSetting( 'convoOnly' )?.value || false;
 
   const pages = useMemo< PageComponents >(

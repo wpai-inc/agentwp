@@ -42,6 +42,10 @@ class HttpErrors
                 'message' => __('Access denied.', 'agentwp'),
                 'code' => 403,
             ],
+            'not_the_owner' => [
+                'message' => __('Only the owner can perform this action.', 'agentwp'),
+                'code' => 403,
+            ],
         ];
     }
 

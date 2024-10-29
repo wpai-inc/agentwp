@@ -22,12 +22,15 @@ class ManuallyActivateAgent extends BaseController
             'client_id' => sanitize_text_field($apiKey['client_id']),
             'client_secret' => sanitize_text_field($apiKey['client_secret']),
         ]);
+
         $this->main->settings->setAccessToken([
             'access_token' => sanitize_text_field($apiKey['token']['access_token']),
             'token_type' => 'Bearer',
             'refresh_token' => '',
             'expires_in' => sanitize_text_field($apiKey['token']['expires_in']),
         ]);
+
+        $this->main->auth->makeCurrentUserManager();
 
         $this->respond([
             'settings' => $this->main->settings->data,
