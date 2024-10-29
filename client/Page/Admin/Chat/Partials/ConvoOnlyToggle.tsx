@@ -1,12 +1,12 @@
 import { ChatSwitch } from '@/Components/Chat/Partials/ChatSwitch';
 import { useState } from 'react';
-import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { optimistic } from '@/lib/utils';
 import { AgentTooltip } from '@/Components/ui/tooltip';
+import { useAccountSettings } from '@/Providers/AccountSettingsProvider';
 
 export default function ConvoOnlyToggle() {
-  const { getAccountSetting } = usePage();
+  const { getAccountSetting, updateSetting } = useAccountSettings();
   const setting = getAccountSetting( 'convoOnly' );
   const [ enabled, setEnabled ] = useState( setting?.value || false );
 
@@ -14,12 +14,15 @@ export default function ConvoOnlyToggle() {
 
   async function handleChange( checked: boolean ) {
     const updatedSetting = { ...setting, value: checked };
-    optimistic(
+
+    await optimistic(
       async () =>
         await proxyApiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', updatedSetting ),
       () => setEnabled( checked ),
       () => setEnabled( ! checked ),
     );
+
+    updateSetting( 'convoOnly', updatedSetting );
   }
 
   return setting?.canUpdate ? (
