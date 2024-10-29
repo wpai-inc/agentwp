@@ -42,8 +42,8 @@ class HttpErrors
                 'message' => __('Access denied.', 'agentwp'),
                 'code' => 403,
             ],
-            'already_have_manager' => [
-                'message' => __('You already have a manager.', 'agentwp'),
+            'not_the_owner' => [
+                'message' => __('Only the owner can perform this action.', 'agentwp'),
                 'code' => 403,
             ],
         ];
