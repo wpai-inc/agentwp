@@ -72,7 +72,7 @@ export default function Settings() {
 
   function SettingsHeader() {
     return (
-      <div className="bg-white p-6 pb-0 sticky top-8 z-50">
+      <div className="bg-white p-6 pb-0 md:sticky md:top-8 z-50">
         <div className="flex justify-between">
           <div>
             <img src={ LogoImg } alt="AgentWP" className="w-10 h-10 inline-block mr-2" />
