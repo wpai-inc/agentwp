@@ -8,10 +8,11 @@ class MakeMeAManager extends BaseController
 
     public function __invoke(): void
     {
-        $managers = $this->main->auth->managers();
+        $user_settings = $this->main->client()->user();
+        $isOwner = $user_settings['user']['email'] === wp_get_current_user()->user_email;
 
-        if (count($managers) > 0) {
-            $this->error('already_have_manager');
+        if (! $isOwner) {
+            $this->error('not_the_owner');
         }
 
         $this->main->auth->makeCurrentUserManager();

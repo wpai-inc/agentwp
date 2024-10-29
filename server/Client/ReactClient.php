@@ -136,11 +136,47 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             <div id="<?php echo esc_attr($this->slug()) ?>"></div>
         <?php
         } else {
+            $user_settings = $this->main->client()->user();
+            $isOwner = $user_settings['user']['email'] === wp_get_current_user()->user_email;
             $managers = $this->main->auth->managers();
             ?>
             <div>
                 <h1>AgentWP</h1>
                 <div>
+                    <?php if ($isOwner) { ?>
+                        <p>
+                            <?php
+                                // Translators: This message is shown when the user does not have permission to access AgentWP
+                                esc_html_e(
+                                    'It looks like you have lost your AgentWP manager capabilities. Click the button below to restore your access.',
+                                    'agentwp'
+                                );
+                        ?>
+                        </p>
+                        <div style="margin-top: 10px;">
+                        <button class="button button-primary" id="make-me-a-manager">Restore Manager Access</button>
+                        </div>
+                        <script>
+                            document.getElementById('make-me-a-manager').addEventListener('click', function () {
+                                fetch('<?php echo esc_url(rest_url('agentwp/v1/make-me-a-manager')); ?>', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-WP-Nonce': '<?php echo esc_attr(wp_create_nonce('wp_rest')); ?>',
+                                    },
+                                }).then(function (response) {
+                                    return response.json();
+                                }).then(function (responseData) {
+                                    if (responseData.success) {
+                                        window.location.reload();
+                                    }
+                                }).catch(function (error) {
+                                    console.error('Error:', error);
+                                });
+                            });
+                        </script>
+
+                    <?php } else { ?>
                     <p>
                         <?php
                             // Translators: This message is shown when the user does not have permission to access AgentWP
@@ -148,49 +184,29 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                                 'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
                                 'agentwp'
                             );
-            ?>
+                        ?>
                     </p>
                     <div>
                         <strong>AgentWP Managers:</strong>
                         <ul>
                         <?php
-                        if (count($managers) > 0) {
-                            foreach ($managers as $manager) {
-                                ?><li><?php
-                                    echo esc_html($manager->data->display_name.' ('.$manager->data->user_email.')');
-                                ?></li><?php
-                            }
-                        } else { ?>
+                            if (count($managers) > 0) {
+                                foreach ($managers as $manager) {
+                                    ?><li><?php
+                                        echo esc_html($manager->data->display_name.' ('.$manager->data->user_email.')');
+                                    ?></li><?php
+                                }
+                            } else { ?>
                             <li>
-                                <?php esc_html_e('No managers found.', 'agentwp'); ?>
-                                <div style="margin-top: 10px;">
-                                    <button class="button button-primary" id="make-me-a-manager">Make me a manager</button>
-                                </div>
+                                <?php echo esc_html($user_settings['user']['name'].' ('.$user_settings['user']['email'].')'); ?>
                             </li>
-                            <script>
-                                document.getElementById('make-me-a-manager').addEventListener('click', function () {
-                                    fetch('<?php echo esc_url(rest_url('agentwp/v1/make-me-a-manager')); ?>', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-WP-Nonce': '<?php echo esc_attr(wp_create_nonce('wp_rest')); ?>',
-                                        },
-                                    }).then(function (response) {
-                                        return response.json();
-                                    }).then(function (responseData) {
-                                        if (responseData.success) {
-                                            window.location.reload();
-                                        }
-                                    }).catch(function (error) {
-                                        console.error('Error:', error);
-                                    });
-                                });
-                            </script>
                         <?php } ?>
                         </ul>
                     </div>
+                    <?php } ?>
                 </div>
-    <?php
+
+            <?php
         }
     }
 
