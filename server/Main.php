@@ -20,7 +20,7 @@ class Main
 
     const SLUG = 'agentwp';
 
-    const PLUGIN_VERSION = '1.1.2';
+    const PLUGIN_VERSION = '1.1.3';
 
     const BUILD_DIR = 'build';
 
