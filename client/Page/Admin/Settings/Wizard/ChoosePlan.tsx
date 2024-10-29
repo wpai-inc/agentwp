@@ -77,7 +77,7 @@ export default function ChoosePlan() {
 function FeatureUnlimited() {
   return (
     <AgentTooltip
-      content={ () => (
+      content={
         <p>
           Subject to our{ ' ' }
           <a href="https://agentwp.com/legal/terms/" className="underline underline-offset-1">
@@ -85,7 +85,7 @@ function FeatureUnlimited() {
           </a>
           .
         </p>
-      ) }>
+      }>
       <p>Unlimited usage *</p>
     </AgentTooltip>
   );

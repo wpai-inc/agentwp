@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toJpeg } from 'html-to-image';
-import { usePage } from './PageProvider';
+import { useAccountSettings } from '@/Providers/AccountSettingsProvider';
 
 type postContentType = {
   post_content: string;
@@ -42,7 +42,7 @@ export function useScreen() {
 }
 
 export default function ScreenProvider( { children }: { children: React.ReactNode } ) {
-  const { getAccountSetting, accountSettings } = usePage();
+  const { getAccountSetting, accountSettings } = useAccountSettings();
 
   const url = window.location.href;
   const title = document.title;
