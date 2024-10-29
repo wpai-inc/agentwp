@@ -136,6 +136,8 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             <div id="<?php echo esc_attr($this->slug()) ?>"></div>
         <?php
         } else {
+            $user_settings = $this->main->client()->user();
+            $isOwner = $user_settings['user']['email'] === wp_get_current_user()->user_email;
             $managers = $this->main->auth->managers();
             ?>
             <div>
@@ -154,7 +156,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                         <strong>AgentWP Managers:</strong>
                         <ul>
                         <?php
-                        if (count($managers) > 0) {
+                        if (! $isOwner && count($managers) > 0) {
                             foreach ($managers as $manager) {
                                 ?><li><?php
                                     echo esc_html($manager->data->display_name.' ('.$manager->data->user_email.')');
