@@ -4,11 +4,12 @@ import IconVision from '@material-design-icons/svg/outlined/visibility.svg?react
 import IconNoVision from '@material-design-icons/svg/outlined/visibility_off.svg?react';
 import { cn, optimistic } from '@/lib/utils';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
-import { usePage } from '@/Providers/PageProvider';
+import { useAccountSettings } from '@/Providers/AccountSettingsProvider';
 
 export default function ToggleVision() {
-  const { getAccountSetting, setAccountSettings } = usePage();
+  const { getAccountSetting, setAccountSettings } = useAccountSettings();
   const setting = getAccountSetting( 'visionEnabled' );
+
   const [ on, setOn ] = useState< boolean >( setting?.value || false );
 
   const { proxyApiRequest } = useRestRequest();
