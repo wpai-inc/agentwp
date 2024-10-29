@@ -179,26 +179,26 @@ abstract class ReactClient implements ClientAppInterface, Registrable
                     <?php } else { ?>
                     <p>
                         <?php
-                                    // Translators: This message is shown when the user does not have permission to access AgentWP
-                                    esc_html_e(
-                                        'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
-                                        'agentwp'
-                                    );
+                            // Translators: This message is shown when the user does not have permission to access AgentWP
+                            esc_html_e(
+                                'You do not have permission to access AgentWP. Please request access to AgentWP from your AgentWP manager.',
+                                'agentwp'
+                            );
                         ?>
                     </p>
                     <div>
                         <strong>AgentWP Managers:</strong>
                         <ul>
                         <?php
-                                    if (count($managers) > 0) {
-                                        foreach ($managers as $manager) {
-                                            ?><li><?php
-                                                echo esc_html($manager->data->display_name.' ('.$manager->data->user_email.')');
-                                            ?></li><?php
-                                        }
-                                    } else { ?>
+                            if (count($managers) > 0) {
+                                foreach ($managers as $manager) {
+                                    ?><li><?php
+                                        echo esc_html($manager->data->display_name.' ('.$manager->data->user_email.')');
+                                    ?></li><?php
+                                }
+                            } else { ?>
                             <li>
-                                <?php esc_html_e('No managers found.', 'agentwp'); ?>
+                                <?php echo esc_html($user_settings['user']['name'].' ('.$user_settings['user']['email'].')'); ?>
                             </li>
                         <?php } ?>
                         </ul>
