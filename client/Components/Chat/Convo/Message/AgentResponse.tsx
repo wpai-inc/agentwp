@@ -46,6 +46,8 @@ export default function AgentResponse( {
 
   const incomplete = agentActions?.length === 0;
 
+  const queryActions = agentActions?.filter( aa => aa.action?.ability === 'query' ) ?? [];
+
   const { opened } = useFeedback();
 
   console.log( 'messageAction', messageAction );
@@ -135,7 +137,13 @@ export default function AgentResponse( {
           { aborted && <ActionAborted /> }
           { ! aborted && pending && <ActionPending /> }
           { ! aborted && incomplete && ! pending && (
-            <ActionIncomplete userRequestId={ userRequestId } />
+            <>
+              { queryActions.length > 0 ? (
+                <p className="text-black">Sorry we are unable to run SQL query.</p>
+              ) : (
+                <ActionIncomplete userRequestId={ userRequestId } />
+              ) }
+            </>
           ) }
         </>
       ) }

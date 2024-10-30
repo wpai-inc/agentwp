@@ -1,4 +1,4 @@
-import { useEffect, createContext, useContext } from 'react';
+import { useEffect, createContext, useContext, useState } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import { ActionType, AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useError } from './ErrorProvider';
@@ -6,7 +6,7 @@ import { useRestRequest } from './RestRequestProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 
 type ActionListenerContextType = {
-  actionNavigation: ( aa: AgentAction, confirm: boolean ) => Promise;
+  actionNavigation: ( aa: AgentAction, confirm: boolean ) => Promise< void >;
 };
 
 const ActionListenerContext = createContext< ActionListenerContextType | undefined >( undefined );
@@ -24,6 +24,7 @@ export default function ActionListenerProvider( { children }: { children: React.
   const { currentAction, currentUserRequestId, addActionToCurrentRequest } = useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
   const { errors } = useError();
+  const [ retries, setRetries ] = useState( 0 );
 
   useEffect( () => {
     if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
@@ -56,7 +57,12 @@ export default function ActionListenerProvider( { children }: { children: React.
   }
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
+    if ( retries > 0 ) {
+      return;
+    }
+
     if ( reqId && ! aa.final && aa.hasExecuted ) {
+      setRetries( retries + 1 );
       await retryStream( reqId );
     }
   }
