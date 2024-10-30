@@ -50,7 +50,6 @@ export default function AgentResponse( {
 
   const { opened } = useFeedback();
 
-  console.log( 'messageAction', messageAction );
   return (
     <div className="text-black/60">
       { otherActions.length > 0 ? (

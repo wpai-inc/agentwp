@@ -15,7 +15,7 @@ export default function ActionNavigate( aa: AgentAction ) {
   let title = 'Suggesting navigation to ' + relativeUrl;
 
   if ( aa.hasExecuted ) {
-    if ( aa.hasError ) {
+    if ( aa.result?.data?.confirmed !== true ) {
       title = 'Cancelled navigation to ' + relativeUrl;
     } else {
       title = 'Navigated to ' + relativeUrl;

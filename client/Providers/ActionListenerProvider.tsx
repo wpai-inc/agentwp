@@ -21,10 +21,10 @@ export function useActionListener() {
 
 export default function ActionListenerProvider( { children }: { children: React.ReactNode } ) {
   const { streamingStatus, retryStream } = useStream();
-  const { currentAction, currentUserRequestId, addActionToCurrentRequest } = useUserRequests();
+  const { currentAction, updateCurrentAction, currentUserRequestId, addActionToCurrentRequest } =
+    useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
   const { errors } = useError();
-  const [ retries, setRetries ] = useState( 0 );
 
   useEffect( () => {
     if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
@@ -57,12 +57,7 @@ export default function ActionListenerProvider( { children }: { children: React.
   }
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
-    if ( retries > 0 ) {
-      return;
-    }
-
     if ( reqId && ! aa.final && aa.hasExecuted ) {
-      setRetries( retries + 1 );
       await retryStream( reqId );
     }
   }
@@ -72,13 +67,13 @@ export default function ActionListenerProvider( { children }: { children: React.
       throw new Error( 'Agent action ID is not set' );
     }
 
-    await proxyApiRequest< App.Data.AgentActionData >( 'actionResult', {
+    return await proxyApiRequest< App.Data.AgentActionData >( 'actionResult', {
       agentAction: aa.id,
       ...data,
     } );
   }
 
-  async function storeSuccessfulActionResult( aa: AgentAction, data: any[] | null = null ) {
+  async function storeSuccessfulActionResult( aa: AgentAction, data: any = null ) {
     const result: App.Data.AgentActionResultData = {
       status: 'success',
       error: null,
@@ -101,8 +96,8 @@ export default function ActionListenerProvider( { children }: { children: React.
       await storeSuccessfulActionResult( aa );
       window.location.href = aa.action.url as string;
     } else {
-      await storeUnsuccessfulActionResult( aa, 'User did not confirm navigation' );
-      window.location.reload();
+      const updatedAction = await storeSuccessfulActionResult( aa, { confirmed: false } );
+      updateCurrentAction( updatedAction );
     }
   }
 

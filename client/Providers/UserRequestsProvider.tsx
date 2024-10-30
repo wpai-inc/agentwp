@@ -24,17 +24,7 @@ export type ActionType =
   | Graph
   | MessageActionEscalation;
 
-export type AgentAction = {
-  id: string;
-  created_at: string;
-  human_created_at: string;
-  action: ActionType;
-  final: boolean;
-  recipe_idx: number;
-  result: any;
-  hasError: boolean;
-  hasExecuted: boolean;
-};
+export type AgentAction = App.Data.AgentActionData;
 
 export type UserRequestType = {
   id: string;
@@ -67,6 +57,7 @@ type UserRequestsContextType = {
   currentUserRequest?: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
+  updateCurrentAction: ( action: AgentAction ) => void;
   fetchConvo: ( since: string | null ) => Promise< void >;
   fetchMore: () => Promise< void >;
   refreshConvo: () => void;
@@ -141,6 +132,29 @@ export default function UserRequestsProvider( {
         ? currentUserRequest?.agent_actions[ currentUserRequest?.agent_actions.length - 1 ]
         : null,
     [ currentUserRequest ],
+  );
+
+  // update the current action (last agent action) of the current user request
+  const updateCurrentAction = useCallback(
+    function ( action: AgentAction ) {
+      if ( currentUserRequest ) {
+        setConversation( conversation => {
+          return conversation.map( request => {
+            if ( request.id === currentUserRequest.id ) {
+              return {
+                ...request,
+                agent_actions: [
+                  ...request.agent_actions.filter( a => a.id !== action.id ),
+                  action,
+                ],
+              };
+            }
+            return request;
+          } );
+        } );
+      }
+    },
+    [ conversation, currentUserRequest ],
   );
 
   const addActionToCurrentRequest = useCallback(
@@ -262,6 +276,7 @@ export default function UserRequestsProvider( {
         currentUserRequest,
         setCurrentUserRequestId,
         currentAction,
+        updateCurrentAction,
         fetchConvo,
         fetchMore,
         refreshConvo,

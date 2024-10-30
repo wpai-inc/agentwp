@@ -10,7 +10,7 @@ canAnswerDirectly: boolean;
 shouldQuery: boolean;
 convoOnly: boolean;
 visionEnabled: boolean;
-shouldNavigate: number;
+shouldNavigate: boolean;
 sequence: Array<any> | null;
 refused: boolean;
 unrelated: boolean;
@@ -32,7 +32,7 @@ export type AgentActionData = {
 id: string;
 created_at: string;
 action: any | null;
-result: Array<any> | null;
+result: any;
 recipe_idx: number | null;
 final: boolean;
 hasExecuted: boolean;
