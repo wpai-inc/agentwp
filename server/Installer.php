@@ -24,6 +24,7 @@ class Installer implements Registrable
     public function register()
     {
         $plugin_file = plugin_basename($this->main->pluginPath());
+
         if (doing_action('activate_'.$plugin_file)) {
             $this->activate();
         }

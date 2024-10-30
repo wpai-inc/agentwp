@@ -13,6 +13,7 @@ use WpAi\AgentWp\Http\Controllers\GetMentionItems;
 use WpAi\AgentWp\Http\Controllers\GetUsers;
 use WpAi\AgentWp\Http\Controllers\IndexSiteDocs;
 use WpAi\AgentWp\Http\Controllers\Logout;
+use WpAi\AgentWp\Http\Controllers\MakeMeAManager;
 use WpAi\AgentWp\Http\Controllers\MakeOnboardingAsCompleted;
 use WpAi\AgentWp\Http\Controllers\ManuallyActivateAgent;
 use WpAi\AgentWp\Http\Controllers\OauthAuthorize;
@@ -29,6 +30,7 @@ use WpAi\AgentWp\Http\Controllers\UpdateGeneralSettings;
 use WpAi\AgentWp\Http\Controllers\UpdateUserCapabilities;
 use WpAi\AgentWp\Http\Controllers\UserController;
 use WpAi\AgentWp\Http\Controllers\ValidateWebsite;
+use WpAi\AgentWp\Http\Middleware\CheckRestRequestNonce;
 use WpAi\AgentWp\Main;
 
 class Router implements Registrable
@@ -64,6 +66,7 @@ class Router implements Registrable
         'oauth_authorize' => OauthAuthorize::class,
         'oauth_connect' => OauthConnect::class,
         'tools_summarize' => [Tools::class, 'summarize'],
+        'make-me-a-manager' => MakeMeAManager::class,
     ];
 
     private Main $main;
@@ -80,6 +83,7 @@ class Router implements Registrable
 
     public function routes(): void
     {
+        $default_middleware = [CheckRestRequestNonce::class];
         foreach ($this->routes as $route => $callback) {
             if (is_string($callback)) {
                 $controller = new $callback($this->main);
@@ -91,9 +95,14 @@ class Router implements Registrable
 
             register_rest_route(self::REST_ROUTE_ENDPOINT, '/'.$route, [
                 'methods' => $controller->method(),
-                'callback' => function (\WP_REST_Request $request) use ($controller, $callback) {
+                'callback' => function (\WP_REST_Request $request) use ($controller, $callback, $default_middleware) {
+                    // Only include nonce middleware if disable_nonce is not true
+                    $middlewares = empty($controller->disable_nonce) || $controller->disable_nonce === false
+                        ? array_merge($default_middleware, $controller->middleware)
+                        : $controller->middleware;
+
                     // Run middleware checks before the controller action
-                    foreach ($controller->middleware as $middlewareClass) {
+                    foreach ($middlewares as $middlewareClass) {
                         $middleware = new $middlewareClass($this->main);
 
                         if ($middleware instanceof MiddlewareInterface) {
