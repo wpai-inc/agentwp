@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useError } from './ErrorProvider';
@@ -10,6 +10,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   const { currentAction, currentUserRequestId } = useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
   const { errors } = useError();
+  const [ retries, setRetries ] = useState( 0 );
 
   useEffect( () => {
     if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
@@ -42,7 +43,12 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   }
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
+    if ( retries > 0 ) {
+      return;
+    }
+
     if ( reqId && ! aa.final && aa.hasExecuted ) {
+      setRetries( retries + 1 );
       await retryStream( reqId );
     }
   }

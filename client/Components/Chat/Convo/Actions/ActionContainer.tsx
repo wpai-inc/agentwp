@@ -60,7 +60,7 @@ export default function ActionContainer( {
             ) : hasError ? (
               <AgentTooltip content={ error }>
                 <button>
-                  <IconAlert className={ iconClassName } />
+                  <IconAlert className={ `${ iconClassName } text-red-500` } />
                 </button>
               </AgentTooltip>
             ) : (
