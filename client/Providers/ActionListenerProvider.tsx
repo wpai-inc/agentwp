@@ -24,7 +24,9 @@ export default function ActionListenerProvider( { children }: { children: React.
   const { currentAction, updateCurrentAction, currentUserRequestId, addActionToCurrentRequest } =
     useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
-  const { errors } = useError();
+  const { errors, addErrors } = useError();
+  const [ retryAction, setRetryAction ] = useState( 0 );
+  const shouldRetry = errors.length < 2 && retryAction < 2;
 
   useEffect( () => {
     if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
@@ -40,7 +42,7 @@ export default function ActionListenerProvider( { children }: { children: React.
         currentAction.final &&
         ! currentAction.hasExecuted &&
         currentAction.action &&
-        errors.length < 2
+        shouldRetry
       ) {
         retryStream( currentUserRequestId );
       }
@@ -57,7 +59,8 @@ export default function ActionListenerProvider( { children }: { children: React.
   }
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
-    if ( reqId && ! aa.final && aa.hasExecuted ) {
+    if ( reqId && aa.hasExecuted && ( ! aa.final || aa.hasError ) && shouldRetry ) {
+      setRetryAction( retryAction => retryAction + 1 );
       await retryStream( reqId );
     }
   }
@@ -112,7 +115,9 @@ export default function ActionListenerProvider( { children }: { children: React.
 
           await storeSuccessfulActionResult( aa, response.data.data.results );
         } catch ( error ) {
-          await storeUnsuccessfulActionResult( aa, ( error as any )?.response?.data?.data );
+          const err = ( error as any )?.response?.data?.data ?? 'Unknown error';
+          const result = await storeUnsuccessfulActionResult( aa, err );
+          updateCurrentAction( result );
         }
         break;
       case 'navigate':

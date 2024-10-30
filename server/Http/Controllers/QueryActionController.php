@@ -8,8 +8,6 @@ class QueryActionController extends BaseController
 
     public function __invoke(): void
     {
-        // $this->respondWithError("Query didn't go well", 422);
-
         if (! $this->main->auth->canAccessDB()) {
             $this->error('access_denied');
             exit;

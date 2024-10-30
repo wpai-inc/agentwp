@@ -59,9 +59,6 @@ export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children }
         } ),
       ];
     } );
-    setTimeout( () => {
-      clearErrors();
-    }, 5000 );
   };
 
   const clearErrors = () => {
