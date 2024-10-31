@@ -127,11 +127,6 @@ export default function AgentResponse( {
       { messageAction ? (
         <ActionComponent { ...messageAction } />
       ) : (
-        // messageAction.hasError ? (
-        //   <ActionIncomplete userRequestId={ userRequestId } />
-        // ) : (
-        //   <ActionComponent { ...messageAction } />
-        // )
         <>
           { aborted && <ActionAborted /> }
           { ! aborted && pending && <ActionPending /> }

@@ -24,7 +24,7 @@ export default function ActionListenerProvider( { children }: { children: React.
   const { currentAction, updateCurrentAction, currentUserRequestId, addActionToCurrentRequest } =
     useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
-  const { errors, addErrors } = useError();
+  const { errors } = useError();
   const [ retryAction, setRetryAction ] = useState( 0 );
   const shouldRetry = errors.length < 2 && retryAction < 2;
 
@@ -96,7 +96,7 @@ export default function ActionListenerProvider( { children }: { children: React.
 
   async function actionNavigation( aa: AgentAction, confirm: boolean ) {
     if ( confirm ) {
-      await storeSuccessfulActionResult( aa );
+      await storeSuccessfulActionResult( aa, { confirmed: true } );
       window.location.href = aa.action.url as string;
     } else {
       const updatedAction = await storeSuccessfulActionResult( aa, { confirmed: false } );
