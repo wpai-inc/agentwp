@@ -39,7 +39,7 @@ export default function ConvoOnlyToggle() {
         </p>
       }>
       <label className="flex items-center gap-1.5 opacity-75 cursor-not-allowed">
-        <ChatSwitch checked={ true } disabled={ true } />
+        <ChatSwitch checked={ enabled } disabled={ ! setting?.canUpdate } />
         Convo Only
       </label>
     </AgentTooltip>
