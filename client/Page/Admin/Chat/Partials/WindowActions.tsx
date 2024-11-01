@@ -16,12 +16,14 @@ const Corners = () => {
 };
 
 export default function WindowActions( {
+  onReset,
   toggle,
   handleDrag,
   isMaximized,
   toggleMaximizeRestore,
   ...props
 }: {
+  onReset: () => void;
   toggle: () => void;
   onMouseEnter?: () => void;
   isMaximized?: boolean;
@@ -74,6 +76,7 @@ export default function WindowActions( {
       <div className="pl-4">
         <AgentTooltip content="Drag or double-click to reset window position" side="right">
           <button
+            onDoubleClick={ onReset }
             id="dragHandle"
             className="handle -translate-y-full cursor-move text-gray-400 hover:text-amber-500">
             <DragIcon />

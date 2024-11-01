@@ -269,6 +269,11 @@ export const usePosition = ( {
     }
   }, [ position, size, calculateBoundaries, animate, chatWindowRef ] );
 
+  const resetWindowPosition = useCallback( () => {
+    setPosition( { right: 16, bottom: 16 } );
+    setSize( { width: 400, height: 800 } );
+  }, [] );
+
   const checkIsMaximized = () => {
     const { width, height } = calculateBoundaries();
     if ( Math.abs( size.width - width ) <= 5 && Math.abs( size.height - height ) <= 5 ) {
@@ -347,5 +352,6 @@ export const usePosition = ( {
     offset,
     minSize,
     toggleMaximizeRestore,
+    resetWindowPosition,
   };
 };
