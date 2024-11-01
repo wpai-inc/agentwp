@@ -132,7 +132,7 @@ export default function ActionListenerProvider( { children }: { children: React.
             final: true,
           };
 
-          addActionToCurrentRequest( agentResponseAction );
+          addActionToCurrentRequest( currentUserRequestId, agentResponseAction );
         }
         await new Promise( () => {} );
         break;

@@ -72,7 +72,7 @@ export default function ActionContainer( {
           <p className="overflow-hidden text-ellipsis whitespace-nowrap flex-1">{ title }</p>
           { ! pending && handleRetry && <IconRenew className={ iconClassName } /> }
           { children && ! handleRetry && (
-            <CollapsibleTrigger>
+            <CollapsibleTrigger asChild>
               <button>
                 { ! isOpen && <IconAdd className={ iconClassName } /> }
                 { isOpen && <IconRemove className={ iconClassName } /> }

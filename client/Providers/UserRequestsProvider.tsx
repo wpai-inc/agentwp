@@ -64,7 +64,7 @@ type UserRequestsContextType = {
   loadingConversation: boolean;
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
-  addActionToCurrentRequest: ( action: AgentAction ) => void;
+  addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
   setRequestAborted: ( userRequestId: string ) => void;
   alertMessage: null | React.ReactNode;
   setAlertMessage: React.Dispatch< React.SetStateAction< null | React.ReactNode > >;
@@ -161,14 +161,11 @@ export default function UserRequestsProvider( {
   );
 
   const addActionToCurrentRequest = useCallback(
-    function ( action: AgentAction ) {
-      if ( currentUserRequestId ) {
+    function ( userRequestId: string, action: AgentAction ) {
+      if ( userRequestId ) {
         setConversation( conversation => {
           return conversation.map( request => {
-            if (
-              request.id === currentUserRequestId &&
-              ! request.agent_actions.includes( action )
-            ) {
+            if ( request.id === userRequestId && ! request.agent_actions.includes( action ) ) {
               return {
                 ...request,
                 agent_actions: [ ...request.agent_actions, action ],

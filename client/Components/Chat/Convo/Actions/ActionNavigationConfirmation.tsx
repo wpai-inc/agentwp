@@ -8,7 +8,7 @@ export default function ActionNavigationConfirmation( aa: AgentAction ) {
   const action = aa.action as NavigateAction;
   const { actionNavigation } = useActionListener();
   const { page } = usePage();
-  const relativeUrl = action.url.replace( page.home_url, '' );
+  const relativeUrl = action?.url ? action.url.replace( page.home_url, '' ) : 'Not found';
 
   return (
     <div className="flex flex-col gap-4">
