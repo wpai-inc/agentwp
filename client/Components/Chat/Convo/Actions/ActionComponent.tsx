@@ -5,9 +5,12 @@ import ActionMessage from '@/Components/Chat/Convo/Actions/ActionMessage';
 import ActionQuery from '@/Components/Chat/Convo/Actions/ActionQuery';
 import ActionWriteToEditor from './ActionWriteToEditor';
 import ActionWriteToInputField from '@/Components/Chat/Convo/Actions/ActionWriteToInputField';
+import ActionNavigationConfirmation from './ActionNavigationConfirmation';
 
 type ActionComponentsType = {
   [ key in Abilities ]?: React.ComponentType< AgentAction >;
+} & {
+  navigation_confirmation?: React.ComponentType< AgentAction >;
 };
 
 const ActionComponents: ActionComponentsType = {
@@ -16,6 +19,7 @@ const ActionComponents: ActionComponentsType = {
   query: ActionQuery,
   write_to_editor: ActionWriteToEditor,
   write_to_input: ActionWriteToInputField,
+  navigation_confirmation: ActionNavigationConfirmation,
 };
 
 export default function ActionComponent( props: AgentAction ) {

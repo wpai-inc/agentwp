@@ -24,16 +24,7 @@ export type ActionType =
   | Graph
   | MessageActionEscalation;
 
-export type AgentAction = {
-  id: string;
-  created_at: string;
-  human_created_at: string;
-  action: ActionType;
-  final: boolean;
-  recipe_idx: number;
-  result: any;
-  hasExecuted: boolean;
-};
+export type AgentAction = App.Data.AgentActionData;
 
 export type UserRequestType = {
   id: string;
@@ -66,14 +57,17 @@ type UserRequestsContextType = {
   currentUserRequest?: UserRequestType;
   setCurrentUserRequestId: React.Dispatch< React.SetStateAction< string | null > >;
   currentAction: AgentAction | null;
+  updateCurrentAction: ( action: AgentAction ) => void;
   fetchConvo: ( since: string | null ) => Promise< void >;
   fetchMore: () => Promise< void >;
   refreshConvo: () => void;
   loadingConversation: boolean;
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
-  addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
+  addActionToCurrentRequest: ( action: AgentAction ) => void;
   setRequestAborted: ( userRequestId: string ) => void;
+  alertMessage: null | React.ReactNode;
+  setAlertMessage: React.Dispatch< React.SetStateAction< null | React.ReactNode > >;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >(
@@ -103,6 +97,7 @@ export default function UserRequestsProvider( {
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( true );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ refresh, setRefresh ] = useState< boolean >( false );
+  const [ alertMessage, setAlertMessage ] = useState< null | React.ReactNode >( null );
 
   const refreshConvo = () => {
     setRefresh( prev => ! prev );
@@ -142,12 +137,38 @@ export default function UserRequestsProvider( {
     [ currentUserRequest ],
   );
 
-  const addActionToCurrentRequest = useCallback(
-    function ( userRequestId: string, action: AgentAction ) {
-      if ( userRequestId ) {
+  // update the current action (last agent action) of the current user request
+  const updateCurrentAction = useCallback(
+    function ( action: AgentAction ) {
+      if ( currentUserRequest ) {
         setConversation( conversation => {
           return conversation.map( request => {
-            if ( request.id === userRequestId && ! request.agent_actions.includes( action ) ) {
+            if ( request.id === currentUserRequest.id ) {
+              return {
+                ...request,
+                agent_actions: [
+                  ...request.agent_actions.filter( a => a.id !== action.id ),
+                  action,
+                ],
+              };
+            }
+            return request;
+          } );
+        } );
+      }
+    },
+    [ conversation, currentUserRequest ],
+  );
+
+  const addActionToCurrentRequest = useCallback(
+    function ( action: AgentAction ) {
+      if ( currentUserRequestId ) {
+        setConversation( conversation => {
+          return conversation.map( request => {
+            if (
+              request.id === currentUserRequestId &&
+              ! request.agent_actions.includes( action )
+            ) {
               return {
                 ...request,
                 agent_actions: [ ...request.agent_actions, action ],
@@ -261,6 +282,7 @@ export default function UserRequestsProvider( {
         currentUserRequest,
         setCurrentUserRequestId,
         currentAction,
+        updateCurrentAction,
         fetchConvo,
         fetchMore,
         refreshConvo,
@@ -269,6 +291,8 @@ export default function UserRequestsProvider( {
         setSince,
         addActionToCurrentRequest,
         setRequestAborted,
+        alertMessage,
+        setAlertMessage,
       } }>
       { children }
     </UserRequestsContext.Provider>

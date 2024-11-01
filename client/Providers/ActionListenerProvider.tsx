@@ -1,15 +1,32 @@
-import { useEffect } from 'react';
+import { useEffect, createContext, useContext, useState } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
-import { AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
+import { ActionType, AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
 import { useError } from './ErrorProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 
-const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
+type ActionListenerContextType = {
+  actionNavigation: ( aa: AgentAction, confirm: boolean ) => Promise< void >;
+};
+
+const ActionListenerContext = createContext< ActionListenerContextType | undefined >( undefined );
+
+export function useActionListener() {
+  const actionListener = useContext( ActionListenerContext );
+  if ( ! actionListener ) {
+    throw new Error( 'useActionListener must be used within a ActionListenerProvider' );
+  }
+  return actionListener;
+}
+
+export default function ActionListenerProvider( { children }: { children: React.ReactNode } ) {
   const { streamingStatus, retryStream } = useStream();
-  const { currentAction, currentUserRequestId } = useUserRequests();
+  const { currentAction, updateCurrentAction, currentUserRequestId, addActionToCurrentRequest } =
+    useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
   const { errors } = useError();
+  const [ retryAction, setRetryAction ] = useState( 0 );
+  const shouldRetry = errors.length < 2 && retryAction < 2;
 
   useEffect( () => {
     if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
@@ -25,7 +42,7 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
         currentAction.final &&
         ! currentAction.hasExecuted &&
         currentAction.action &&
-        errors.length < 2
+        shouldRetry
       ) {
         retryStream( currentUserRequestId );
       }
@@ -42,7 +59,8 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
   }
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
-    if ( reqId && ! aa.final && aa.hasExecuted ) {
+    if ( reqId && aa.hasExecuted && ( ! aa.final || aa.hasError ) && shouldRetry ) {
+      setRetryAction( retryAction => retryAction + 1 );
       await retryStream( reqId );
     }
   }
@@ -52,13 +70,13 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
       throw new Error( 'Agent action ID is not set' );
     }
 
-    await proxyApiRequest< App.Data.AgentActionData >( 'actionResult', {
+    return await proxyApiRequest< App.Data.AgentActionData >( 'actionResult', {
       agentAction: aa.id,
       ...data,
     } );
   }
 
-  async function storeSuccessfulActionResult( aa: AgentAction, data: any[] | null = null ) {
+  async function storeSuccessfulActionResult( aa: AgentAction, data: any = null ) {
     const result: App.Data.AgentActionResultData = {
       status: 'success',
       error: null,
@@ -76,6 +94,16 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
     return storeActionResult( aa, result );
   }
 
+  async function actionNavigation( aa: AgentAction, confirm: boolean ) {
+    if ( confirm ) {
+      await storeSuccessfulActionResult( aa, { confirmed: true } );
+      window.location.href = aa.action.url as string;
+    } else {
+      const updatedAction = await storeSuccessfulActionResult( aa, { confirmed: false } );
+      updateCurrentAction( updatedAction );
+    }
+  }
+
   async function executeAction( aa: AgentAction ) {
     switch ( aa.action.ability ) {
       case 'query':
@@ -87,15 +115,26 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
 
           await storeSuccessfulActionResult( aa, response.data.data.results );
         } catch ( error ) {
-          await storeUnsuccessfulActionResult( aa, ( error as any )?.response?.data?.data );
+          const err = ( error as any )?.response?.data?.data ?? 'Unknown error';
+          const result = await storeUnsuccessfulActionResult( aa, err );
+          updateCurrentAction( result );
         }
         break;
       case 'navigate':
-        await storeSuccessfulActionResult( aa );
-        window.location.href = aa.action.url as string;
-        return new Promise( () => {
-          /* never resolve to stop further execution */
-        } );
+        if ( currentUserRequestId && currentAction ) {
+          const agentResponseAction: AgentAction = {
+            ...currentAction,
+            action: {
+              ...currentAction.action,
+              ability: 'navigation_confirmation',
+            } as ActionType,
+            hasExecuted: true,
+            final: true,
+          };
+
+          addActionToCurrentRequest( agentResponseAction );
+        }
+        await new Promise( () => {} );
         break;
       case 'message':
         await storeSuccessfulActionResult( aa );
@@ -111,7 +150,12 @@ const ActionListenerProvider: React.FC< { children: React.ReactNode } > = ( { ch
     }
   }
 
-  return <>{ children }</>;
-};
-
-export default ActionListenerProvider;
+  return (
+    <ActionListenerContext.Provider
+      value={ {
+        actionNavigation: actionNavigation,
+      } }>
+      { children }
+    </ActionListenerContext.Provider>
+  );
+}

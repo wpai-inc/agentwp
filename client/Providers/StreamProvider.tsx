@@ -118,8 +118,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             throw new Error( `Error when processing message: ${ aar.reason }` );
           }
           if ( ev.event === 'close' && liveAction.current ) {
-            addActionToCurrentRequest( user_request.id, liveAction.current );
-            // setStreamClosed( true );
+            addActionToCurrentRequest( liveAction.current );
             setStreamingStatus( StreamingStatusEnum.OFF );
             return;
           }

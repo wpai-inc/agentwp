@@ -27,21 +27,26 @@ export default function AgentResponse( {
   userRequestId,
   time,
   pending = false,
-  incomplete = false,
   aborted = false,
 }: {
   agentActions?: AgentAction[];
   userRequestId: string;
   time: string;
   pending?: boolean;
-  incomplete?: boolean;
   aborted?: boolean;
 } ) {
-  const messageAction = agentActions?.find( aa => aa.action?.ability === 'message' ) as
-    | AgentAction
-    | undefined;
+  const messageAction = agentActions?.find( aa =>
+    [ 'message', 'navigation_confirmation' ].includes( aa.action?.ability ),
+  ) as AgentAction | undefined;
 
-  const otherActions = agentActions?.filter( aa => aa.action?.ability !== 'message' ) ?? [];
+  const otherActions =
+    agentActions?.filter(
+      aa => ! [ 'message', 'navigation_confirmation' ].includes( aa.action?.ability ),
+    ) ?? [];
+
+  const incomplete = agentActions?.length === 0;
+
+  const queryActions = agentActions?.filter( aa => aa.action?.ability === 'query' ) ?? [];
 
   const { opened } = useFeedback();
 
@@ -126,7 +131,13 @@ export default function AgentResponse( {
           { aborted && <ActionAborted /> }
           { ! aborted && pending && <ActionPending /> }
           { ! aborted && incomplete && ! pending && (
-            <ActionIncomplete userRequestId={ userRequestId } />
+            <>
+              { queryActions.length > 0 ? (
+                <p className="text-black">Sorry we are unable to run SQL query.</p>
+              ) : (
+                <ActionIncomplete userRequestId={ userRequestId } />
+              ) }
+            </>
           ) }
         </>
       ) }

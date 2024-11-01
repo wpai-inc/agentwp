@@ -7,7 +7,7 @@ export default function StaticChat() {
     <HotKeyProvider>
       <ChatContainer
         id="agentwp-settings-chat"
-        className="relative h-full max-h-screen w-full @container">
+        className="relative h-full max-h-screen min-w-[400px] w-full @container">
         <ChatCore />
       </ChatContainer>
     </HotKeyProvider>

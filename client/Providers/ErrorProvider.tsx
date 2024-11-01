@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useApp } from '@/Providers/AppProvider';
 import { TokenUsageStatus } from '@/Types/enums';
 
@@ -23,7 +23,7 @@ export function useError() {
   return errors;
 }
 
-export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children } ) => {
+export function ErrorProvider( { children }: { children: React.ReactNode } ) {
   const [ errors, setErrors ] = useState< ChatErrorType[] >( [] );
   const { setCooldownTime, setTokenUsageStatus } = useApp();
 
@@ -78,4 +78,4 @@ export const ErrorProvider: FC< { children: React.ReactNode } > = ( { children }
       { children }
     </ErrorContext.Provider>
   );
-};
+}
