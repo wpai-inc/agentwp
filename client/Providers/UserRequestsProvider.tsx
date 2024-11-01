@@ -64,8 +64,10 @@ type UserRequestsContextType = {
   loadingConversation: boolean;
   since: string | null;
   setSince: React.Dispatch< React.SetStateAction< string | null > >;
-  addActionToCurrentRequest: ( userRequestId: string, action: AgentAction ) => void;
+  addActionToCurrentRequest: ( action: AgentAction ) => void;
   setRequestAborted: ( userRequestId: string ) => void;
+  alertMessage: null | React.ReactNode;
+  setAlertMessage: React.Dispatch< React.SetStateAction< null | React.ReactNode > >;
 };
 
 const UserRequestsContext = createContext< UserRequestsContextType >(
@@ -95,6 +97,7 @@ export default function UserRequestsProvider( {
   const [ loadingConversation, setLoadingConversation ] = useState< boolean >( true );
   const [ currentUserRequestId, setCurrentUserRequestId ] = useState< string | null >( null );
   const [ refresh, setRefresh ] = useState< boolean >( false );
+  const [ alertMessage, setAlertMessage ] = useState< null | React.ReactNode >( null );
 
   const refreshConvo = () => {
     setRefresh( prev => ! prev );
@@ -158,11 +161,14 @@ export default function UserRequestsProvider( {
   );
 
   const addActionToCurrentRequest = useCallback(
-    function ( userRequestId: string, action: AgentAction ) {
-      if ( userRequestId ) {
+    function ( action: AgentAction ) {
+      if ( currentUserRequestId ) {
         setConversation( conversation => {
           return conversation.map( request => {
-            if ( request.id === userRequestId && ! request.agent_actions.includes( action ) ) {
+            if (
+              request.id === currentUserRequestId &&
+              ! request.agent_actions.includes( action )
+            ) {
               return {
                 ...request,
                 agent_actions: [ ...request.agent_actions, action ],
@@ -285,6 +291,8 @@ export default function UserRequestsProvider( {
         setSince,
         addActionToCurrentRequest,
         setRequestAborted,
+        alertMessage,
+        setAlertMessage,
       } }>
       { children }
     </UserRequestsContext.Provider>

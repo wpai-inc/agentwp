@@ -13,6 +13,7 @@ import { useRestRequest } from './RestRequestProvider';
 import { optimistic } from '@/lib/utils';
 import { StreamingStatusEnum } from '@/Types/enums';
 import type { WpResponse } from '@/Types/types';
+import OverageAlert from '@/Components/Chat/Convo/Alerts/OverageAlert';
 
 type ChatSettingProps = { component: React.ReactNode; header: string } | null;
 
@@ -76,7 +77,7 @@ export default function ChatProvider( {
   const { addErrors } = useError();
   const [ snippetPlugin, setSnippetPlugin ] = useState< string | null >( null );
   const { tryRequest, proxyApiRequest } = useRestRequest();
-  const { since } = useUserRequests();
+  const { since, setAlertMessage } = useUserRequests();
 
   async function clearHistory() {
     await optimistic(
@@ -110,7 +111,9 @@ export default function ChatProvider( {
       req.site_data = data;
     }
 
-    return await tryRequest( 'post', 'create_request', req );
+    return await tryRequest( 'post', 'create_request', req, undefined, ( e: any ) => {
+      setAlertMessage( () => <OverageAlert message={ e } /> );
+    } );
   }
 
   /**

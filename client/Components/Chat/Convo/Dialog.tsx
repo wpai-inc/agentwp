@@ -1,6 +1,10 @@
 import React from 'react';
 import Message from '@/Components/Chat/Convo/Message/Message';
-import { ConvoPagination, UserRequestType } from '@/Providers/UserRequestsProvider';
+import {
+  ConvoPagination,
+  UserRequestType,
+  useUserRequests,
+} from '@/Providers/UserRequestsProvider';
 import ChatWelcome from '@/Components/ChatWelcome';
 import { usePage } from '@/Providers/PageProvider';
 import InnerContainer from '@/Components/Chat/Partials/ChatInnerContainer';
@@ -17,6 +21,7 @@ function DialogComponent( {
   onScrollToTop: () => void;
 } ) {
   const { page } = usePage();
+  const { alertMessage } = useUserRequests();
 
   const handleScrollToTop = () => {
     if ( pagination.next ) {
@@ -29,13 +34,16 @@ function DialogComponent( {
       { ! conversation.length ? (
         <ChatWelcome user={ page.user } />
       ) : (
-        conversation.map( userRequest => (
-          <Message
-            key={ userRequest.id }
-            submitted={ messageSubmitted }
-            userRequest={ userRequest }
-          />
-        ) )
+        <>
+          { alertMessage ? alertMessage : null }
+          { conversation.map( userRequest => (
+            <Message
+              key={ userRequest.id }
+              submitted={ messageSubmitted }
+              userRequest={ userRequest }
+            />
+          ) ) }
+        </>
       ) }
     </InnerContainer>
   );
