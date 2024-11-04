@@ -142,12 +142,12 @@ class Main
 
     public function apiClientHost()
     {
-        return defined('AGENT_WP_CLIENT_BASE_URL') ? AGENT_WP_CLIENT_BASE_URL : $this->runtimeApiHost();
+        return defined('AGENT_WP_CLIENT_BASE_URL') && ! empty(AGENT_WP_CLIENT_BASE_URL) ? AGENT_WP_CLIENT_BASE_URL : $this->runtimeApiHost();
     }
 
     private function runtimeApiHost()
     {
-        return defined('AGENTWP_API_HOST') ? AGENTWP_API_HOST : 'https://app.agentwp.com';
+        return defined('AGENTWP_API_HOST') && ! empty(AGENTWP_API_HOST) ? AGENTWP_API_HOST : 'https://app.agentwp.com';
     }
 
     public function registerAdminStyles(): void
