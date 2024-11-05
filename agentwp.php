@@ -46,6 +46,7 @@ function agentwp_boot_plugin(): void
         \WpAi\AgentWp\Registry\Hooks::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
+        // \WpAi\AgentWp\Page\Frontend\Chat::class,
         \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
         \WpAi\AgentWp\Registry\IndexSiteData::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,

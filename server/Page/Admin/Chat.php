@@ -34,7 +34,7 @@ class Chat extends ReactClient
         }
 
         $this->locations = [
-            \WpAi\AgentWp\Client\Locations\CoreChat::class,
+            \WpAi\AgentWp\Client\Locations\AdminChat::class,
             \WpAi\AgentWp\Client\Locations\ElementorChat::class,
             \WpAi\AgentWp\Client\Locations\BeaverBuilder::class,
             \WpAi\AgentWp\Client\Locations\BricksBuilder::class,

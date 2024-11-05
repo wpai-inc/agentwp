@@ -6,7 +6,7 @@ use WpAi\AgentWp\Client\ReactClient;
 use WpAi\AgentWp\Contracts\ClientSetupLocationInterface;
 use WpAi\AgentWp\Http\HttpRequest;
 
-class CoreChat implements ClientSetupLocationInterface
+class AdminChat implements ClientSetupLocationInterface
 {
     protected ReactClient $client;
 
