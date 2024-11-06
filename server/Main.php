@@ -12,7 +12,7 @@ use WpAi\AgentWp\Services\AccountSettings;
  * Contains a lot of the configuration and common functionality for the plugin.
  * All providers depend on this class.
  *
- * @since 0.1.5
+ * @since 1.3.0
  */
 class Main
 {
@@ -20,7 +20,7 @@ class Main
 
     const SLUG = 'agentwp';
 
-    const PLUGIN_VERSION = '1.2.1';
+    const PLUGIN_VERSION = '1.3.0';
 
     const BUILD_DIR = 'build';
 
