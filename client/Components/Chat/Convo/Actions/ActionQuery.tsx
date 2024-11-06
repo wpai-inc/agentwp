@@ -9,6 +9,10 @@ export default function ActionQuery( { hasExecuted, action, result }: AgentActio
   if ( hasExecuted ) {
     icon = <IconQuery />;
     title = 'Ran SQL query';
+
+    if ( result?.error ) {
+      title = 'Failed to run SQL query: ' + result.error;
+    }
   }
 
   return (

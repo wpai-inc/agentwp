@@ -60,7 +60,9 @@ export default function ActionListenerProvider( { children }: { children: React.
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
     if ( reqId && aa.hasExecuted && ( ! aa.final || aa.hasError ) && shouldRetry ) {
-      setRetryAction( retryAction => retryAction + 1 );
+      if ( aa.hasError ) {
+        setRetryAction( retryAction => retryAction + 1 );
+      }
       await retryStream( reqId );
     }
   }
