@@ -10,6 +10,8 @@ import {
 } from '@/Services/SelectedFields';
 import { useScreen } from '@/Providers/ScreenProvider';
 import type { Editor } from 'tinymce';
+import { useAccountSettings } from './AccountSettingsProvider';
+import { useAccount } from './AccountProvider';
 
 declare const wp: any;
 
@@ -30,6 +32,12 @@ export const useInputSelect = () => {
 };
 
 export const InputSelectProvider = ( { children }: { children: ReactNode } ) => {
+  const { account } = useAccount();
+  const hasAiAnywhere =
+    account &&
+    account.config.abilities.includes( 'write_to_editor' ) &&
+    account.config.abilities.includes( 'write_to_input' );
+
   const [ selectedInput, setSelectedInput ] = useState< App.Data.StreamableFieldData | null >(
     null,
   );
@@ -39,14 +47,16 @@ export const InputSelectProvider = ( { children }: { children: ReactNode } ) => 
   const { screen, setScreen } = useScreen();
 
   useEffect( () => {
-    getSelectedInputField( setSelectedInput, selectedInputRef );
-    getSelectedGutenbergBlock( setSelectedInput );
-    getSelectedWysiwyg( setSelectedInput, selectedInputRef );
-    getSelectedPostTitle( setSelectedInput );
-    getSelectedElementorField( setSelectedInput, selectedInputRef );
-    getSelectedBricksBuilderFields( setSelectedInput, selectedInputRef );
-    getSelectedCodeMirror( setSelectedInput, selectedInputRef );
-  }, [] );
+    if ( hasAiAnywhere ) {
+      getSelectedInputField( setSelectedInput, selectedInputRef );
+      getSelectedGutenbergBlock( setSelectedInput );
+      getSelectedWysiwyg( setSelectedInput, selectedInputRef );
+      getSelectedPostTitle( setSelectedInput );
+      getSelectedElementorField( setSelectedInput, selectedInputRef );
+      getSelectedBricksBuilderFields( setSelectedInput, selectedInputRef );
+      getSelectedCodeMirror( setSelectedInput, selectedInputRef );
+    }
+  }, [ hasAiAnywhere ] );
 
   useEffect( () => {
     if ( selectedInput ) {
