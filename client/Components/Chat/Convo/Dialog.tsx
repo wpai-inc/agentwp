@@ -32,7 +32,10 @@ function DialogComponent( {
   return (
     <InnerContainer className="flex-col-reverse" onTop={ handleScrollToTop }>
       { ! conversation.length ? (
-        <ChatWelcome user={ page.user } />
+        <>
+          { alertMessage ? alertMessage : null }
+          <ChatWelcome user={ page.user } />
+        </>
       ) : (
         <>
           { alertMessage ? alertMessage : null }
