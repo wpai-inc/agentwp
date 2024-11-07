@@ -136,6 +136,24 @@ class UserAuth
         $this->user->add_cap($cap);
     }
 
+    public function removeUserCapabilities(?WP_User $user = null): void
+    {
+        $user = $user ?? $this->user;
+
+        $user->remove_cap(self::CAP_MANAGE_AGENTWP_CONNECTION);
+        $user->remove_cap(self::CAP_MANAGE_AGENTWP_USERS);
+        $user->remove_cap(self::CAP_AGENTWP_ACCESS);
+    }
+
+    public function removeCapabilitiesFromAllUsers(): void
+    {
+        $users = get_users();
+
+        foreach ($users as $user) {
+            $this->removeUserCapabilities($user);
+        }
+    }
+
     public function removeCap(string $cap): void
     {
         $this->user->remove_cap($cap);
