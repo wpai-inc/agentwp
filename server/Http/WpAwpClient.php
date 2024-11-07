@@ -32,10 +32,12 @@ class WpAwpClient
 
         try {
             if ($response->isError()) {
+                $res = $response->get();
+
                 return $response->setErrorResponse(new \WP_Error(
                     $response->status(),
-                    $response->get(),
-                    ['status' => $response->status()]
+                    $res['message'],
+                    ['status' => $response->status(), 'errors' => $res['errors']]
                 ));
             }
 
