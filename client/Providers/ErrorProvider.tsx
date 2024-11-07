@@ -61,7 +61,7 @@ export function ErrorProvider( { children }: { children: React.ReactNode } ) {
     } );
     setTimeout( () => {
       clearErrors();
-    }, 5000 );
+    }, 7000 );
   };
 
   const clearErrors = () => {
