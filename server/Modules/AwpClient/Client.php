@@ -2,9 +2,6 @@
 
 namespace WpAi\AgentWp\Modules\AwpClient;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
 use WpAi\AgentWp\Main;
 
 class Client
@@ -47,16 +44,30 @@ class Client
     /**
      * Calls the API route by its defined name in ApiRoutes.
      *
-     * @throws RouteDoesNotExistException|GuzzleException
+     * @throws RouteDoesNotExistException|array
      */
-    public function __call(string $name, array $args): Response
+    public function __call(string $name, array $args): ClientResponse
     {
         $args = isset($args[0]) ? $args[0] : [];
         extract($this->getUrl($name, $args));
 
-        return $this->getClient()->request($method, $path, [
-            'json' => $params,
-        ]);
+        $response = $this->makeRequest($method, $url, $params);
+
+        if (is_wp_error($response)) {
+            return new ClientResponse(
+                $response->get_error_code(),
+                $response->get_error_message(),
+            );
+        }
+
+        $code = wp_remote_retrieve_response_code($response);
+        $status = empty($code) ? 500 : $code;
+
+        return new ClientResponse(
+            $status,
+            wp_remote_retrieve_body($response),
+            wp_remote_retrieve_headers($response)->getAll(),
+        );
     }
 
     /**
@@ -170,11 +181,6 @@ class Client
         return $this->getClientOptions()['headers'];
     }
 
-    public function getClient(): GuzzleHttpClient
-    {
-        return new GuzzleHttpClient($this->getClientOptions());
-    }
-
     public function getRoutes(): ApiRoutes
     {
         return $this->routes;
@@ -185,5 +191,21 @@ class Client
         $this->version = $v;
 
         return $this;
+    }
+
+    /**
+     * @return array|\WP_Error
+     */
+    private function makeRequest(string $method, string $url, array $params = [])
+    {
+        $options = $this->getClientOptions();
+        $method = \strtoupper($method);
+        if ($method === 'POST') {
+            $options['body'] = json_encode($params);
+        } elseif ($method === 'GET') {
+            $url = add_query_arg($params, $url);
+        }
+
+        return wp_remote_request($url, array_merge($options, ['method' => $method]));
     }
 }

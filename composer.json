@@ -19,8 +19,7 @@
     "php-stubs/wordpress-stubs": "^6.4"
   },
   "require": {
-    "php": ">=7.4",
-    "guzzlehttp/guzzle": "^7.0"
+    "php": ">=7.4"
   },
   "config": {
     "platform": {
