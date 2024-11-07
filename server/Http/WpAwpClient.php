@@ -2,7 +2,6 @@
 
 namespace WpAi\AgentWp\Http;
 
-use GuzzleHttp\Exception\ClientException;
 use WpAi\AgentWp\Modules\AwpClient\Client;
 
 /**
@@ -24,17 +23,17 @@ class WpAwpClient
     public function __call(string $name, array $arguments = [])
     {
         $params = isset($arguments[0]) ? $arguments[0] : [];
+        $response = $this->client->$name($params);
+
         try {
-            $response = $this->client->$name($params);
+            if ($response->isError()) {
+                return new \WP_Error(
+                    $response->status(),
+                    $response->body()
+                );
+            }
 
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (ClientException $e) {
-            $error = json_decode($e->getResponse()->getBody()->getContents());
-
-            return new \WP_Error(
-                $e->getCode(),
-                $error->message
-            );
+            return json_decode($response->body(), true);
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
