@@ -21,6 +21,7 @@ import {
 } from '@/Components/ui/dropdown-menu';
 import CopyAgentResponse from '../Partials/CopyAgentResponse';
 import CreatePostFromAgentResponse from '../Partials/CreatePostFromAgentResponse';
+import Copyable from '@/Components/Utilties/Copyable';
 
 export default function AgentResponse( {
   agentActions,
@@ -89,7 +90,7 @@ export default function AgentResponse( {
                 <span className="flex gap-2">
                   Message ID:{ ' ' }
                   <strong className="inline-block max-w-24 truncate font-mono text-sm font-semibold">
-                    { userRequestId }
+                    <Copyable text={ userRequestId } />
                   </strong>
                 </span>
               </DropdownMenuItem>
