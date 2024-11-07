@@ -10,6 +10,8 @@ class ClientResponse
 
     private array $headers;
 
+    private $error = null;
+
     public function __construct(int $status, string $body, array $headers = [])
     {
         $this->status = $status;
@@ -17,9 +19,16 @@ class ClientResponse
         $this->headers = $headers;
     }
 
-    public function body(): string
+    /**
+     * @return array|\WP_Error
+     */
+    public function get()
     {
-        return $this->body;
+        if ($this->error) {
+            return $this->error;
+        } else {
+            return json_decode($this->body, true);
+        }
     }
 
     public function status(): int
@@ -29,6 +38,13 @@ class ClientResponse
 
     public function isError(): bool
     {
-        return $this->status >= 400;
+        return $this->status > 400;
+    }
+
+    public function setErrorResponse($error): self
+    {
+        $this->error = $error;
+
+        return $this;
     }
 }

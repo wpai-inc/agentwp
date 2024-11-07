@@ -136,7 +136,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             <div id="<?php echo esc_attr($this->slug()) ?>"></div>
         <?php
         } else {
-            $user_settings = $this->main->client()->user();
+            $user_settings = $this->main->client()->user()->get();
             $isOwner = $user_settings['user']['email'] === wp_get_current_user()->user_email;
             $managers = $this->main->auth->managers();
             ?>
@@ -261,7 +261,7 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'site_id' => $this->main->siteId(),
             'user' => $current_user,
             'api_host' => $this->main->apiClientHost(),
-            'account_settings' => $this->main->accountSettings()->get(),
+            'account_settings' => $this->main->accountSettings(),
             'general_settings' => $this->main->settings->getGeneralSettings(),
             'agentwp_manager' => $access_token ? $this->main->auth->isManager() : false,
             'agentwp_users_manager' => $access_token ? $this->main->auth->canManageUsers() : false,

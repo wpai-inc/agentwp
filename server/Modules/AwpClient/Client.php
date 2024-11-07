@@ -50,7 +50,6 @@ class Client
     {
         $args = isset($args[0]) ? $args[0] : [];
         extract($this->getUrl($name, $args));
-
         $response = $this->makeRequest($method, $url, $params);
 
         if (is_wp_error($response)) {

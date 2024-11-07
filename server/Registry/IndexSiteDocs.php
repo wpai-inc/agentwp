@@ -51,7 +51,7 @@ class IndexSiteDocs implements Registrable
 
         $response = $this->main->client()->siteDocsStore(
             $this->docs->data()
-        );
+        )->get();
 
         if (isset($response['error'])) {
             error_log(print_r($response['error'], true));

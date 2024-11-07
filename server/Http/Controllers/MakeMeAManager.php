@@ -8,7 +8,7 @@ class MakeMeAManager extends BaseController
 
     public function __invoke(): void
     {
-        $user_settings = $this->main->client()->user();
+        $user_settings = $this->main->client()->user()->get();
         $isOwner = $user_settings['user']['email'] === wp_get_current_user()->user_email;
 
         if (! $isOwner) {

@@ -69,7 +69,7 @@ class Settings extends ReactClient
         return [
             'site_title' => get_bloginfo('name'),
             'site_icon_url' => get_site_icon_url() ?: '',
-            'plans' => $this->main->client()->plans(),
+            'plans' => $this->main->client()->plans()->get(),
         ];
     }
 
@@ -87,7 +87,7 @@ class Settings extends ReactClient
                 'client_secret' => $this->main->settings->client_secret,
                 'redirect_uri' => $this->main->settingsPageUrl,
                 'code' => $code,
-            ]);
+            ])->get();
 
             if (\is_wp_error($response)) {
                 wp_redirect($this->main->settingsPageUrl);
