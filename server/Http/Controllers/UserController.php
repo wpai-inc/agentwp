@@ -11,7 +11,7 @@ class UserController extends BaseController
         $res = $this->main->client()->acceptTerms([
             'ip' => $this->request->getClientIp(),
             'acceptance_url' => home_url(),
-        ]);
+        ])->get();
 
         if (\is_wp_error($res)) {
             return $this->error('api_request_error');

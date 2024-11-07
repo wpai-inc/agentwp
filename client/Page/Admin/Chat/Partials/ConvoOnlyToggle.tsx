@@ -13,16 +13,21 @@ export default function ConvoOnlyToggle() {
   const { proxyApiRequest } = useRestRequest();
 
   async function handleChange( checked: boolean ) {
+    const prevSetting = setting;
     const updatedSetting = { ...setting, value: checked };
 
     await optimistic(
       async () =>
         await proxyApiRequest< App.Data.SiteSettingData[] >( 'siteSettingSave', updatedSetting ),
-      () => setEnabled( checked ),
-      () => setEnabled( ! checked ),
+      () => {
+        updateSetting( 'convoOnly', updatedSetting );
+        setEnabled( checked );
+      },
+      () => {
+        updateSetting( 'convoOnly', prevSetting );
+        setEnabled( ! checked );
+      },
     );
-
-    updateSetting( 'convoOnly', updatedSetting );
   }
 
   return setting?.canUpdate ? (

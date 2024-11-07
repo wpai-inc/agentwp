@@ -4,7 +4,6 @@ namespace WpAi\AgentWp;
 
 use WpAi\AgentWp\Factories\ClientFactory;
 use WpAi\AgentWp\Http\WpAwpClient;
-use WpAi\AgentWp\Services\AccountSettings;
 
 /**
  * Main plugin class
@@ -130,9 +129,9 @@ class Main
         return $this->settings->getAccessToken();
     }
 
-    public function accountSettings(): AccountSettings
+    public function accountSettings(): array
     {
-        return new AccountSettings($this->client());
+        return $this->client()->siteSettingAll()->get() ?? [];
     }
 
     public function apiHost()

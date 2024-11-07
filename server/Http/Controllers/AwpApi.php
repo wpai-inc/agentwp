@@ -16,12 +16,14 @@ class AwpApi extends BaseController
         $endpoint = $params['endpoint'];
         unset($params['endpoint']);
 
-        return $this->main->client()->$endpoint($params);
+        return $this->main->client()->$endpoint($params)->get();
     }
 
     public function createRequest()
     {
-        $response = $this->main->client()->convoCreate($this->handleMentions($this->request->toArray()));
+        $response = $this->main->client()->convoCreate(
+            $this->handleMentions($this->request->toArray())
+        )->get();
 
         if (\is_wp_error($response)) {
             $this->respondWithError($response->get_error_message(), $response->get_error_code());
@@ -34,7 +36,7 @@ class AwpApi extends BaseController
 
     public function retryRequest()
     {
-        $response = $this->main->client()->requestRetry($this->request->toArray());
+        $response = $this->main->client()->requestRetry($this->request->toArray())->get();
 
         $response['access_token'] = $this->main->getAccessToken();
 

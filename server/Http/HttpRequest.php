@@ -13,7 +13,7 @@ class HttpRequest
     public function __construct(?WP_REST_Request $request = null)
     {
         // If no WP_REST_Request is provided, we create one using the current request globals.
-        $this->request = $request ?: new WP_REST_Request($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+        $this->request = $request ?: new WP_REST_Request($_SERVER['REQUEST_METHOD'] ?? null, $_SERVER['REQUEST_URI'] ?? null);
 
         // Populate parameters for `GET` and `POST` (similar to Symfony's `createFromGlobals`).
         $this->request->set_query_params($_GET);

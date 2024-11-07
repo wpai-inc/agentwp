@@ -136,7 +136,7 @@ class IndexSiteData implements Cacheable, Registrable
      */
     private function getSetting($key)
     {
-        $accountSettings = $this->main->accountSettings()->get();
+        $accountSettings = $this->main->accountSettings();
         foreach ($accountSettings as $setting) {
             if ($setting['name'] === $key) {
                 return $setting['value'];

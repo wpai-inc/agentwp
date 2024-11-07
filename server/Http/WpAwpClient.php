@@ -20,6 +20,11 @@ class WpAwpClient
         $this->errors = new HttpErrors;
     }
 
+    /**
+     * Calls the API route by its defined name in ApiRoutes.
+     *
+     * @return ClientResponse|\WP_Error
+     */
     public function __call(string $name, array $arguments = [])
     {
         $params = isset($arguments[0]) ? $arguments[0] : [];
@@ -27,13 +32,16 @@ class WpAwpClient
 
         try {
             if ($response->isError()) {
-                return new \WP_Error(
+                $res = $response->get();
+
+                return $response->setErrorResponse(new \WP_Error(
                     $response->status(),
-                    $response->body()
-                );
+                    $res['message'],
+                    ['status' => $response->status(), 'errors' => $res['errors']]
+                ));
             }
 
-            return json_decode($response->body(), true);
+            return $response;
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
