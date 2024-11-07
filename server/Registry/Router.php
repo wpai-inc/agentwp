@@ -43,7 +43,6 @@ class Router implements Registrable
         'retry_request' => [AwpApi::class, 'retryRequest'],
         'test_auth' => TestAuthResponse::class,
         'test_route' => [TestResponse::class, 'successfulResponse'],
-        'test_stream_forward' => [TestResponse::class, 'stream'],
         'accept_terms' => [UserController::class, 'acceptTerms'],
         'agentwp_users' => GetUsers::class,
         'site_data' => SiteDataController::class,

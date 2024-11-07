@@ -2,11 +2,6 @@
   "name": "wpai/agentwp",
   "description": "Adds a AI Agent to your WordPress installation.",
   "license": "GPL2",
-  "autoload": {
-    "psr-4": {
-      "WpAi\\AgentWp\\": "server/"
-    }
-  },
   "authors": [
     {
       "name": "Greg Hunt",
@@ -16,10 +11,8 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require-dev": {
+    "php": ">=7.4",
     "php-stubs/wordpress-stubs": "^6.4"
-  },
-  "require": {
-    "php": ">=7.4"
   },
   "config": {
     "platform": {

@@ -16,7 +16,7 @@
  */
 defined('ABSPATH') || exit;
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/autoload.php';
 
 register_activation_hook(__FILE__, 'agentwp_boot_plugin');
 register_deactivation_hook(__FILE__, 'agentwp_boot_plugin');
