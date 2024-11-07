@@ -199,7 +199,7 @@ class Client
     {
         $options = $this->getClientOptions();
         $method = \strtoupper($method);
-        if ($method === 'POST') {
+        if (in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
             $options['body'] = json_encode($params);
         } elseif ($method === 'GET') {
             $url = add_query_arg($params, $url);

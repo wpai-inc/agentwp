@@ -16,9 +16,7 @@ class AwpApi extends BaseController
         $endpoint = $params['endpoint'];
         unset($params['endpoint']);
 
-        $response = $this->main->client()->$endpoint($params);
-
-        return $response->get();
+        return $this->main->client()->$endpoint($params)->get();
     }
 
     public function createRequest()
