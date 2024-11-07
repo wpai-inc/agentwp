@@ -20,8 +20,7 @@
   },
   "require": {
     "php": ">=7.4",
-    "guzzlehttp/guzzle": "^7.0",
-    "symfony/http-foundation": "^5.0"
+    "guzzlehttp/guzzle": "^7.0"
   },
   "config": {
     "platform": {

@@ -18,16 +18,6 @@ defined('ABSPATH') || exit;
 
 require_once __DIR__.'/vendor/autoload.php';
 
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
-
-$awpPrivateRepo = PucFactory::buildUpdateChecker(
-    'https://github.com/wpai-inc/agentwp/',
-    __FILE__,
-    'agentwp'
-);
-$awpPrivateRepo->getVcsApi()->enableReleaseAssets();
-$awpPrivateRepo->setBranch('main');
-
 register_activation_hook(__FILE__, 'agentwp_boot_plugin');
 register_deactivation_hook(__FILE__, 'agentwp_boot_plugin');
 add_action('plugins_loaded', 'agentwp_boot_plugin');
