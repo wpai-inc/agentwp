@@ -57,6 +57,10 @@ export const usePosition = ( {
   const [ offset, setOffset ] = useState< TwoDCoord >( { x: 0, y: 0 } );
   const minSize = { width: 400, height: 400 };
   const [ isMaximized, setIsMaximized ] = useState( false );
+  const defaults = {
+    position: { right: 16, bottom: 16 },
+    size: { width: 400, height: 800 },
+  };
 
   /**
    * Calculate boundaries based on parent element and window size
@@ -128,7 +132,13 @@ export const usePosition = ( {
 
   const handleWindowResize = useCallback( () => {
     if ( chatWindowEl && settings.chatOpen ) {
-      const { maxRight, maxBottom } = calculateBoundaries();
+      const { maxRight, maxBottom, width, height } = calculateBoundaries();
+
+      if ( size.width >= width || size.height >= height ) {
+        setSize( { width, height } );
+        setPosition( { right: 20, bottom: 20 } );
+        return;
+      }
 
       setPosition( position => ( {
         right: Math.min( position.right, maxRight ),
@@ -279,11 +289,6 @@ export const usePosition = ( {
   };
 
   const getMinimizeParams = () => {
-    const defaults = {
-      position: { right: 16, bottom: 16 },
-      size: { width: 400, height: 800 },
-    };
-
     if ( ! maximization ) {
       return defaults;
     }
