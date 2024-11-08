@@ -37,7 +37,7 @@ class WpAwpClient
                 return $response->setErrorResponse(new \WP_Error(
                     $response->status(),
                     $res['message'],
-                    ['status' => $response->status(), 'errors' => $res['errors']]
+                    ['status' => $response->status(), 'errors' => $res['errors'] ?? []]
                 ));
             }
 
