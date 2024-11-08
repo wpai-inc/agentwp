@@ -5,7 +5,17 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { optimistic } from '@/lib/utils';
 import { DataListItem } from '@/Components/ui/dl';
 
-const abilities = [ 'navigate', 'query' ];
+type AbilitySetting = { name: string; label: string };
+const abilities: AbilitySetting[] = [
+  {
+    name: 'navigate',
+    label: 'Navigate',
+  },
+  {
+    name: 'query',
+    label: 'Query – Read Only',
+  },
+];
 
 export default function ChatSettings() {
   const {
@@ -52,19 +62,19 @@ export default function ChatSettings() {
           }>
           { setting.name === 'abilities' ? (
             <div className="space-y-2">
-              { abilities.map( ( ability: string ) => (
-                <label key={ ability } className="capitalize flex gap-2 items-center">
+              { abilities.map( ability => (
+                <label key={ ability.name } className="capitalize flex gap-2 items-center">
                   <input
                     type="checkbox"
-                    checked={ setting.value.includes( ability ) }
+                    checked={ setting.value.includes( ability.name ) }
                     onChange={ ( e: React.ChangeEvent< HTMLInputElement > ) => {
                       const newItems = e.target.checked
-                        ? [ ...setting.value, ability ]
-                        : setting.value.filter( ( item: string ) => item !== ability );
+                        ? [ ...setting.value, ability.name ]
+                        : setting.value.filter( ( item: string ) => item !== ability.name );
                       handleChange( setting.name, newItems );
                     } }
                   />
-                  { ability }
+                  { ability.label }
                 </label>
               ) ) }
             </div>
