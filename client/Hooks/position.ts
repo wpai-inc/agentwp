@@ -132,7 +132,13 @@ export const usePosition = ( {
 
   const handleWindowResize = useCallback( () => {
     if ( chatWindowEl && settings.chatOpen ) {
-      const { maxRight, maxBottom } = calculateBoundaries();
+      const { maxRight, maxBottom, width, height } = calculateBoundaries();
+
+      if ( size.width >= width || size.height >= height ) {
+        setSize( { width, height } );
+        setPosition( { right: 20, bottom: 20 } );
+        return;
+      }
 
       setPosition( position => ( {
         right: Math.min( position.right, maxRight ),
