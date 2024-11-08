@@ -21,6 +21,7 @@ require_once __DIR__.'/autoload.php';
 register_activation_hook(__FILE__, 'agentwp_boot_plugin');
 register_deactivation_hook(__FILE__, 'agentwp_boot_plugin');
 add_action('plugins_loaded', 'agentwp_boot_plugin');
+add_action('current_screen', 'agentwp_load_widget');
 
 /**
  * Registers all the service providers
@@ -37,12 +38,24 @@ function agentwp_boot_plugin(): void
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
         // \WpAi\AgentWp\Page\Frontend\Chat::class,
-        \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
         \WpAi\AgentWp\Registry\IndexSiteData::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,
         \WpAi\AgentWp\Registry\IndexThemeJson::class,
         \WpAi\AgentWp\Registry\IndexSiteDocs::class,
         \WpAi\AgentWp\Registry\Router::class,
         \WpAi\AgentWp\Registry\WpUser::class,
+    ]);
+}
+
+/**
+ * Load widget class.
+ */
+function agentwp_load_widget()
+{
+    $main = \WpAi\AgentWp\Main::getInstance(__FILE__);
+    $registry = (new \WpAi\AgentWp\ProviderRegistry($main));
+
+    $registry->register([
+        \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
     ]);
 }
