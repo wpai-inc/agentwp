@@ -131,7 +131,12 @@ class Main
 
     public function accountSettings(): array
     {
-        return $this->client()->siteSettingAll()->get() ?? [];
+        $res = $this->client()->siteSettingAll();
+        if ($res->isError()) {
+            return [];
+        }
+
+        return $res->get() ?? [];
     }
 
     public function apiHost()
