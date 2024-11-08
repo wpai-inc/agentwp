@@ -202,7 +202,7 @@ class Client
         if (in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
             $options['body'] = json_encode($params);
         } elseif ($method === 'GET') {
-            $url = add_query_arg($params, $url);
+            $url = add_query_arg(array_map('urlencode', $params), $url);
         }
 
         return wp_remote_request($url, array_merge($options, ['method' => $method]));
