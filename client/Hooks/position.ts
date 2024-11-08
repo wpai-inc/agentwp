@@ -297,7 +297,7 @@ export const usePosition = ( {
     return maximization;
   };
 
-  const restoreDefultSize = () => {
+  const restoreDefaultSize = () => {
     setPosition( defaults.position );
     setSize( defaults.size );
   };
@@ -351,6 +351,6 @@ export const usePosition = ( {
     offset,
     minSize,
     toggleMaximizeRestore,
-    restoreDefultSize,
+    restoreDefaultSize,
   };
 };
