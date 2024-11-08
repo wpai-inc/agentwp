@@ -298,6 +298,15 @@ export const usePosition = ( {
     return maximization;
   };
 
+  const restoreDefultSize = () => {
+    const defaults = {
+      position: { right: 16, bottom: 16 },
+      size: { width: 400, height: 800 },
+    };
+    setPosition( defaults.position );
+    setSize( defaults.size );
+  };
+
   useEffect( () => {
     setIsMaximized( checkIsMaximized() );
   }, [ size, calculateBoundaries, position ] );
@@ -347,5 +356,6 @@ export const usePosition = ( {
     offset,
     minSize,
     toggleMaximizeRestore,
+    restoreDefultSize,
   };
 };

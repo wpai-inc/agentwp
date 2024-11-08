@@ -20,6 +20,7 @@ export default function WindowActions( {
   handleDrag,
   isMaximized,
   toggleMaximizeRestore,
+  restoreDefault,
   ...props
 }: {
   toggle: () => void;
@@ -27,6 +28,7 @@ export default function WindowActions( {
   isMaximized?: boolean;
   toggleMaximizeRestore?: () => void;
   handleDrag: ( e: MouseEvent ) => void;
+  restoreDefault?: () => void;
 } ) {
   return (
     <div
@@ -74,6 +76,7 @@ export default function WindowActions( {
       <div className="pl-4">
         <AgentTooltip content="Drag or double-click to reset window position" side="right">
           <button
+            onDoubleClick={ restoreDefault }
             id="dragHandle"
             className="handle -translate-y-full cursor-move text-gray-400 hover:text-amber-500">
             <DragIcon />
