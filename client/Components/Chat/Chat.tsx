@@ -79,6 +79,7 @@ export default function Chat() {
     isMaximized,
     minSize,
     toggleMaximizeRestore,
+    restoreDefaultSize,
   } = usePosition( {
     chatWindowRef: scope,
   } );
@@ -187,6 +188,7 @@ export default function Chat() {
               handleDrag={ onDrag }
               isMaximized={ isMaximized }
               toggleMaximizeRestore={ handleMaximizeRestoreToggle }
+              restoreDefault={ restoreDefaultSize }
             />
             <ChatCore handleDrag={ onDrag } />
             <ResizeHandles resizeHandler={ onChatWindowResize } />

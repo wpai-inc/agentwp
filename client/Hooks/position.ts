@@ -57,6 +57,10 @@ export const usePosition = ( {
   const [ offset, setOffset ] = useState< TwoDCoord >( { x: 0, y: 0 } );
   const minSize = { width: 400, height: 400 };
   const [ isMaximized, setIsMaximized ] = useState( false );
+  const defaults = {
+    position: { right: 16, bottom: 16 },
+    size: { width: 400, height: 800 },
+  };
 
   /**
    * Calculate boundaries based on parent element and window size
@@ -279,11 +283,6 @@ export const usePosition = ( {
   };
 
   const getMinimizeParams = () => {
-    const defaults = {
-      position: { right: 16, bottom: 16 },
-      size: { width: 400, height: 800 },
-    };
-
     if ( ! maximization ) {
       return defaults;
     }
@@ -296,6 +295,11 @@ export const usePosition = ( {
     }
 
     return maximization;
+  };
+
+  const restoreDefaultSize = () => {
+    setPosition( defaults.position );
+    setSize( defaults.size );
   };
 
   useEffect( () => {
@@ -347,5 +351,6 @@ export const usePosition = ( {
     offset,
     minSize,
     toggleMaximizeRestore,
+    restoreDefaultSize,
   };
 };
