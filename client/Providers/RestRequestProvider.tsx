@@ -60,7 +60,6 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     onBefore && onBefore();
 
     const catchFailure = ( e: any ) => {
-      console.info( '>>>>>>>', e.response );
       const msg = e.response.data.data;
       if ( throwError ) {
         notify(
