@@ -1,7 +1,6 @@
-import { useEffect, createContext, useContext, useState } from 'react';
+import { useEffect, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import { ActionType, AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
-import { useError } from './ErrorProvider';
 import { useRestRequest } from './RestRequestProvider';
 import { StreamingStatusEnum } from '@/Types/enums';
 
@@ -24,13 +23,11 @@ export default function ActionListenerProvider( { children }: { children: React.
   const { currentAction, updateCurrentAction, currentUserRequestId, addActionToCurrentRequest } =
     useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
-  const { errors } = useError();
-  const [ retryAction, setRetryAction ] = useState( 0 );
-  const shouldRetry = errors.length < 2 && retryAction < 2;
 
   useEffect( () => {
     if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
       if ( currentAction.action ) {
+        console.log( 'current action', currentAction );
         executeAndContinueAction( currentAction, currentUserRequestId );
         return;
       }
@@ -38,12 +35,7 @@ export default function ActionListenerProvider( { children }: { children: React.
        * Tries reconnecting stream.
        * Allows for two errors before stopping the stream.
        */
-      if (
-        currentAction.final &&
-        ! currentAction.hasExecuted &&
-        currentAction.action &&
-        shouldRetry
-      ) {
+      if ( currentAction.final && ! currentAction.hasExecuted && currentAction.action ) {
         retryStream( currentUserRequestId );
       }
     }
@@ -59,10 +51,7 @@ export default function ActionListenerProvider( { children }: { children: React.
   }
 
   async function continueActionStream( reqId: string | null, aa: AgentAction ) {
-    if ( reqId && aa.hasExecuted && ( ! aa.final || aa.hasError ) && shouldRetry ) {
-      if ( aa.hasError ) {
-        setRetryAction( retryAction => retryAction + 1 );
-      }
+    if ( reqId && aa.hasExecuted && ( ! aa.final || aa.hasError ) ) {
       await retryStream( reqId );
     }
   }
