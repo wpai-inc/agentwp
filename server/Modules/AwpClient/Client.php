@@ -53,8 +53,10 @@ class Client
         $response = $this->makeRequest($method, $url, $params);
 
         if (is_wp_error($response)) {
+            $errorCode = empty($response->get_error_code()) ? 500 : $response->get_error_code();
+
             return new ClientResponse(
-                $response->get_error_code(),
+                $errorCode,
                 $response->get_error_message(),
             );
         }
