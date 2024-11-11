@@ -27,7 +27,6 @@ export default function ActionListenerProvider( { children }: { children: React.
   useEffect( () => {
     if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
       if ( currentAction.action ) {
-        console.log( 'current action', currentAction );
         executeAndContinueAction( currentAction, currentUserRequestId );
         return;
       }
