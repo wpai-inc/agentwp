@@ -45,17 +45,10 @@ function agentwp_boot_plugin(): void
         \WpAi\AgentWp\Registry\Router::class,
         \WpAi\AgentWp\Registry\WpUser::class,
     ]);
-}
 
-/**
- * Load widget class.
- */
-function agentwp_load_widget()
-{
-    $main = \WpAi\AgentWp\Main::getInstance(__FILE__);
-    $registry = (new \WpAi\AgentWp\ProviderRegistry($main));
-
-    $registry->register([
-        \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
-    ]);
+    add_action('current_screen', function () use ($registry) {
+        $registry->register([
+            \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
+        ]);
+    });
 }
