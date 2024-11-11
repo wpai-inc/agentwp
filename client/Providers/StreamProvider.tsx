@@ -51,7 +51,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const { proxyApiRequest, tryRequest } = useRestRequest();
   const ctrl = useRef< AbortController >( new AbortController() );
   const [ streamingStatus, setStreamingStatus ] = useState( StreamingStatusEnum.OFF );
-  const latestStreamingStatus = useRef( streamingStatus );
+  const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
 
   async function startStream( {
     user_request,
