@@ -4,12 +4,10 @@ import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import { PageProvider } from '@/Providers/PageProvider';
 import type { PageData } from '@/Types/types';
 import { RestRequestProvider } from '@/Providers/RestRequestProvider';
-import LatestConvos from './Partials/LatestConvos';
-import '@/assets/styles/app.css';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
-import Footer from './Partials/Footer';
 import { AccountProvider } from '@/Providers/AccountProvider';
+import App from './App';
 
 const rootElement = document.getElementById( 'agentwp-admin-dashboardwidget' );
 
@@ -17,7 +15,6 @@ declare const agentwpData: PageData;
 
 if ( rootElement ) {
   const root = ReactDOM.createRoot( rootElement );
-  const wpWidgetStyleReset = { margin: '-11px -12px -12px -12px' };
   root.render(
     <StrictMode>
       <PageProvider page={ agentwpData }>
@@ -26,10 +23,7 @@ if ( rootElement ) {
             <RestRequestProvider>
               <AccountProvider>
                 <ClientSettingsProvider>
-                  <div style={ wpWidgetStyleReset }>
-                    <LatestConvos />
-                    <Footer />
-                  </div>
+                  <App />
                 </ClientSettingsProvider>
               </AccountProvider>
             </RestRequestProvider>

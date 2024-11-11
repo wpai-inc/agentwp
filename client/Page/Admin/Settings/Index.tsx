@@ -7,7 +7,6 @@ import type { SettingsPageData } from '@/Types/types';
 import { RestRequestProvider } from '@/Providers/RestRequestProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
-import '@/assets/styles/app.css';
 import { AWPRootType } from '@/Types/types';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import { AccountProvider } from '@/Providers/AccountProvider';

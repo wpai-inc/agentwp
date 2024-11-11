@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import type { PageData } from '@/Types/types';
 import { AWPRootType } from '@/Types/types';
-import '@/assets/styles/app.css';
 import ChatApp from '@/Components/Chat';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { PageProvider } from '@/Providers/PageProvider';

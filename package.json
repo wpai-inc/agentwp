@@ -54,6 +54,7 @@
     "partial-json": "^0.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-shadow": "^20.5.0",
     "react-syntax-highlighter": "^15.5.0",
     "recharts": "^2.12.7",
     "rehype-raw": "^7.0.0",

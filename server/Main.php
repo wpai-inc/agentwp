@@ -50,7 +50,6 @@ class Main
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPageUrl = admin_url('admin.php?page='.self::SETTINGS_PAGE);
         $this->registerSchedules();
-        $this->registerAdminStyles();
     }
 
     /**
@@ -148,15 +147,6 @@ class Main
     private function runtimeApiHost()
     {
         return defined('AGENTWP_API_HOST') && ! empty(AGENTWP_API_HOST) ? AGENTWP_API_HOST : 'https://app.agentwp.com';
-    }
-
-    public function registerAdminStyles(): void
-    {
-        if (is_admin()) {
-            add_action('admin_enqueue_scripts', function () {
-                wp_enqueue_style('agentwp-admin', $this->staticAsset('admin.css'), [], self::PLUGIN_VERSION);
-            });
-        }
     }
 
     public function registerSchedules(): void
