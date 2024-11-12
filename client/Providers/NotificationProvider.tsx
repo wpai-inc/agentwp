@@ -43,7 +43,7 @@ export const NotificationsProvider = ( { children }: { children: ReactNode } ) =
             toast: 'rounded-none',
             title: 'text-white/50',
             description: 'text-white/80',
-            closeButton: 'ring-1 ring-white/60 bg-black',
+            closeButton: 'ring-1 ring-white/60 bg-black text-white',
             error: 'bg-black/90',
           },
         } }
