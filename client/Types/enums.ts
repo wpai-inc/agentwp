@@ -12,4 +12,5 @@ export enum StreamingStatusEnum {
   STREAMING = 30,
   SHOULD_ABORT = 40,
   ABORT = 50,
+  ERROR = 60,
 }

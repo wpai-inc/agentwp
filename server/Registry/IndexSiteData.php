@@ -83,6 +83,10 @@ class IndexSiteData implements Cacheable, Registrable
 
             foreach ($info['wp-plugins-active']['fields'] as $plugin_name => $plugin_info) {
                 foreach ($plugin_data as $slug => $data) {
+                    if (empty($data['Name'])) {
+                        continue;
+                    }
+
                     if (! empty($plugin_info['label']) && strpos($plugin_info['label'], $data['Name']) !== false) {
                         $info['wp-plugins-active']['fields'][$plugin_name]['slug'] = $slug;
                         break;

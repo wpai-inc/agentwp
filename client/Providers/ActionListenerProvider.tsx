@@ -1,9 +1,7 @@
-import { useEffect, createContext, useContext, useState } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import { useStream } from '@/Providers/StreamProvider';
 import { ActionType, AgentAction, useUserRequests } from '@/Providers/UserRequestsProvider';
-import { useError } from './ErrorProvider';
 import { useRestRequest } from './RestRequestProvider';
-import { StreamingStatusEnum } from '@/Types/enums';
 
 type ActionListenerContextType = {
   actionNavigation: ( aa: AgentAction, confirm: boolean ) => Promise< void >;
@@ -20,52 +18,33 @@ export function useActionListener() {
 }
 
 export default function ActionListenerProvider( { children }: { children: React.ReactNode } ) {
-  const { streamingStatus, retryStream } = useStream();
+  const { retryStream } = useStream();
   const { currentAction, updateCurrentAction, currentUserRequestId, addActionToCurrentRequest } =
     useUserRequests();
   const { proxyApiRequest, restReq } = useRestRequest();
-  const { errors } = useError();
-  const [ retryAction, setRetryAction ] = useState( 0 );
-  const shouldRetry = errors.length < 2 && retryAction < 2;
+  const [ executing, setExecuting ] = useState< boolean >( false );
 
   useEffect( () => {
-    if ( currentUserRequestId && currentAction && streamingStatus === StreamingStatusEnum.OFF ) {
-      if ( currentAction.action ) {
-        executeAndContinueAction( currentAction, currentUserRequestId );
-        return;
-      }
-      /**
-       * Tries reconnecting stream.
-       * Allows for two errors before stopping the stream.
-       */
-      if (
-        currentAction.final &&
-        ! currentAction.hasExecuted &&
-        currentAction.action &&
-        shouldRetry
-      ) {
-        retryStream( currentUserRequestId );
-      }
-    }
-  }, [ currentAction, streamingStatus, currentUserRequestId ] );
+    if ( currentUserRequestId && currentAction?.action && ! executing ) {
+      async function continueActions( aa: AgentAction, reqId: string ) {
+        setExecuting( true );
 
-  async function executeAndContinueAction( aa: AgentAction, reqId: string | null ) {
-    if ( ! aa.hasExecuted ) {
-      await executeAction( aa );
-      aa.hasExecuted = true;
-    }
+        if ( ! aa.hasExecuted ) {
+          await executeAction( aa );
+          aa.hasExecuted = true;
+        }
 
-    await continueActionStream( reqId, aa );
-  }
+        if ( ! aa.final ) {
+          console.log( 'Not Final', aa );
+          await retryStream( reqId );
+        }
 
-  async function continueActionStream( reqId: string | null, aa: AgentAction ) {
-    if ( reqId && aa.hasExecuted && ( ! aa.final || aa.hasError ) && shouldRetry ) {
-      if ( aa.hasError ) {
-        setRetryAction( retryAction => retryAction + 1 );
+        setExecuting( false );
       }
-      await retryStream( reqId );
+
+      continueActions( currentAction, currentUserRequestId );
     }
-  }
+  }, [ currentAction, currentUserRequestId, executing ] );
 
   async function storeActionResult( aa: AgentAction, data: App.Data.AgentActionResultData ) {
     if ( ! aa.id ) {
@@ -103,6 +82,7 @@ export default function ActionListenerProvider( { children }: { children: React.
     } else {
       const updatedAction = await storeSuccessfulActionResult( aa, { confirmed: false } );
       updateCurrentAction( updatedAction );
+      setExecuting( false );
     }
   }
 

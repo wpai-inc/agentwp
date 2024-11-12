@@ -103,9 +103,11 @@ export default function ChatProvider( {
       site_data: null,
       since,
     };
+
     if ( streamingStatus === StreamingStatusEnum.OFF ) {
       setStreamingStatus( StreamingStatusEnum.CONVO );
     }
+
     const { data } = await tryRequest( 'get', 'site_data' );
     if ( data ) {
       req.site_data = data;

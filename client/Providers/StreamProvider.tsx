@@ -51,7 +51,79 @@ export default function StreamProvider( { children }: { children: React.ReactNod
   const { proxyApiRequest, tryRequest } = useRestRequest();
   const ctrl = useRef< AbortController >( new AbortController() );
   const [ streamingStatus, setStreamingStatus ] = useState( StreamingStatusEnum.OFF );
-  const latestStreamingStatus = useRef( streamingStatus );
+  const latestStreamingStatus = useRef( StreamingStatusEnum.OFF );
+
+  useEffect( () => {
+    latestStreamingStatus.current = streamingStatus;
+  }, [ streamingStatus ] );
+
+  useEffect( () => {
+    if ( streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ) {
+      liveAction.current = null;
+    }
+    if ( streamingStatus === StreamingStatusEnum.ABORT ) {
+      ctrl.current.abort();
+      ctrl.current = new AbortController();
+      if ( currentUserRequestId ) {
+        abortRequest( currentUserRequestId );
+      }
+    }
+  }, [ streamingStatus, currentUserRequestId ] );
+
+  function resetStream( ur: App.Data.UserRequestData ) {
+    setStreamingStatus( StreamingStatusEnum.PENDING );
+    setCurrentUserRequestId( ur.id );
+    liveAction.current = null;
+  }
+
+  function closeStream( ur: App.Data.UserRequestData ) {
+    if ( liveAction.current ) {
+      addActionToCurrentRequest( ur.id, liveAction.current );
+    }
+
+    setStreamingStatus( StreamingStatusEnum.OFF );
+  }
+
+  function actionTick( aa: AgentAction ) {
+    liveAction.current = aa;
+    forceUpdate();
+  }
+
+  function cancelStream( userRequestId: string ) {
+    if ( currentUserRequestId === userRequestId ) {
+      if ( latestStreamingStatus.current >= StreamingStatusEnum.STREAMING ) {
+        setStreamingStatus( StreamingStatusEnum.ABORT );
+      } else {
+        setStreamingStatus( StreamingStatusEnum.SHOULD_ABORT );
+      }
+    }
+  }
+
+  async function abortRequest( userRequestId: string ) {
+    setRequestAborted( userRequestId );
+    await proxyApiRequest< App.Data.UserRequestData >( 'requestAbort', {
+      userRequest: userRequestId,
+    } );
+    setStreamingStatus( StreamingStatusEnum.OFF );
+  }
+
+  async function retryStream( userRequestId: string ) {
+    const { data } = await tryRequest< StreamRequestType >( 'post', 'retry_request', {
+      userRequest: userRequestId,
+    } );
+
+    await startStream( data );
+  }
+
+  function checkAbortion(): boolean {
+    if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
+      setStreamingStatus( StreamingStatusEnum.ABORT );
+      return true;
+    } else {
+      setStreamingStatus( StreamingStatusEnum.STREAMING );
+      return false;
+    }
+  }
 
   async function startStream( {
     user_request,
@@ -60,14 +132,11 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     site_id,
     wp_user_id,
   }: StreamRequestType ) {
-    if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
-      setStreamingStatus( StreamingStatusEnum.ABORT );
+    if ( checkAbortion() ) {
       return;
     }
 
-    setStreamingStatus( StreamingStatusEnum.PENDING );
-    setCurrentUserRequestId( user_request.id );
-    liveAction.current = null;
+    resetStream( user_request );
 
     try {
       await fetchEventSource( stream_url, {
@@ -90,11 +159,7 @@ export default function StreamProvider( { children }: { children: React.ReactNod
           setStreamingStatus( StreamingStatusEnum.OFF );
         },
         async onopen( response ) {
-          if ( latestStreamingStatus.current >= StreamingStatusEnum.SHOULD_ABORT ) {
-            setStreamingStatus( StreamingStatusEnum.ABORT );
-          } else {
-            setStreamingStatus( StreamingStatusEnum.STREAMING );
-          }
+          checkAbortion();
           if ( response.status > 300 ) {
             let body = await response.json();
             if ( body?.action_txt && body?.action_url ) {
@@ -109,75 +174,24 @@ export default function StreamProvider( { children }: { children: React.ReactNod
             let aar = JSON.parse( ev.data );
             throw new Error( `Error when processing message: ${ aar.reason }` );
           }
-          if ( ev.event === 'close' && liveAction.current ) {
-            addActionToCurrentRequest( user_request.id, liveAction.current );
-            setStreamingStatus( StreamingStatusEnum.OFF );
-            return;
-          }
 
-          let aa = JSON.parse( ev.data ) as AgentAction;
-          liveAction.current = aa;
-          forceUpdate();
+          if ( ev.event === 'close' ) {
+            closeStream( user_request );
+          } else {
+            let aa = JSON.parse( ev.data ) as AgentAction;
+            actionTick( aa );
+          }
         },
         onerror( err ) {
-          console.log( 'Stream error' );
-          setStreamingStatus( StreamingStatusEnum.OFF );
           throw err;
         },
       } );
-    } catch ( e ) {
-      await handleStreamError( e );
-      setStreamingStatus( StreamingStatusEnum.OFF );
+    } catch ( e: any ) {
+      console.error( 'Stream error', e );
+      setStreamingStatus( StreamingStatusEnum.ERROR );
+      addErrors( [ e ] );
     }
   }
-
-  function cancelStream( userRequestId: string ) {
-    if ( currentUserRequestId === userRequestId ) {
-      if ( latestStreamingStatus.current >= StreamingStatusEnum.STREAMING ) {
-        setStreamingStatus( StreamingStatusEnum.ABORT );
-      } else {
-        setStreamingStatus( StreamingStatusEnum.SHOULD_ABORT );
-      }
-    }
-  }
-
-  async function abortRequest( userRequestId: string ) {
-    setRequestAborted( userRequestId );
-    await proxyApiRequest< App.Data.UserRequestData >( 'requestAbort', {
-      userRequest: userRequestId,
-    } );
-    setStreamingStatus( StreamingStatusEnum.OFF );
-  }
-
-  async function handleStreamError( e: any ) {
-    console.error( 'Stream error', e );
-    addErrors( [ e ] );
-  }
-
-  async function retryStream( userRequestId: string ) {
-    const { data } = await tryRequest< StreamRequestType >( 'post', 'retry_request', {
-      userRequest: userRequestId,
-    } );
-
-    await startStream( data );
-  }
-
-  useEffect( () => {
-    latestStreamingStatus.current = streamingStatus;
-  }, [ streamingStatus ] );
-
-  useEffect( () => {
-    if ( streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ) {
-      liveAction.current = null;
-    }
-    if ( streamingStatus === StreamingStatusEnum.ABORT ) {
-      ctrl.current.abort();
-      ctrl.current = new AbortController();
-      if ( currentUserRequestId ) {
-        abortRequest( currentUserRequestId );
-      }
-    }
-  }, [ streamingStatus, currentUserRequestId ] );
 
   return (
     <StreamContext.Provider
