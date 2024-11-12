@@ -2,7 +2,7 @@
 Contributors: codewp, ovidiu-galatan, freshbrewedweb, isotropic
 Tags: ai, agent, chatbot
 Requires at least: 6.4
-Tested up to: 6.6
+Tested up to: 6.7
 Stable tag: 1.3.0
 Requires PHP: 7.4
 License: GPLv3
