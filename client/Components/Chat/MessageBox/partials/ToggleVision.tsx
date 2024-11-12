@@ -35,7 +35,7 @@ export default function ToggleVision() {
   }
 
   return (
-    <AgentTooltip content={ <p className="max-w-60">{ msg }</p> }>
+    <AgentTooltip content={ msg } maxWidth={ 250 }>
       <button
         type="button"
         onClick={ toggleVision }
