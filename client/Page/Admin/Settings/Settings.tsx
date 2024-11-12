@@ -1,5 +1,4 @@
 import ConnectToAwp from './SubPages/SettingsTab';
-import root from 'react-shadow';
 import * as Tabs from '@radix-ui/react-tabs';
 import UsersManagement from '@/Page/Admin/Settings/SubPages/UsersManagement';
 import SettingsTab from '@/Page/Admin/Settings/SubPages/SettingsTab';
@@ -11,7 +10,6 @@ import { Button } from '@/Components/ui/button';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import History from './SubPages/History';
 import { useAccount } from '@/Providers/AccountProvider';
-import styles from '@/assets/styles/inline-app.css?inline';
 
 const tabClasses =
   'px-3 lg:px-5 py-4 flex items-center justify-center text-sm lg:text-base leading-none select-none hover:text-brand-primary data-[state=active]:text-brand-dark  data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-brand-primary outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-70';
@@ -47,30 +45,27 @@ export default function Settings() {
   window.agentwp.classList.add( 'h-full' );
 
   return (
-    <root.div className="h-full -ml-5">
-      <Tabs.Root
-        defaultValue={ initialTab }
-        onValueChange={ value => handleTabChange( value ) }
-        className="flex flex-col h-full">
-        <SettingsHeader />
-        <TabContent value="dashboard">
-          <Dashboard />
-        </TabContent>
-        <TabContent value="history">
-          <History />
-        </TabContent>
-        <TabContent value="connect">
-          <ConnectToAwp />
-        </TabContent>
-        <TabContent value="users">
-          <UsersManagement />
-        </TabContent>
-        <TabContent value="settings">
-          <SettingsTab />
-        </TabContent>
-      </Tabs.Root>
-      <style type="text/css">{ styles }</style>
-    </root.div>
+    <Tabs.Root
+      defaultValue={ initialTab }
+      onValueChange={ value => handleTabChange( value ) }
+      className="flex flex-col h-full">
+      <SettingsHeader />
+      <TabContent value="dashboard">
+        <Dashboard />
+      </TabContent>
+      <TabContent value="history">
+        <History />
+      </TabContent>
+      <TabContent value="connect">
+        <ConnectToAwp />
+      </TabContent>
+      <TabContent value="users">
+        <UsersManagement />
+      </TabContent>
+      <TabContent value="settings">
+        <SettingsTab />
+      </TabContent>
+    </Tabs.Root>
   );
 
   function SettingsHeader() {
