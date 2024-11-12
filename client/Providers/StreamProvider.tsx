@@ -99,12 +99,6 @@ export default function StreamProvider( { children }: { children: React.ReactNod
     }
   }
 
-  function streamError( e: any ) {
-    console.error( 'Stream error', e );
-    setStreamingStatus( StreamingStatusEnum.OFF );
-    addErrors( [ e ] );
-  }
-
   async function abortRequest( userRequestId: string ) {
     setRequestAborted( userRequestId );
     await proxyApiRequest< App.Data.UserRequestData >( 'requestAbort', {
@@ -193,7 +187,9 @@ export default function StreamProvider( { children }: { children: React.ReactNod
         },
       } );
     } catch ( e: any ) {
-      streamError( e );
+      console.error( 'Stream error', e );
+      setStreamingStatus( StreamingStatusEnum.ERROR );
+      addErrors( [ e ] );
     }
   }
 
