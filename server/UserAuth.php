@@ -147,7 +147,26 @@ class UserAuth
 
     public function removeCapabilitiesFromAllUsers(): void
     {
-        $users = get_users();
+        $users = get_users([
+            'meta_query' => [
+                'relation' => 'OR',
+                [
+                    'key' => $this->user->cap_key,
+                    'value' => self::CAP_AGENTWP_ACCESS,
+                    'compare' => 'LIKE',
+                ],
+                [
+                    'key' => $this->user->cap_key,
+                    'value' => self::CAP_MANAGE_AGENTWP_CONNECTION,
+                    'compare' => 'LIKE',
+                ],
+                [
+                    'key' => $this->user->cap_key,
+                    'value' => self::CAP_MANAGE_AGENTWP_USERS,
+                    'compare' => 'LIKE',
+                ],
+            ],
+        ]);
 
         foreach ($users as $user) {
             $this->removeUserCapabilities($user);
