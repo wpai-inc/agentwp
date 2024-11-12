@@ -21,7 +21,6 @@ require_once __DIR__.'/autoload.php';
 register_activation_hook(__FILE__, 'agentwp_boot_plugin');
 register_deactivation_hook(__FILE__, 'agentwp_boot_plugin');
 add_action('plugins_loaded', 'agentwp_boot_plugin');
-add_action('current_screen', 'agentwp_load_widget');
 
 /**
  * Registers all the service providers
