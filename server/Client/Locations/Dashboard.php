@@ -16,18 +16,16 @@ class Dashboard implements ClientSetupLocationInterface
 
     public function active(): bool
     {
-        if (! isset($_SERVER['REQUEST_URI'])) {
+        if (! function_exists('get_current_screen')) {
             return false;
         }
 
-        /**
-         * @todo: bad method, this should be hooked into the right hook so that
-         * get_current_screen() can be used.
-         */
-        $requestUri = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
-        $dashboardPage = strpos($requestUri, '/wp-admin/index.php') !== false;
+        $screen = get_current_screen();
+        if (! $screen || ! isset($screen->id) || $screen->id !== 'dashboard') {
+            return false;
+        }
 
-        return is_admin() && $this->client->main->auth()->hasAccess() && $dashboardPage;
+        return is_admin() && $this->client->main->auth()->hasAccess();
     }
 
     public function root(): void

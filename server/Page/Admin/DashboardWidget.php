@@ -19,9 +19,9 @@ class DashboardWidget extends ReactClient
     public function dashboard_widget()
     {
         wp_add_dashboard_widget(
-            $this->pageName, // Widget slug.
+            'WPAgentDashboardWidget',
             '<!-- @todo: SVG Logo to be embedded here --> AgentWP',
-            [$this, 'appRoot']  // Display function.
+            [$this, 'appRoot']
         );
     }
 
