@@ -54,6 +54,7 @@ class Installer implements Registrable
         IndexSiteSummary::clearSchedules(['autoUpdate']);
 
         if ($this->main->settings->get('general_settings.cleanup_after_deactivate') !== false) {
+            $this->main->auth()->removeCapabilitiesFromAllUsers();
             $this->main->settings->disconnectSite($this->main);
             $this->cleanup_plugin_data();
         }
