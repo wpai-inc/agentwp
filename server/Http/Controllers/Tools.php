@@ -12,5 +12,6 @@ class Tools extends BaseController
     {
         $summarizer = (new IndexSiteSummary($this->main));
         $summarizer->scheduleNow('autoUpdate');
+        $this->respond('Content summarization has been started successfully');
     }
 }
