@@ -7,10 +7,11 @@ import type { SettingsPageData } from '@/Types/types';
 import { RestRequestProvider } from '@/Providers/RestRequestProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { ErrorProvider } from '@/Providers/ErrorProvider';
-import '@/assets/styles/app.css';
 import { AWPRootType } from '@/Types/types';
 import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import { AccountProvider } from '@/Providers/AccountProvider';
+import styles from '@/assets/styles/inline-app.css?inline';
+import root from 'react-shadow';
 
 declare global {
   interface Window {
@@ -23,10 +24,10 @@ const rootElement = document.getElementById( 'agentwp-admin-settings' );
 declare const agentwpData: SettingsPageData;
 
 if ( rootElement ) {
-  const root = ReactDOM.createRoot( rootElement );
+  const theRootElement = ReactDOM.createRoot( rootElement );
   window.agentwp = rootElement as AWPRootType;
 
-  root.render(
+  theRootElement.render(
     <React.StrictMode>
       <PageProvider page={ agentwpData }>
         <NotificationsProvider>
@@ -34,7 +35,10 @@ if ( rootElement ) {
             <RestRequestProvider>
               <AccountProvider>
                 <ClientSettingsProvider>
-                  { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
+                  <root.div>
+                    { agentwpData?.onboarding_completed ? <Settings /> : <Wizard /> }
+                    <style type="text/css">{ styles }</style>
+                  </root.div>
                 </ClientSettingsProvider>
               </AccountProvider>
             </RestRequestProvider>

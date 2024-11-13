@@ -9,7 +9,6 @@ export default defineConfig( {
   plugins: [
     v4wp( {
       input: {
-        styles: '/assets/styles/app.css',
         settings: '/Page/Admin/Settings/Index.tsx',
         dashboardWidget: '/Page/Admin/DashboardWidget/Index.tsx',
         chat: '/Page/Admin/Chat/Index.tsx',

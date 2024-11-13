@@ -45,9 +45,9 @@ export default function Wizard() {
   };
 
   return (
-    <div>
+    <>
       <Breadcrumb currentStep={ currentStep() } steps={ steps } />
       { steps[ currentStep() ].subpage }
-    </div>
+    </>
   );
 }
