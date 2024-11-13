@@ -32,8 +32,8 @@ export default function SupportTab() {
 
   return (
     <TabContainer>
-      <div className="mx-auto flex h-full max-w-lg flex-col justify-between p-2">
-        <div className="prose mb-4">
+      <div className="mx-auto flex h-full max-w-lg flex-col justify-between p-4">
+        <div className="prose mb-4 text-base">
           <h1 className="text-3xl font-semibold">General Feedback</h1>
           <p>Submit general feedback thoughts, and ideas about AgentWP.</p>
           <p>

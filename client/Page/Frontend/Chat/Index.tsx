@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import type { PageData } from '@/Types/types';
 import { AWPRootType } from '@/Types/types';
-import '@/assets/styles/app.css';
 import ChatApp from '@/Components/Chat';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { PageProvider } from '@/Providers/PageProvider';
+import root from 'react-shadow';
+import styles from '@/assets/styles/inline-app.css?inline';
 
 declare global {
   interface Window {
@@ -18,12 +19,15 @@ declare const agentwpData: PageData;
 const rootElement = document.getElementById( 'agentwp-frontend-chat' );
 if ( rootElement ) {
   window.agentwp = rootElement as AWPRootType;
-  const root = ReactDOM.createRoot( rootElement );
-  root.render(
+  const rootEl = ReactDOM.createRoot( rootElement );
+  rootEl.render(
     <React.StrictMode>
       <NotificationsProvider>
         <PageProvider page={ agentwpData }>
-          <ChatApp />
+          <root.div>
+            <ChatApp />
+            <style type="text/css">{ styles }</style>
+          </root.div>
         </PageProvider>
       </NotificationsProvider>
     </React.StrictMode>,

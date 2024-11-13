@@ -11,7 +11,8 @@ export default defineConfig( {
       input: {
         settings: '/Page/Admin/Settings/Index.tsx',
         dashboardWidget: '/Page/Admin/DashboardWidget/Index.tsx',
-        chat: '/Page/Admin/Chat/Index.tsx',
+        adminChat: '/Page/Admin/Chat/Index.tsx',
+        frontendChat: '/Page/Frontend/Chat/Index.tsx',
         testBlocksStreaming: '/Tests/test-blocks-streaming.ts',
       },
       outDir: '../build',

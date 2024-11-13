@@ -62,7 +62,7 @@ export default function History() {
   return loading ? (
     <LoadingScreen />
   ) : (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col text-base">
       { history.length > 0 ? (
         history.map( ( chronoGroup, idx ) => {
           const isOpen = !! openStates[ idx ];

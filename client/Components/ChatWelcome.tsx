@@ -52,9 +52,9 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
       } }
       exit={ { opacity: 0, scale: 0 } }
       className="flex flex-col h-full justify-center items-center p-4">
-      <p className="text-3xl font-semibold text-black">Hi { name },</p>
+      <p className="text-3xl font-semibold text-black mb-2">Hi { name },</p>
       <p className="text-xl text-center text-black">Here are some things I can help you with.</p>
-      <div className={ cn( 'grid grid-cols-2 gap-3 mt-3 w-full max-w-96' ) }>
+      <div className={ cn( 'grid grid-cols-2 gap-3 mt-4 w-full max-w-96' ) }>
         { suggestions &&
           suggestions.map( ( item: SuggestionType, key: number ) => (
             <ChatOption
@@ -102,7 +102,7 @@ function ChatOption( {
     <div
       onClick={ onClick && onClick }
       className={ cn(
-        'flex items-center justify-center shadow-sm p-4 bg-brand-gray cursor-pointer h-full rounded-lg text-center text-gray-600 transition min-h-12 w-full',
+        'flex items-center justify-center shadow-sm p-4 bg-brand-gray cursor-pointer h-full rounded-lg text-base leading-normal text-center text-gray-600 transition min-h-12 w-full',
         {
           'hover:bg-brand-gray-20 duration-200': message,
           'animate-pulse duration-1000': ! message,

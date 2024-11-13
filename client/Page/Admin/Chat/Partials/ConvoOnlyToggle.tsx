@@ -31,7 +31,7 @@ export default function ConvoOnlyToggle() {
   }
 
   return setting?.canUpdate ? (
-    <label className="flex items-center gap-1.5">
+    <label className="flex items-center gap-1.5 text-sm">
       <ChatSwitch checked={ enabled } onCheckedChange={ handleChange } />
       Convo Only
     </label>
