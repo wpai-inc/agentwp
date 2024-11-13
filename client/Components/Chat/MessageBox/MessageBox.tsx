@@ -112,7 +112,7 @@ export default function MessageBox() {
       message={ message }
       setMessage={ handleMessageInput }>
       <form
-        className="ring-brand-primary-muted/60 ring-inset focus-within:ring-2 transition relative rounded-lg bg-brand-gray p-2"
+        className="relative p-2 transition rounded-lg ring-brand-primary-muted/60 ring-inset focus-within:ring-2 bg-brand-gray"
         onSubmit={ submit }>
         <TextBox
           callback={ handleMessageInput }
@@ -128,10 +128,10 @@ export default function MessageBox() {
         />
         <div className="flex items-center justify-between gap-3">
           { messageError && (
-            <p className="ml-1 text-red-500 font-semibold text-sm">{ messageError }</p>
+            <p className="ml-1 text-sm font-semibold text-red-500">{ messageError }</p>
           ) }
 
-          <div className="ml-auto flex gap-3">
+          <div className="flex gap-3 ml-auto">
             <ToggleVision />
             <Button
               type={ streamingStatus === StreamingStatusEnum.OFF ? 'submit' : 'button' }
@@ -139,14 +139,14 @@ export default function MessageBox() {
               onClick={
                 streamingStatus > StreamingStatusEnum.OFF ? handleCancelMessage : undefined
               }
-              className="rounded bg-brand-primary h-10 w-10"
+              className="w-10 h-10 rounded bg-brand-primary"
               disabled={ isDisabled }>
               { streamingStatus === StreamingStatusEnum.OFF ? (
-                <UpArrowIcon className="h-5 w-5" />
+                <UpArrowIcon className="w-5 h-5" />
               ) : streamingStatus >= StreamingStatusEnum.SHOULD_ABORT ? (
-                <LoaderIcon className="animate-spin h-4 w-4" />
+                <LoaderIcon className="w-4 h-4 animate-spin" />
               ) : (
-                <div className="h-3 w-3 bg-white"></div>
+                <div className="w-3 h-3 bg-white"></div>
               ) }
             </Button>
           </div>

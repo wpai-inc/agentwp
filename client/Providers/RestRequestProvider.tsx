@@ -13,6 +13,7 @@ type RestRequestContextType = {
     dataOrParams?: any,
     onBefore?: () => void,
     onFailure?: ( error: any ) => void,
+    throwError?: boolean,
   ) => Promise< WpResponse< T > >;
   proxyApiRequest: < T = any >( endpoint: string, dataOrParams?: any ) => Promise< T >;
   requestUrl: ( name: string ) => string;
@@ -50,6 +51,7 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
     dataOrParams?: any,
     onBefore?: () => void,
     onFailure?: ( error: any ) => void,
+    throwError: boolean = true,
   ): Promise< WpResponse< T > > => {
     const req =
       method === 'post'
@@ -59,7 +61,15 @@ export function RestRequestProvider( { children }: { children: React.ReactNode }
 
     const catchFailure = ( e: any ) => {
       const msg = e.response.data.data;
-      notify( msg.message || 'An unexpected error occured.' );
+      if ( throwError ) {
+        notify(
+          typeof msg === 'string'
+            ? msg
+            : msg?.message && typeof msg.message === 'string'
+            ? msg.message
+            : 'An unexpected error occurred.',
+        );
+      }
       onFailure && onFailure( msg );
     };
 

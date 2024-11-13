@@ -31,19 +31,17 @@ function DialogComponent( {
 
   return (
     <InnerContainer className="flex-col-reverse" onTop={ handleScrollToTop }>
+      { alertMessage ? alertMessage : null }
       { ! conversation.length ? (
         <ChatWelcome user={ page.user } />
       ) : (
-        <>
-          { alertMessage ? alertMessage : null }
-          { conversation.map( userRequest => (
-            <Message
-              key={ userRequest.id }
-              submitted={ messageSubmitted }
-              userRequest={ userRequest }
-            />
-          ) ) }
-        </>
+        conversation.map( userRequest => (
+          <Message
+            key={ userRequest.id }
+            submitted={ messageSubmitted }
+            userRequest={ userRequest }
+          />
+        ) )
       ) }
     </InnerContainer>
   );

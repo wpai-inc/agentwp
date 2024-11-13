@@ -113,9 +113,16 @@ export default function ChatProvider( {
       req.site_data = data;
     }
 
-    return await tryRequest( 'post', 'create_request', req, undefined, ( e: any ) => {
-      setAlertMessage( () => <OverageAlert message={ e } /> );
-    } );
+    return await tryRequest(
+      'post',
+      'create_request',
+      req,
+      undefined,
+      ( e: any ) => {
+        setAlertMessage( () => <OverageAlert message={ e } /> );
+      },
+      false,
+    );
   }
 
   /**
