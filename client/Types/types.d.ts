@@ -84,6 +84,7 @@ export type GutenbergStreamType = {
 
 type AgentWpGeneralSettings = {
   cleanup_after_deactivate: boolean;
+  keyboard_shortcuts: boolean;
   restricted_urls: string;
 };
 

@@ -22,20 +22,35 @@ export default function GeneralSettings() {
   }
 
   return (
-    <DataListItem
-      label={
-        <div>
-          <label className="font-bold">Cleanup Data</label>
-          <p className="text-sm">Clean up AgentWP plugin data after deactivation</p>
-        </div>
-      }>
-      <Switch
-        id="cleanup_after_deactivate"
-        checked={ generalSettings?.cleanup_after_deactivate }
-        onCheckedChange={ ( checked: boolean ) =>
-          updateSetting( 'cleanup_after_deactivate', checked )
-        }
-      />
-    </DataListItem>
+    <>
+      <DataListItem
+        label={
+          <div>
+            <label className="font-bold">Cleanup Data</label>
+            <p className="text-sm">Clean up AgentWP plugin data after deactivation</p>
+          </div>
+        }>
+        <Switch
+          id="cleanup_after_deactivate"
+          checked={ generalSettings?.cleanup_after_deactivate }
+          onCheckedChange={ ( checked: boolean ) =>
+            updateSetting( 'cleanup_after_deactivate', checked )
+          }
+        />
+      </DataListItem>
+      <DataListItem
+        label={
+          <div>
+            <label className="font-bold">Keyboards Shortcuts</label>
+            <p className="text-sm">Enable or disable keyboard shortcuts</p>
+          </div>
+        }>
+        <Switch
+          id="cleanup_after_deactivate"
+          checked={ generalSettings?.keyboard_shortcuts }
+          onCheckedChange={ ( checked: boolean ) => updateSetting( 'keyboard_shortcuts', checked ) }
+        />
+      </DataListItem>
+    </>
   );
 }

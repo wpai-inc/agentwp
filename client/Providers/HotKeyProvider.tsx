@@ -1,11 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useChat } from '@/Providers/ChatProvider';
 import { useUserRequests } from './UserRequestsProvider';
 import { AWPEventChatSinceType, AWPEventChatOpenType } from '@/Types/types';
 import { maybeUseChatUI } from '@/Components/Chat/Chat';
+import { usePage } from '@/Providers/PageProvider';
 
 const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children } ) => {
   const { chatSetting, setChatSetting, cancelMessage, clearHistory } = useChat();
+  const { page } = usePage();
 
   const chatUI = maybeUseChatUI();
   const toggleChat = chatUI?.toggle;
@@ -17,7 +19,7 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
    * the escape key
    */
   useEffect( () => {
-    if ( chatSetting ) {
+    if ( chatSetting && page.general_settings?.keyboard_shortcuts ) {
       const handleEscape = ( e: KeyboardEvent ) => {
         if ( e.key === 'Escape' ) {
           setChatSetting( null );
@@ -34,7 +36,7 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
    * Toggle the chat with the
    * CMD + L key
    */
-  if ( toggleChat ) {
+  if ( toggleChat && page.general_settings?.keyboard_shortcuts ) {
     useEffect( () => {
       const handleToggle = ( e: KeyboardEvent ) => {
         if ( ( e.metaKey || e.ctrlKey ) && e.key === 'l' ) {
@@ -53,7 +55,7 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
    * New chat with CMD + K
    * CMD + L key
    */
-  if ( clearHistory ) {
+  if ( clearHistory && page.general_settings?.keyboard_shortcuts ) {
     useEffect( () => {
       const handleClearHistory = ( e: KeyboardEvent ) => {
         if ( ( e.metaKey || e.ctrlKey ) && e.key === 'k' ) {
@@ -72,18 +74,20 @@ const HotKeyProvider: React.FC< { children: React.ReactNode } > = ( { children }
    * Cancel the chat with the
    * CMD + SHIFT + X key
    */
-  useEffect( () => {
-    const handleCxl = ( e: KeyboardEvent ) => {
-      if ( ( e.metaKey || e.ctrlKey ) && e.shiftKey && e.key === 'x' ) {
-        e.preventDefault();
-        cancelMessage();
-      }
-    };
-    window.addEventListener( 'keydown', handleCxl );
-    return () => {
-      window.removeEventListener( 'keydown', handleCxl );
-    };
-  }, [ cancelMessage ] );
+  if ( page.general_settings?.keyboard_shortcuts ) {
+    useEffect( () => {
+      const handleCxl = ( e: KeyboardEvent ) => {
+        if ( ( e.metaKey || e.ctrlKey ) && e.shiftKey && e.key === 'x' ) {
+          e.preventDefault();
+          cancelMessage();
+        }
+      };
+      window.addEventListener( 'keydown', handleCxl );
+      return () => {
+        window.removeEventListener( 'keydown', handleCxl );
+      };
+    }, [ cancelMessage ] );
+  }
 
   /**
    * Custom Event Listener for Chat Since
