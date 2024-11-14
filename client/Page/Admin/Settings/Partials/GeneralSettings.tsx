@@ -41,7 +41,7 @@ export default function GeneralSettings() {
       <DataListItem
         label={
           <div>
-            <label className="font-bold">Keyboards Shortcuts</label>
+            <label className="font-bold">Keyboard Shortcuts</label>
             <p className="text-sm">Enable or disable keyboard shortcuts</p>
           </div>
         }>
