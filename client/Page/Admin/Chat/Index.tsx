@@ -7,6 +7,7 @@ import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { PageProvider } from '@/Providers/PageProvider';
 import root from 'react-shadow';
 import styles from '@/assets/styles/inline-app.css?inline';
+
 declare global {
   interface Window {
     agentwp: AWPRootType;
@@ -20,16 +21,16 @@ if ( rootElement ) {
   window.agentwp = rootElement as AWPRootType;
   const theRootElement = ReactDOM.createRoot( rootElement );
   theRootElement.render(
-    <React.StrictMode>
-      <NotificationsProvider>
-        <PageProvider page={ agentwpData }>
-          <root.div>
+    <root.div id="agentwp-chat-shadow-root">
+      <React.StrictMode>
+        <NotificationsProvider>
+          <PageProvider page={ agentwpData }>
             <ChatApp />
             <style type="text/css">{ styles }</style>
-          </root.div>
-        </PageProvider>
-      </NotificationsProvider>
-    </React.StrictMode>,
+          </PageProvider>
+        </NotificationsProvider>
+      </React.StrictMode>
+    </root.div>,
   );
 } else {
   // Handle the case where the root element is not found
