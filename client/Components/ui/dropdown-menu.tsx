@@ -55,7 +55,8 @@ const DropdownMenuContent = React.forwardRef<
   React.ElementRef< typeof DropdownMenuPrimitive.Content >,
   React.ComponentPropsWithoutRef< typeof DropdownMenuPrimitive.Content >
 >( ( { className, sideOffset = 4, ...props }, ref ) => (
-  <DropdownMenuPrimitive.Portal container={ window.agentwp }>
+  <DropdownMenuPrimitive.Portal
+    container={ window.agentwp.querySelector( '#agentwp-chat-shadow-root' )?.shadowRoot }>
     <DropdownMenuPrimitive.Content
       ref={ ref }
       sideOffset={ sideOffset }
