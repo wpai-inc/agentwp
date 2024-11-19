@@ -24,7 +24,6 @@ abstract class ReactClient implements ClientAppInterface, Registrable
         $this->main = $main;
         $this->pageName =
             str_replace('\\', '/', str_replace('WpAi\\AgentWp\\Page\\', '', get_class($this)));
-        $this->setLocation();
     }
 
     protected function onLocations(): void {}
@@ -53,6 +52,12 @@ abstract class ReactClient implements ClientAppInterface, Registrable
     public function register()
     {
         $this->registrations();
+        add_action('current_screen', [$this, 'locateAndSetup']);
+    }
+
+    public function locateAndSetup(): void
+    {
+        $this->setLocation();
 
         if ($this->location) {
             $this->location->root();
