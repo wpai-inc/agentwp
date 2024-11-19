@@ -44,11 +44,41 @@ class Main
     public function __construct(string $file)
     {
         $this->file = $file;
-        $this->settings = new Settings;
-        $this->auth = new UserAuth;
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPageUrl = admin_url('admin.php?page='.self::SETTINGS_PAGE);
-        $this->registerSchedules();
+    }
+
+    public function boot(): void
+    {
+        add_action('plugins_loaded', [$this, 'init']);
+    }
+
+    public function init(): void
+    {
+        $this->settings = new Settings;
+        $this->auth = new UserAuth;
+        $this->registerProviders()->registerSchedules();
+    }
+
+    public function registerProviders(): self
+    {
+        (new ProviderRegistry($this))->register();
+
+        return $this;
+    }
+
+    public function registerSchedules(): self
+    {
+        add_filter('cron_schedules', function ($schedules) {
+            $schedules['every_minute'] = [
+                'interval' => 60,
+                'display' => __('Every minute', 'agentwp'),
+            ];
+
+            return $schedules;
+        });
+
+        return $this;
     }
 
     /**
@@ -138,6 +168,11 @@ class Main
         return $res->get() ?? [];
     }
 
+    public function settingsRedirect(): void
+    {
+        \wp_safe_redirect($this->settingsPageUrl, 302, 'AgentWP');
+    }
+
     public function apiHost()
     {
         return defined('AGENT_WP_SERVER_BASE_URL') ? AGENT_WP_SERVER_BASE_URL : $this->runtimeApiHost();
@@ -151,17 +186,5 @@ class Main
     private function runtimeApiHost()
     {
         return defined('AGENTWP_API_HOST') && ! empty(AGENTWP_API_HOST) ? AGENTWP_API_HOST : 'https://app.agentwp.com';
-    }
-
-    public function registerSchedules(): void
-    {
-        add_filter('cron_schedules', function ($schedules) {
-            $schedules['every_minute'] = [
-                'interval' => 60,
-                'display' => __('Every minute', 'agentwp'),
-            ];
-
-            return $schedules;
-        });
     }
 }
