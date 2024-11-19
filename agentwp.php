@@ -33,10 +33,11 @@ function agentwp_boot_plugin(): void
 
     $registry->register([
         \WpAi\AgentWp\Installer::class,
-        \WpAi\AgentWp\Registry\Hooks::class,
         \WpAi\AgentWp\Page\Admin\Settings::class,
         \WpAi\AgentWp\Page\Admin\Chat::class,
         \WpAi\AgentWp\Page\Frontend\Chat::class,
+        \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
+        \WpAi\AgentWp\Registry\Hooks::class,
         \WpAi\AgentWp\Registry\IndexSiteData::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,
         \WpAi\AgentWp\Registry\IndexThemeJson::class,
@@ -44,10 +45,4 @@ function agentwp_boot_plugin(): void
         \WpAi\AgentWp\Registry\Router::class,
         \WpAi\AgentWp\Registry\WpUser::class,
     ]);
-
-    add_action('current_screen', function () use ($registry) {
-        $registry->register([
-            \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
-        ]);
-    });
 }
