@@ -2,6 +2,7 @@
 
 namespace WpAi\AgentWp;
 
+use WpAi\AgentWp\Database\Schema;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Registry\IndexSiteData;
 use WpAi\AgentWp\Registry\IndexSiteSummary;
@@ -21,6 +22,8 @@ class Installer
 
         (new IndexSiteData($main))->scheduleNow('autoUpdate');
 
+        (new Schema)->createTables();
+
         set_transient(MAIN::prefix('installing'), 'yes', MINUTE_IN_SECONDS * 10);
 
         if (! defined('WP_CLI') || ! WP_CLI) {
@@ -36,6 +39,7 @@ class Installer
         IndexSiteSummary::clearSchedules(['autoUpdate']);
 
         if ($main->settings->get('general_settings.cleanup_after_deactivate') !== false) {
+            (new Schema)->deleteTables();
             $main->auth()->removeCapabilitiesFromAllUsers();
             $main->settings->disconnectSite($main);
             self::cleanup_plugin_data($main);

@@ -52,4 +52,14 @@ class Schema
             dbDelta($sql);
         }
     }
+
+    public function deleteTables()
+    {
+        global $wpdb;
+
+        foreach ($this->tables as $table => $columns) {
+            $table = $this->namespace.$table;
+            $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}{$table}");
+        }
+    }
 }
