@@ -14,6 +14,7 @@ class ProviderRegistry
         \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
         \WpAi\AgentWp\Page\Frontend\Chat::class,
         \WpAi\AgentWp\Registry\Hooks::class,
+        \WpAi\AgentWp\Registry\CodeRunner::class,
         \WpAi\AgentWp\Registry\IndexSiteData::class,
         \WpAi\AgentWp\Registry\IndexSiteSummary::class,
         \WpAi\AgentWp\Registry\IndexThemeJson::class,
