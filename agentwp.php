@@ -6,7 +6,7 @@ use WpAi\AgentWp\Installer;
  * Plugin Name: AgentWP
  * Plugin URI: https://agentwp.com
  * Description: Adds a AI Agent to your WordPress installation.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Author: WPAI Inc.
  * Author URI: https://wpai.co
  * License: GPLv3

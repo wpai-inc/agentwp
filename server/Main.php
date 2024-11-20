@@ -11,7 +11,7 @@ use WpAi\AgentWp\Http\WpAwpClient;
  * Contains a lot of the configuration and common functionality for the plugin.
  * All providers depend on this class.
  *
- * @since 1.3.0
+ * @since 1.4.0
  */
 class Main
 {
@@ -19,7 +19,7 @@ class Main
 
     const SLUG = 'agentwp';
 
-    const PLUGIN_VERSION = '1.3.0';
+    const PLUGIN_VERSION = '1.4.0';
 
     const BUILD_DIR = 'build';
 
