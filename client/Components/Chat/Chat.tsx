@@ -29,6 +29,7 @@ import { useApp } from '@/Providers/AppProvider';
 import ToggleButton from '@/Components/Chat/ToggleButton/ToggleButton';
 import ChatContainer from './Partials/ChatContainer';
 import ChatCore from './Partials/ChatCore';
+import { useTranslation } from 'react-i18next';
 
 type ChatUIContextType = {
   toggle: () => void;
@@ -52,6 +53,7 @@ export function maybeUseChatUI() {
 }
 
 export default function Chat() {
+  const { t } = useTranslation();
   const { setTurnedOff } = useApp();
   const { open, setOpen } = useChat();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
@@ -204,13 +206,13 @@ export default function Chat() {
                     <p>
                       { open ? (
                         <>
-                          Click to minimize
+                          { t( 'Click to minimize' ) }
                           <br /> AgentWP.
                         </>
                       ) : (
                         <>
-                          AgentWP is hidden.
-                          <br /> Click to show.
+                          { t( 'AgentWP is hidden.' ) }
+                          <br /> { t( 'Click to show.' ) }
                         </>
                       ) }
                     </p>
@@ -223,7 +225,7 @@ export default function Chat() {
                 <ContextMenuIcon>
                   <PowerOffIcon />
                 </ContextMenuIcon>
-                Turn off
+                { t( 'Turn off' ) }
               </ContextMenuItem>
             </ContextMenuContent>
           </ContextMenu>

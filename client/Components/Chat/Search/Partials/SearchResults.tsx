@@ -1,6 +1,7 @@
 import ChatHeading from '../../Partials/ChatHeading';
 import IconLink from '@material-design-icons/svg/outlined/open_in_new.svg?react';
 import type { SearchResult } from '@/Providers/SearchProvider';
+import { useTranslation } from 'react-i18next';
 
 export default function SearchResults( {
   results,
@@ -9,12 +10,13 @@ export default function SearchResults( {
   results: SearchResult[];
   total: number;
 } ) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-2 -mx-4">
       <ChatHeading
         className="px-4"
         explanation="Displays a list of relevant content items from your WordPress site that match your search query.">
-        Results ({ total })
+        { t( 'Results' ) } ({ total })
       </ChatHeading>
       <div className="divide-y divide-brand-gray border-b border-brand-gray">
         { results.length > 0 ? (
@@ -55,5 +57,6 @@ function Result( { title, date, excerpt, thumbnail, url, author }: SearchResult 
 }
 
 function NoResults() {
-  return <div className="p-4 text-center text-brand-gray-70">No results found.</div>;
+  const { t } = useTranslation();
+  return <div className="p-4 text-center text-brand-gray-70">{ t( 'No results found.' ) }</div>;
 }

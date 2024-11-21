@@ -1,7 +1,9 @@
 import { WpUser } from '@/Types/types';
 import { Button } from '@/Components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 export default function ChatNotConnected( { user }: { user: WpUser } ) {
+  const { t } = useTranslation();
   const name = user.display_name;
 
   const currentPage = window.location.href;
@@ -11,8 +13,9 @@ export default function ChatNotConnected( { user }: { user: WpUser } ) {
     <div className="mb-8 flex h-full flex-col items-center justify-center">
       <p className="text-3xl font-semibold text-black">Hi { name },</p>
       <p className="text-center text-xl text-black">
-        To begin using AgentWP, connect it to the AI services. If this is your first time connecting
-        this site, a quick indexing process will take place.
+        { t(
+          'To begin using AgentWP, connect it to the AI services. If this is your first time connecting this site, a quick indexing process will take place.',
+        ) }
       </p>
 
       { showButton && (
@@ -20,7 +23,7 @@ export default function ChatNotConnected( { user }: { user: WpUser } ) {
           <a
             className="flex items-center"
             href="/wp-admin/admin.php?page=agentwp-admin-settings&tab=connect">
-            Connect AI Services
+            { t( 'Connect AI Services' ) }
           </a>
         </Button>
       ) }

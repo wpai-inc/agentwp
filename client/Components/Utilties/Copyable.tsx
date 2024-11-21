@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import useCopy from '@/Hooks/copy';
+import { useTranslation } from 'react-i18next';
 
 export default function Copyable( { text }: { text: string } ) {
+  const { t } = useTranslation();
   const { copy, copied, setCopied } = useCopy();
 
   useEffect( () => {
@@ -21,7 +23,7 @@ export default function Copyable( { text }: { text: string } ) {
 
   return (
     <button className="hover:cursor-copy" onClick={ handleClick }>
-      { copied ? 'Copied' : text }
+      { copied ? t( 'Copied' ) : text }
     </button>
   );
 }
