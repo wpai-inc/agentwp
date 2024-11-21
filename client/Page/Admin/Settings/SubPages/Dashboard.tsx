@@ -3,8 +3,10 @@ import LatestConvos from '../../DashboardWidget/Partials/LatestConvos';
 import { Card } from '@/Components/Admin/Card';
 import ChangelogFeed from '@/Components/Admin/ChangelogFeed';
 import QuickLinks from '../Partials/QuickLinks';
+import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col-reverse sm:flex-row gap-5">
       <div className="grid grid-cols-3 gap-5 h-full flex-1">
@@ -18,13 +20,15 @@ export default function Dashboard() {
             allowFullScreen
           />
         </div>
-        <Card title="Recent conversations" className="col-span-full lg:col-span-1 row-span-2">
+        <Card
+          title={ t( 'Recent conversations' ) }
+          className="col-span-full lg:col-span-1 row-span-2">
           <LatestConvos />
         </Card>
-        <Card title="Changelog" className="col-span-full lg:col-span-1">
+        <Card title={ t( 'Changelog' ) } className="col-span-full lg:col-span-1">
           <ChangelogFeed />
         </Card>
-        <Card title="Quicklinks" className="col-span-full lg:col-span-1">
+        <Card title={ t( 'Quicklinks' ) } className="col-span-full lg:col-span-1">
           <QuickLinks />
         </Card>
       </div>

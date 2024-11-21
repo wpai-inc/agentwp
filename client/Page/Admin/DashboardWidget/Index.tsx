@@ -8,6 +8,7 @@ import { ErrorProvider } from '@/Providers/ErrorProvider';
 import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { AccountProvider } from '@/Providers/AccountProvider';
 import App from './App';
+import '../../../i18n';
 
 const rootElement = document.getElementById( 'agentwp-admin-dashboardwidget' );
 

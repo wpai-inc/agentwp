@@ -6,6 +6,7 @@ import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export function ManualAwpActivation( {
   accepted,
@@ -14,6 +15,8 @@ export function ManualAwpActivation( {
   accepted: boolean;
   onToggleManual: ( isManual: boolean ) => void;
 } ) {
+  const { t } = useTranslation();
+
   const { tryRequest } = useRestRequest();
   const { page, getApiUrl } = usePage();
 
@@ -63,12 +66,12 @@ export function ManualAwpActivation( {
           <Textarea
             name="apiKey"
             value={ apiKey }
-            placeholder={ 'Enter your API key' }
-            label={ 'API key' }
+            placeholder={ t( 'Enter your API key' ) }
+            label={ t( 'API key' ) }
             required={ true }
             onChange={ value => setApiKey( value ) }
             validateMessage={ {
-              missing: 'Please enter your API key',
+              missing: t( 'Please enter your API key' ),
               custom: serverErrors.apiKey,
             } }
             labelInstructions={
@@ -77,24 +80,24 @@ export function ManualAwpActivation( {
                 className="underline"
                 // prettier-ignore
                 href={`${getApiUrl('oauthManuallyConnectSite')}?url=${encodeURIComponent(page.home_url)}`}>
-                Click here to get your API key
+                { t( 'Click here to get your API key' ) }
               </a>
             }></Textarea>
           { accepted ? (
             <Form.Submit asChild>
               <Button className="w-full mt-2" variant="brand" size="lg" isBusy={ saving }>
-                Connect
+                { t( 'Connect' ) }
               </Button>
             </Form.Submit>
           ) : (
-            <AgentTooltip content="Please accept the terms and conditions">
+            <AgentTooltip content={ t( 'Please accept the terms and conditions' ) }>
               <div>
                 <Button
                   disabled={ true }
                   className={ cn( 'w-full mt-2', 'cursor-not-allowed' ) }
                   variant="brand"
                   size="lg">
-                  Connect
+                  { t( 'Connect' ) }
                 </Button>
               </div>
             </AgentTooltip>
@@ -104,7 +107,9 @@ export function ManualAwpActivation( {
       <span
         onClick={ showFields }
         className="underline cursor-pointer w-full text-center mt-4 opacity-50">
-        { fieldsVisible ? 'Use auto connection (default)' : 'Or, Manually Connect AI services' }
+        { fieldsVisible
+          ? t( 'Use auto connection (default)' )
+          : t( 'Or, Manually Connect AI services' ) }
       </span>
     </div>
   );

@@ -13,6 +13,7 @@ import {
 } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import { usePage } from '@/Providers/PageProvider';
+import { useTranslation } from 'react-i18next';
 
 const formSchema = z.object( {
   apikey: z.string().min( 2, {
@@ -21,6 +22,7 @@ const formSchema = z.object( {
 } );
 
 export function GeneralForm() {
+  const { t } = useTranslation();
   const { page } = usePage();
 
   const form = useForm< z.infer< typeof formSchema > >( {
@@ -42,16 +44,16 @@ export function GeneralForm() {
           name="apikey"
           render={ ( { field } ) => (
             <FormItem>
-              <FormLabel>API Key</FormLabel>
+              <FormLabel>{ t( 'API Key' ) }</FormLabel>
               <FormControl>
                 <Input type="password" { ...field } />
               </FormControl>
-              <FormDescription>This is your API key</FormDescription>
+              <FormDescription>{ t( 'This is your API key' ) }</FormDescription>
               <FormMessage />
             </FormItem>
           ) }
         />
-        <Button type="submit">Save</Button>
+        <Button type="submit">{ t( 'Save' ) }</Button>
       </form>
     </Form>
   );

@@ -12,6 +12,7 @@ import ClientSettingsProvider from '@/Providers/ClientSettingsProvider';
 import { AccountProvider } from '@/Providers/AccountProvider';
 import styles from '@/assets/styles/inline-app.css?inline';
 import root from 'react-shadow';
+import '../../../i18n';
 
 declare global {
   interface Window {

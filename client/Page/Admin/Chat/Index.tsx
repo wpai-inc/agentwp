@@ -7,6 +7,8 @@ import { NotificationsProvider } from '@/Providers/NotificationProvider';
 import { PageProvider } from '@/Providers/PageProvider';
 import root from 'react-shadow';
 import styles from '@/assets/styles/inline-app.css?inline';
+import '../../../i18n';
+
 declare global {
   interface Window {
     agentwp: AWPRootType;

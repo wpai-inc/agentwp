@@ -1,4 +1,5 @@
 import { CardList } from '@/Components/Admin/CardList';
+import { useTranslation } from 'react-i18next';
 
 type QuickLink = {
   title: string;
@@ -6,25 +7,26 @@ type QuickLink = {
 };
 
 export default function QuickLinks() {
+  const { t } = useTranslation();
   const links: QuickLink[] = [
     {
-      title: 'All Agents',
+      title: t( 'All Agents' ),
       url: 'app.agentwp.com',
     },
     {
-      title: 'Billing',
+      title: t( 'Billing' ),
       url: 'app.agentwp.com/billing',
     },
     {
-      title: 'Agent Settings',
+      title: t( 'Agent Settings' ),
       url: 'tab',
     },
     {
-      title: 'Changes and Updates',
+      title: t( 'Changes and Updates' ),
       url: 'agentwp.com/blog',
     },
     {
-      title: 'AgentWP Blog',
+      title: t( 'AgentWP Blog' ),
       url: 'agentwp.com/blog',
     },
   ];

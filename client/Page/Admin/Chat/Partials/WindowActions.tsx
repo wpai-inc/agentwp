@@ -5,6 +5,7 @@ import DragIcon from '@material-design-icons/svg/outlined/drag_indicator.svg?rea
 import { cn } from '@/lib/utils';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { Button } from '@/Components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const Corners = () => {
   return (
@@ -30,6 +31,7 @@ export default function WindowActions( {
   handleDrag: ( e: MouseEvent ) => void;
   restoreDefault?: () => void;
 } ) {
+  const { t } = useTranslation();
   return (
     <div
       onMouseDown={ e => handleDrag( e.nativeEvent ) }
@@ -52,7 +54,7 @@ export default function WindowActions( {
             </AgentTooltip>
           ) : (
             <AgentTooltip
-              content="Maximize the chat window to take all the available space"
+              content={ t( 'Maximize the chat window to take all the available space' ) }
               side="right">
               <Button
                 variant="ghost"

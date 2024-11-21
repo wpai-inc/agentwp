@@ -1,3 +1,5 @@
+import i18n from '@/i18n';
+
 type FooterLink = {
   label: string;
   href: string;
@@ -5,15 +7,15 @@ type FooterLink = {
 
 const links: FooterLink[] = [
   {
-    label: 'Blog',
+    label: i18n.t( 'Blog' ),
     href: 'https://agentwp.com/blog',
   },
   {
-    label: 'Help',
+    label: i18n.t( 'Help' ),
     href: 'https://app.agentwp.com/support',
   },
   {
-    label: 'Go Pro',
+    label: i18n.t( 'Go Pro' ),
     href: 'https://app.agentwp.com/enroll/pro',
   },
 ];

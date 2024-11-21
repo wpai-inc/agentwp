@@ -3,8 +3,10 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { Switch } from '@/Components/ui/switch';
 import { usePage } from '@/Providers/PageProvider';
 import { DataListItem } from '@/Components/ui/dl';
+import { useTranslation } from 'react-i18next';
 
 export default function GeneralSettings() {
+  const { t } = useTranslation();
   const { tryRequest } = useRestRequest();
   const { page } = usePage();
   const [ generalSettings, setGeneralSettings ] = useState( page.general_settings );
@@ -26,8 +28,8 @@ export default function GeneralSettings() {
       <DataListItem
         label={
           <div>
-            <label className="font-bold">Cleanup Data</label>
-            <p className="text-sm">Clean up AgentWP plugin data after deactivation</p>
+            <label className="font-bold">{ t( 'Cleanup Data' ) }</label>
+            <p className="text-sm">{ t( 'Clean up AgentWP plugin data after deactivation' ) }</p>
           </div>
         }>
         <Switch
@@ -41,8 +43,8 @@ export default function GeneralSettings() {
       <DataListItem
         label={
           <div>
-            <label className="font-bold">Keyboard Shortcuts</label>
-            <p className="text-sm">Enable or disable keyboard shortcuts</p>
+            <label className="font-bold">{ t( 'Keyboard Shortcuts' ) }</label>
+            <p className="text-sm">{ t( 'Enable or disable keyboard shortcuts' ) }</p>
           </div>
         }>
         <Switch

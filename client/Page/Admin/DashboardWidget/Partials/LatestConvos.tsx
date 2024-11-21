@@ -1,8 +1,10 @@
 import { useState, useEffect, Fragment } from 'react';
 import { Spinner } from '@/Components/Spinner';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import { useTranslation } from 'react-i18next';
 
 export default function LatestConvos() {
+  const { t } = useTranslation();
   const { proxyApiRequest } = useRestRequest();
   const [ isLoading, setIsLoading ] = useState< boolean >( true );
   const [ historyGroups, setHistoryGroups ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
@@ -35,7 +37,7 @@ export default function LatestConvos() {
           ) ) }
         </div>
       ) : (
-        <p>No recent conversations.</p>
+        <p>{ t( 'No recent conversations.' ) }</p>
       ) }
     </div>
   );

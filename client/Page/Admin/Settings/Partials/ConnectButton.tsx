@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export default function ConnectButton( {
   accepted,
   className,
   ...props
 }: { accepted: boolean; className?: string } & React.ButtonHTMLAttributes< HTMLButtonElement > ) {
+  const { t } = useTranslation();
   const { tryRequest } = useRestRequest();
 
   const [ connecting, setConnecting ] = useState( false );
@@ -27,7 +29,7 @@ export default function ConnectButton( {
       size="lg"
       isBusy={ connecting }
       { ...props }>
-      Connect AI Services
+      { t( 'Connect AI Services' ) }
     </Button>
   );
 }

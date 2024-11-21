@@ -5,6 +5,7 @@ import type { SettingsPageData } from '@/Types/types';
 import ChoosePlan from './Wizard/ChoosePlan';
 import Breadcrumb from './Wizard/Breadcrumb';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
+import i18n from '@/i18n';
 
 export type StepType = {
   text: string;
@@ -13,19 +14,19 @@ export type StepType = {
 
 const steps: StepType[] = [
   {
-    text: 'Install',
+    text: i18n.t( 'Install' ),
     subpage: undefined,
   },
   {
-    text: 'Connect',
+    text: i18n.t( 'Connect' ),
     subpage: <ConnectAiService />,
   },
   {
-    text: 'Plan',
+    text: i18n.t( 'Plan' ),
     subpage: <ChoosePlan />,
   },
   {
-    text: 'Access',
+    text: i18n.t( 'Access' ),
     subpage: <UserAccess />,
   },
 ];
