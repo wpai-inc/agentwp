@@ -5,17 +5,19 @@ import IconNoVision from '@material-design-icons/svg/outlined/visibility_off.svg
 import { cn, optimistic } from '@/lib/utils';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { useAccountSettings } from '@/Providers/AccountSettingsProvider';
+import { useTranslation } from 'react-i18next';
 
 export default function ToggleVision() {
   const { getAccountSetting, setAccountSettings } = useAccountSettings();
   const setting = getAccountSetting( 'visionEnabled' );
+  const { t } = useTranslation();
 
   const [ on, setOn ] = useState< boolean >( setting?.value || false );
 
   const { proxyApiRequest } = useRestRequest();
   const msg = on
-    ? 'Vision is on. Click to toggle off.'
-    : 'Vision is off. When turned on, AgentWP can view the current page.';
+    ? t( 'Vision is on. Click to toggle off.' )
+    : t( 'Vision is off. When turned on, AgentWP can view the current page.' );
 
   async function toggleVision() {
     const prev = on;

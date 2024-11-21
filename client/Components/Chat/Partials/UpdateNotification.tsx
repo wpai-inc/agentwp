@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import IconClose from '@material-design-icons/svg/outlined/close.svg?react';
 import { useClientSettings } from '@/Providers/ClientSettingsProvider';
-import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import type { AxiosPromise } from 'axios';
 import type { WpPost } from '@/Types/types';
 import { ChatNotice } from '../Notices/ChatNotice';
+import { useTranslation } from 'react-i18next';
 
 type ChangelogUpdate = {
   title: string;
@@ -13,6 +12,7 @@ type ChangelogUpdate = {
 };
 
 export default function UpdateNotification() {
+  const { t } = useTranslation();
   const { settings, updateSetting } = useClientSettings();
   const feedUrl = 'https://agentwp.com/wp-json/wp/v2/change/';
   const [ update, setUpdate ] = useState< ChangelogUpdate | null >( null );
@@ -57,10 +57,12 @@ export default function UpdateNotification() {
           size="sm"
           action={
             <a href={ update.link } target="_blank" className="underline underline-offset-2">
-              Learn More
+              { t( 'Learn More' ) }
             </a>
           }>
-          <span>New: { update.title }</span>
+          <span>
+            { t( 'New' ) }: { update.title }
+          </span>
         </ChatNotice>
       </div>
     )

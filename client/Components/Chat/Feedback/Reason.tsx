@@ -4,6 +4,7 @@ import IconClose from '@material-design-icons/svg/outlined/close.svg?react';
 import { useFeedback } from '@/Providers/FeedbackProvider';
 import { ChatNotice } from '../Notices/ChatNotice';
 import { Button } from '@/Components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const reasons = [ "Didn't follow instructions", 'Not relevant', 'Inaccurate response' ];
 
@@ -12,6 +13,7 @@ export default function Reason() {
   const [ reason, setReason ] = useState< string >( '' );
   const [ otherReason, setOtherReason ] = useState< boolean >( false );
   const [ successful, setSuccessful ] = useState< boolean >( false );
+  const { t } = useTranslation();
 
   async function handleSendMessage( r: string ) {
     optimistic(
@@ -28,7 +30,7 @@ export default function Reason() {
 
   return successful ? (
     <ChatNotice variant="success" dismissable>
-      <p>Thank you for your feedback!</p>
+      <p>{ t( 'Thank you for your feedback!' ) }</p>
     </ChatNotice>
   ) : (
     <form
@@ -38,7 +40,7 @@ export default function Reason() {
       } }
       className={ cn( 'w-full rounded-xl border border-brand-gray-25 p-4' ) }>
       <div className="mb-4 flex items-center justify-between">
-        <legend>Rating Feedback</legend>
+        <legend>{ t( 'Rating Feedback' ) }</legend>
         <button onClick={ () => setOpened( false ) }>
           <IconClose className="h-5 w-5" />
         </button>
@@ -61,7 +63,7 @@ export default function Reason() {
           } ) }
           type="button"
           onClick={ handleSelectOther }>
-          Other...
+          { t( 'Other...' ) }
         </Button>
       </div>
       { otherReason && (
@@ -73,7 +75,7 @@ export default function Reason() {
           />
           <div className="mt-2 text-right">
             <Button variant="brand" type="submit" disabled={ reason.length < 2 }>
-              Submit
+              { t( 'Submit' ) }
             </Button>
           </div>
         </div>

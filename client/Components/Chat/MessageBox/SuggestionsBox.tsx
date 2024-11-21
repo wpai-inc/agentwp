@@ -1,10 +1,12 @@
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { useEffect, useState } from 'react';
 import { SuggestionBoxProps } from './helpers/types';
+import { useTranslation } from 'react-i18next';
 
 export default function SuggestionsBox( { show, keyword, onSelect }: SuggestionBoxProps ) {
   const { restReq } = useRestRequest();
   const [ suggestions, setSuggestions ] = useState< any[] >( [] );
+  const { t } = useTranslation();
 
   useEffect( () => {
     if ( show ) {
@@ -45,7 +47,7 @@ export default function SuggestionsBox( { show, keyword, onSelect }: SuggestionB
                 </ul>
               </div>
             ) )
-          : 'No suggestions found' }
+          : t( 'No suggestions found' ) }
       </div>
     </div>
   );

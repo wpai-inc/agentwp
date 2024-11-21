@@ -2,12 +2,14 @@ import { MessageActionEscalation } from '@wpai/schemas';
 import { useEscalation } from '@/Providers/EscalationProvider';
 import CodeableLogo from '@/assets/services/codeable.png';
 import { LoaderIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   escalation: MessageActionEscalation;
 };
 
 const CodeableEscalation = ( { escalation }: Props ) => {
+  const { t } = useTranslation();
   const { createEscalation, loading } = useEscalation();
 
   function handleContinue() {
@@ -30,14 +32,14 @@ const CodeableEscalation = ( { escalation }: Props ) => {
           { escalation.description }{ ' ' }
           { escalation.link ? (
             <a href={ escalation.link } className="text-blue-500 hover:underline">
-              View Full Scope.
+              { t( 'View Full Scope.' ) }
             </a>
           ) : (
             <button
               onClick={ handleContinue }
               disabled={ loading }
               className="text-blue-500 hover:underline">
-              View Full Scope.
+              { t( 'View Full Scope.' ) }
             </button>
           ) }
         </p>
@@ -48,7 +50,11 @@ const CodeableEscalation = ( { escalation }: Props ) => {
           className={
             'p-2 rounded-lg w-full text-sm justify-center items-center text-white flex bg-[#457580] hover:opacity-80 min-h-[35px]'
           }>
-          { loading ? <LoaderIcon className="animate-spin h-4 w-4" /> : 'Continue In Codeable' }
+          { loading ? (
+            <LoaderIcon className="animate-spin h-4 w-4" />
+          ) : (
+            t( 'Continue In Codeable' )
+          ) }
         </a>
       ) : (
         <button
@@ -58,7 +64,11 @@ const CodeableEscalation = ( { escalation }: Props ) => {
           className={
             'p-2 rounded-lg w-full text-sm justify-center items-center text-white flex bg-[#457580] hover:opacity-80 min-h-[35px]'
           }>
-          { loading ? <LoaderIcon className="animate-spin h-4 w-4" /> : 'Continue In Codeable' }
+          { loading ? (
+            <LoaderIcon className="animate-spin h-4 w-4" />
+          ) : (
+            t( 'Continue In Codeable' )
+          ) }
         </button>
       ) }
     </div>

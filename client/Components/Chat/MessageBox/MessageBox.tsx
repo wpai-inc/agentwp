@@ -10,6 +10,7 @@ import { useError } from '@/Providers/ErrorProvider';
 import { LoaderIcon } from 'lucide-react';
 import TextBox from './TextBox';
 import ToggleVision from './partials/ToggleVision';
+import { useTranslation } from 'react-i18next';
 
 type ValidationRule = {
   rule: ( text: string ) => boolean;
@@ -17,6 +18,7 @@ type ValidationRule = {
 };
 
 export default function MessageBox() {
+  const { t } = useTranslation();
   const { sendMessage, message, setMessage, cancelMessage, messageSubmitted } = useChat();
   const { page } = usePage();
   const [ commandMenuFocused, setCommandMenuFocused ] = useState( false );
@@ -27,7 +29,7 @@ export default function MessageBox() {
   const validation: ValidationRule[] = [
     {
       rule: ( text: string ) => text.length < 3600,
-      message: 'Your message is too long',
+      message: t( 'Your message is too long' ),
     },
   ];
 
@@ -41,7 +43,7 @@ export default function MessageBox() {
   function submit( e: React.FormEvent< HTMLFormElement > ) {
     e.preventDefault();
     if ( message.trim() === '' ) {
-      return addErrors( [ 'Message is empty' ] );
+      return addErrors( [ t( 'Message is empty' ) ] );
     }
     sendMessage( message );
   }
