@@ -39,6 +39,7 @@ export interface PageData {
   agentwp_access: string;
   locale: string;
   lang: string;
+  translations: Array< string >;
 }
 
 export interface SettingsPageData extends PageData {

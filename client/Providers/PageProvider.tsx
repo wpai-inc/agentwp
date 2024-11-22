@@ -62,7 +62,10 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
     return page.api_host + '/' + getApiRoute( name ).uri;
   }
 
-  i18n.changeLanguage( page?.lang );
+  console.log( 'PageProvider', page );
+
+  i18n.addResources( page.lang, 'translation', page.translations );
+  i18n.changeLanguage( page.lang );
 
   return (
     <PageContext.Provider
