@@ -266,6 +266,8 @@ abstract class ReactClient implements ClientAppInterface, Registrable
             'agentwp_manager' => $access_token ? $this->main->auth->isManager() : false,
             'agentwp_users_manager' => $access_token ? $this->main->auth->canManageUsers() : false,
             'agentwp_access' => $access_token ? $this->main->auth->hasAccess() : false,
+            'locale' => get_locale(),
+            'lang' => explode('_', get_locale())[0],
         ];
     }
 }

@@ -37,6 +37,8 @@ export interface PageData {
   agentwp_manager: string;
   agentwp_users_manager: string;
   agentwp_access: string;
+  locale: string;
+  lang: string;
 }
 
 export interface SettingsPageData extends PageData {
