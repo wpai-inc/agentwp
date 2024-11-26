@@ -47,6 +47,10 @@ export default function AgentResponse( {
       aa => ! [ 'message', 'navigation_confirmation' ].includes( aa.action?.ability ),
     ) ?? [];
 
+  const hasUnexecutedActions = otherActions.some(
+    action => ! action.hasExecuted && ! action.hasError,
+  );
+
   const incomplete = agentActions?.length === 0;
 
   const queryActions = agentActions?.filter( aa => aa.action?.ability === 'query' ) ?? [];
@@ -56,7 +60,7 @@ export default function AgentResponse( {
   return (
     <div className="text-black/60">
       { otherActions.length > 0 ? (
-        <div className="mb-4 flex-1 space-y-2">
+        <div className="flex-1 mb-4 space-y-2">
           { otherActions.map( aa => {
             if ( aa.action ) {
               return <ActionComponent key={ aa.id } { ...aa } />;
@@ -70,7 +74,7 @@ export default function AgentResponse( {
           name="AgentWP"
           time={ time }
           image={ logoUrl }
-          className="border-brand border p-1"
+          className="p-1 border border-brand"
         />
         <div className="flex items-center gap-4">
           { ! incomplete && <Rate /> }
@@ -132,7 +136,7 @@ export default function AgentResponse( {
       ) : (
         <>
           { aborted && <ActionAborted /> }
-          { ! aborted && pending && <ActionPending /> }
+          { ! aborted && ( pending || hasUnexecutedActions ) && <ActionPending /> }
           { ! aborted && incomplete && ! pending && (
             <>
               { queryActions.length > 0 ? (

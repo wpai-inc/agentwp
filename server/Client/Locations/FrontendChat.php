@@ -30,4 +30,11 @@ class FrontendChat implements ClientSetupLocationInterface
         add_action('wp_enqueue_scripts', [$this->client, 'registerPageProps']);
         add_filter('body_class', [$this, 'bodyClass']);
     }
+
+    public function bodyClass(array $classes): array
+    {
+        $classes[] = 'wp-frontend-chat';
+
+        return $classes;
+    }
 }

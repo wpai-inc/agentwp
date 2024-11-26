@@ -7,6 +7,9 @@ export function getSelectedGutenbergBlock(
   setSelectedInput: React.Dispatch< React.SetStateAction< any > >,
 ) {
   isEditorReady( () => {
+    if ( typeof wp === 'undefined' ) {
+      return;
+    }
     const { subscribe, select } = wp.data;
     let previousSelectedBlockClientId: string | null = null;
 
