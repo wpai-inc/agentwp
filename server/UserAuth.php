@@ -21,7 +21,7 @@ class UserAuth
 
     public function __construct($user = null)
     {
-        $this->user = $user ?? wp_get_current_user();
+        $this->user = $user ?? \wp_get_current_user();
         $this->settings = new Settings;
         $this->request = new HttpRequest;
     }

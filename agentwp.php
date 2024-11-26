@@ -1,10 +1,12 @@
 <?php
 
+use WpAi\AgentWp\Installer;
+
 /**
  * Plugin Name: AgentWP
  * Plugin URI: https://agentwp.com
  * Description: Adds a AI Agent to your WordPress installation.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Author: WPAI Inc.
  * Author URI: https://wpai.co
  * License: GPLv3
@@ -18,38 +20,9 @@ defined('ABSPATH') || exit;
 
 require_once __DIR__.'/autoload.php';
 
-register_activation_hook(__FILE__, 'agentwp_boot_plugin');
-register_deactivation_hook(__FILE__, 'agentwp_boot_plugin');
-add_action('plugins_loaded', 'agentwp_boot_plugin');
+$main = \WpAi\AgentWp\Main::getInstance(__FILE__);
 
-/**
- * Registers all the service providers
- * with a Main dependency.
- */
-function agentwp_boot_plugin(): void
-{
-    $main = \WpAi\AgentWp\Main::getInstance(__FILE__);
-    $registry = (new \WpAi\AgentWp\ProviderRegistry($main));
+register_activation_hook(__FILE__, [Installer::class, 'activate']);
+register_deactivation_hook(__FILE__, [Installer::class, 'deactivate']);
 
-    $registry->register([
-        \WpAi\AgentWp\Installer::class,
-        \WpAi\AgentWp\Registry\Hooks::class,
-        \WpAi\AgentWp\Page\Admin\Settings::class,
-        \WpAi\AgentWp\Page\Admin\Chat::class,
-        \WpAi\AgentWp\Page\Frontend\Chat::class,
-        \WpAi\AgentWp\Registry\IndexSiteData::class,
-        \WpAi\AgentWp\Registry\IndexSiteSummary::class,
-        \WpAi\AgentWp\Registry\IndexThemeJson::class,
-        \WpAi\AgentWp\Registry\IndexSiteDocs::class,
-        \WpAi\AgentWp\Registry\Router::class,
-        \WpAi\AgentWp\Registry\WpUser::class,
-    ]);
-
-    add_action('current_screen', function () use ($registry) {
-        $registry->register([
-            \WpAi\AgentWp\Page\Admin\DashboardWidget::class,
-        ]);
-    });
-
-    load_plugin_textdomain( 'agentwp', false, dirname(plugin_basename(__FILE__)) . '/languages' );
-}
+$main->boot();

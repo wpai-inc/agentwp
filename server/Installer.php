@@ -2,7 +2,7 @@
 
 namespace WpAi\AgentWp;
 
-use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Database\Schema;
 use WpAi\AgentWp\Modules\Summarization\SiteSummarizer;
 use WpAi\AgentWp\Registry\IndexSiteData;
 use WpAi\AgentWp\Registry\IndexSiteSummary;
@@ -12,59 +12,45 @@ use WpAi\AgentWp\Registry\IndexSiteSummary;
  *
  * @since 0.1.0
  */
-class Installer implements Registrable
+class Installer
 {
-    private Main $main;
-
-    public function __construct(Main $main)
+    public static function activate(): void
     {
-        $this->main = $main;
-    }
-
-    public function register()
-    {
-        $plugin_file = plugin_basename($this->main->pluginPath());
-
-        if (doing_action('activate_'.$plugin_file)) {
-            $this->activate();
-        }
-        if (doing_action('deactivate_'.$plugin_file)) {
-            $this->deactivate();
-        }
-    }
-
-    public function activate()
-    {
-        $summarizer = (new IndexSiteSummary($this->main));
+        $main = Main::getInstance();
+        $summarizer = (new IndexSiteSummary($main));
         $summarizer->schedule('autoUpdate', 'weekly');
 
-        (new IndexSiteData($this->main))->scheduleNow('autoUpdate');
+        (new IndexSiteData($main))->scheduleNow('autoUpdate');
+
+        (new Schema)->createTables();
 
         set_transient(MAIN::prefix('installing'), 'yes', MINUTE_IN_SECONDS * 10);
 
         if (! defined('WP_CLI') || ! WP_CLI) {
-            add_action('shutdown', [$this, 'redirect']);
+            add_action('shutdown', [$main, 'settingsRedirect']);
         }
     }
 
-    public function deactivate(): void
+    public static function deactivate(): void
     {
+        $main = Main::getInstance();
         IndexSiteData::invalidate();
         SiteSummarizer::invalidate();
         IndexSiteSummary::clearSchedules(['autoUpdate']);
 
-        if ($this->main->settings->get('general_settings.cleanup_after_deactivate') !== false) {
-            $this->main->auth()->removeCapabilitiesFromAllUsers();
-            $this->main->settings->disconnectSite($this->main);
-            $this->cleanup_plugin_data();
+        if ($main->settings->get('general_settings.cleanup_after_deactivate') !== false) {
+            (new Schema)->deleteTables();
+            $main->auth()->removeCapabilitiesFromAllUsers();
+            $main->settings->disconnectSite($main);
+            self::cleanup_plugin_data($main);
         }
     }
 
-    public function cleanup_plugin_data()
+    public static function cleanup_plugin_data(Main $main)
     {
         global $wpdb;
         $key = Main::SLUG;
-        $this->main->settings->delete('general_settings');
+        $main->settings->delete('general_settings');
         delete_option($key.'_summary');
         delete_option($key.'_site_summary');
         delete_option($key.'_site_data');
@@ -77,10 +63,5 @@ class Installer implements Registrable
             ])
         );
 
-    }
-
-    public function redirect(): void
-    {
-        \wp_safe_redirect($this->main->settingsPageUrl, 302, 'AgentWP');
     }
 }
