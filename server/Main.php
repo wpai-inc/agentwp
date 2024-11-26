@@ -40,10 +40,6 @@ class Main
     public string $settingsPageUrl;
 
     private string $file;
-    
-    public string $languagesDir;
-
-    public array $languageStrings = [];
 
     public function __construct(string $file)
     {
@@ -62,6 +58,18 @@ class Main
         $this->settings = new Settings;
         $this->auth = new UserAuth;
         $this->registerProviders()->registerSchedules();
+
+        load_plugin_textdomain( 'agentwp', false, dirname(plugin_basename(__FILE__)) . '/languages' );
+    }
+
+    /**
+     * Get translations.
+     * 
+     * @return array
+     */
+    public function translations(): array
+    {
+        return require $this->path() . 'server/TranslatableStrings.php';
     }
 
     public function registerProviders(): self
