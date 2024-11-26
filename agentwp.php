@@ -51,15 +51,5 @@ function agentwp_boot_plugin(): void
         ]);
     });
 
-    // $plugin_rel_path = dirname(plugin_basename(__FILE__)) . '/languages';
-    // $loaded = load_plugin_textdomain('agentwp', false, $plugin_rel_path);
-    // if (!$loaded) {
-    //     var_dump('Failed to load text domain for agentwp');
-    //     var_dump('Text Domain: agentwp');
-    //     var_dump('Domain Path: ' . $plugin_rel_path);
-    // } else {
-    //     var_dump('Loaded text domain for agentwp');
-    // }
-
     load_plugin_textdomain( 'agentwp', false, dirname(plugin_basename(__FILE__)) . '/languages' );
 }

@@ -58,6 +58,8 @@ class Main
 
     /**
      * Get translations.
+     * 
+     * @return array
      */
     public function translations(): array
     {
