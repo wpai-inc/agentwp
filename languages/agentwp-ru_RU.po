@@ -1,0 +1,1060 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: AgentWP\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-26 10:15+0000\n"
+"PO-Revision-Date: 2024-11-26 10:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.14; wp-6.4.5\n"
+"X-Domain: agentwp"
+
+#: server/TranslatableStrings.php:37
+msgid "5 users per website"
+msgstr "5 пользователей на сайт"
+
+#. %1$s is the entry point name.
+#: server/Modules/Vite/Vite.php:273
+#, php-format
+msgid "[Vite] Entry %1$s not found."
+msgstr "[Vite] Запись %1$s не найдена."
+
+#. %1$s is the manifest file path.
+#: server/Modules/Vite/Vite.php:58
+#, php-format
+msgid "[Vite] Failed to read manifest file %1$s."
+msgstr "[Vite] Не удалось прочитать файл манифеста %1$s."
+
+#. %1$s is the manifest directory path.
+#: server/Modules/Vite/Vite.php:51
+#, php-format
+msgid "[Vite] No manifest found in %1$s."
+msgstr "[Vite] Манифест не найден в %1$s."
+
+#: server/TranslatableStrings.php:89
+msgid "Abilities are the actions AgentWP can take on your site."
+msgstr ""
+"Возможности — это действия, которые AgentWP может выполнять на вашем сайте."
+
+#: server/TranslatableStrings.php:7
+msgid "Access"
+msgstr "Доступ"
+
+#: server/Http/HttpErrors.php:42
+msgid "Access denied."
+msgstr "Доступ запрещен."
+
+#: server/TranslatableStrings.php:18
+msgid "Account"
+msgstr "Счет"
+
+#: server/TranslatableStrings.php:185
+msgid "Actions"
+msgstr "Действия"
+
+#: server/TranslatableStrings.php:24
+msgid "Active plugins & themes, uploads, and logs"
+msgstr "Активные плагины и темы, загрузки и журналы"
+
+#. Description of the plugin
+msgid "Adds a AI Agent to your WordPress installation."
+msgstr "Добавляет AI-агента к вашей установке WordPress."
+
+#: server/TranslatableStrings.php:71
+msgid "Agent Settings"
+msgstr "Настройки агента"
+
+#: server/TranslatableStrings.php:98
+msgid ""
+"Agentic actions are currently disabled and will roll out in the coming weeks."
+msgstr ""
+"Действия агентов в настоящее время отключены и будут развернуты в ближайшие "
+"недели."
+
+#. Name of the plugin
+msgid "AgentWP"
+msgstr "АгентWP"
+
+#: server/TranslatableStrings.php:73
+msgid "AgentWP Blog"
+msgstr "Блог AgentWP"
+
+#: server/TranslatableStrings.php:61
+msgid ""
+"AgentWP crawls your site weekly to summarize it for better understanding. "
+"Run this now instead of waiting."
+msgstr ""
+"AgentWP сканирует ваш сайт еженедельно, чтобы подвести итог для лучшего "
+"понимания. Запустите это сейчас, а не ждите."
+
+#: server/TranslatableStrings.php:121
+msgid "AgentWP is hidden."
+msgstr "AgentWP скрыт."
+
+#: server/TranslatableStrings.php:117
+msgid "AgentWP is off."
+msgstr "AgentWP выключен."
+
+#: server/TranslatableStrings.php:23
+msgid "AgentWP will have access to:"
+msgstr "AgentWP будет иметь доступ к:"
+
+#: server/TranslatableStrings.php:69
+msgid "All Agents"
+msgstr "Все агенты"
+
+#: server/TranslatableStrings.php:112
+msgid "All Capabilities"
+msgstr "Все возможности"
+
+#: server/Http/HttpErrors.php:34
+msgid "An unknown error occurred."
+msgstr "Произошла неизвестная ошибка."
+
+#: server/TranslatableStrings.php:31
+msgid "and"
+msgstr "и"
+
+#: server/TranslatableStrings.php:84
+msgid "API Key"
+msgstr "API-ключ"
+
+#: server/TranslatableStrings.php:75
+msgid "API key"
+msgstr "API-ключ"
+
+#: server/TranslatableStrings.php:158
+msgid "Beta Testing – Read Only Mode"
+msgstr "Бета-тестирование — режим «Только чтение»"
+
+#: server/TranslatableStrings.php:70
+msgid "Billing"
+msgstr "Биллинг"
+
+#: server/TranslatableStrings.php:91
+msgid "Blog"
+msgstr "Блог"
+
+#: server/TranslatableStrings.php:130
+msgid "Bug"
+msgstr "Ошибка"
+
+#: server/TranslatableStrings.php:57
+msgid "Changelog"
+msgstr "Журнал изменений"
+
+#: server/TranslatableStrings.php:72
+msgid "Changes and Updates"
+msgstr "Изменения и обновления"
+
+#: server/TranslatableStrings.php:66
+msgid ""
+"Chat will not be available on these URLs or URL patterns. Put each on a new "
+"line."
+msgstr ""
+"Чат не будет доступен по этим URL или шаблонам URL. Размещайте каждый на "
+"новой строке."
+
+#: server/TranslatableStrings.php:41
+msgid "Choose a site specific plan to get started:"
+msgstr "Чтобы начать, выберите план для конкретного объекта:"
+
+#: server/TranslatableStrings.php:20
+msgid "Choose Who Can Use AgentWP"
+msgstr "Выберите, кто может использовать AgentWP"
+
+#. %1$s is the class name that does not exist.
+#: server/ProviderRegistry.php:24
+#, php-format
+msgid "Class %1$s does not exist"
+msgstr "Класс %1$s не существует"
+
+#: server/TranslatableStrings.php:81
+msgid "Clean up AgentWP plugin data after deactivation"
+msgstr "Очистите данные плагина AgentWP после деактивации"
+
+#: server/TranslatableStrings.php:80
+msgid "Cleanup Data"
+msgstr "Очистка данных"
+
+#: server/TranslatableStrings.php:77
+msgid "Click here to get your API key"
+msgstr "Нажмите здесь, чтобы получить свой ключ API"
+
+#: server/TranslatableStrings.php:120
+msgid "Click to minimize"
+msgstr "Нажмите, чтобы свернуть"
+
+#: server/TranslatableStrings.php:118
+msgid "Click to reinitialize."
+msgstr "Нажмите для повторной инициализации."
+
+#: server/TranslatableStrings.php:122
+msgid "Click to show."
+msgstr "Нажмите, чтобы показать."
+
+#: server/TranslatableStrings.php:12
+msgid "Coming soon"
+msgstr "Вскоре"
+
+#: server/TranslatableStrings.php:5
+msgid "Connect"
+msgstr "Соединять"
+
+#: server/TranslatableStrings.php:86
+msgid "Connect AI Services"
+msgstr "Подключите службы ИИ"
+
+#: server/TranslatableStrings.php:53
+msgid "Connect To AWP"
+msgstr "Подключиться к AWP"
+
+#: server/TranslatableStrings.php:51
+msgid "Connect Your Site"
+msgstr "Подключите свой сайт"
+
+#: server/TranslatableStrings.php:52
+msgid "Connecting to awp. Please wait..."
+msgstr "Подключение к awp. Пожалуйста, подождите..."
+
+#: server/TranslatableStrings.php:19
+msgid "Continue"
+msgstr "Продолжать"
+
+#: server/TranslatableStrings.php:196
+msgid "Continue In Codeable"
+msgstr "Продолжить в кодируемом"
+
+#: server/TranslatableStrings.php:160
+msgid "Conversation Only Mode (no Agent)"
+msgstr "Режим «Только разговор» (без агента)"
+
+#: server/TranslatableStrings.php:54
+msgid "Conversation Settings"
+msgstr "Настройки разговора"
+
+#: server/TranslatableStrings.php:97
+msgid "Convo Only"
+msgstr "Только Convo"
+
+#: server/TranslatableStrings.php:116
+msgid "Copied"
+msgstr "Скопировано"
+
+#: server/TranslatableStrings.php:181
+msgid "Copied!"
+msgstr "Скопировано!"
+
+#: server/TranslatableStrings.php:189
+msgid "Copy code"
+msgstr "Скопировать код"
+
+#: server/TranslatableStrings.php:190
+msgid "Copy code to clipboard."
+msgstr "Скопировать код в буфер обмена."
+
+#: server/TranslatableStrings.php:182
+msgid "Copy Response"
+msgstr "Копировать ответ"
+
+#: server/TranslatableStrings.php:104
+msgid "count is"
+msgstr "количество равно"
+
+#: server/TranslatableStrings.php:202
+msgid "Create a new conversation"
+msgstr "Создать новый разговор"
+
+#: server/TranslatableStrings.php:201
+msgid "Create a new post"
+msgstr "Создать новый пост"
+
+#: server/TranslatableStrings.php:180
+msgid "Create Post from Agent Response"
+msgstr "Создать публикацию из ответа агента"
+
+#: server/TranslatableStrings.php:178
+msgid "Creating Post..."
+msgstr "Создание поста..."
+
+#: server/TranslatableStrings.php:10
+msgid "Dashboard"
+msgstr "Панель инструментов"
+
+#: server/TranslatableStrings.php:26
+msgid "Database"
+msgstr "База данных"
+
+#: server/TranslatableStrings.php:25
+msgid "Database structure, database content (encrypted)"
+msgstr "Структура базы данных, содержимое базы данных (зашифровано)"
+
+#: server/TranslatableStrings.php:177
+msgid "Delete"
+msgstr "Удалить"
+
+#: server/TranslatableStrings.php:50
+msgid "Disconnect Site"
+msgstr "Отключить сайт"
+
+#. %1$s is the doc type that was not found.
+#: server/Modules/SiteDocs/SiteDocs.php:44
+#, php-format
+msgid "Doc type not found: %1$s"
+msgstr "Тип документа не найден: %1$s"
+
+#: server/TranslatableStrings.php:152
+msgid "Done."
+msgstr "Сделанный."
+
+#: server/TranslatableStrings.php:105
+msgid "Edit"
+msgstr "Редактировать"
+
+#: server/TranslatableStrings.php:203
+msgid "Edit a specific page"
+msgstr "Редактировать определенную страницу"
+
+#: server/TranslatableStrings.php:197
+msgid "Edit gutenberg content"
+msgstr "Редактировать содержимое Гутенберга"
+
+#: server/TranslatableStrings.php:83
+msgid "Enable or disable keyboard shortcuts"
+msgstr "Включить или отключить сочетания клавиш"
+
+#: server/TranslatableStrings.php:74
+msgid "Enter your API key"
+msgstr "Введите свой ключ API"
+
+#: server/TranslatableStrings.php:179
+msgid "Error Creating Post"
+msgstr "Ошибка создания поста"
+
+#: server/Main.php:174
+msgid "Every minute"
+msgstr "Каждую минуту"
+
+#: server/TranslatableStrings.php:199
+msgid "Explain a specific topic"
+msgstr "Объясните конкретную тему"
+
+#: server/TranslatableStrings.php:145
+msgid "Extracted entities"
+msgstr "Извлеченные сущности"
+
+#: server/TranslatableStrings.php:144
+msgid "Extracting entities..."
+msgstr "Извлечение сущностей..."
+
+#: server/TranslatableStrings.php:187
+msgid "Failed to add code snippet"
+msgstr "Не удалось добавить фрагмент кода"
+
+#. %1$s is the error message returned by the database.
+#: server/Modules/CodeSnippets/Plugins/CodeSnippets.php:94
+#, php-format
+msgid "Failed to add CodeSnippets snippet: %1$s"
+msgstr "Не удалось добавить фрагмент CodeSnippets: %1$s"
+
+#. %1$s is the error message returned by wp_insert_post.
+#: server/Modules/CodeSnippets/Plugins/WoodySnippets.php:69
+#, php-format
+msgid "Failed to add Woody Snippets snippet: %1$s"
+msgstr "Не удалось добавить фрагмент Woody Snippets: %1$s"
+
+#. %1$s is the error message returned by the database.
+#: server/Modules/CodeSnippets/Plugins/WPCodeBox.php:120
+#, php-format
+msgid "Failed to add WPCodeBox snippet: %1$s"
+msgstr "Не удалось добавить фрагмент WPCodeBox: %1$s"
+
+#: server/TranslatableStrings.php:63
+msgid "Failed to summarize content"
+msgstr "Не удалось резюмировать содержание"
+
+#: server/TranslatableStrings.php:44
+msgid "fair use policy"
+msgstr "политика добросовестного использования"
+
+#: server/TranslatableStrings.php:36
+msgid "Faster responses"
+msgstr "Более быстрые ответы"
+
+#: server/TranslatableStrings.php:165
+msgid "Field"
+msgstr "Поле"
+
+#: server/TranslatableStrings.php:126
+msgid ""
+"For feedback on specific messages please don't use this - instead rank the "
+"message and use the resulting UI for more detailed feedback."
+msgstr ""
+"Для отзывов по конкретным сообщениям, пожалуйста, не используйте этот метод "
+"— вместо этого оцените сообщение и используйте полученный пользовательский "
+"интерфейс для более подробной обратной связи."
+
+#: server/TranslatableStrings.php:162
+msgid "Free message limit reached."
+msgstr "Достигнут лимит бесплатных сообщений."
+
+#: server/TranslatableStrings.php:124
+msgid "General Feedback"
+msgstr "Общая обратная связь"
+
+#: server/TranslatableStrings.php:200
+msgid "Get help"
+msgstr "Получить помощь"
+
+#: server/TranslatableStrings.php:93
+msgid "Go Pro"
+msgstr "Стань профессионалом"
+
+#: server/TranslatableStrings.php:198
+msgid "Go to a specific page"
+msgstr "Перейти на определенную страницу"
+
+#: server/TranslatableStrings.php:205
+msgid "Go to Dashboard"
+msgstr "Перейти к панели инструментов"
+
+#: server/TranslatableStrings.php:92
+msgid "Help"
+msgstr "Помощь"
+
+#: server/TranslatableStrings.php:107
+msgid "Help me create a new blog post."
+msgstr "Помогите мне создать новую запись в блоге."
+
+#: server/TranslatableStrings.php:110
+msgid "Here are some things I can help you with."
+msgstr "Вот несколько вещей, с которыми я могу вам помочь."
+
+#: server/TranslatableStrings.php:111
+msgid "Hi"
+msgstr "Привет"
+
+#: server/TranslatableStrings.php:11
+msgid "History"
+msgstr "История"
+
+#. URI of the plugin
+msgid "https://agentwp.com"
+msgstr "https://agentwp.com"
+
+#. Author URI of the plugin
+msgid "https://wpai.co"
+msgstr "https://wpai.co"
+
+#: server/TranslatableStrings.php:29
+msgid "I agree to the"
+msgstr "Я согласен с"
+
+#: server/TranslatableStrings.php:191
+msgid ""
+"I think we should navigate to a new page. Would you like to continue to:"
+msgstr "Я думаю, нам следует перейти на новую страницу. Хотите продолжить:"
+
+#: server/TranslatableStrings.php:128
+msgid "Ideas"
+msgstr "Идеи"
+
+#: server/TranslatableStrings.php:138
+msgid "Indexing"
+msgstr "Индексация"
+
+#: server/TranslatableStrings.php:4
+msgid "Install"
+msgstr "Установить"
+
+#: server/TranslatableStrings.php:13
+msgid "Integrations"
+msgstr "Интеграции"
+
+#: server/Http/HttpErrors.php:26
+msgid "Invalid nonce."
+msgstr "Неверный одноразовый номер."
+
+#. %1$s is the invalid request method.
+#: server/Modules/AwpClient/RequestMethod.php:25
+#, php-format
+msgid "Invalid request method: %1$s"
+msgstr "Неверный метод запроса: %1$s"
+
+#: server/Http/HttpErrors.php:30
+msgid "Invalid request."
+msgstr "Неверный запрос."
+
+#. This message is shown when the user does not have permission to access AgentWP
+#: server/Client/ReactClient.php:150
+msgid ""
+"It looks like you have lost your AgentWP manager capabilities. Click the "
+"button below to restore your access."
+msgstr ""
+"Похоже, вы потеряли возможности менеджера AgentWP. Нажмите кнопку ниже, "
+"чтобы восстановить доступ."
+
+#: server/TranslatableStrings.php:82
+msgid "Keyboard Shortcuts"
+msgstr "Сочетания клавиш"
+
+#: server/TranslatableStrings.php:136
+msgid "Learn More"
+msgstr "Узнать больше"
+
+#: server/TranslatableStrings.php:159
+msgid "Learn more"
+msgstr "Узнать больше"
+
+#: server/TranslatableStrings.php:172
+msgid "Loading..."
+msgstr "Загрузка..."
+
+#. %1$s is the location class name
+#: server/Client/ReactClient.php:39
+#, php-format
+msgid "Location class does not exist: %1$s"
+msgstr "Класс местоположения не существует: %1$s"
+
+#: server/TranslatableStrings.php:47
+msgid "Login"
+msgstr "Авторизоваться"
+
+#: server/TranslatableStrings.php:46
+msgid "Login to AWP"
+msgstr "Войти в AWP"
+
+#: server/TranslatableStrings.php:108
+msgid "Make a snippet to add a new CPT"
+msgstr "Создайте фрагмент для добавления нового CPT"
+
+#: server/TranslatableStrings.php:9
+msgid "Manage your account"
+msgstr "Управляйте своим аккаунтом"
+
+#: server/TranslatableStrings.php:96
+msgid "Maximize the chat window to take all the available space"
+msgstr "Разверните окно чата, чтобы занять все доступное пространство"
+
+#: server/TranslatableStrings.php:184
+msgid "Message ID"
+msgstr "Идентификатор сообщения"
+
+#: server/TranslatableStrings.php:170
+msgid "Message is empty"
+msgstr "Сообщение пусто"
+
+#. %1$s is the method name, %2$s is the class name.
+#: server/Traits/HasScheduler.php:93
+#, php-format
+msgid "Method %1$s does not exist in class %2$s"
+msgstr "Метод %1$s не существует в классе %2$s"
+
+#. %1$s is the method name, %2$s is the class name.
+#: server/Traits/HasScheduler.php:98
+#, php-format
+msgid "Method %1$s must be public in class %2$s"
+msgstr "Метод %1$s должен быть публичным в классе %2$s"
+
+#: server/TranslatableStrings.php:35
+msgid "More accurate AI"
+msgstr "Более точный ИИ"
+
+#: server/TranslatableStrings.php:99
+msgid "More info"
+msgstr "Дополнительная информация"
+
+#: server/Http/Controllers/QueryActionController.php:91
+msgid "Multiple statements are not allowed"
+msgstr "Несколько утверждений не допускаются."
+
+#: server/TranslatableStrings.php:87
+msgid "Navigate"
+msgstr "Навигация"
+
+#: server/TranslatableStrings.php:161
+msgid "New"
+msgstr "Новый"
+
+#: server/TranslatableStrings.php:100
+msgid "New Chat"
+msgstr "Новый чат"
+
+#: server/TranslatableStrings.php:192
+msgid "No"
+msgstr "Нет"
+
+#: server/TranslatableStrings.php:115
+msgid "No Access"
+msgstr "Нет доступа"
+
+#: server/TranslatableStrings.php:94
+msgid "No history found"
+msgstr "История не найдена"
+
+#: server/TranslatableStrings.php:207
+msgid "No posts found."
+msgstr "Сообщения не найдены."
+
+#: server/TranslatableStrings.php:90
+msgid "No recent conversations."
+msgstr "Нет недавних разговоров."
+
+#: server/TranslatableStrings.php:143
+msgid "No results found."
+msgstr "Результаты не найдены."
+
+#: server/TranslatableStrings.php:171
+msgid "No suggestions found"
+msgstr "Предложений не найдено"
+
+#: server/TranslatableStrings.php:194
+msgid "Not found"
+msgstr "Не найдено"
+
+#: server/TranslatableStrings.php:206
+msgid "Nothing yet!"
+msgstr "Пока ничего!"
+
+#: server/Http/HttpErrors.php:46
+msgid "Only the owner can perform this action."
+msgstr "Это действие может выполнить только владелец."
+
+#: server/TranslatableStrings.php:204
+msgid "Open the settings page"
+msgstr "Откройте страницу настроек."
+
+#: server/TranslatableStrings.php:42
+msgid "Or, continue with free"
+msgstr "Или продолжайте бесплатно"
+
+#: server/TranslatableStrings.php:79
+msgid "Or, Manually Connect AI services"
+msgstr "Или вручную подключите службы ИИ"
+
+#: server/TranslatableStrings.php:175
+msgid "Other..."
+msgstr "Другой..."
+
+#: server/TranslatableStrings.php:6
+msgid "Plan"
+msgstr "План"
+
+#: server/TranslatableStrings.php:33
+msgid "Please accept the terms and conditions"
+msgstr "Пожалуйста, примите условия и положения."
+
+#: server/TranslatableStrings.php:76
+msgid "Please enter your API key"
+msgstr "Введите ваш ключ API"
+
+#: server/TranslatableStrings.php:163
+msgid "Please get back at"
+msgstr "Пожалуйста, ответьте по адресу"
+
+#: server/TranslatableStrings.php:38
+msgid "Priority access to agent features as they're released"
+msgstr "Приоритетный доступ к функциям агента по мере их выпуска"
+
+#: server/TranslatableStrings.php:32
+msgid "Privacy Policy"
+msgstr "политика конфиденциальности"
+
+#: server/TranslatableStrings.php:88
+msgid "Query - Read Only"
+msgstr "Запрос - Только чтение"
+
+#. %1$s is a list of disallowed SQL keywords found in the query.
+#: server/Http/Controllers/QueryActionController.php:86
+#, php-format
+msgid "Query contains disallowed keyword: %1$s"
+msgstr "Запрос содержит недопустимое ключевое слово: %1$s"
+
+#: server/Http/Controllers/QueryActionController.php:95
+msgid "Query must start with SELECT"
+msgstr "Запрос должен начинаться с SELECT"
+
+#: server/TranslatableStrings.php:129
+msgid "Question"
+msgstr "Вопрос"
+
+#: server/TranslatableStrings.php:58
+msgid "Quicklinks"
+msgstr "Быстрые ссылки"
+
+#: server/TranslatableStrings.php:147
+msgid "Ran fuzzy keyword search"
+msgstr "Выполнил нечеткий поиск по ключевым словам"
+
+#: server/TranslatableStrings.php:149
+msgid "Ran semantic search"
+msgstr "Выполнил семантический поиск"
+
+#: server/TranslatableStrings.php:151
+msgid "Ranked search results"
+msgstr "Ранжированные результаты поиска"
+
+#: server/TranslatableStrings.php:150
+msgid "Ranking search results..."
+msgstr "Рейтинг результатов поиска..."
+
+#: server/TranslatableStrings.php:174
+msgid "Rating Feedback"
+msgstr "Рейтинг Отзыв"
+
+#: server/TranslatableStrings.php:67
+msgid "Read more about URL patterns."
+msgstr "Узнайте больше о шаблонах URL."
+
+#: server/TranslatableStrings.php:56
+msgid "Recent conversations"
+msgstr "Недавние разговоры"
+
+#: server/TranslatableStrings.php:114
+msgid "Request Access"
+msgstr "Запросить доступ"
+
+#: server/TranslatableStrings.php:183
+msgid "Responding Actions"
+msgstr "Ответные действия"
+
+#: server/TranslatableStrings.php:65
+msgid "Restricted URLs and Patterns"
+msgstr "Ограниченные URL-адреса и шаблоны"
+
+#: server/TranslatableStrings.php:142
+msgid "Results"
+msgstr "Результаты"
+
+#: server/TranslatableStrings.php:62
+msgid "Resummarize"
+msgstr "Повторно резюмировать"
+
+#: server/TranslatableStrings.php:146
+msgid "Running fuzzy keyword search..."
+msgstr "Выполнение нечеткого поиска по ключевым словам..."
+
+#: server/TranslatableStrings.php:148
+msgid "Running semantic search..."
+msgstr "Выполнение семантического поиска..."
+
+#: server/TranslatableStrings.php:68
+msgid "Save"
+msgstr "Сохранять"
+
+#: server/TranslatableStrings.php:134
+msgid "Search"
+msgstr "Поиск"
+
+#: server/TranslatableStrings.php:64
+msgid "Search for a user..."
+msgstr "Поиск пользователя..."
+
+#: server/TranslatableStrings.php:137
+msgid "Search for anything"
+msgstr "Поиск чего-либо"
+
+#: server/TranslatableStrings.php:154
+msgid "Search Steps"
+msgstr "Шаги поиска"
+
+#: server/TranslatableStrings.php:157
+msgid "Search Term"
+msgstr "Поисковый термин"
+
+#: server/TranslatableStrings.php:166
+msgid "selected"
+msgstr "выбрано"
+
+#: server/ConnectNotice.php:38
+msgid "Set Up AgentWP"
+msgstr "Настроить AgentWP"
+
+#: server/TranslatableStrings.php:15
+msgid "Settings"
+msgstr "Настройки"
+
+#: server/TranslatableStrings.php:153
+msgid ""
+"Shows the progress of the AI-powered search process across your WordPress "
+"content."
+msgstr ""
+"Показывает ход процесса поиска с использованием искусственного интеллекта по "
+"всему контенту WordPress."
+
+#: server/TranslatableStrings.php:48
+msgid "Site Connection"
+msgstr "Подключение к сайту"
+
+#: server/TranslatableStrings.php:27
+msgid "Site Health"
+msgstr "Здоровье сайта"
+
+#: server/TranslatableStrings.php:60
+msgid "Site Summary"
+msgstr "Резюме сайта"
+
+#: server/TranslatableStrings.php:21
+msgid "Site to AgentWP Services"
+msgstr "Сайт для AgentWP Services"
+
+#: server/Modules/CodeSnippets/SnippetHandler.php:45
+msgid "Snippet added by AgentWP"
+msgstr "Фрагмент добавлен AgentWP"
+
+#: server/TranslatableStrings.php:186
+msgid "Sorry we are unable to run SQL query."
+msgstr "Извините, мы не можем выполнить SQL-запрос."
+
+#: server/TranslatableStrings.php:141
+msgid "Start Indexing"
+msgstr "Начать индексацию"
+
+#: server/TranslatableStrings.php:43
+msgid "Subject to our"
+msgstr "При условии соблюдения наших"
+
+#: server/TranslatableStrings.php:176
+msgid "Submit"
+msgstr "Представлять на рассмотрение"
+
+#: server/TranslatableStrings.php:125
+msgid "Submit general feedback thoughts, and ideas about AgentWP."
+msgstr "Отправьте общие отзывы, мысли и идеи по поводу AgentWP."
+
+#: server/TranslatableStrings.php:131
+msgid "Suggestion"
+msgstr "Предположение"
+
+#: server/TranslatableStrings.php:155
+msgid "Summary"
+msgstr "Краткое содержание"
+
+#: server/TranslatableStrings.php:16
+msgid "Support"
+msgstr "Поддерживать"
+
+#: server/TranslatableStrings.php:34
+msgid "Supporter Plan"
+msgstr "План поддержки"
+
+#: server/TranslatableStrings.php:14
+msgid "Tasks"
+msgstr "Задачи"
+
+#: server/TranslatableStrings.php:30
+msgid "Terms"
+msgstr "Условия"
+
+#: server/TranslatableStrings.php:188
+msgid "Test code before using"
+msgstr "Проверьте код перед использованием"
+
+#: server/TranslatableStrings.php:173
+msgid "Thank you for your feedback!"
+msgstr "Спасибо за ваш отзыв!"
+
+#: server/TranslatableStrings.php:133
+msgid "Thank you for your message!"
+msgstr "Спасибо за ваше сообщение!"
+
+#: server/TranslatableStrings.php:156
+msgid ""
+"The natural language query you enter to find specific content or information "
+"on your WordPress site."
+msgstr ""
+"Запрос на естественном языке, который вы вводите для поиска определенного "
+"контента или информации на вашем сайте WordPress."
+
+#: server/TranslatableStrings.php:127
+msgid "This is not a support channel. For account support, click here."
+msgstr "Это не канал поддержки. Для поддержки учетной записи нажмите здесь."
+
+#: server/TranslatableStrings.php:85
+msgid "This is your API key"
+msgstr "Это ваш ключ API"
+
+#: server/TranslatableStrings.php:113
+msgid ""
+"To begin using AgentWP, connect it to the AI services. If this is your first "
+"time connecting this site, a quick indexing process will take place."
+msgstr ""
+"Чтобы начать использовать AgentWP, подключите его к службам AI. Если вы "
+"подключаетесь к этому сайту впервые, будет выполнен быстрый процесс "
+"индексации."
+
+#: server/TranslatableStrings.php:22
+msgid ""
+"To begin using AgentWP, connect it to the Al services. If this is your first "
+"time connecting this site, a quick indexing process will take place."
+msgstr ""
+"Чтобы начать использовать AgentWP, подключите его к службам AI. Если вы "
+"подключаетесь к этому сайту впервые, будет выполнен быстрый процесс "
+"индексации."
+
+#: server/ConnectNotice.php:37
+msgid "To use AgentWP, please complete the onboarding and configuration!"
+msgstr ""
+"Чтобы использовать AgentWP, пожалуйста, завершите регистрацию и настройку!"
+
+#: server/TranslatableStrings.php:55
+msgid "Tools"
+msgstr "Инструменты"
+
+#: server/TranslatableStrings.php:123
+msgid "Turn off"
+msgstr "Выключать"
+
+#: server/TranslatableStrings.php:45
+msgid "Unlimited usage"
+msgstr "Неограниченное использование"
+
+#: server/TranslatableStrings.php:139
+msgid "Up next"
+msgstr "Далее"
+
+#: server/TranslatableStrings.php:103
+msgid "Upgrade"
+msgstr "Апгрейд"
+
+#: server/TranslatableStrings.php:164
+msgid "Upgrade now"
+msgstr "Апгрейд сейчас"
+
+#: server/TranslatableStrings.php:39
+msgid "Upgrade this Site to Pro"
+msgstr "Апгрейд сайт до Pro"
+
+#: server/TranslatableStrings.php:8
+msgid "Upgrade to Pro"
+msgstr "Апгрейд до Pro"
+
+#: server/TranslatableStrings.php:78
+msgid "Use auto connection (default)"
+msgstr "Использовать автоматическое подключение (по умолчанию)"
+
+#: server/TranslatableStrings.php:95
+msgid "View all history"
+msgstr "Посмотреть всю историю"
+
+#: server/TranslatableStrings.php:195
+msgid "View Full Scope."
+msgstr "Просмотреть полный объем."
+
+#: server/TranslatableStrings.php:101
+msgid "View history"
+msgstr "Посмотреть историю"
+
+#: server/TranslatableStrings.php:168
+msgid "Vision is off. When turned on, AgentWP can view the current page."
+msgstr ""
+"Vision выключен. При включении AgentWP может просматривать текущую страницу."
+
+#: server/TranslatableStrings.php:167
+msgid "Vision is on. Click to toggle off."
+msgstr "Видение включено. Нажмите, чтобы выключить."
+
+#. This message is shown when JavaScript is disabled
+#: server/Client/ReactClient.php:129
+msgid ""
+"Warning: AgentWP will not work properly without JavaScript, please enable it."
+msgstr ""
+"Предупреждение: AgentWP не будет работать правильно без JavaScript, "
+"пожалуйста, включите его."
+
+#: server/TranslatableStrings.php:106
+msgid "What WordPress version am I running?"
+msgstr "Какую версию WordPress я использую?"
+
+#: server/TranslatableStrings.php:17
+msgid "What's New?"
+msgstr "Что нового?"
+
+#: server/TranslatableStrings.php:109
+msgid "Who are you?"
+msgstr "Кто ты?"
+
+#. Author of the plugin
+msgid "WPAI Inc."
+msgstr "WPAI Inc."
+
+#: server/TranslatableStrings.php:193
+msgid "Yes"
+msgstr "Да"
+
+#: server/TranslatableStrings.php:59
+msgid "YOU"
+msgstr "ТЫ"
+
+#. %1$s is the list of missing parameters.
+#: server/Modules/AwpClient/RouteParamsMissingException.php:13
+#, php-format
+msgid "You are missing the following params in your request: %1$s"
+msgstr "В вашем запросе отсутствуют следующие параметры: %1$s"
+
+#. This message is shown when the user does not have permission to access AgentWP
+#: server/Client/ReactClient.php:183
+msgid ""
+"You do not have permission to access AgentWP. Please request access to "
+"AgentWP from your AgentWP manager."
+msgstr ""
+"У вас нет разрешения на доступ к AgentWP. Пожалуйста, запросите доступ к "
+"AgentWP у вашего менеджера AgentWP."
+
+#: server/TranslatableStrings.php:140
+msgid "You haven't indexed your site yet."
+msgstr "Вы еще не проиндексировали свой сайт."
+
+#: server/TranslatableStrings.php:119
+msgid "You must be connected."
+msgstr "Вы должны быть подключены."
+
+#: server/TranslatableStrings.php:135
+msgid ""
+"You're on the waitlist... Search Anything WordPress will be available soon."
+msgstr ""
+"Вы в списке ожидания... Поиск чего угодно WordPress скоро будет доступен."
+
+#: server/TranslatableStrings.php:40
+msgid "You've successfully connected to AI Services"
+msgstr "Вы успешно подключились к службам ИИ"
+
+#: server/TranslatableStrings.php:49
+msgid "Your connected site ID is"
+msgstr "Ваш идентификатор подключенного сайта:"
+
+#: server/TranslatableStrings.php:28
+msgid ""
+"Your data is private. It will never be used for AI training, and is "
+"encrypted at rest and transit."
+msgstr ""
+"Ваши данные конфиденциальны. Они никогда не будут использоваться для "
+"обучения ИИ и шифруются при хранении и передаче."
+
+#: server/TranslatableStrings.php:132
+msgid "Your feedback..."
+msgstr "Ваш отзыв..."
+
+#: server/TranslatableStrings.php:169
+msgid "Your message is too long"
+msgstr "Ваше сообщение слишком длинное"
+
+#: server/TranslatableStrings.php:102
+msgid "Your profile"
+msgstr "Ваш профиль"
+
+#: server/Http/HttpErrors.php:38
+msgid "Your site could not be verified."
+msgstr "Ваш сайт не может быть проверен."
+
+#: server/Http/HttpErrors.php:22
+msgid "Your site needs to be connected to AgentWP perform this action."
+msgstr ""
+"Для выполнения этого действия ваш сайт должен быть подключен к AgentWP."

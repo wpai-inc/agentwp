@@ -40,6 +40,10 @@ class Main
     public string $settingsPageUrl;
 
     private string $file;
+    
+    public string $languagesDir;
+
+    public array $languageStrings = [];
 
     public function __construct(string $file)
     {
@@ -49,6 +53,15 @@ class Main
         $this->pluginUrl = plugin_dir_url($this->file);
         $this->settingsPageUrl = admin_url('admin.php?page='.self::SETTINGS_PAGE);
         $this->registerSchedules();
+        $this->languagesDir = $this->path() . 'languages';
+    }
+
+    /**
+     * Get translations.
+     */
+    public function translations(): array
+    {
+        return require $this->path() . 'server/TranslatableStrings.php';
     }
 
     /**

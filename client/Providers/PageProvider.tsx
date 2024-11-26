@@ -1,6 +1,7 @@
 import { useRef, createContext, useContext, ReactNode } from 'react';
 import type { PageData } from '@/Types/types';
 import routes from '../../server/Modules/AwpClient/routes.json';
+import root from 'react-shadow';
 import i18n from '@/i18n';
 
 // Define a generic type that extends PageData
@@ -64,10 +65,8 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
     return page.api_host + '/' + getApiRoute( name ).uri;
   }
 
-  console.log( 'PageProvider', page );
-
-  i18n.addResources( page.lang, 'translation', page.translations );
-  i18n.changeLanguage( page.lang );
+  i18n.addResources( page.locale, 'translation', page.translations );
+  i18n.changeLanguage( page.locale );
 
   return (
     <PageContext.Provider
