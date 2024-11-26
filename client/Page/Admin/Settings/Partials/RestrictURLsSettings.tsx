@@ -3,8 +3,10 @@ import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { Button } from '@/Components/ui/button';
 import { usePage } from '@/Providers/PageProvider';
 import { DataListItem } from '@/Components/ui/dl';
+import { useTranslation } from 'react-i18next';
 
 export default function RestrictURLsSettings() {
+  const { t } = useTranslation();
   const { tryRequest } = useRestRequest();
   const { page } = usePage();
   const [ urls, setUrls ] = useState( page.general_settings?.restricted_urls );
@@ -25,13 +27,18 @@ export default function RestrictURLsSettings() {
     <DataListItem
       label={
         <div>
-          <label className="font-bold">Restricted URLs and Patterns</label>
+          <label className="font-bold">{ t( 'Restricted URLs and Patterns' ) }</label>
           <p className="text-sm">
-            Chat will not be available on these URLs or URL patterns. Put each on a new line. <a
+            { t(
+              'Chat will not be available on these URLs or URL patterns. Put each on a new line.',
+            ) }{ ' ' }
+            <a
               className="text-blue-500 hover:underline cursor-pointer underline"
               href="https://agentwp.com/kb/restricted-url-patterns"
               target="_blank"
-              rel="noreferrer">Read more about URL patterns.</a>
+              rel="noreferrer">
+              { t( 'Read more about URL patterns.' ) }
+            </a>
           </p>
         </div>
       }>
@@ -44,7 +51,7 @@ export default function RestrictURLsSettings() {
         variant="brand"
         className="mt-2"
         onClick={ () => updateSetting( 'restricted_urls', urls ) }>
-        Save
+        { t( 'Save' ) }
       </Button>
     </DataListItem>
   );

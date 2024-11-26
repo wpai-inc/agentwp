@@ -2,8 +2,10 @@ import { Tag } from '@/Components/Tag';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import type { AgentWpUser } from '@/Types/types';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function User( { user }: { user: AgentWpUser } ) {
+  const { t } = useTranslation();
   const { tryRequest } = useRestRequest();
   const [ checked, setChecked ] = useState( user.agentwp_access );
 
@@ -31,7 +33,7 @@ export function User( { user }: { user: AgentWpUser } ) {
       <div className="flex items-center gap-4">
         <img src={ user.image } alt={ user.name } className={ 'w-8 h-8 rounded-full' } />
         <div>{ user.name }</div>
-        { user.is_current_user && <Tag>YOU</Tag> }
+        { user.is_current_user && <Tag>{ t( 'YOU' ) }</Tag> }
         <Tag>{ user.role }</Tag>
       </div>
       <input

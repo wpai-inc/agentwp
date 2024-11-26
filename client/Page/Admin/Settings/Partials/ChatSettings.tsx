@@ -4,16 +4,18 @@ import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
 import { optimistic } from '@/lib/utils';
 import { DataListItem } from '@/Components/ui/dl';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/i18n';
 
 type AbilitySetting = { name: string; label: string };
 const abilities: AbilitySetting[] = [
   {
     name: 'navigate',
-    label: 'Navigate',
+    label: i18n.t( 'Navigate' ),
   },
   {
     name: 'query',
-    label: 'Query – Read Only',
+    label: i18n.t( 'Query - Read Only' ),
   },
 ];
 
@@ -22,6 +24,7 @@ export default function ChatSettings() {
     page: { account_settings },
   } = usePage();
 
+  const { t } = useTranslation();
   const [ settings, setSettings ] = useState< App.Data.SiteSettingData[] >( account_settings );
   const { proxyApiRequest } = useRestRequest();
   const isBoolean = ( value: any ) => typeof value === 'boolean';
@@ -56,7 +59,9 @@ export default function ChatSettings() {
             <div>
               <label className="font-bold">{ setting.label }</label>
               { setting.name === 'abilities' && (
-                <p className="text-sm">Abilities are the actions AgentWP can take on your site.</p>
+                <p className="text-sm">
+                  { t( 'Abilities are the actions AgentWP can take on your site.' ) }
+                </p>
               ) }
             </div>
           }>

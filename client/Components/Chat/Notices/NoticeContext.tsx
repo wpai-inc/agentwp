@@ -1,5 +1,6 @@
 import { useInputSelect } from '@/Providers/InputSelectProvider';
 import { ChatNotice } from './ChatNotice';
+import { useTranslation } from 'react-i18next';
 
 export default function NoticeContext( {
   selectedInput,
@@ -7,6 +8,7 @@ export default function NoticeContext( {
   selectedInput: App.Data.StreamableFieldData;
 } ) {
   const { setSelectedInput } = useInputSelect();
+  const { t } = useTranslation();
 
   return (
     <ChatNotice
@@ -14,7 +16,7 @@ export default function NoticeContext( {
       onDismiss={ () => setSelectedInput( null ) }
       variant="informative">
       <p>
-        Field <strong>{ selectedInput.data?.inputLabel }</strong> selected
+        { t( 'Field' ) } <strong>{ selectedInput.data?.inputLabel }</strong> { t( 'selected' ) }
       </p>
     </ChatNotice>
   );

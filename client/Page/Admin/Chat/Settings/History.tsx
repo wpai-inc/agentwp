@@ -9,8 +9,10 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/Components/ui/button';
 import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import { useTranslation } from 'react-i18next';
 
 export default function History() {
+  const { t } = useTranslation();
   const [ history, setHistory ] = useState< App.Data.HistoryChronoGroupData[] >( [] );
   const { proxyApiRequest } = useRestRequest();
   const [ loading, setLoading ] = useState( true );
@@ -83,11 +85,11 @@ export default function History() {
           );
         } )
       ) : (
-        <p className="text-center">No history found</p>
+        <p className="text-center">{ t( 'No history found' ) }</p>
       ) }
       <Button className="mt-auto" asChild>
         <a href={ page.settings_page }>
-          View all history <IconLink className="ml-1 h-4 w-4" />
+          { t( 'View all history' ) } <IconLink className="ml-1 h-4 w-4" />
         </a>
       </Button>
     </div>

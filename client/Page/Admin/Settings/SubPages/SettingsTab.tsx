@@ -8,8 +8,11 @@ import ChatSettings from '../Partials/ChatSettings';
 import Tools from '../Partials/Tools';
 import RestrictURLsSettings from '../Partials/RestrictURLsSettings';
 import { useAccount } from '@/Providers/AccountProvider';
+import { useTranslation } from 'react-i18next';
 
 export default function SettingsTab() {
+  const { t } = useTranslation();
+
   /**
    * Variables
    */
@@ -54,13 +57,13 @@ export default function SettingsTab() {
       <Section header="Plugin Settings">
         <DataList>
           { account && ! loggedIn && (
-            <DataListItem label={ <label className="font-bold">Login to AWP</label> }>
+            <DataListItem label={ <label className="font-bold">{ t( 'Login to AWP' ) }</label> }>
               <Button
                 onClick={ authorize }
                 variant="brand"
                 disabled={ authorizing }
                 isBusy={ authorizing }>
-                Login
+                { t( 'Login' ) }
               </Button>
             </DataListItem>
           ) }
@@ -69,8 +72,10 @@ export default function SettingsTab() {
             <DataListItem
               label={
                 <div>
-                  <h3 className="font-bold">Site Connection</h3>
-                  <p className="text-sm">Your connected site ID is { page.site_id }</p>
+                  <h3 className="font-bold">{ t( 'Site Connection' ) }</h3>
+                  <p className="text-sm">
+                    { t( 'Your connected site ID is' ) } { page.site_id }
+                  </p>
                 </div>
               }>
               <Button
@@ -78,17 +83,17 @@ export default function SettingsTab() {
                 variant="brand"
                 disabled={ disconnecting }
                 isBusy={ disconnecting }>
-                Disconnect Site
+                { t( 'Disconnect Site' ) }
               </Button>
             </DataListItem>
           ) : (
-            <DataListItem label="Connect Your Site">
+            <DataListItem label={ t( 'Connect Your Site' ) }>
               <Button
                 onClick={ connect }
                 variant="brand"
                 disabled={ connecting }
                 isBusy={ connecting }>
-                { connecting ? 'Connecting to awp. Please wait...' : 'Connect To AWP' }
+                { connecting ? t( 'Connecting to awp. Please wait...' ) : t( 'Connect To AWP' ) }
               </Button>
             </DataListItem>
           ) }
@@ -97,13 +102,13 @@ export default function SettingsTab() {
         </DataList>
       </Section>
 
-      <Section header="Conversation Settings">
+      <Section header={ t( 'Conversation Settings' ) }>
         <DataList>
           <ChatSettings />
         </DataList>
       </Section>
 
-      <Section header="Tools">
+      <Section header={ t( 'Tools' ) }>
         <DataList>
           <Tools />
         </DataList>

@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next';
+
 export default function ChatDisconnected( { inline = false }: { inline?: boolean } ) {
-  return inline && <p>You must be connected.</p>;
+  const { t } = useTranslation();
+  return inline && <p>{ t( 'You must be connected.' ) }</p>;
 }

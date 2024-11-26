@@ -5,6 +5,7 @@ import { WpUser } from '@/Types/types';
 import { useChat } from '@/Providers/ChatProvider';
 import { motion } from 'framer-motion';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import { useTranslation } from 'react-i18next';
 
 type SuggestionType = {
   suggestion: string;
@@ -12,25 +13,26 @@ type SuggestionType = {
 };
 
 export default function ChatWelcome( { user }: { user: WpUser } ) {
+  const { t } = useTranslation();
   const name = user.display_name;
   const { sendMessage } = useChat();
   const { proxyApiRequest } = useRestRequest();
   const [ suggestions, setSuggestions ] = useState< SuggestionType[] >( [
     {
-      suggestion: 'What WordPress version am I running?',
-      prompt: 'What WordPress version am I running?',
+      suggestion: t( 'What WordPress version am I running?' ),
+      prompt: t( 'What WordPress version am I running?' ),
     },
     {
-      suggestion: 'Help me create a new blog post.',
-      prompt: 'Help me create a new blog post.',
+      suggestion: t( 'Help me create a new blog post.' ),
+      prompt: t( 'Help me create a new blog post.' ),
     },
     {
-      suggestion: 'Make a snippet to add a new CPT',
-      prompt: 'Make a snippet to add a new CPT',
+      suggestion: t( 'Make a snippet to add a new CPT' ),
+      prompt: t( 'Make a snippet to add a new CPT' ),
     },
     {
-      suggestion: 'Who are you?',
-      prompt: 'Who are you?',
+      suggestion: t( 'Who are you?' ),
+      prompt: t( 'Who are you?' ),
     },
   ] );
 
@@ -52,8 +54,12 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
       } }
       exit={ { opacity: 0, scale: 0 } }
       className="flex flex-col h-full justify-center items-center p-4">
-      <p className="text-3xl font-semibold text-black mb-2">Hi { name },</p>
-      <p className="text-xl text-center text-black">Here are some things I can help you with.</p>
+      <p className="text-3xl font-semibold text-black mb-2">
+        { t( 'Hi' ) } { name },
+      </p>
+      <p className="text-xl text-center text-black">
+        { t( 'Here are some things I can help you with.' ) }
+      </p>
       <div className={ cn( 'grid grid-cols-2 gap-3 mt-4 w-full max-w-96' ) }>
         { suggestions &&
           suggestions.map( ( item: SuggestionType, key: number ) => (
@@ -72,7 +78,7 @@ export default function ChatWelcome( { user }: { user: WpUser } ) {
             'px-3 py-2 flex items-center justify-between text-gray-600',
             'col-span-2 shadow-sm',
           ) }>
-          All Capabilities
+          { t( 'All Capabilities' ) }
           <OpenNewIcon className="h-4 w-4" />
         </a>
       </div>

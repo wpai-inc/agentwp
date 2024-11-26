@@ -11,11 +11,13 @@ import { maybeUseChatUI } from '@/Components/Chat/Chat';
 import { Button } from '@/Components/ui/button';
 import ConvoOnlyToggle from './ConvoOnlyToggle';
 import { useAccount } from '@/Providers/AccountProvider';
+import { useTranslation } from 'react-i18next';
 
 import type { HandleDrag } from '@/Components/Chat/Partials/ChatCore';
 import type { AccountType } from '@/Providers/AccountProvider';
 
 export default function ChatTopBar( { handleDrag }: HandleDrag ) {
+  const { t } = useTranslation();
   const { setChatSetting, clearHistory, isEmptyConversation } = useChat();
   const toggle = maybeUseChatUI()?.toggle;
   const { page, userProfileUrl } = usePage();
@@ -24,7 +26,7 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
   function handleHistorySettings() {
     setChatSetting( {
       component: <History />,
-      header: 'History',
+      header: t( 'History' ),
     } );
   }
 
@@ -50,19 +52,19 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
       </div>
       <div className="flex items-center justify-center">
         { page.onboarding_completed && page.agentwp_access && ! isEmptyConversation && (
-          <AgentTooltip content="New conversation">
+          <AgentTooltip content={ t( 'New conversation' ) }>
             <Button onClick={ clearHistory } className="uppercase">
-              <span className="hidden @lg:inline">New Chat</span>
+              <span className="hidden @lg:inline">{ t( 'New Chat' ) }</span>
               <AddIcon className="h-4 w-4" />
             </Button>
           </AgentTooltip>
         ) }
-        <AgentTooltip content="View history">
+        <AgentTooltip content={ t( 'View history' ) }>
           <Button onClick={ handleHistorySettings } variant="ghost" size="sm">
             <HistoryIcon className="h-5 w-5" />
           </Button>
         </AgentTooltip>
-        <AgentTooltip content="Your profile">
+        <AgentTooltip content={ t( 'Your profile' ) }>
           <Button asChild variant="ghost" size="sm">
             <a href={ userProfileUrl } target="_blank">
               <AccountIcon className="h-5 w-5" />
@@ -81,7 +83,7 @@ export default function ChatTopBar( { handleDrag }: HandleDrag ) {
         </Button>
         <Button asChild variant="dark" className="h-full">
           <a id="topBarUpgradeBtn" href={ account.upgrade_link }>
-            Upgrade
+            { t( 'Upgrade' ) }
           </a>
         </Button>
       </>

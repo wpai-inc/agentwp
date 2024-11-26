@@ -7,6 +7,7 @@ import {
   CommandList,
 } from '@/Components/ui/command';
 import type { CommandPopoverProps } from '../CommandMenu';
+import { useTranslation } from 'react-i18next';
 
 export default function SelectCommand( {
   handleKeyDown,
@@ -15,6 +16,7 @@ export default function SelectCommand( {
   setMessage,
   focused,
 }: CommandPopoverProps ) {
+  const { t } = useTranslation();
   const commandListRef = useRef< HTMLDivElement >( null );
   useEffect( () => {
     if ( focused && commandListRef.current ) {
@@ -36,7 +38,7 @@ export default function SelectCommand( {
         ref={ commandListRef }
         tabIndex={ 0 }
         onKeyDown={ e => handleKeyDown( e, focused ) }>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>{ t( 'No results found.' ) }</CommandEmpty>
         <CommandGroup>
           { commands.map( c => (
             <CommandItem key={ c.command } value={ c.command } onSelect={ select }>

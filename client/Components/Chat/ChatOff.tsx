@@ -2,8 +2,10 @@ import { useRef } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Components/ui/tooltip';
 import { useApp } from '@/Providers/AppProvider';
 import ToggleButton from '@/Components/Chat/ToggleButton/ToggleButton';
+import { useTranslation } from 'react-i18next';
 
 export default function ChatOff() {
+  const { t } = useTranslation();
   const { setTurnedOff } = useApp();
   const chatTriggerRef = useRef< HTMLButtonElement >( null );
 
@@ -24,8 +26,8 @@ export default function ChatOff() {
         </TooltipTrigger>
         <TooltipContent side="right" align="center">
           <p>
-            AgentWP is off.
-            <br /> Click to reinitialize.
+            { t( 'AgentWP is off.' ) }
+            <br /> { t( 'Click to reinitialize.' ) }
           </p>
         </TooltipContent>
       </Tooltip>

@@ -4,6 +4,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Component
 import IconOpen from '@material-design-icons/svg/outlined/add.svg?react';
 import IconClose from '@material-design-icons/svg/outlined/remove.svg?react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Status = {
   present: string;
@@ -13,26 +14,27 @@ type Status = {
 export default function SearchStatus( { pending }: { pending: boolean } ) {
   const [ open, setOpen ] = useState( false );
   const [ step, setStep ] = useState( 0 );
+  const { t } = useTranslation();
   const statuses: Status[] = [
     {
-      present: 'Extracting entities...',
-      past: 'Extracted entities',
+      present: t( 'Extracting entities...' ),
+      past: t( 'Extracted entities' ),
     },
     {
-      present: 'Running fuzzy keyword search...',
-      past: 'Ran fuzzy keyword search',
+      present: t( 'Running fuzzy keyword search...' ),
+      past: t( 'Ran fuzzy keyword search' ),
     },
     {
-      present: 'Running semantic search...',
-      past: 'Ran semantic search',
+      present: t( 'Running semantic search...' ),
+      past: t( 'Ran semantic search' ),
     },
     {
-      present: 'Ranking search results...',
-      past: 'Ranked search results',
+      present: t( 'Ranking search results...' ),
+      past: t( 'Ranked search results' ),
     },
     {
-      present: 'Done.',
-      past: 'Done.',
+      present: t( 'Done.' ),
+      past: t( 'Done.' ),
     },
   ];
 
@@ -54,8 +56,11 @@ export default function SearchStatus( { pending }: { pending: boolean } ) {
 
   return (
     <div className="space-y-2">
-      <ChatHeading explanation="Shows the progress of the AI-powered search process across your WordPress content.">
-        Search Steps
+      <ChatHeading
+        explanation={ t(
+          'Shows the progress of the AI-powered search process across your WordPress content.',
+        ) }>
+        { t( 'Search Steps' ) }
       </ChatHeading>
       <Collapsible
         open={ open }

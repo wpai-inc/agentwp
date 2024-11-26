@@ -3,8 +3,10 @@ import axios from 'axios';
 import { CardListItemProps } from './CardListItem';
 import { CardList } from './CardList';
 import type { WpPost } from '@/Types/types';
+import { useTranslation } from 'react-i18next';
 
 export default function ChangelogFeed() {
+  const { t } = useTranslation();
   const feedUrl = 'https://agentwp.com/wp-json/wp/v2/change/';
   const [ items, setItems ] = useState< WpPost[] >( [] );
 
@@ -21,7 +23,7 @@ export default function ChangelogFeed() {
     }
   }
 
-  return items.length > 0 ? <PostList items={ items } /> : <p>Nothing yet!</p>;
+  return items.length > 0 ? <PostList items={ items } /> : <p>{ t( 'Nothing yet!' ) }</p>;
 }
 
 function PostList( { items }: { items: WpPost[] } ) {

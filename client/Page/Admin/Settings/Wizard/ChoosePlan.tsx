@@ -6,6 +6,7 @@ import { useClientSettings } from '@/Providers/ClientSettingsProvider';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import { SettingsPageData } from '@/Types/types';
 import { useAccount } from '@/Providers/AccountProvider';
+import { useTranslation } from 'react-i18next';
 
 type ProPlanType = {
   name: string;
@@ -16,6 +17,7 @@ type ProPlanType = {
 };
 
 export default function ChoosePlan() {
+  const { t } = useTranslation();
   const { page } = usePage< SettingsPageData >();
   const { account } = useAccount();
   const { updateSetting } = useClientSettings();
@@ -32,16 +34,18 @@ export default function ChoosePlan() {
   } );
 
   const proPlanData: ProPlanType = {
-    name: 'Supporter Plan',
+    name: t( 'Supporter Plan' ),
     price: `${ money.format( proPlan.priceMonthly ) }/month`,
     features: [
       <FeatureUnlimited />,
-      'More accurate AI',
-      'Faster responses',
-      '5 users per website',
-      <strong className="italic">Priority access to agent features as they're released</strong>,
+      t( 'More accurate AI' ),
+      t( 'Faster responses' ),
+      t( '5 users per website' ),
+      <strong className="italic">
+        { t( "Priority access to agent features as they're released" ) }
+      </strong>,
     ],
-    buttonText: 'Upgrade this Site to Pro',
+    buttonText: t( 'Upgrade this Site to Pro' ),
     buttonAction: () => {
       updateSetting( 'planSelected', true );
       if ( account ) {
@@ -56,9 +60,9 @@ export default function ChoosePlan() {
 
   return (
     <WizardContainer className="space-y-6">
-      <WizardHeader message="You've successfully connected to AI Services"></WizardHeader>
+      <WizardHeader message={ t( "You've successfully connected to AI Services" ) }></WizardHeader>
       <p className="text-left text-xl text-brand-gray-70">
-        Choose a site specific plan to get started:
+        { t( 'Choose a site specific plan to get started:' ) }
       </p>
       <div className="space-y-4">
         <PlanCard { ...proPlanData } />
@@ -67,7 +71,7 @@ export default function ChoosePlan() {
           size="lg"
           className="w-full text-gray-500 bg-gray-100"
           onClick={ handleFreePlan }>
-          Or, continue with free
+          { t( 'Or, continue with free' ) }
         </Button>
       </div>
     </WizardContainer>
@@ -75,18 +79,20 @@ export default function ChoosePlan() {
 }
 
 function FeatureUnlimited() {
+  const { t } = useTranslation();
+
   return (
     <AgentTooltip
       content={
         <p>
-          Subject to our{ ' ' }
+          { t( 'Subject to our' ) }{ ' ' }
           <a href="https://agentwp.com/legal/terms/" className="underline underline-offset-1">
-            fair use policy
+            { t( 'fair use policy' ) }
           </a>
           .
         </p>
       }>
-      <p>Unlimited usage *</p>
+      <p>{ t( 'Unlimited usage' ) } *</p>
     </AgentTooltip>
   );
 }

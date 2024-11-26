@@ -10,6 +10,7 @@ import { Button } from '@/Components/ui/button';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import History from './SubPages/History';
 import { useAccount } from '@/Providers/AccountProvider';
+import { useTranslation } from 'react-i18next';
 
 const tabClasses =
   'px-3 lg:px-5 py-4 flex items-center justify-center text-sm lg:text-base leading-none select-none hover:text-brand-primary data-[state=active]:text-brand-dark  data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-brand-primary outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-70';
@@ -31,6 +32,7 @@ function TabContent( { value, children }: { value: string; children: ReactNode }
 }
 
 export default function Settings() {
+  const { t } = useTranslation();
   const { page } = usePage();
   const { account } = useAccount();
 
@@ -83,38 +85,40 @@ export default function Settings() {
           { account?.plan?.slug === 'free' && (
             <div className="text-right">
               <Button variant="brand" pill={ true }>
-                <a href={ account?.upgrade_link }>Upgrade to Pro</a>
+                <a href={ account?.upgrade_link }>{ t( 'Upgrade to Pro' ) }</a>
               </Button>
             </div>
           ) }
         </div>
         <div className="flex flex-col-reverse items-center justify-center md:flex-row md:items-end md:justify-between md:mt-5">
-          <Tabs.List className="flex" aria-label="Manage your account">
-            <Tab value="dashboard" title="Dashboard" />
-            { page.agentwp_users_manager && <Tab value="users" title="Access" /> }
-            <Tab value="history" title="History" />
-            <AgentTooltip content="Coming soon" side="top">
+          <Tabs.List className="flex" aria-label={ t( 'Manage your account' ) }>
+            <Tab value="dashboard" title={ t( 'Dashboard' ) } />
+            { page.agentwp_users_manager && <Tab value="users" title={ t( 'Access' ) } /> }
+            <Tab value="history" title={ t( 'History' ) } />
+            <AgentTooltip content={ t( 'Coming soon' ) } side="top">
               <button className={ tabClasses } disabled>
-                Integrations
+                { t( 'Integrations' ) }
               </button>
             </AgentTooltip>
-            <AgentTooltip content="Coming soon" side="top">
+            <AgentTooltip content={ t( 'Coming soon' ) } side="top">
               <button className={ tabClasses } disabled>
-                Tasks
+                { t( 'Tasks' ) }
               </button>
             </AgentTooltip>
 
-            { page.agentwp_manager && <Tab value="settings" title="Settings" /> }
+            { page.agentwp_manager && <Tab value="settings" title={ t( 'Settings' ) } /> }
           </Tabs.List>
-          <Tabs.List className="flex items-end justify-end" aria-label="Manage your account">
+          <Tabs.List
+            className="flex items-end justify-end"
+            aria-label={ t( 'Manage your account' ) }>
             <a className={ tabClasses } href="https://app.agentwp.com/support">
-              Support
+              { t( 'Support' ) }
             </a>
             <a className={ tabClasses } href="https://agentwp.com/blog">
-              What's New?
+              { t( "What's New?" ) }
             </a>
             <a className={ tabClasses } href="https://app.agentwp.com/dashboard">
-              Account
+              { t( 'Account' ) }
             </a>
           </Tabs.List>
         </div>

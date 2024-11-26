@@ -7,6 +7,7 @@ import UpArrowIcon from '@material-design-icons/svg/outlined/arrow_upward.svg?re
 import { LoaderIcon } from 'lucide-react';
 import { usePage } from '@/Providers/PageProvider';
 import { useRestRequest } from '@/Providers/RestRequestProvider';
+import { useTranslation } from 'react-i18next';
 
 export default function SupportTab() {
   const { page } = usePage();
@@ -15,6 +16,7 @@ export default function SupportTab() {
   const [ message, setMessage ] = useState< string >( '' );
   const [ success, setSuccess ] = useState< boolean >( false );
   const [ messageType, setMessageType ] = useState( 'idea' );
+  const { t } = useTranslation();
 
   async function submit( event: React.FormEvent ) {
     event.preventDefault();
@@ -34,13 +36,14 @@ export default function SupportTab() {
     <TabContainer>
       <div className="mx-auto flex h-full max-w-lg flex-col justify-between p-4">
         <div className="prose mb-4 text-base">
-          <h1 className="text-3xl font-semibold">General Feedback</h1>
-          <p>Submit general feedback thoughts, and ideas about AgentWP.</p>
+          <h1 className="text-3xl font-semibold">{ t( 'General Feedback' ) }</h1>
+          <p>{ t( 'Submit general feedback thoughts, and ideas about AgentWP.' ) }</p>
           <p>
-            For feedback on specific messages please don’t use this - instead rank the message and
-            use the resulting UI for more detailed feedback.
+            { t(
+              "For feedback on specific messages please don't use this - instead rank the message and use the resulting UI for more detailed feedback.",
+            ) }
           </p>
-          <p>This is not a support channel. For account support, click here.</p>
+          <p>{ t( 'This is not a support channel. For account support, click here.' ) }</p>
         </div>
 
         { ! success ? (
@@ -51,26 +54,26 @@ export default function SupportTab() {
               onValueChange={ setMessageType }>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="idea" id="idea" />
-                <Label htmlFor="option-one">Idea</Label>
+                <Label htmlFor="option-one">{ t( 'Idea' ) }</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="question" id="question" />
-                <Label htmlFor="question">Question</Label>
+                <Label htmlFor="question">{ t( 'Question' ) }</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="bug" id="bug" />
-                <Label htmlFor="bug">Bug</Label>
+                <Label htmlFor="bug">{ t( 'Bug' ) }</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="suggestion" id="suggestion" />
-                <Label htmlFor="suggestion">Suggestion</Label>
+                <Label htmlFor="suggestion">{ t( 'Suggestion' ) }</Label>
               </div>
             </RadioGroup>
             <div className="mt-4 rounded bg-brand-gray p-4 ring-brand-primary focus-within:ring-2">
               <textarea
                 className="mb-4 w-full bg-transparent outline-none focus:ring-0"
                 rows={ 5 }
-                placeholder="Your feedback..."
+                placeholder={ t( 'Your feedback...' ) }
                 value={ message }
                 onChange={ e => setMessage( e.target.value ) }></textarea>
               <div className="text-right">
@@ -90,7 +93,7 @@ export default function SupportTab() {
           </form>
         ) : (
           <p className="rounded-full bg-green-100 px-3 py-1 text-green-900">
-            Thank you for your message!
+            { t( 'Thank you for your message!' ) }
           </p>
         ) }
       </div>

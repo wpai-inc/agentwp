@@ -1,6 +1,8 @@
-import { createContext, useContext, ReactNode } from 'react';
+import { useRef, createContext, useContext, ReactNode } from 'react';
 import type { PageData } from '@/Types/types';
 import routes from '../../server/Modules/AwpClient/routes.json';
+import root from 'react-shadow';
+import i18n from '@/i18n';
 
 // Define a generic type that extends PageData
 interface PageProviderProps< T extends PageData > {
@@ -16,6 +18,7 @@ interface PageContextType< T extends PageData > {
   userProfileUrl: string;
   getApiUrl: ( name: string ) => string;
   isConnected: boolean;
+  root: React.MutableRefObject< HTMLDivElement | null >;
 }
 
 // Create a context with the generic type
@@ -41,6 +44,7 @@ type Route = {
 
 // Update the PageProvider to pass the generic type
 export function PageProvider< T extends PageData >( { page, children }: PageProviderProps< T > ) {
+  const shadowRoot = useRef( null );
   const isOnboarded = parseInt( page.onboarding_completed ) === 1;
   const isConnected = parseInt( page.is_connected ) === 1;
   const hasAccess = parseInt( page.agentwp_access ) === 1;
@@ -61,6 +65,9 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
     return page.api_host + '/' + getApiRoute( name ).uri;
   }
 
+  i18n.addResources( page.locale, 'translation', page.translations );
+  i18n.changeLanguage( page.locale );
+
   return (
     <PageContext.Provider
       value={ {
@@ -70,8 +77,9 @@ export function PageProvider< T extends PageData >( { page, children }: PageProv
         userProfileUrl,
         getApiUrl,
         isConnected,
+        root: shadowRoot,
       } }>
-      { children }
+      <root.div ref={ shadowRoot }>{ children }</root.div>
     </PageContext.Provider>
   );
 }

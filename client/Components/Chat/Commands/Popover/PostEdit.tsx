@@ -8,8 +8,10 @@ import {
   CommandList,
 } from '@/Components/ui/command';
 import type { CommandPopoverProps } from '../CommandMenu';
+import { useTranslation } from 'react-i18next';
 
 export default function PostEdit( { handleKeyDown, message, focused }: CommandPopoverProps ) {
+  const { t } = useTranslation();
   const commandListRef = useRef< HTMLDivElement >( null );
 
   useEffect( () => {
@@ -46,7 +48,7 @@ export default function PostEdit( { handleKeyDown, message, focused }: CommandPo
         ref={ commandListRef }
         tabIndex={ 0 }
         onKeyDown={ e => handleKeyDown( e, focused ) }>
-        <CommandEmpty>No posts found.</CommandEmpty>
+        <CommandEmpty>{ t( 'No posts found.' ) }</CommandEmpty>
         <CommandGroup>
           { foundPosts.map( post => (
             <CommandItem key={ post.id } value={ post.id } onSelect={ select }>

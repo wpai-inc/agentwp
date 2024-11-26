@@ -1,6 +1,7 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import SelectCommand from './Popover/SelectCommand';
 import PostEdit from './Popover/PostEdit';
+import i18n from '@/i18n';
 
 export type SlashCommand = {
   command: string;
@@ -9,26 +10,26 @@ export type SlashCommand = {
 };
 
 const commands: SlashCommand[] = [
-  { command: 'gb', info: 'Edit gutenberg content' },
-  { command: 'goto', info: 'Go to a specific page' },
-  { command: 'explain', info: 'Explain a specific topic' },
-  { command: 'help', info: 'Get help' },
+  { command: 'gb', info: i18n.t( 'Edit gutenberg content' ) },
+  { command: 'goto', info: i18n.t( 'Go to a specific page' ) },
+  { command: 'explain', info: i18n.t( 'Explain a specific topic' ) },
+  { command: 'help', info: i18n.t( 'Get help' ) },
   // @todo: Automatically add all CPT's and taxonomies
   {
     command: 'new post',
-    info: 'Create a new post',
+    info: i18n.t( 'Create a new post' ),
     action: () => {
       document.location.href = '/wp-admin/post-new.php';
     },
   },
-  { command: 'new conversation', info: 'Create a new conversation' },
+  { command: 'new conversation', info: i18n.t( 'Create a new conversation' ) },
   {
     command: 'edit',
-    info: 'Edit a specific page',
+    info: i18n.t( 'Edit a specific page' ),
     action: () => {},
   },
-  { command: 'settings', info: 'Open the settings page' },
-  { command: 'dashboard', info: 'Go to Dashboard' },
+  { command: 'settings', info: i18n.t( 'Open the settings page' ) },
+  { command: 'dashboard', info: i18n.t( 'Go to Dashboard' ) },
 ];
 
 const popoverComponent: {

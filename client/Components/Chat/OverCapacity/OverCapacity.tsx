@@ -3,6 +3,7 @@ import { TokenUsageStatus } from '@/Types/enums';
 import { buttonVariants } from '@/Components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAccount } from '@/Providers/AccountProvider';
+import { useTranslation } from 'react-i18next';
 
 interface OverCapacityProps {
   cooldownTime: Date | null;
@@ -11,6 +12,7 @@ interface OverCapacityProps {
 
 export default function OverCapacity( props: OverCapacityProps ) {
   const { account } = useAccount();
+  const { t } = useTranslation();
 
   return (
     <Alert
@@ -19,10 +21,10 @@ export default function OverCapacity( props: OverCapacityProps ) {
         'w-full rounded-lg text-base border-none flex justify-between items-center',
       ) }>
       <div>
-        <AlertTitle>Free message limit reached.</AlertTitle>
+        <AlertTitle>{ t( 'Free message limit reached.' ) }</AlertTitle>
         { props.cooldownTime && (
           <AlertDescription>
-            Please get back at{ ' ' }
+            { t( 'Please get back at' ) }{ ' ' }
             { new Intl.DateTimeFormat( 'en-US', {
               hour: 'numeric',
               minute: 'numeric',
@@ -41,7 +43,7 @@ export default function OverCapacity( props: OverCapacityProps ) {
             } ),
           ) }
           href={ account.upgrade_link }>
-          Upgrade now
+          { t( 'Upgrade now' ) }
         </a>
       ) }
     </Alert>

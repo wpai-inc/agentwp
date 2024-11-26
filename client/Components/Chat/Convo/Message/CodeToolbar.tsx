@@ -14,6 +14,7 @@ import PHP from '@/assets/svgs/php.svg';
 import JS from '@/assets/svgs/js.svg';
 import CSS from '@/assets/svgs/css.svg';
 import HTML from '@/assets/svgs/html.svg';
+import { useTranslation } from 'react-i18next';
 
 const languageIcons: {
   [ key: string ]: string;
@@ -25,6 +26,7 @@ const languageIcons: {
 };
 
 export default function CodeToolbar( { code, language }: { code: string; language: string } ) {
+  const { t } = useTranslation();
   const { restReq } = useRestRequest();
   const { copy, copied } = useCopy();
   const [ pluginIcon, setPluginIcon ] = useState< string | null >( null );
@@ -81,7 +83,7 @@ export default function CodeToolbar( { code, language }: { code: string; languag
         addErrors( [ result.data.message ] );
       }
     } catch ( e ) {
-      addErrors( [ 'Failed to add code snippet' ] );
+      addErrors( [ t( 'Failed to add code snippet' ) ] );
     }
   };
 
@@ -97,10 +99,10 @@ export default function CodeToolbar( { code, language }: { code: string; languag
             target="_blank"
             rel="noreferrer noopener"
             className="underline underline-offset-2">
-            Learn More
+            { t( 'Learn More' ) }
           </a>
         }>
-        Test code before using
+        { t( 'Test code before using' ) }
       </ChatNotice>
 
       <div className="flex justify-between rounded-t-xl bg-brand-gray-25 p-2 text-brand-gray-70">
@@ -116,12 +118,12 @@ export default function CodeToolbar( { code, language }: { code: string; languag
           ) }
         </span>
         <div className="flex items-center justify-end gap-3">
-          <AgentTooltip content="Copy code to clipboard.">
+          <AgentTooltip content={ t( 'Copy code to clipboard.' ) }>
             <button
               className="hover:text-brand-gray-100 ml-2 text-sm flex align-center gap-1 me-2 font-sans"
               onClick={ () => copy( code ) }>
               <IconCopy className="h-4 w-4 relative top-[1px]" />{ ' ' }
-              { copied ? 'Copied!' : 'Copy code' }
+              { copied ? t( 'Copied!' ) : t( 'Copy code' ) }
             </button>
           </AgentTooltip>
 
