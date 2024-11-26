@@ -4,6 +4,7 @@ namespace WpAi\AgentWp\Registry;
 
 use WpAi\AgentWp\Contracts\MiddlewareInterface;
 use WpAi\AgentWp\Contracts\Registrable;
+use WpAi\AgentWp\Http\Controllers\ActivateCodePackage;
 use WpAi\AgentWp\Http\Controllers\AddCodeSnippet;
 use WpAi\AgentWp\Http\Controllers\AwpApi;
 use WpAi\AgentWp\Http\Controllers\CreatePost;
@@ -21,6 +22,7 @@ use WpAi\AgentWp\Http\Controllers\OauthConnect;
 use WpAi\AgentWp\Http\Controllers\QueryActionController;
 use WpAi\AgentWp\Http\Controllers\RefreshToken;
 use WpAi\AgentWp\Http\Controllers\SaveConnection;
+use WpAi\AgentWp\Http\Controllers\SearchCodePackages;
 use WpAi\AgentWp\Http\Controllers\SearchQuery;
 use WpAi\AgentWp\Http\Controllers\SiteDataController;
 use WpAi\AgentWp\Http\Controllers\TestAuthResponse;
@@ -65,6 +67,8 @@ class Router implements Registrable
         'oauth_authorize' => OauthAuthorize::class,
         'oauth_connect' => OauthConnect::class,
         'tools_summarize' => [Tools::class, 'summarize'],
+        'get_active_tasks' => SearchCodePackages::class,
+        'activate_code' => ActivateCodePackage::class,
         'make-me-a-manager' => MakeMeAManager::class,
     ];
 

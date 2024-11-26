@@ -10,6 +10,13 @@ class Code extends BaseModel
 {
     protected static $table = 'code';
 
+    protected array $casts = [
+        'id' => 'int',
+        'active' => 'bool',
+        'stale' => 'bool',
+        'error' => 'bool',
+    ];
+
     private array $modes = ['always', 'once', 'repeated'];
 
     public function scopeActive()

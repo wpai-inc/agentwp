@@ -125,3 +125,19 @@ export type WpPost = {
   categories: number[];
   tags: number[];
 };
+
+/**
+ * Models
+ */
+export type CodeModel = {
+  id: number;
+  code_id: string;
+  path: string;
+  params?: [];
+  mode: 'always' | 'once' | 'repeated';
+  active: boolean;
+  stale: boolean;
+  error: boolean;
+  status: 'idle' | 'running' | 'completed' | 'failed';
+  created_at: string;
+};

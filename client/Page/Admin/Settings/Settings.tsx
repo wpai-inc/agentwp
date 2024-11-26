@@ -10,6 +10,7 @@ import { Button } from '@/Components/ui/button';
 import { AgentTooltip } from '@/Components/ui/tooltip';
 import History from './SubPages/History';
 import { useAccount } from '@/Providers/AccountProvider';
+import Tasks from './SubPages/Tasks';
 
 const tabClasses =
   'px-3 lg:px-5 py-4 flex items-center justify-center text-sm lg:text-base leading-none select-none hover:text-brand-primary data-[state=active]:text-brand-dark  data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-brand-primary outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-70';
@@ -56,6 +57,9 @@ export default function Settings() {
       <TabContent value="history">
         <History />
       </TabContent>
+      <TabContent value="tasks">
+        <Tasks />
+      </TabContent>
       <TabContent value="connect">
         <ConnectToAwp />
       </TabContent>
@@ -98,11 +102,7 @@ export default function Settings() {
                 Integrations
               </button>
             </AgentTooltip>
-            <AgentTooltip content="Coming soon" side="top">
-              <button className={ tabClasses } disabled>
-                Tasks
-              </button>
-            </AgentTooltip>
+            <Tab value="tasks" title="Tasks" />
 
             { page.agentwp_manager && <Tab value="settings" title="Settings" /> }
           </Tabs.List>

@@ -43,6 +43,24 @@
         "name": "acceptTerms"
     },
     {
+        "key": "api.code-packages.search",
+        "uri": "api\/code-packages\/search",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "codePackagesSearch"
+    },
+    {
+        "key": "api.code-packages.show",
+        "uri": "api\/code-packages\/{pkg}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "name": "codePackagesShow"
+    },
+    {
         "key": "api.site.health",
         "uri": "api\/site\/health",
         "methods": [

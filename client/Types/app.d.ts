@@ -10,7 +10,8 @@ canAnswerDirectly: boolean;
 shouldQuery: boolean;
 convoOnly: boolean;
 visionEnabled: boolean;
-shouldNavigate: boolean;
+shouldNavigate: number;
+navigationTarget: string | null;
 sequence: Array<any> | null;
 refused: boolean;
 unrelated: boolean;
@@ -27,6 +28,7 @@ intent_id: number | null;
 navigation: Array<any>;
 moderation: Array<any>;
 jailbreakAttempt: number;
+language: string;
 };
 export type AgentActionData = {
 id: string;
@@ -47,6 +49,17 @@ export type CapabilityData = {
 slug: string;
 name: string;
 description: string;
+};
+export type CodePackageData = {
+id: string;
+name: string;
+description: string | null;
+params: string | null;
+files: Array<App.Data.CodePackageFileData>;
+};
+export type CodePackageFileData = {
+name: string;
+download_url: string;
 };
 export type ConfigData = {
 abilities: Array<any>;
@@ -287,14 +300,14 @@ export type Ability = 'message' | 'query' | 'run' | 'code' | 'edit' | 'report' |
 export type AgentActionResultStatus = 'success' | 'error';
 export type BillingCycle = 'monthly' | 'yearly';
 export type Command = '/gb';
-export type ConfigType = 'abilities' | 'context_awareness' | 'capabilities' | 'convo_only' | 'convo_disabled' | 'token_limit' | 'token_limit_per_site' | 'token_limit_per_user';
+export type ConfigType = 'abilities' | 'context_awareness' | 'capabilities' | 'convo_only' | 'convo_disabled' | 'token_limit' | 'token_limit_per_site' | 'token_limit_per_user' | 'sunset';
 export type ContextAwareness = 'screen' | 'site_health' | 'errors' | 'db_schema' | 'wordpress_public_information' | 'post' | 'mentions';
 export type DocIndexState = 0 | 1 | 2 | 3 | 4;
 export type EmbedSchema = 'posts_combined' | 'post_simple' | 'post_title' | 'post_content' | 'post_comments' | 'post_meta';
 export type LlmOption = 'json_response' | 'json_schema';
 export type LlmProvider = 'anthropic' | 'azure_openai' | 'cohere' | 'google_vertex' | 'openai';
 export type SiteChatSetting = 'web_enabled';
-export type SiteSettingValue = 'convoOnly' | 'webEnabled' | 'visionEnabled' | 'healthEnabled' | 'dbSchemaEnabled';
+export type SiteSettingValue = 'convoOnly' | 'webEnabled' | 'visionEnabled' | 'healthEnabled' | 'dbSchemaEnabled' | 'abilities';
 export type TokenUsageStatus = 0 | 1 | 2 | 3;
 export type UserRequestStatus = 'pending' | 'aborted' | 'completed';
 }

@@ -22,6 +22,11 @@ class HttpRequest
         $this->request->set_body($this->getContent());
     }
 
+    public function __get(string $name)
+    {
+        return $this->getJsonContent($name);
+    }
+
     /**
      * Returns the request body content.
      *
